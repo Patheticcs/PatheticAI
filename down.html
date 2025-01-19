@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Site Down</title>
+    <style>
+        /* Your existing CSS theme */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cabinet Grotesk', sans-serif;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        *::-webkit-scrollbar {
+            display: none;
+        }
+
+        body {
+            background: url('https://wallpapershome.com/images/pages/pic_h/26430.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        :root {
+            --container-width: 90%;
+            --container-max-width: 800px;
+            --spacing-normal: 20px;
+            --spacing-small: 10px;
+            --border-radius: 30px;
+            --border-radius-small: 15px;
+            --blur-intensity: 12px;
+        }
+
+        .container {
+            text-align: center;
+            padding: var(--spacing-normal);
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: var(--border-radius);
+            backdrop-filter: blur(var(--blur-intensity));
+            -webkit-backdrop-filter: blur(var(--blur-intensity));
+            width: 700px;
+           height: auto;
+            color: white;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        h1 {
+            font-size: 38px;
+            font-weight: 700;
+            margin-bottom: var(--spacing-small);
+            letter-spacing: 2px;
+        }
+
+        p {
+            font-size: 15px;
+            opacity: 0.85;
+            margin-bottom: var(--spacing-normal);
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Media Query for responsiveness */
+        @media (max-width: 768px) {
+            :root {
+                --container-width: 95%;
+                --spacing-normal: 15px;
+            }
+
+            h1 {
+                font-size: 36px;
+            }
+
+            p {
+                font-size: 18px;
+            }
+
+            .cta-button {
+                font-size: 14px;
+                padding: 10px 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Down</h1>
+        <p>We are working hard to improve our site. Please check back soon!</p>
+    </div>
+</body>
+</html>
