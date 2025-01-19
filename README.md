@@ -1,0 +1,1 @@
+PatheticAI is a sophisticated AI chatbot designed to provide real-time interaction, task assistance, and process automation. It offers smart, personalized, and adaptable conversations, constantly learning to improve user service. Whether it's for quick information or automating tasks, PatheticAI aims to make your experience more efficient and easier.
