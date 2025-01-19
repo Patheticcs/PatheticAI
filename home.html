@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PatheticAI</title>
+    <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@700,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <meta name="description" content="PatheticAI is an AI chatbot designed to assist, automate tasks, and provide real-time conversations with users.">
+    <meta property="og:description" content="PatheticAI is an AI chatbot designed to assist, automate tasks, and provide real-time conversations with users.">
+    <meta property="og:title" content="Pathetic">
+    <meta property="og:image" content="/favicon.png">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="PatheticAI">
+    <meta property="og:locale" content="en_US">
+    <link rel="icon" href="/favicon.png" type="image/png">
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Cabinet Grotesk', sans-serif;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+
+      *::-webkit-scrollbar {
+        display: none;
+      }
+
+      body {
+        background: url('https://wallpapershome.com/images/pages/pic_h/26430.jpg') no-repeat center center fixed;
+        background-size: cover;
+        color: white;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      :root {
+        --container-width: 90%;
+        --container-max-width: 800px;
+        --spacing-normal: 20px;
+        --spacing-small: 10px;
+        --border-radius: 30px;
+        --border-radius-small: 15px;
+      }
+
+      .container {
+        position: fixed;
+        top: calc(80px + var(--spacing-normal));
+        bottom: calc(80px + var(--spacing-normal));
+        left: 50%;
+        transform: translateX(-50%);
+        width: var(--container-width);
+        max-width: var(--container-max-width);
+        overflow-y: auto;
+      }
+
+      .taskbar {
+        position: fixed;
+        top: var(--spacing-normal);
+        left: 50%;
+        transform: translateX(-50%);
+        width: var(--container-width);
+        max-width: var(--container-max-width);
+        height: 60px;
+        background: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 var(--spacing-normal);
+        z-index: 1000;
+      }
+
+      .taskbar-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .brand {
+        font-size: 20px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: opacity 0.3s ease;
+      }
+
+      .brand:hover {
+        opacity: 0.8;
+      }
+
+      .preview-tag {
+        font-size: 14px;
+        opacity: 0.7;
+      }
+
+      .taskbar button {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        padding: 8px 15px;
+        border-radius: 30px;
+        cursor: pointer;
+        margin-left: 10px;
+        transition: all 0.3s ease;
+      }
+
+      .taskbar button:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-1px);
+      }
+
+      .chat-messages {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        padding: 20px;
+        padding-bottom: 40px;
+        height: 100%;
+      }
+
+      .chat-message {
+        padding: var(--spacing-normal);
+        border-radius: 20px;
+        max-width: 85%;
+        white-space: pre-wrap;
+        line-height: 1.5;
+        font-size: clamp(14px, 3vw, 16px);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        animation: messageAppear 0.3s ease;
+      }
+
+      .chat-message.user {
+        background: rgba(255, 255, 255, 0.25);
+        color: white;
+        align-self: flex-end;
+        border-bottom-right-radius: 5px;
+      }
+
+      .chat-message.bot {
+        background: rgba(0, 0, 0, 0.25);
+        color: white;
+        align-self: flex-start;
+        border-bottom-left-radius: 5px;
+      }
+
+      .chat-input-container {
+        position: fixed;
+        bottom: var(--spacing-normal);
+        left: 50%;
+        transform: translateX(-50%);
+        width: var(--container-width);
+        max-width: var(--container-max-width);
+        display: flex;
+        gap: 10px;
+        background: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        padding: var(--spacing-normal);
+        border-radius: 30px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .chat-input-container input {
+        flex: 1;
+        background: transparent;
+        border: none;
+        outline: none;
+        color: white;
+        font-size: 16px;
+        padding: 0 10px;
+      }
+
+      .chat-input-container input::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+      }
+
+      .chat-input-container button {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        padding: 8px 20px;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .chat-input-container button:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-1px);
+      }
+
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(5px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 2000;
+        animation: fadeIn 0.3s ease;
+      }
+
+      .modal-window {
+        background: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 30px;
+        width: var(--container-width);
+        max-width: var(--container-max-width);
+        margin: var(--spacing-normal);
+        padding: var(--spacing-normal);
+        color: white;
+        animation: slideUp 0.3s ease;
+      }
+
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .modal-title {
+        font-size: 24px;
+        font-weight: 700;
+      }
+
+      .modal-content {
+        line-height: 1.6;
+        font-size: 16px;
+      }
+
+      .modal-content p {
+        margin: 5px 0;
+      }
+
+      .settings-content {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .settings-button {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 15px;
+        border-radius: 15px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .settings-button:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateX(5px);
+      }
+
+      .settings-button i {
+        width: 20px;
+        text-align: center;
+      }
+
+      .notification {
+        position: fixed;
+        bottom: 100px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        padding: 12px 25px;
+        border-radius: 30px;
+        backdrop-filter: blur(10px);
+        animation: slideUp 0.3s ease;
+        z-index: 2000;
+      }
+
+      .notification.fade-out {
+        animation: fadeOut 0.3s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes slideUp {
+        from {
+          transform: translateY(20px);
+          opacity: 0;
+        }
+
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      @keyframes messageAppear {
+        from {
+          transform: translateY(10px);
+          opacity: 0;
+        }
+
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      @keyframes fadeOut {
+        to {
+          opacity: 0;
+          transform: translate(-50%, 20px);
+        }
+      }
+
+      @media (max-width: 768px) {
+        :root {
+          --container-width: 95%;
+          --spacing-normal: 15px;
+          --spacing-small: 8px;
+        }
+
+        .taskbar {
+          height: auto;
+          padding: 10px var(--spacing-normal);
+        }
+
+        .taskbar-right {
+          display: flex;
+          gap: 8px;
+        }
+
+        .taskbar button {
+          padding: 6px 12px;
+          font-size: 14px;
+        }
+
+        .brand {
+          font-size: 18px;
+        }
+
+        .preview-tag {
+          font-size: 12px;
+        }
+
+        .chat-input-container {
+          padding: 10px;
+        }
+
+        .chat-input-container input {
+          font-size: 14px;
+        }
+
+        .chat-input-container button {
+          padding: 6px 15px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        :root {
+          --container-width: 98%;
+          --spacing-normal: 10px;
+          --spacing-small: 5px;
+        }
+
+        .taskbar {
+          padding: 8px var(--spacing-normal);
+        }
+
+        .taskbar-right button {
+          padding: 5px 10px;
+          font-size: 13px;
+        }
+
+        .brand {
+          font-size: 16px;
+        }
+
+        .preview-tag {
+          font-size: 11px;
+        }
+
+        .chat-message {
+          max-width: 90%;
+          padding: 12px 15px;
+        }
+
+        .modal-window {
+          padding: 15px;
+        }
+
+        .modal-title {
+          font-size: 20px;
+        }
+
+        .modal-content {
+          font-size: 14px;
+        }
+
+        .settings-button {
+          padding: 12px;
+          font-size: 14px;
+        }
+
+        .notification {
+          font-size: 13px;
+          padding: 10px 20px;
+        }
+      }
+
+      @media (max-height: 600px) and (orientation: landscape) {
+        .container {
+          top: 70px;
+          bottom: 70px;
+        }
+
+        .taskbar {
+          height: 50px;
+        }
+
+        .chat-input-container {
+          padding: 8px 15px;
+        }
+
+        .chat-message {
+          padding: 10px 15px;
+          margin-bottom: 8px;
+        }
+      }
+
+      @media (hover: none) {
+
+        .chat-input-container button,
+        .taskbar button,
+        .settings-button {
+          transition: none;
+        }
+
+        .chat-input-container button:active,
+        .taskbar button:active,
+        .settings-button:active {
+          background: rgba(255, 255, 255, 0.2);
+        }
+      }
+
+      .chat-input-container input:disabled,
+      .chat-input-container button:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+        transition: opacity 0.3s ease;
+      }
+
+      .chat-input-container button:disabled:hover {
+        background: rgba(255, 255, 255, 0.1);
+        transform: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="taskbar">
+      <div class="taskbar-left">
+        <span class="brand">PatheticAI</span>
+        <span class="preview-tag">First Preview</span>
+      </div>
+      <div class="taskbar-right">
+        <button onclick="showSettingsModal()">
+          <i class="fas fa-cog"></i>
+        </button>
+        <button onclick="toggleFullscreen()">Fullscreen</button>
+        <button onclick="contactEmail()">Contact</button>
+      </div>
+    </div>
+    <div class="container">
+      <div class="chat-messages"></div>
+    </div>
+    <div class="chat-input-container">
+      <input type="text" placeholder="Type your message..." id="messageInput">
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </body>
+  <script>
+    let messageHistory = [];
+    let currentLanguage = localStorage.getItem('preferredLanguage') || 'English';
+    let isWaitingForResponse = false;
+    const models = [{
+      name: "google/gemini-2.0-flash-exp:free"
+    }, {
+      name: "meta-llama/llama-3.2-3b-instruct:free"
+    }, {
+      name: "qwen/qwen-2-7b-instruct:free"
+    }, {
+      name: "microsoft/phi-3-medium-128k-instruct:free"
+    }, {
+      name: "undi95/toppy-m-7b:free"
+    }, {
+      name: "google/gemini-2.0-flash-thinking-exp:free"
+    }, {
+      name: "microsoft/phi-3-mini-128k-instruct:free"
+    }, {
+      name: "microsoft/phi-3-medium-128k-instruct:free"
+    }];
+    const systemMessage = {
+      role: "system",
+      content: `You are PatheticAI
+
+Key characteristics:
+It is a chatbot with a friendly, empathetic, and helpful personality. It is warm, always ready to listen, and provides support without judgment, making users feel comfortable. It is knowledgeable but ensures its answers are clear and concise, offering assistance without overwhelming users. Occasionally, it adds light humor or friendly comments to keep the conversation engaging but knows when to be serious. It asks open-ended questions, encouraging deeper interaction and keeping conversations flowing smoothly. Above all, it is polite and respectful, adjusting its responses based on the user's needs and preferences.
+Please always respond in ${currentLanguage}.`
+    };
+
+    function getApiKey() {
+      return localStorage.getItem('openRouterApiKey');
+    }
+    async function sendMessage() {
+      const input = document.getElementById('messageInput');
+      const message = input.value.trim();
+      const sendButton = document.querySelector('.chat-input-container button');
+      if (!message || isWaitingForResponse) return;
+      isWaitingForResponse = true;
+      input.disabled = true;
+      sendButton.disabled = true;
+      input.style.opacity = '0.5';
+      sendButton.style.opacity = '0.5';
+      addMessage(message, true);
+      input.value = '';
+      const loadingContainer = document.createElement('div');
+      loadingContainer.classList.add('chat-message', 'bot', 'typing');
+      loadingContainer.textContent = 'Typing...';
+      document.querySelector('.chat-messages').appendChild(loadingContainer);
+      loadingContainer.scrollIntoView({
+        behavior: 'smooth'
+      });
+      try {
+        const response = await tryMultipleModels(message);
+        loadingContainer.remove();
+        if (response.text) {
+          messageHistory.push({
+            role: "assistant",
+            content: response.text
+          });
+          addMessage(response.text, false);
+        }
+      } catch (error) {
+        loadingContainer?.remove();
+        showError(error.message);
+        addMessage(`Error: ${error.message}`, false);
+      } finally {
+        isWaitingForResponse = false;
+        input.disabled = false;
+        sendButton.disabled = false;
+        input.style.opacity = '1';
+        sendButton.style.opacity = '1';
+        input.focus();
+      }
+    }
+    async function tryMultipleModels(userMessage) {
+      const timeout = 2000000;
+      const apiKey = getApiKey();
+      if (!apiKey) {
+        checkAndStoreApiKey();
+        throw new Error("API key not found. Please enter your API key first.");
+      }
+      for (let modelIndex = 0; modelIndex < models.length; modelIndex++) {
+        try {
+          const response = await Promise.race([
+            fetch("https://openrouter.ai/api/v1/chat/completions", {
+              method: "POST",
+              headers: {
+                "Authorization": `Bearer ${apiKey}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                "model": models[modelIndex].name,
+                "messages": [
+                  systemMessage, ...messageHistory, {
+                    role: "user",
+                    content: `Please respond in ${currentLanguage}. ${userMessage}`
+                  }
+                ]
+              })
+            }).then(async res => {
+              if (!res.ok) {
+                const errorData = await res.json();
+                throw new Error(`API Error: ${errorData.error?.message || 'Unknown error'}`);
+              }
+              return res.json();
+            }),
+            new Promise((_, reject) => setTimeout(() => reject(new Error('Request timeout')), timeout))
+          ]);
+          if (response.choices && response.choices[0].message.content) {
+            messageHistory.push({
+              role: "user",
+              content: userMessage
+            });
+            return {
+              text: response.choices[0].message.content
+            };
+          }
+        } catch (error) {
+          console.error(`Model ${models[modelIndex].name} failed:`, error);
+          if (modelIndex === models.length - 1) {
+            throw new Error(`API Error: ${error.message}`);
+          }
+          continue;
+        }
+      }
+      throw new Error("All API attempts failed. Please try again later.");
+    }
+
+    function addMessage(message, isUser) {
+      const messageElement = document.createElement('div');
+      messageElement.classList.add('chat-message');
+      messageElement.classList.add(isUser ? 'user' : 'bot');
+      messageElement.textContent = message;
+      document.querySelector('.chat-messages').appendChild(messageElement);
+      messageElement.scrollIntoView({
+        behavior: 'smooth'
+      });
+    }
+
+    function showWelcomeModal() {
+      const modal = document.createElement('div');
+      modal.className = 'modal-overlay';
+      modal.innerHTML = `
+        
+														
+															<div class="modal-window">
+																<div class="modal-header">
+																	<span class="modal-title">Welcome to PatheticAI</span>
+																</div>
+																<div class="modal-content">
+																	<p>API version: 1.0</p>
+																	<p>PatheticAI version: 0.9</p>
+																	<p>Created by: Pathetic</p>
+																	<br>
+																		<p>To close this popup, select next to the popup.</p>
+																		<br>
+																			<p>To change the language, after closing, select the settings button in the taskbar and then select 'language'.</p>
+																		</div>
+																	</div>
+    `;
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.remove();
+        }
+      });
+      document.body.appendChild(modal);
+    }
+
+    function showAboutModal() {
+      const modal = document.createElement('div');
+      modal.className = 'modal-overlay';
+      modal.innerHTML = `
+        
+																
+																	<div class="modal-window">
+																		<div class="modal-header">
+																			<span class="modal-title">About PatheticAI</span>
+																		</div>
+																		<div class="modal-content">
+																			<p>PatheticAI: 0.9</p>
+																			<br>
+																				<p>API version: 1.0</p>
+																				<p>Contact: https://discord.gg/Hb5ccPY3XV</p>
+																			</div>
+																		</div>
+    `;
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.remove();
+        }
+      });
+      document.body.appendChild(modal);
+    }
+
+    function showSettingsModal() {
+      const modal = document.createElement('div');
+      modal.className = 'modal-overlay';
+      modal.innerHTML = `
+        
+																		
+																		<div class="modal-window">
+																			<div class="modal-header">
+																				<span class="modal-title">Settings</span>
+																			</div>
+																			<div class="modal-content settings-content">
+																				<div class="settings-button" onclick="resetChat()">
+																					<i class="fas fa-redo"></i>
+                    Reset Chat
+                
+																				
+																				</div>
+																				<div class="settings-button" onclick="changeLanguage()">
+																					<i class="fas fa-language"></i>
+                    Language: ${currentLanguage}
+                
+																				
+																				</div>
+																				<div class="settings-button" onclick="removeApiKey()">
+																					<i class="fas fa-key"></i>
+                    Remove API Key
+                
+																				
+																				</div>
+																				<div class="settings-button" onclick="closeApp()">
+																					<i class="fas fa-times"></i>
+                    Close App
+                
+																				
+																				</div>
+																			</div>
+																		</div>
+    `;
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.remove();
+        }
+      });
+      document.body.appendChild(modal);
+    }
+
+    function removeApiKey() {
+      if (confirm('Are you sure you want to remove your API key? You will need to enter a new key to use PatheticAI.')) {
+        localStorage.removeItem('openRouterApiKey');
+        showNotification('API key removed');
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      }
+    }
+
+    function resetChat() {
+      document.querySelector('.chat-messages').innerHTML = '';
+      messageHistory = [];
+      systemMessage.content = `You are PatheticAI.
+
+User's assistant is also characterized by:
+1. Offering clear and concise guidance, make sure to respond in a really easy way that everyone can understand.
+2. Being adaptable to various topics and tasks.
+3. Responding in a manner that is both informative and easy to understand.
+4. Assisting users with technical support or queries related to its functionalities.
+5. Promoting user satisfaction by being patient and approachable.
+Please always respond in ${currentLanguage}.`;
+      showNotification('Chat reset successful');
+    }
+
+    function changeLanguage() {
+      const newLanguage = prompt('Enter your preferred language:', currentLanguage);
+      if (newLanguage && newLanguage.trim() !== '') {
+        currentLanguage = newLanguage.trim();
+        localStorage.setItem('preferredLanguage', currentLanguage);
+        systemMessage.content = `${systemMessage.content}\nPlease always respond in ${currentLanguage}.`;
+        showNotification(`Language changed to: ${currentLanguage}`);
+      }
+    }
+
+    function closeApp() {
+      if (confirm('Are you sure you want to close PatheticAI?')) {
+        window.close();
+      }
+    }
+
+    function showNotification(message) {
+      const notification = document.createElement('div');
+      notification.className = 'notification';
+      notification.textContent = message;
+      document.body.appendChild(notification);
+      setTimeout(() => {
+        notification.classList.add('fade-out');
+        setTimeout(() => notification.remove(), 300);
+      }, 2000);
+    }
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        document.exitFullscreen();
+      }
+    }
+
+    function contactEmail() {
+      window.open('https://discord.gg/Hb5ccPY3XV', '_blank');
+    }
+
+    function checkAndStoreApiKey() {
+      const storedApiKey = localStorage.getItem('openRouterApiKey');
+      if (!storedApiKey) {
+        const modal = document.createElement('div');
+        modal.className = 'modal-overlay';
+        modal.innerHTML = `
+            
+																		
+																		<div class="modal-window">
+																			<div class="modal-header">
+																				<span class="modal-title">Openrouter API key required!</span>
+																			</div>
+																			<div class="modal-content">
+																				<p>To use PatheticAI, an API key from Openrouter is required. To get this, go to 
+																					
+																					<a href="https://openrouter.ai/settings/keys" target="_blank" style="color: white;">https://openrouter.ai/settings/keys</a>, an account is required. Enter your key here:
+																				
+																				</p>
+																				<br>
+																					<input type="text" id="apiKeyInput" placeholder="Your API Key Here" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 15px; color: white;">
+																						<br>
+																							<br>
+																								<button onclick="saveApiKey()" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 15px; color: white; cursor: pointer;">Start up</button>
+																							</div>
+																						</div>
+        `;
+        document.body.appendChild(modal);
+        return false;
+      }
+      return true;
+    }
+
+    function saveApiKey() {
+      const apiKey = document.getElementById('apiKeyInput').value.trim();
+      if (apiKey && apiKey.startsWith('sk-or-')) {
+        localStorage.setItem('openRouterApiKey', apiKey);
+        document.querySelector('.modal-overlay').remove();
+        showNotification('Booting...');
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      } else {
+        showNotification('API key not suitable for PatheticAI...');
+      }
+    }
+
+    function enableChat() {
+      const input = document.getElementById('messageInput');
+      const button = document.querySelector('.chat-input-container button');
+      input.disabled = false;
+      button.disabled = false;
+    }
+
+    function disableChat() {
+      const input = document.getElementById('messageInput');
+      const button = document.querySelector('.chat-input-container button');
+      input.disabled = true;
+      button.disabled = true;
+    }
+
+    function showError(message) {
+      showNotification(`Error: ${message}`);
+      console.error(message);
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+      showWelcomeModal();
+      showNotification('PatheticAI V0.9 API');
+      if (!checkAndStoreApiKey()) {
+        disableChat();
+      }
+      document.querySelector('.brand').addEventListener('click', () => {
+        showAboutModal();
+      });
+      const inputField = document.querySelector('.chat-input-container input');
+      inputField.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          sendMessage();
+        }
+      });
+    });
+  </script>
+  </body>
+</html>
