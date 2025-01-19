@@ -15,76 +15,67 @@
     <meta property="og:locale" content="en_US">
     <link rel="icon" href="/favicon.png" type="image/png">
     <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: 'Cabinet Grotesk', sans-serif;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-      }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Cabinet Grotesk', sans-serif;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
 
-      :root {
-        --container-width: 90%;
-        --container-max-width: 800px;
-        --spacing-normal: 20px;
-        --spacing-small: 10px;
-        --border-radius: 30px;
-        --border-radius-small: 15px;
-        --primary-color: #000000;
-        --secondary-color: #6200ea;
-        --border-color: rgba(0, 0, 0, 0.1);
-        --button-background: rgba(255, 255, 255, 0.1);
-        --button-hover-background: rgba(255, 255, 255, 0.2);
-        --taskbar-background: rgba(255, 255, 255, 0.8);
-        --background-color: #ffffff;
-        --input-background: rgba(255, 255, 255, 0.9);
-        --modal-background: rgba(255, 255, 255, 0.8);
-      }
+:root {
+  --container-width: 90%;
+  --container-max-width: 800px;
+  --spacing-normal: 20px;
+  --spacing-small: 10px;
+  --border-radius: 30px;
+  --border-radius-small: 15px;
+  --primary-color: #000000;
+  --secondary-color: #6200ea;
+  --border-color: rgba(0, 0, 0, 0.1);
+  --button-background: rgba(255, 255, 255, 0.1);
+  --button-hover-background: rgba(255, 255, 255, 0.2);
+  --taskbar-background: rgba(255, 255, 255, 0.8);
+  --background-color: #ffffff;
+  --input-background: rgba(255, 255, 255, 0.9);
+  --modal-background: rgba(255, 255, 255, 0.8);
+}
 
-      body {
-        background-color: var(--background-color);
-        color: var(--primary-color);
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        background-image: url('light%20background.jpg');
-        background-size: cover;
-        background-position: center;
-      }
+:root[data-theme="dark"] {
+  --background-color: #121212;
+  --primary-color: #ffffff;
+  --secondary-color: #bb86fc;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --taskbar-background: rgba(0, 0, 0, 0.4);
+  --input-background: rgba(0, 0, 0, 0.6);
+  --button-background: rgba(255, 255, 255, 0.1);
+  --button-hover-background: rgba(255, 255, 255, 0.2);
+  --modal-background: rgba(0, 0, 0, 0.4);
+  --background-image: url('dark%20background.jpg');
+}
 
-      :root[data-theme="dark"] {
-        --background-color: #121212;
-        --primary-color: #ffffff;
-        --secondary-color: #bb86fc;
-        --border-color: rgba(255, 255, 255, 0.1);
-        --taskbar-background: rgba(0, 0, 0, 0.4);
-        --input-background: rgba(0, 0, 0, 0.6);
-        --button-background: rgba(255, 255, 255, 0.1);
-        --button-hover-background: rgba(255, 255, 255, 0.2);
-        --modal-background: rgba(0, 0, 0, 0.4);
-        background-image: url('dark%20background.jpg');
-      }
+:root[data-theme="light"] {
+  --background-color: #ffffff;
+  --primary-color: #000000;
+  --secondary-color: #6200ea;
+  --border-color: rgba(0, 0, 0, 0.1);
+  --taskbar-background: rgba(255, 255, 255, 0.8);
+  --input-background: rgba(255, 255, 255, 0.9);
+  --button-background: rgba(0, 0, 0, 0.1);
+  --button-hover-background: rgba(0, 0, 0, 0.2);
+  --modal-background: rgba(255, 255, 255, 0.8);
+  --background-image: url('light%20background.jpg');
+}
 
-      :root[data-theme="light"] {
-        --background-color: #ffffff;
-        --primary-color: #000000;
-        --secondary-color: #6200ea;
-        --border-color: rgba(0, 0, 0, 0.1);
-        --taskbar-background: rgba(255, 255, 255, 0.8);
-        --input-background: rgba(255, 255, 255, 0.9);
-        --button-background: rgba(0, 0, 0, 0.1);
-        --button-hover-background: rgba(0, 0, 0, 0.2);
-        --modal-background: rgba(255, 255, 255, 0.8);
-        background-image: url('light%20background.jpg');
-      }
-
-      body {
-        background-color: var(--background-color);
-        background-image: var(--background-image);
-        background-size: cover;
-        background-position: center;
-      }
+body {
+  background-color: var(--background-color);
+  background-image: var(--background-image); 
+  background-size: cover;  
+  background-position: center;  
+  background-repeat: no-repeat;  
+  min-height: 100vh;  
+}
 
       *::-webkit-scrollbar {
         display: none;
