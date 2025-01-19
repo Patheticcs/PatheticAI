@@ -512,15 +512,21 @@
       name: "microsoft/phi-3-medium-128k-instruct:free"
     }, {
       name: "undi95/toppy-m-7b:free"
+    }, {
+      name: "google/gemini-2.0-flash-thinking-exp:free"
+    }, {
+      name: "microsoft/phi-3-mini-128k-instruct:free"
+    }, {
+      name: "microsoft/phi-3-medium-128k-instruct:free"
     }];
-const systemMessage = {
-  role: "system",
-  content: `You are PatheticAI
+    const systemMessage = {
+      role: "system",
+      content: `You are PatheticAI
 
 Key characteristics:
 It is a chatbot with a friendly, empathetic, and helpful personality. It is warm, always ready to listen, and provides support without judgment, making users feel comfortable. It is knowledgeable but ensures its answers are clear and concise, offering assistance without overwhelming users. Occasionally, it adds light humor or friendly comments to keep the conversation engaging but knows when to be serious. It asks open-ended questions, encouraging deeper interaction and keeping conversations flowing smoothly. Above all, it is polite and respectful, adjusting its responses based on the user's needs and preferences.
 Please always respond in ${currentLanguage}.`
-};
+    };
 
     function getApiKey() {
       return localStorage.getItem('openRouterApiKey');
@@ -568,7 +574,7 @@ Please always respond in ${currentLanguage}.`
       }
     }
     async function tryMultipleModels(userMessage) {
-      const timeout = 20000;
+      const timeout = 2000000;
       const apiKey = getApiKey();
       if (!apiKey) {
         checkAndStoreApiKey();
@@ -582,8 +588,6 @@ Please always respond in ${currentLanguage}.`
               headers: {
                 "Authorization": `Bearer ${apiKey}`,
                 "Content-Type": "application/json",
-                "HTTP-Referer": "https://syberofficial.com",
-                "X-Title": "SyberNeoRenew Byte"
               },
               body: JSON.stringify({
                 "model": models[modelIndex].name,
@@ -639,20 +643,21 @@ Please always respond in ${currentLanguage}.`
       modal.className = 'modal-overlay';
       modal.innerHTML = `
         
-														<div class="modal-window">
-															<div class="modal-header">
-																<span class="modal-title">Welcome to PatheticAI</span>
-															</div>
-															<div class="modal-content">
-																<p>API version: 1.0</p>
-																<p>PatheticAI version: 0.9</p>
-																<p>Created by: Pathetic</p>
-																<br>
-																	<p>To close this popup, select next to the popup.</p>
-																	<br>
-																		<p>To change the language, after closing, select the settings button in the taskbar and then select 'language'.</p>
-																	</div>
+														
+															<div class="modal-window">
+																<div class="modal-header">
+																	<span class="modal-title">Welcome to PatheticAI</span>
 																</div>
+																<div class="modal-content">
+																	<p>API version: 1.0</p>
+																	<p>PatheticAI version: 0.9</p>
+																	<p>Created by: Pathetic</p>
+																	<br>
+																		<p>To close this popup, select next to the popup.</p>
+																		<br>
+																			<p>To change the language, after closing, select the settings button in the taskbar and then select 'language'.</p>
+																		</div>
+																	</div>
     `;
       modal.addEventListener('click', (e) => {
         if (e.target === modal) {
@@ -667,16 +672,16 @@ Please always respond in ${currentLanguage}.`
       modal.className = 'modal-overlay';
       modal.innerHTML = `
         
-																<div class="modal-window">
-																	<div class="modal-header">
-																		<span class="modal-title">About PatheticAI</span>
-																	</div>
-																	<div class="modal-content">
-																		<p>PatheticAI: 0.9</p>
-																		<br>
-																			<p>API version: 1.0</p>
-																			<p>Contact: https://discord.gg/Hb5ccPY3XV</p>
-            
+																
+																	<div class="modal-window">
+																		<div class="modal-header">
+																			<span class="modal-title">About PatheticAI</span>
+																		</div>
+																		<div class="modal-content">
+																			<p>PatheticAI: 0.9</p>
+																			<br>
+																				<p>API version: 1.0</p>
+																				<p>Contact: https://discord.gg/Hb5ccPY3XV</p>
 																			</div>
 																		</div>
     `;
@@ -693,6 +698,7 @@ Please always respond in ${currentLanguage}.`
       modal.className = 'modal-overlay';
       modal.innerHTML = `
         
+																		
 																		<div class="modal-window">
 																			<div class="modal-header">
 																				<span class="modal-title">Settings</span>
@@ -702,21 +708,25 @@ Please always respond in ${currentLanguage}.`
 																					<i class="fas fa-redo"></i>
                     Reset Chat
                 
+																				
 																				</div>
 																				<div class="settings-button" onclick="changeLanguage()">
 																					<i class="fas fa-language"></i>
                     Language: ${currentLanguage}
                 
+																				
 																				</div>
 																				<div class="settings-button" onclick="removeApiKey()">
 																					<i class="fas fa-key"></i>
                     Remove API Key
                 
+																				
 																				</div>
 																				<div class="settings-button" onclick="closeApp()">
 																					<i class="fas fa-times"></i>
                     Close App
                 
+																				
 																				</div>
 																			</div>
 																		</div>
@@ -744,13 +754,12 @@ Please always respond in ${currentLanguage}.`
       messageHistory = [];
       systemMessage.content = `You are PatheticAI.
 
-Key characteristics:
-1. You identify yourself as "PatheticAI (Model: OpenRouter)"
-2. You provide helpful and detailed responses
-3. You maintain a professional and friendly tone
-4. When people want to change the language, they have to go to the settings in the toolbar and then select language
-5. When people want to remove the API key, they have to go to the settings in the toolbar and then select remove API key
-6. To reset the chat, they select reset chat in the settings
+User's assistant is also characterized by:
+1. Offering clear and concise guidance, make sure to respond in a really easy way that everyone can understand.
+2. Being adaptable to various topics and tasks.
+3. Responding in a manner that is both informative and easy to understand.
+4. Assisting users with technical support or queries related to its functionalities.
+5. Promoting user satisfaction by being patient and approachable.
 Please always respond in ${currentLanguage}.`;
       showNotification('Chat reset successful');
     }
@@ -791,7 +800,8 @@ Please always respond in ${currentLanguage}.`;
     }
 
     function contactEmail() {
-window.open('https://discord.gg/Hb5ccPY3XV', '_blank');    }
+      window.open('https://discord.gg/Hb5ccPY3XV', '_blank');
+    }
 
     function checkAndStoreApiKey() {
       const storedApiKey = localStorage.getItem('openRouterApiKey');
@@ -800,13 +810,16 @@ window.open('https://discord.gg/Hb5ccPY3XV', '_blank');    }
         modal.className = 'modal-overlay';
         modal.innerHTML = `
             
+																		
 																		<div class="modal-window">
 																			<div class="modal-header">
 																				<span class="modal-title">Openrouter API key required!</span>
 																			</div>
 																			<div class="modal-content">
 																				<p>To use PatheticAI, an API key from Openrouter is required. To get this, go to 
+																					
 																					<a href="https://openrouter.ai/settings/keys" target="_blank" style="color: white;">https://openrouter.ai/settings/keys</a>, an account is required. Enter your key here:
+																				
 																				</p>
 																				<br>
 																					<input type="text" id="apiKeyInput" placeholder="Your API Key Here" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 15px; color: white;">
