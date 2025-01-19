@@ -23,7 +23,40 @@
         scrollbar-width: none;
         -ms-overflow-style: none;
       }
+:root {
+  --container-width: 90%;
+  --container-max-width: 800px;
+  --spacing-normal: 20px;
+  --spacing-small: 10px;
+  --border-radius: 30px;
+  --border-radius-small: 15px;
+}
 
+:root[data-theme="dark"] {
+  --background-color: #121212;
+  --primary-color: #ffffff;
+  --secondary-color: #bb86fc;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --chat-message-background: rgba(0, 0, 0, 0.25);
+  --taskbar-background: rgba(0, 0, 0, 0.4);
+  --input-background: rgba(0, 0, 0, 0.6);
+  --button-background: rgba(255, 255, 255, 0.1);
+  --button-hover-background: rgba(255, 255, 255, 0.2);
+  --modal-background: rgba(0, 0, 0, 0.4);
+}
+
+:root[data-theme="light"] {
+  --background-color: #ffffff;
+  --primary-color: #000000;
+  --secondary-color: #6200ea;
+  --border-color: rgba(0, 0, 0, 0.1);
+  --chat-message-background: rgba(255, 255, 255, 0.25);
+  --taskbar-background: rgba(255, 255, 255, 0.8);
+  --input-background: rgba(255, 255, 255, 0.9);
+  --button-background: rgba(0, 0, 0, 0.1);
+  --button-hover-background: rgba(0, 0, 0, 0.2);
+  --modal-background: rgba(255, 255, 255, 0.8);
+}
       *::-webkit-scrollbar {
         display: none;
       }
@@ -633,10 +666,12 @@
         <div class="taskbar-left">
             <span class="brand">PatheticAI</span>
             <span class="preview-tag">Enhanced Edition</span>
-            <select class="theme-selector" id="themeSelect">
-                <option value="dark">Dark Theme</option>
-                <option value="light">Light Theme</option>
-            </select>
+<select class="theme-selector" id="themeSelect">
+  <option value="dark">Dark Theme</option>
+  <option value="light">Light Theme</option>
+</select>
+
+</select>
         </div>
         <div class="taskbar-right">
             <button onclick="showSettingsModal()">
@@ -811,14 +846,7 @@ function startEditing(messageId) {
     
     textarea.focus();
     
-    textarea.onkeydown = (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            finishEditing(messageId, textarea.value);
-        } else if (e.key === 'Escape') {
-            finishEditing(messageId, originalText);
-        }
-    };
+
 }
 
 function startEditing(messageId) {
@@ -839,17 +867,7 @@ function startEditing(messageId) {
     
     textarea.focus();
     
-    textarea.onkeydown = async (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            const newText = textarea.value;
-            finishEditing(messageId, newText);
-            // Trigger a new response for the edited message
-            await handleEditedMessage(newText);
-        } else if (e.key === 'Escape') {
-            finishEditing(messageId, originalText);
-        }
-    };
+
 }
 
 function finishEditing(messageId, newText) {
@@ -1237,6 +1255,7 @@ Please always respond in ${currentLanguage}.`;
           sendMessage();
         }
       });
+
     });
   </script>
   </body>
