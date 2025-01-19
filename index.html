@@ -31,6 +31,26 @@
         --spacing-small: 10px;
         --border-radius: 30px;
         --border-radius-small: 15px;
+        --primary-color: #000000;
+        --secondary-color: #6200ea;
+        --border-color: rgba(0, 0, 0, 0.1);
+        --button-background: rgba(255, 255, 255, 0.1);
+        --button-hover-background: rgba(255, 255, 255, 0.2);
+        --taskbar-background: rgba(255, 255, 255, 0.8);
+        --background-color: #ffffff;
+        --input-background: rgba(255, 255, 255, 0.9);
+        --modal-background: rgba(255, 255, 255, 0.8);
+      }
+
+      body {
+        background-color: var(--background-color);
+        color: var(--primary-color);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background-image: url('light%20background.jpg');
+        background-size: cover;
+        background-position: center;
       }
 
       :root[data-theme="dark"] {
@@ -38,12 +58,12 @@
         --primary-color: #ffffff;
         --secondary-color: #bb86fc;
         --border-color: rgba(255, 255, 255, 0.1);
-        --chat-message-background: rgba(0, 0, 0, 0.25);
         --taskbar-background: rgba(0, 0, 0, 0.4);
         --input-background: rgba(0, 0, 0, 0.6);
         --button-background: rgba(255, 255, 255, 0.1);
         --button-hover-background: rgba(255, 255, 255, 0.2);
         --modal-background: rgba(0, 0, 0, 0.4);
+        background-image: url('dark%20background.jpg');
       }
 
       :root[data-theme="light"] {
@@ -51,34 +71,23 @@
         --primary-color: #000000;
         --secondary-color: #6200ea;
         --border-color: rgba(0, 0, 0, 0.1);
-        --chat-message-background: rgba(255, 255, 255, 0.25);
         --taskbar-background: rgba(255, 255, 255, 0.8);
         --input-background: rgba(255, 255, 255, 0.9);
         --button-background: rgba(0, 0, 0, 0.1);
         --button-hover-background: rgba(0, 0, 0, 0.2);
         --modal-background: rgba(255, 255, 255, 0.8);
+        background-image: url('light%20background.jpg');
+      }
+
+      body {
+        background-color: var(--background-color);
+        background-image: var(--background-image);
+        background-size: cover;
+        background-position: center;
       }
 
       *::-webkit-scrollbar {
         display: none;
-      }
-
-      body {
-        background: url('https://wallpapershome.com/images/pages/pic_h/26430.jpg') no-repeat center center fixed;
-        background-size: cover;
-        color: white;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-      }
-
-      :root {
-        --container-width: 90%;
-        --container-max-width: 800px;
-        --spacing-normal: 20px;
-        --spacing-small: 10px;
-        --border-radius: 30px;
-        --border-radius-small: 15px;
       }
 
       .container {
@@ -90,6 +99,7 @@
         width: var(--container-width);
         max-width: var(--container-max-width);
         overflow-y: auto;
+        padding-right: 15px;
       }
 
       .taskbar {
@@ -100,10 +110,10 @@
         width: var(--container-width);
         max-width: var(--container-max-width);
         height: 60px;
-        background: rgba(0, 0, 0, 0.4);
+        background: var(--taskbar-background);
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid var(--border-color);
         border-radius: 30px;
         display: flex;
         justify-content: space-between;
@@ -135,9 +145,9 @@
       }
 
       .taskbar button {
-        background: rgba(255, 255, 255, 0.1);
+        background: var(--button-background);
         border: 1px solid rgba(255, 255, 255, 0.2);
-        color: white;
+        color: var(--primary-color);
         padding: 8px 15px;
         border-radius: 30px;
         cursor: pointer;
@@ -146,7 +156,7 @@
       }
 
       .taskbar button:hover {
-        background: rgba(255, 255, 255, 0.2);
+        background: var(--button-hover-background);
         transform: translateY(-1px);
       }
 
@@ -157,6 +167,7 @@
         padding: 20px;
         padding-bottom: 40px;
         height: 100%;
+        overflow-y: auto;
       }
 
       .chat-message {
@@ -168,20 +179,20 @@
         font-size: clamp(14px, 3vw, 16px);
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid var(--border-color);
         animation: messageAppear 0.3s ease;
       }
 
       .chat-message.user {
         background: rgba(255, 255, 255, 0.25);
-        color: white;
+        color: var(--primary-color);
         align-self: flex-end;
         border-bottom-right-radius: 5px;
       }
 
       .chat-message.bot {
         background: rgba(0, 0, 0, 0.25);
-        color: white;
+        color: var(--primary-color);
         align-self: flex-start;
         border-bottom-left-radius: 5px;
       }
@@ -195,12 +206,12 @@
         max-width: var(--container-max-width);
         display: flex;
         gap: 10px;
-        background: rgba(0, 0, 0, 0.4);
+        background: var(--taskbar-background);
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
         padding: var(--spacing-normal);
         border-radius: 30px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid var(--border-color);
       }
 
       .chat-input-container input {
@@ -208,7 +219,7 @@
         background: transparent;
         border: none;
         outline: none;
-        color: white;
+        color: var(--primary-color);
         font-size: 16px;
         padding: 0 10px;
       }
@@ -218,9 +229,9 @@
       }
 
       .chat-input-container button {
-        background: rgba(255, 255, 255, 0.1);
+        background: var(--button-background);
         border: 1px solid rgba(255, 255, 255, 0.2);
-        color: white;
+        color: var(--primary-color);
         padding: 8px 20px;
         border-radius: 30px;
         cursor: pointer;
@@ -228,7 +239,7 @@
       }
 
       .chat-input-container button:hover {
-        background: rgba(255, 255, 255, 0.2);
+        background: var(--button-hover-background);
         transform: translateY(-1px);
       }
 
@@ -248,15 +259,15 @@
       }
 
       .modal-window {
-        background: rgba(0, 0, 0, 0.4);
+        background: var(--modal-background);
         backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid var(--border-color);
         border-radius: 30px;
         width: var(--container-width);
         max-width: var(--container-max-width);
         margin: var(--spacing-normal);
         padding: var(--spacing-normal);
-        color: white;
+        color: var(--primary-color);
         animation: slideUp 0.3s ease;
       }
 
@@ -288,7 +299,7 @@
       }
 
       .settings-button {
-        background: rgba(255, 255, 255, 0.1);
+        background: var(--button-background);
         border: 1px solid rgba(255, 255, 255, 0.2);
         padding: 15px;
         border-radius: 15px;
@@ -300,7 +311,7 @@
       }
 
       .settings-button:hover {
-        background: rgba(255, 255, 255, 0.2);
+        background: var(--button-hover-background);
         transform: translateX(5px);
       }
 
@@ -315,7 +326,7 @@
         left: 50%;
         transform: translateX(-50%);
         background: rgba(0, 0, 0, 0.8);
-        color: white;
+        color: var(--primary-color);
         padding: 12px 25px;
         border-radius: 30px;
         backdrop-filter: blur(10px);
@@ -368,9 +379,9 @@
       }
 
       .action-button {
-        background: rgba(255, 255, 255, 0.1);
+        background: var(--button-background);
         border: 1px solid rgba(255, 255, 255, 0.2);
-        color: white;
+        color: var(--primary-color);
         padding: 3px 8px;
         border-radius: 12px;
         cursor: pointer;
@@ -385,7 +396,7 @@
         width: 100%;
         background: transparent;
         border: none;
-        color: white;
+        color: var(--primary-color);
         font-family: inherit;
         font-size: inherit;
         padding: 0;
@@ -395,13 +406,50 @@
       }
 
       .theme-selector {
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        color: white;
-        padding: 5px 10px;
+        background: var(--button-background);
+        border: 1px solid var(--border-color);
+        color: var(--primary-color);
+        padding: 8px 15px;
         border-radius: 15px;
         cursor: pointer;
         margin-left: 10px;
+        transition: all 0.3s ease;
+        font-size: 14px;
+      }
+
+      .theme-selector:hover {
+        background: var(--button-hover-background);
+      }
+
+      .theme-selector select {
+        background: transparent;
+        border: none;
+        color: var(--primary-color);
+        font-size: inherit;
+        outline: none;
+        padding: 5px;
+        cursor: pointer;
+        border-radius: 15px;
+      }
+
+      .theme-selector select:focus {
+        border: 1px solid var(--secondary-color);
+      }
+
+      .theme-selector option {
+        background: var(--background-color);
+        color: var(--primary-color);
+        padding: 10px;
+      }
+
+      .theme-selector option:hover {
+        background: var(--secondary-color);
+        color: white;
+      }
+
+      .theme-selector option[selected] {
+        background: var(--secondary-color);
+        color: white;
       }
 
       .message-timestamp {
@@ -673,7 +721,6 @@
           <option value="dark">Dark Theme</option>
           <option value="light">Light Theme</option>
         </select>
-        </select>
       </div>
       <div class="taskbar-right">
         <button onclick="showSettingsModal()">
@@ -885,20 +932,7 @@ Please always respond in ${currentLanguage}.`
                 showNotification('Failed to copy to clipboard');
               }
             }
-            document.addEventListener('DOMContentLoaded', () => {
-              if (messageHistory.length > 0) {
-                messageHistory.forEach(msg => {
-                  if (msg.role === "user" || msg.role === "assistant") {
-                    const {
-                      element
-                    } = createMessageElement(msg.content, msg.role === "user", new Date(msg.timestamp));
-                    document.querySelector('.chat-messages').appendChild(element);
-                  }
-                });
-                const chatMessages = document.querySelector('.chat-messages');
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-              }
-            }); async function sendMessage(customMessage = null, isEdit = false) {
+            async function sendMessage(customMessage = null, isEdit = false) {
               const message = customMessage || textarea.value.trim();
               const sendButton = document.querySelector('.chat-input-container button');
               if (!message || isWaitingForResponse) return;
@@ -1019,28 +1053,28 @@ Please always respond in ${currentLanguage}.`
               modal.className = 'modal-overlay';
               modal.innerHTML = `
         
-													<div class="modal-window">
-														<div class="modal-header">
-															<span class="modal-title">Welcome to PatheticAI Enhanced</span>
-														</div>
-														<div class="modal-content">
-															<p>API version: 1.0</p>
-															<p>PatheticAI version: 1.0 Enhanced</p>
-															<p>Created by: Pathetic</p>
-															<br>
-																<p>New Features:</p>
-																<ul>
-																	<li>Edit messages with the edit button</li>
-																	<li>Copy messages and code blocks</li>
-																	<li>Syntax highlighting for code</li>
-																	<li>Dark/Light theme toggle</li>
-																	<li>Improved UI and responsiveness</li>
-																	<li>Persistent chat history</li>
-																</ul>
-																<br>
-																	<p>Click outside this popup to close it.</p>
-																</div>
+														<div class="modal-window">
+															<div class="modal-header">
+																<span class="modal-title">Welcome to PatheticAI Enhanced</span>
 															</div>
+															<div class="modal-content">
+																<p>API version: 1.0</p>
+																<p>PatheticAI version: 1.0 Enhanced</p>
+																<p>Created by: Pathetic</p>
+																<br>
+																	<p>New Features:</p>
+																	<ul>
+																		<li>Edit messages with the edit button</li>
+																		<li>Copy messages and code blocks</li>
+																		<li>Syntax highlighting for code</li>
+																		<li>Dark/Light theme toggle</li>
+																		<li>Improved UI and responsiveness</li>
+																		<li>Persistent chat history</li>
+																	</ul>
+																	<br>
+																		<p>Click outside this popup to close it.</p>
+																	</div>
+																</div>
     `;
               modal.addEventListener('click', (e) => {
                 if (e.target === modal) {
@@ -1054,34 +1088,39 @@ Please always respond in ${currentLanguage}.`
               const modal = document.createElement('div');
               modal.className = 'modal-overlay';
               modal.innerHTML = `
-        
-															<div class="modal-window">
-																<div class="modal-header">
-																	<span class="modal-title">Settings</span>
-																</div>
-																<div class="modal-content settings-content">
-																	<div class="settings-button" onclick="resetChat()">
-																		<i class="fas fa-redo"></i>
+
+															
+																<div class="modal-window">
+																	<div class="modal-header">
+																		<span class="modal-title">Settings</span>
+																	</div>
+																	<div class="modal-content settings-content">
+																		<div class="settings-button" onclick="resetChat()">
+																			<i class="fas fa-redo"></i>
                     Reset Chat
-                
-																	</div>
-																	<div class="settings-button" onclick="changeLanguage()">
-																		<i class="fas fa-language"></i>
+
+																	
+																		</div>
+																		<div class="settings-button" onclick="changeLanguage()">
+																			<i class="fas fa-language"></i>
                     Language: ${currentLanguage}
-                
-																	</div>
-																	<div class="settings-button" onclick="removeApiKey()">
-																		<i class="fas fa-key"></i>
+
+																	
+																		</div>
+																		<div class="settings-button" onclick="removeApiKey()">
+																			<i class="fas fa-key"></i>
                     Remove API Key
-                
-																	</div>
-																	<div class="settings-button" onclick="closeApp()">
-																		<i class="fas fa-times"></i>
+
+																	
+																		</div>
+																		<div class="settings-button" onclick="closeApp()">
+																			<i class="fas fa-times"></i>
                     Close App
-                
+
+																	
+																		</div>
 																	</div>
 																</div>
-															</div>
     `;
               modal.addEventListener('click', (e) => {
                 if (e.target === modal) {
@@ -1095,27 +1134,29 @@ Please always respond in ${currentLanguage}.`
               const modal = document.createElement('div');
               modal.className = 'modal-overlay';
               modal.innerHTML = `
-        
-															<div class="modal-window">
-																<div class="modal-header">
-																	<span class="modal-title">About PatheticAI</span>
-																</div>
-																<div class="modal-content">
-																	<p>PatheticAI: 1.0 Enhanced</p>
-																	<p>API version: 1.0</p>
-																	<p>Contact: https:
-                
-																		<br>
-																			<p>Enhanced Features:</p>
-																			<ul>
-																				<li>Improved message handling</li>
-																				<li>Better code display and copying</li>
-																				<li>Theme customization</li>
-																				<li>Advanced editing capabilities</li>
-																				<li>Persistent chat history</li>
-																			</ul>
-																		</div>
+
+															
+																<div class="modal-window">
+																	<div class="modal-header">
+																		<span class="modal-title">About PatheticAI</span>
 																	</div>
+																	<div class="modal-content">
+																		<p>PatheticAI: 1.0 Enhanced</p>
+																		<p>API version: 1.0</p>
+																		<p>Contact: https:
+
+																		
+																			<br>
+																				<p>Enhanced Features:</p>
+																				<ul>
+																					<li>Improved message handling</li>
+																					<li>Better code display and copying</li>
+																					<li>Theme customization</li>
+																					<li>Advanced editing capabilities</li>
+																					<li>Persistent chat history</li>
+																				</ul>
+																			</div>
+																		</div>
     `;
               modal.addEventListener('click', (e) => {
                 if (e.target === modal) {
@@ -1185,9 +1226,9 @@ Please always respond in ${currentLanguage}.`;
 																			<span class="modal-title">Openrouter API key required!</span>
 																		</div>
 																		<div class="modal-content">
-																			<p>To use PatheticAI, an API key from Openrouter is required. To get this, go to 
+																			<p>To use PatheticAI, an API key from Openrouter is required. To get this, go to</p>
                         
-																				<a href="https://openrouter.ai/settings/keys" target="_blank" style="color: white;">https:
+																				<a href="https://openrouter.ai/settings/keys" target="_blank" style="color: white;">https://openrouter.ai/settings/keys</a>
                     
 																				</p>
 																				<br>
@@ -1203,6 +1244,7 @@ Please always respond in ${currentLanguage}.`;
               }
               return true;
             }
+
 
             function saveApiKey() {
               const apiKey = document.getElementById('apiKeyInput').value.trim();
