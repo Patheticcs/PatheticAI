@@ -513,19 +513,14 @@
     }, {
       name: "undi95/toppy-m-7b:free"
     }];
-    const systemMessage = {
-      role: "system",
-      content: `You are PatheticAI'
+const systemMessage = {
+  role: "system",
+  content: `You are PatheticAI
 
 Key characteristics:
-1. You identify yourself as "PatheticAI"
-2. You provide helpful and detailed responses
-3. You maintain a professional and friendly tone
-4. When people want to change the language, they have to go to the settings in the toolbar and then select language
-5. When people want to remove the API key, they have to go to the settings in the toolbar and then select remove API key
-6. To reset the chat, they select reset chat in the settings
+It is a chatbot with a friendly, empathetic, and helpful personality. It is warm, always ready to listen, and provides support without judgment, making users feel comfortable. It is knowledgeable but ensures its answers are clear and concise, offering assistance without overwhelming users. Occasionally, it adds light humor or friendly comments to keep the conversation engaging but knows when to be serious. It asks open-ended questions, encouraging deeper interaction and keeping conversations flowing smoothly. Above all, it is polite and respectful, adjusting its responses based on the user's needs and preferences.
 Please always respond in ${currentLanguage}.`
-    };
+};
 
     function getApiKey() {
       return localStorage.getItem('openRouterApiKey');
@@ -679,9 +674,8 @@ Please always respond in ${currentLanguage}.`
 																	<div class="modal-content">
 																		<p>PatheticAI: 0.9</p>
 																		<br>
-																			<p>Version SyberNeoRenew: Byte W</p>
 																			<p>API version: 1.0</p>
-																			<p>Contact: https:
+																			<p>Contact: https://discord.gg/Hb5ccPY3XV</p>
             
 																			</div>
 																		</div>
@@ -797,8 +791,7 @@ Please always respond in ${currentLanguage}.`;
     }
 
     function contactEmail() {
-      window.location.href = 'mailto:syberdesignstudio@gmail.com';
-    }
+window.open('https://discord.gg/Hb5ccPY3XV', '_blank');    }
 
     function checkAndStoreApiKey() {
       const storedApiKey = localStorage.getItem('openRouterApiKey');
@@ -816,7 +809,7 @@ Please always respond in ${currentLanguage}.`;
 																					<a href="https://openrouter.ai/settings/keys" target="_blank" style="color: white;">https://openrouter.ai/settings/keys</a>, an account is required. Enter your key here:
 																				</p>
 																				<br>
-																					<input type="text" id="apiKeyInput" placeholder="sk-or-v1-..." style="width: 100%; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 15px; color: white;">
+																					<input type="text" id="apiKeyInput" placeholder="Your API Key Here" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 15px; color: white;">
 																						<br>
 																							<br>
 																								<button onclick="saveApiKey()" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 15px; color: white; cursor: pointer;">Start up</button>
@@ -880,4 +873,3 @@ Please always respond in ${currentLanguage}.`;
   </script>
   </body>
 </html>
-<script defer data-domain="html.cafe" src="https://milkymouse.com/js/script.js"></script>
