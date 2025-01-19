@@ -51,7 +51,7 @@
   --notification-background: rgba(0, 0, 0, 0.8);
   --notification-text: #ffffff;
   --placeholder-color: rgba(0, 0, 0, 0.5);
-  --background-image: url('light%20background.png');
+  --background-image: url('light-background.png'); /* Fixed URL encoding */
 }
 
 :root[data-theme="dark"] {
@@ -71,7 +71,7 @@
   --notification-background: rgba(0, 0, 0, 0.8);
   --notification-text: #ffffff;
   --placeholder-color: rgba(255, 255, 255, 0.5);
-  --background-image: url('dark%20background.jpg');
+  --background-image: url('dark-background.jpg'); /* Fixed URL encoding */
 }
 
 body {
@@ -83,353 +83,369 @@ body {
   min-height: 100vh;  
 }
 
-      *::-webkit-scrollbar {
-        display: none;
-      }
+*::-webkit-scrollbar {
+  display: none;
+}
 
-      .container {
-        position: fixed;
-        top: calc(80px + var(--spacing-normal));
-        bottom: calc(80px + var(--spacing-normal));
-        left: 50%;
-        transform: translateX(-50%);
-        width: var(--container-width);
-        max-width: var(--container-max-width);
-        overflow-y: auto;
-        padding-right: 15px;
-      }
+.container {
+  position: fixed;
+  top: calc(80px + var(--spacing-normal));
+  bottom: calc(80px + var(--spacing-normal));
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--container-width);
+  max-width: var(--container-max-width);
+  overflow-y: auto;
+  padding-right: 15px;
+}
 
-      .taskbar {
-        position: fixed;
-        top: var(--spacing-normal);
-        left: 50%;
-        transform: translateX(-50%);
-        width: var(--container-width);
-        max-width: var(--container-max-width);
-        height: 60px;
-        background: var(--taskbar-background);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        border: 1px solid var(--border-color);
-        border-radius: 30px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0 var(--spacing-normal);
-        z-index: 1000;
-      }
+.taskbar {
+  position: fixed;
+  top: var(--spacing-normal);
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--container-width);
+  max-width: var(--container-max-width);
+  height: 60px;
+  background: var(--taskbar-background);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--border-color);
+  border-radius: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 var(--spacing-normal);
+  z-index: 1000;
+}
 
-      .taskbar-left {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
+.taskbar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 
-      .brand {
-        font-size: 20px;
-        font-weight: 700;
-        cursor: pointer;
-        color: var(--primary-color);
-        transition: opacity 0.3s ease;
-      }
+.brand {
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+  color: var(--primary-color);
+  transition: opacity 0.3s ease;
+}
 
-      .brand:hover {
-        opacity: 0.8;
-      }
+.brand:hover {
+  opacity: 0.8;
+}
 
-      .preview-tag {
-        font-size: 14px;
-        opacity: 0.7;
-      }
+.preview-tag {
+  font-size: 14px;
+  color: var(--primary-color);
+  opacity: 0.7;
+}
 
-      .taskbar button {
-        background: var(--button-background);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        color: var(--primary-color);
-        padding: 8px 15px;
-        border-radius: 30px;
-        cursor: pointer;
-        margin-left: 10px;
-        transition: all 0.3s ease;
-      }
+.taskbar button {
+  background: var(--button-background);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--primary-color);
+  padding: 8px 15px;
+  border-radius: 30px;
+  cursor: pointer;
+  margin-left: 10px;
+  transition: all 0.3s ease;
+}
 
-      .taskbar button:hover {
-        background: var(--button-hover-background);
-        transform: translateY(-1px);
-      }
+.taskbar button:hover {
+  background: var(--button-hover-background);
+  transform: translateY(-1px);
+}
 
-      .chat-messages {
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-        padding: 20px;
-        padding-bottom: 40px;
-        height: 100%;
-        overflow-y: auto;
-      }
+.chat-input-container button,
+.theme-selector button {
+  background: var(--button-background);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--primary-color);
+  padding: 8px 15px;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
 
-      .chat-message {
-        padding: var(--spacing-normal);
-        border-radius: 20px;
-        max-width: 85%;
-        white-space: pre-wrap;
-        line-height: 1.5;
-        font-size: clamp(14px, 3vw, 16px);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        border: 1px solid var(--border-color);
-        animation: messageAppear 0.3s ease;
-      }
+.chat-input-container button:hover,
+.theme-selector button:hover {
+  background: var(--button-hover-background);
+  transform: translateY(-1px);
+}
 
-      .chat-message.user {
-        background: rgba(255, 255, 255, 0.25);
-        color: var(--primary-color);
-        align-self: flex-end;
-        border-bottom-right-radius: 5px;
-      }
+.chat-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 20px;
+  padding-bottom: 40px;
+  height: 100%;
+  overflow-y: auto;
+}
 
-      .chat-message.bot {
-        background: rgba(0, 0, 0, 0.25);
-        color: var(--primary-color);
-        align-self: flex-start;
-        border-bottom-left-radius: 5px;
-      }
+.chat-message {
+  padding: var(--spacing-normal);
+  border-radius: 20px;
+  max-width: 85%;
+  white-space: pre-wrap;
+  line-height: 1.5;
+  font-size: clamp(14px, 3vw, 16px);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--border-color);
+  animation: messageAppear 0.3s ease;
+}
 
-      .chat-input-container {
-        position: fixed;
-        bottom: var(--spacing-normal);
-        left: 50%;
-        transform: translateX(-50%);
-        width: var(--container-width);
-        max-width: var(--container-max-width);
-        display: flex;
-        gap: 10px;
-        background: var(--taskbar-background);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        padding: var(--spacing-normal);
-        border-radius: 30px;
-        border: 1px solid var(--border-color);
-      }
+.chat-message.user {
+  background: rgba(255, 255, 255, 0.25);
+  color: var(--primary-color);
+  align-self: flex-end;
+  border-bottom-right-radius: 5px;
+}
 
-      .chat-input-container input {
-        flex: 1;
-        background: transparent;
-        border: none;
-        outline: none;
-        color: var(--primary-color);
-        font-size: 16px;
-        padding: 0 10px;
-      }
+.chat-message.bot {
+  background: rgba(0, 0, 0, 0.25);
+  color: var(--primary-color);
+  align-self: flex-start;
+  border-bottom-left-radius: 5px;
+}
 
-      .chat-input-container input::placeholder {
-        color: rgba(255, 255, 255, 0.5);
-      }
+.chat-input-container {
+  position: fixed;
+  bottom: var(--spacing-normal);
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--container-width);
+  max-width: var(--container-max-width);
+  display: flex;
+  gap: 10px;
+  background: var(--taskbar-background);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: var(--spacing-normal);
+  border-radius: 30px;
+  border: 1px solid var(--border-color);
+}
 
-      .chat-input-container button {
-        background: var(--button-background);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        color: var(--primary-color);
-        padding: 8px 20px;
-        border-radius: 30px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-      }
+.chat-input-container input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--primary-color);
+  font-size: 16px;
+  padding: 0 10px;
+}
 
-      .chat-input-container button:hover {
-        background: var(--button-hover-background);
-        transform: translateY(-1px);
-      }
+.chat-input-container input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
 
-      .modal-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.5);
-        backdrop-filter: blur(5px);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 2000;
-        animation: fadeIn 0.3s ease;
-      }
+.chat-input-container button {
+  background: var(--button-background);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--primary-color);
+  padding: 8px 20px;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
 
-      .modal-window {
-        background: var(--modal-background);
-        backdrop-filter: blur(10px);
-        border: 1px solid var(--border-color);
-        border-radius: 30px;
-        width: var(--container-width);
-        max-width: var(--container-max-width);
-        margin: var(--spacing-normal);
-        padding: var(--spacing-normal);
-        color: var(--primary-color);
-        animation: slideUp 0.3s ease;
-      }
+.chat-input-container button:hover {
+  background: var(--button-hover-background);
+  transform: translateY(-1px);
+}
 
-      .modal-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-      }
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  animation: fadeIn 0.3s ease;
+}
 
-      .modal-title {
-        font-size: 24px;
-        font-weight: 700;
-      }
+.modal-window {
+  background: var(--modal-background);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border-color);
+  border-radius: 30px;
+  width: var(--container-width);
+  max-width: var(--container-max-width);
+  margin: var(--spacing-normal);
+  padding: var(--spacing-normal);
+  color: var(--primary-color);
+  animation: slideUp 0.3s ease;
+}
 
-      .modal-content {
-        line-height: 1.6;
-        font-size: 16px;
-      }
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
 
-      .modal-content p {
-        margin: 5px 0;
-      }
+.modal-title {
+  font-size: 24px;
+  font-weight: 700;
+}
 
-      .settings-content {
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-      }
+.modal-content {
+  line-height: 1.6;
+  font-size: 16px;
+}
 
-      .settings-button {
-        background: var(--button-background);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        padding: 15px;
-        border-radius: 15px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
+.modal-content p {
+  margin: 5px 0;
+}
 
-      .settings-button:hover {
-        background: var(--button-hover-background);
-        transform: translateX(5px);
-      }
+.settings-content {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
 
-      .settings-button i {
-        width: 20px;
-        text-align: center;
-      }
+.settings-button {
+  background: var(--button-background);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 15px;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 
-      .notification {
-        position: fixed;
-        bottom: 100px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: (--background-color);
-        color: var(--primary-color);
-        padding: 12px 25px;
-        border-radius: 30px;
-        backdrop-filter: blur(10px);
-        animation: slideUp 0.3s ease;
-        z-index: 2000;
-      }
+.settings-button:hover {
+  background: var(--button-hover-background);
+  transform: translateX(5px);
+}
 
-      .notification.fade-out {
-        animation: fadeOut 0.3s ease;
-      }
+.settings-button i {
+  width: 20px;
+  text-align: center;
+}
 
-      .code-block {
-        background: (--background-color);
-        color: var(--primary-color);
-        border-radius: 10px;
-        padding: 15px;
-        margin: 10px 0;
-        position: relative;
-      }
+.notification {
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--background-color);
+  color: var(--primary-color);
+  padding: 12px 25px;
+  border-radius: 30px;
+  backdrop-filter: blur(10px);
+  animation: slideUp 0.3s ease;
+  z-index: 2000;
+}
 
-      .code-block pre {
-        margin: 0;
-        white-space: pre-wrap;
-        font-family: 'Fira Code', monospace;
-        color: #e0e0e0;
-      }
+.notification.fade-out {
+  animation: fadeOut 0.3s ease;
+}
 
-      .copy-button {
-        position: absolute;
-        top: 5px;
-        right: 5px;
-        background: (--background-color);
-        color: var(--primary-color);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-        padding: 5px 10px;
-        border-radius: 15px;
-        cursor: pointer;
-        font-size: 12px;
-      }
+.code-block {
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 10px;
+  padding: 15px;
+  margin: 10px 0;
+  position: relative;
+}
 
-      .message-actions {
-        display: flex;
-        gap: 5px;
-        margin-top: 5px;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-      }
+.code-block pre {
+  margin: 0;
+  white-space: pre-wrap;
+  font-family: 'Fira Code', monospace;
+  color: #e0e0e0;
+}
 
-      .chat-message:hover .message-actions {
-        opacity: 1;
-      }
+.copy-button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 15px;
+  cursor: pointer;
+  font-size: 12px;
+}
 
-      .action-button {
-        background: var(--button-background);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        color: var(--primary-color);
-        padding: 3px 8px;
-        border-radius: 12px;
-        cursor: pointer;
-        font-size: 12px;
-      }
+.message-actions {
+  display: flex;
+  gap: 5px;
+  margin-top: 5px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
 
-      .edit-mode {
-        border: 1px solid rgba(255, 255, 255, 0.3);
-      }
+.chat-message:hover .message-actions {
+  opacity: 1;
+}
 
-      .edit-input {
-        width: 100%;
-        background: transparent;
-        border: none;
-        color: var(--primary-color);
-        font-family: inherit;
-        font-size: inherit;
-        padding: 0;
-        margin: 0;
-        resize: none;
-        outline: none;
-      }
+.action-button {
+  background: var(--button-background);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--primary-color);
+  padding: 3px 8px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 12px;
+}
 
-      .theme-selector {
-        background: var(--button-background);
-        border: 1px solid var(--border-color);
-        color: var(--primary-color);
-        padding: 8px 15px;
-        border-radius: 15px;
-        cursor: pointer;
-        margin-left: 10px;
-        transition: all 0.3s ease;
-        font-size: 14px;
-      }
+.edit-mode {
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
 
-      .theme-selector:hover {
-        background: var(--button-hover-background);
-      }
+.edit-input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: var(--primary-color);
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0;
+  margin: 0;
+  resize: none;
+  outline: none;
+}
 
-      .theme-selector select {
-        background: transparent;
-        border: none;
-        color: var(--primary-color);
-        font-size: inherit;
-        outline: none;
-        padding: 5px;
-        cursor: pointer;
-        border-radius: 15px;
-      }
+.theme-selector {
+  background: var(--button-background);
+  border: 1px solid var(--border-color);
+  color: var(--primary-color);
+  padding: 8px 15px;
+  border-radius: 15px;
+  cursor: pointer;
+  margin-left: 10px;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.theme-selector:hover {
+  background: var(--button-hover-background);
+}
+
+.theme-selector select {
+  background: transparent;
+  border: none;
+  color: var(--primary-color);
+  font-size: inherit;
+  outline: none;
+  padding: 5px;
+  cursor: pointer;
+}
 
       .theme-selector select:focus {
         border: 1px solid var(--secondary-color);
@@ -743,7 +759,6 @@ body {
       </button>
     </div>
   </body>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
   <script>
     const STORAGE_KEYS = {
       THEME: 'theme',
@@ -810,226 +825,204 @@ Please always respond in ${currentLanguage}.`
     }
 
 function createMessageElement(message, isUser, timestamp = new Date()) {
-  const messageId = Date.now().toString();
-  const messageElement = document.createElement('div');
-  messageElement.classList.add('chat-message');
-  messageElement.classList.add(isUser ? 'user' : 'bot');
-  messageElement.dataset.messageId = messageId;
-  const contentDiv = document.createElement('div');
-  contentDiv.classList.add('message-content');
-  
-  if (!isUser) {
-    message = message.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-    message = message.replace(/\*(.*?)\*/g, '<em>$1</em>');
-    message = message.replace(/`([^`]+)`/g, '<code>$1</code>');
+    const messageId = Date.now().toString();
+    const messageElement = document.createElement('div');
+    messageElement.classList.add('chat-message');
+    messageElement.classList.add(isUser ? 'user' : 'bot');
+    messageElement.dataset.messageId = messageId;
+
+    const contentDiv = document.createElement('div');
+    contentDiv.classList.add('message-content');
     
-    const codeBlocks = message.match(/```[\s\S]*?```/g) || [];
-    let remainingMessage = message;
-    
-    if (codeBlocks.length > 0) {
-      codeBlocks.forEach((block) => {
-        const parts = remainingMessage.split(block);
-        if (parts[0]) {
-          const div = document.createElement('div');
-          div.innerHTML = parts[0];
-          contentDiv.appendChild(div);
+    if (!isUser) {
+        // Process code blocks in bot messages
+        const codeBlocks = message.match(/```[\s\S]*?```/g) || [];
+        let remainingMessage = message;
+
+        codeBlocks.forEach((block, index) => {
+            const code = block.replace(/```(\w+)?\n?|\n?```/g, '');
+            const language = block.match(/```(\w+)/)?.[1] || '';
+            
+            const parts = remainingMessage.split(block);
+            if (parts[0]) {
+                contentDiv.appendChild(document.createTextNode(parts[0]));
+            }
+
+            const codeBlockDiv = document.createElement('div');
+            codeBlockDiv.className = 'code-block';
+            
+            const pre = document.createElement('pre');
+            const codeElement = document.createElement('code');
+            if (language) codeElement.className = `language-${language}`;
+            codeElement.textContent = code;
+            pre.appendChild(codeElement);
+            codeBlockDiv.appendChild(pre);
+
+            const copyButton = document.createElement('button');
+            copyButton.className = 'copy-button';
+            copyButton.innerHTML = '<i class="fas fa-copy"></i>';
+            copyButton.onclick = () => copyToClipboard(code);
+            codeBlockDiv.appendChild(copyButton);
+
+            contentDiv.appendChild(codeBlockDiv);
+            remainingMessage = parts[1];
+        });
+
+        if (remainingMessage) {
+            contentDiv.appendChild(document.createTextNode(remainingMessage));
         }
-        
-        const code = block.replace(/```(\w+)?\n?|\n?```/g, '');
-        const language = block.match(/```(\w+)/)?.[1] || '';
-        const codeBlockDiv = document.createElement('div');
-        codeBlockDiv.className = 'code-block';
-        const pre = document.createElement('pre');
-        const codeElement = document.createElement('code');
-        
-        if (language) codeElement.className = `language-${language}`;
-        codeElement.textContent = code;
-        pre.appendChild(codeElement);
-        codeBlockDiv.appendChild(pre);
-        
-        const copyButton = document.createElement('button');
-        copyButton.className = 'copy-button';
-        copyButton.innerHTML = '<i class="fas fa-copy"></i>';
-        copyButton.onclick = () => copyToClipboard(code);
-        codeBlockDiv.appendChild(copyButton);
-        
-        contentDiv.appendChild(codeBlockDiv);
-        remainingMessage = parts[1];
-      });
-
-      if (remainingMessage) {
-        const div = document.createElement('div');
-        div.innerHTML = remainingMessage;
-        contentDiv.appendChild(div);
-      }
     } else {
-      contentDiv.innerHTML = message;
+        contentDiv.textContent = message;
     }
-  } else {
-    contentDiv.textContent = message;
-  }
 
-  messageElement.appendChild(contentDiv);
+    messageElement.appendChild(contentDiv);
 
-  const timestampDiv = document.createElement('div');
-  timestampDiv.className = 'message-timestamp';
-  timestampDiv.textContent = formatTimestamp(timestamp);
-  messageElement.appendChild(timestampDiv);
+    const timestampDiv = document.createElement('div');
+    timestampDiv.className = 'message-timestamp';
+    timestampDiv.textContent = formatTimestamp(timestamp);
+    messageElement.appendChild(timestampDiv);
 
-  const actionsDiv = document.createElement('div');
-  actionsDiv.className = 'message-actions';
-  
-  if (isUser) {
-    const editButton = document.createElement('button');
-    editButton.className = 'action-button';
-    editButton.innerHTML = '<i class="fas fa-edit"></i>';
-    editButton.onclick = () => startEditing(messageId);
-    actionsDiv.appendChild(editButton);
-  }
+    const actionsDiv = document.createElement('div');
+    actionsDiv.className = 'message-actions';
 
-  const copyButton = document.createElement('button');
-  copyButton.className = 'action-button';
-  copyButton.innerHTML = '<i class="fas fa-copy"></i>';
-  copyButton.onclick = () => copyToClipboard(isUser ? message : contentDiv.textContent);
-  actionsDiv.appendChild(copyButton);
-  
-  messageElement.appendChild(actionsDiv);
+    if (isUser) {
+        const editButton = document.createElement('button');
+        editButton.className = 'action-button';
+        editButton.innerHTML = '<i class="fas fa-edit"></i>';
+        editButton.onclick = () => startEditing(messageId);
+        actionsDiv.appendChild(editButton);
+    }
 
-  return {
-    element: messageElement,
-    id: messageId
-  };
+    const copyButton = document.createElement('button');
+    copyButton.className = 'action-button';
+    copyButton.innerHTML = '<i class="fas fa-copy"></i>';
+    copyButton.onclick = () => copyToClipboard(message);
+    actionsDiv.appendChild(copyButton);
+
+    messageElement.appendChild(actionsDiv);
+
+    return { element: messageElement, id: messageId };
+}
+
+function getApiKey() {
+    return localStorage.getItem('openRouterApiKey');
 }
 
 function startEditing(messageId) {
-  if (isWaitingForResponse) return;
-  const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
-  const contentDiv = messageElement.querySelector('.message-content');
-  const originalText = contentDiv.textContent;
-  const textarea = document.createElement('textarea');
-  textarea.className = 'edit-input';
-  textarea.value = originalText;
-  textarea.rows = Math.min(originalText.split('\n').length, 5);
-  contentDiv.innerHTML = '';
-  contentDiv.appendChild(textarea);
-  messageElement.classList.add('edit-mode');
-  textarea.focus();
-  
-  textarea.addEventListener('keydown', async function (e) {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      const newText = this.value.trim();
-      if (newText && newText !== originalText) {
-        finishEditing(messageId, newText);
-        let currentElement = messageElement;
-        while (currentElement.nextElementSibling) {
-          currentElement.nextElementSibling.remove();
+    if (isWaitingForResponse) return;
+    
+    const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
+    const contentDiv = messageElement.querySelector('.message-content');
+    const originalText = contentDiv.textContent;
+
+    const textarea = document.createElement('textarea');
+    textarea.className = 'edit-input';
+    textarea.value = originalText;
+    textarea.rows = originalText.split('\n').length;
+    
+    contentDiv.innerHTML = '';
+    contentDiv.appendChild(textarea);
+    messageElement.classList.add('edit-mode');
+    
+    textarea.focus();
+    
+    textarea.onkeydown = (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            finishEditing(messageId, textarea.value);
+        } else if (e.key === 'Escape') {
+            finishEditing(messageId, originalText);
         }
-        
-        const messageIndex = messageHistory.findIndex(msg => msg.role === "user" && msg.timestamp?.toString() === messageId);
-        if (messageIndex !== -1) {
-          messageHistory = messageHistory.slice(0, messageIndex + 1);
-          messageHistory[messageIndex].content = newText;
-          localStorage.setItem(STORAGE_KEYS.MESSAGES, JSON.stringify(messageHistory));
-        }
-        await sendMessage(newText, true);
-      } else {
-        finishEditing(messageId, originalText);
-      }
-    } else if (e.key === 'Escape') {
-      finishEditing(messageId, originalText);
-    }
-  });
+    };
 }
+
 function finishEditing(messageId, newText) {
-  const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
-  const contentDiv = messageElement.querySelector('.message-content');
-  contentDiv.textContent = newText;
-  messageElement.classList.remove('edit-mode');
+    const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
+    const contentDiv = messageElement.querySelector('.message-content');
+    contentDiv.textContent = newText;
+    messageElement.classList.remove('edit-mode');
+
+    // Update message history
+    const messageIndex = messageHistory.findIndex(msg => 
+        msg.role === "user" && msg.timestamp?.toString() === messageId
+    );
+    if (messageIndex !== -1) {
+        messageHistory[messageIndex].content = newText;
+    }
 }
 
 async function copyToClipboard(text) {
-  try {
-    await navigator.clipboard.writeText(text);
-    showNotification('Copied to clipboard');
-  } catch (err) {
-    showNotification('Failed to copy to clipboard');
-  }
+    try {
+        await navigator.clipboard.writeText(text);
+        showNotification('Copied to clipboard');
+    } catch (err) {
+        showNotification('Failed to copy to clipboard');
+    }
 }
 
-async function sendMessage(customMessage = null, isEdit = false) {
-  const message = customMessage || textarea.value.trim();
-  const sendButton = document.querySelector('.chat-input-container button');
-  
-  if (!message || isWaitingForResponse) return;
-  
-  isWaitingForResponse = true;
-  textarea.disabled = true;
-  sendButton.disabled = true;
-  
-  if (!isEdit) {
-    const timestamp = Date.now();
-    const {
-      element: messageElement,
-      id: messageId
-    } = createMessageElement(message, true, new Date(timestamp));
+function handleInput() {
+    const textarea = document.getElementById('messageInput');
+    textarea.style.height = 'auto';
+    textarea.style.height = textarea.scrollHeight + 'px';
+}
+
+// Enhanced message sending
+async function sendMessage() {
+    const textarea = document.getElementById('messageInput');
+    const message = textarea.value.trim();
+    const sendButton = document.querySelector('.chat-input-container button');
     
+    if (!message || isWaitingForResponse) return;
+    
+    isWaitingForResponse = true;
+    textarea.disabled = true;
+    sendButton.disabled = true;
+    
+    const timestamp = new Date();
+    const { element: messageElement, id: messageId } = createMessageElement(message, true, timestamp);
     document.querySelector('.chat-messages').appendChild(messageElement);
     messageElement.scrollIntoView({ behavior: 'smooth' });
     
-    messageHistory.push({
-      role: "user",
-      content: message,
-      timestamp: timestamp
-    });
-    localStorage.setItem(STORAGE_KEYS.MESSAGES, JSON.stringify(messageHistory));
-  }
-  
-  textarea.value = '';
-  textarea.style.height = 'auto';
-  
-  const loadingElement = document.createElement('div');
-  loadingElement.classList.add('chat-message', 'bot', 'typing');
-  loadingElement.textContent = 'Typing...';
-  document.querySelector('.chat-messages').appendChild(loadingElement);
-  
-  try {
-    const response = await tryMultipleModels(message);
-    loadingElement.remove();
+    textarea.value = '';
+    textarea.style.height = 'auto';
     
-    if (response.text) {
-      const timestamp = Date.now();
-      messageHistory.push({
-        role: "assistant",
-        content: response.text,
-        timestamp: timestamp
-      });
-      localStorage.setItem(STORAGE_KEYS.MESSAGES, JSON.stringify(messageHistory));
-      
-      const {
-        element: botElement
-      } = createMessageElement(response.text, false, new Date(timestamp));
-      
-      document.querySelector('.chat-messages').appendChild(botElement);
-      botElement.scrollIntoView({ behavior: 'smooth' });
-      
-      botElement.querySelectorAll('pre code').forEach((block) => {
-        hljs.highlightElement(block);
-      });
+    const loadingElement = document.createElement('div');
+    loadingElement.classList.add('chat-message', 'bot', 'typing');
+    loadingElement.textContent = 'Typing...';
+    document.querySelector('.chat-messages').appendChild(loadingElement);
+    
+    try {
+        const response = await tryMultipleModels(message);
+        loadingElement.remove();
+        
+        if (response.text) {
+            messageHistory.push({
+                role: "assistant",
+                content: response.text,
+                timestamp: Date.now()
+            });
+            
+            const { element: botElement } = createMessageElement(response.text, false);
+            document.querySelector('.chat-messages').appendChild(botElement);
+            botElement.scrollIntoView({ behavior: 'smooth' });
+            
+            // Apply syntax highlighting to code blocks
+            botElement.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightElement(block);
+            });
+        }
+    } catch (error) {
+        loadingElement.remove();
+        showError(error.message);
+        const { element: errorElement } = createMessageElement(`Error: ${error.message}`, false);
+        document.querySelector('.chat-messages').appendChild(errorElement);
+    } finally {
+        isWaitingForResponse = false;
+        textarea.disabled = false;
+        sendButton.disabled = false;
+        textarea.focus();
     }
-  } catch (error) {
-    loadingElement.remove();
-    showError(error.message);
-    const { element: errorElement } = createMessageElement(`Error: ${error.message}`, false);
-    document.querySelector('.chat-messages').appendChild(errorElement);
-  } finally {
-    isWaitingForResponse = false;
-    textarea.disabled = false;
-    sendButton.disabled = false;
-    textarea.focus();
-  }
 }
-
             async function tryMultipleModels(userMessage) {
               const timeout = 2000000;
               const apiKey = getApiKey();
