@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SyberAI</title>
+    <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@700,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cabinet Grotesk', sans-serif;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        *::-webkit-scrollbar {
+            display: none;
+        }
+
+        body {
+            background: url('https://i.imgur.com/YWGUtyP.jpg') no-repeat center center fixed;
+            background-size: cover;
+            background-attachment: fixed;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+            -webkit-overflow-scrolling: none;
+            overscroll-behavior: none;
+        }
+
+        html {
+            overflow-x: hidden;
+            overflow-y: hidden;
+            touch-action: none;
+            overscroll-behavior: none;
+        }
+
+        /* Basis responsive styling */
+        :root {
+            --container-width: 90%;
+            --container-max-width: 800px;
+            --spacing-normal: 20px;
+            --spacing-small: 10px;
+            --border-radius: 30px;
+            --border-radius-small: 15px;
+        }
+
+        /* Container aanpassingen */
+        .container {
+            position: fixed;
+            top: calc(80px + var(--spacing-normal));
+            bottom: calc(80px + var(--spacing-normal));
+            left: 50%;
+            transform: translateX(-50%);
+            width: var(--container-width);
+            max-width: var(--container-max-width);
+            overflow-y: auto;
+        }
+
+        /* Taakbalk responsive styling */
+        .taskbar {
+            position: fixed;
+            top: var(--spacing-normal);
+            left: 50%;
+            transform: translateX(-50%);
+            width: var(--container-width);
+            max-width: var(--container-max-width);
+            height: 60px;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 var(--spacing-normal);
+            z-index: 1000;
+        }
+
+        .taskbar-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand {
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        .brand:hover {
+            opacity: 0.8;
+        }
+
+        .preview-tag {
+            font-size: 14px;
+            opacity: 0.7;
+        }
+
+        .taskbar button {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 30px;
+            cursor: pointer;
+            margin-left: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .taskbar button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+
+        /* Chat berichten responsive */
+        .chat-messages {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 20px;
+            padding-bottom: 40px;
+            height: 100%;
+        }
+
+        .chat-message {
+            padding: var(--spacing-normal);
+            border-radius: 20px;
+            max-width: 85%;
+            white-space: pre-wrap;
+            line-height: 1.5;
+            font-size: clamp(14px, 3vw, 16px);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: messageAppear 0.3s ease;
+        }
+
+        .chat-message.user {
+            background: rgba(255, 255, 255, 0.25);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+
+        .chat-message.bot {
+            background: rgba(0, 0, 0, 0.25);
+            color: white;
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+        }
+
+        /* Input container responsive */
+        .chat-input-container {
+            position: fixed;
+            bottom: var(--spacing-normal);
+            left: 50%;
+            transform: translateX(-50%);
+            width: var(--container-width);
+            max-width: var(--container-max-width);
+            display: flex;
+            gap: 10px;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: var(--spacing-normal);
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .chat-input-container input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: white;
+            font-size: 16px;
+            padding: 0 10px;
+        }
+
+        .chat-input-container input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .chat-input-container button {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .chat-input-container button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+
+        /* Modal responsive */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-window {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            width: var(--container-width);
+            max-width: var(--container-max-width);
+            margin: var(--spacing-normal);
+            padding: var(--spacing-normal);
+            color: white;
+            animation: slideUp 0.3s ease;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .modal-content {
+            line-height: 1.6;
+            font-size: 16px;
+        }
+
+        .modal-content p {
+            margin: 5px 0;
+        }
+
+        /* Settings styling */
+        .settings-content {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .settings-button {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .settings-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(5px);
+        }
+
+        .settings-button i {
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Notification styling */
+        .notification {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 30px;
+            backdrop-filter: blur(10px);
+            animation: slideUp 0.3s ease;
+            z-index: 2000;
+        }
+
+        .notification.fade-out {
+            animation: fadeOut 0.3s ease;
+        }
+
+        /* Animaties */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { 
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to { 
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes messageAppear {
+            from {
+                transform: translateY(10px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                transform: translate(-50%, 20px);
+            }
+        }
+
+        /* Media queries voor verschillende schermformaten */
+        @media (max-width: 768px) {
+            :root {
+                --container-width: 95%;
+                --spacing-normal: 15px;
+                --spacing-small: 8px;
+            }
+
+            .taskbar {
+                height: auto;
+                padding: 10px var(--spacing-normal);
+            }
+
+            .taskbar-right {
+                display: flex;
+                gap: 8px;
+            }
+
+            .taskbar button {
+                padding: 6px 12px;
+                font-size: 14px;
+            }
+
+            .brand {
+                font-size: 18px;
+            }
+
+            .preview-tag {
+                font-size: 12px;
+            }
+
+            .chat-input-container {
+                padding: 10px;
+            }
+
+            .chat-input-container input {
+                font-size: 14px;
+            }
+
+            .chat-input-container button {
+                padding: 6px 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            :root {
+                --container-width: 98%;
+                --spacing-normal: 10px;
+                --spacing-small: 5px;
+            }
+
+            .taskbar {
+                padding: 8px var(--spacing-normal);
+            }
+
+            .taskbar-right button {
+                padding: 5px 10px;
+                font-size: 13px;
+            }
+
+            .brand {
+                font-size: 16px;
+            }
+
+            .preview-tag {
+                font-size: 11px;
+            }
+
+            .chat-message {
+                max-width: 90%;
+                padding: 12px 15px;
+            }
+
+            .modal-window {
+                padding: 15px;
+            }
+
+            .modal-title {
+                font-size: 20px;
+            }
+
+            .modal-content {
+                font-size: 14px;
+            }
+
+            .settings-button {
+                padding: 12px;
+                font-size: 14px;
+            }
+
+            .notification {
+                font-size: 13px;
+                padding: 10px 20px;
+            }
+        }
+
+        /* Landscape mode optimalisatie */
+        @media (max-height: 600px) and (orientation: landscape) {
+            .container {
+                top: 70px;
+                bottom: 70px;
+            }
+
+            .taskbar {
+                height: 50px;
+            }
+
+            .chat-input-container {
+                padding: 8px 15px;
+            }
+
+            .chat-message {
+                padding: 10px 15px;
+                margin-bottom: 8px;
+            }
+        }
+
+        /* Touch device optimalisatie */
+        @media (hover: none) {
+            .chat-input-container button,
+            .taskbar button,
+            .settings-button {
+                transition: none;
+            }
+
+            .chat-input-container button:active,
+            .taskbar button:active,
+            .settings-button:active {
+                background: rgba(255, 255, 255, 0.2);
+            }
+        }
+
+        .chat-input-container input:disabled,
+        .chat-input-container button:disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+            transition: opacity 0.3s ease;
+        }
+
+        .chat-input-container button:disabled:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: none;
+        }
+
+        .chat-message .url-button {
+            display: block;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 30px;
+            cursor: pointer;
+            margin: 10px 0;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .chat-message .url-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body>
+    <div class="taskbar">
+        <div class="taskbar-left">
+            <span class="brand">SyberAI</span>
+            <span class="preview-tag">COV Laudando Edition</span>
+        </div>
+        <div class="taskbar-right">
+            <button onclick="showSettingsModal()"><i class="fas fa-cog"></i></button>
+            <button onclick="toggleFullscreen()">Fullscreen</button>
+            <button onclick="contactEmail()">Contact</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="chat-messages"></div>
+    </div>
+
+    <div class="chat-input-container">
+        <input type="text" placeholder="Type your message..." id="messageInput">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+
+    <script>
+        let messageHistory = [];
+        let currentLanguage = 'Nederlands';
+        let isWaitingForResponse = false;
+
+        const API_KEYS = [
+            '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',
+            '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',
+            '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'
+        ];
+
+        const models = [
+            { name: "google/gemini-2.0-flash-exp:free" },
+            { name: "meta-llama/llama-3.2-3b-instruct:free" },
+            { name: "microsoft/phi-3-medium-128k-instruct:free" },        ];
+
+        const systemMessage = {
+            role: "system",
+            content: `You are SyberAI, powered by the SyberNeoRenew Byte model and created by SyberOfficial.
+
+Key characteristics:
+1. Je bent "SyberAI (Model: SyberNeoRenew Byte W)"
+2. Je geeft goede antwoorden
+3. Je hebt een vriendelijke en profesionele tekst opmaak
+4. Je kunt URL knoppen toevoegen in je berichten door het volgende formaat te gebruiken: *#https://url.com##Titel van de link#*
+   Bijvoorbeeld: *#https://url.com##Titel van de link#*, DIT IS EEN VOORBEELD JE STUURT DEZE KOPPELING NIET MAAR JE STUURT ALTIJD DE GOEDE KOPPELING.
+5. Je helpt alleen met het zoeken van koppelingen die in deze informatie staan, je deelt voor de rest geen andere koppelingen
+6. Je gebruikt geen opmaak voor bijvoorbeeld schuine tekst, dikke tekst of andere opmaak
+7. Je vertelt niets over jezelf
+8. Hieronder staan de koppelingen, deze mag je alleen delen.
+
+Das Sühnopfer des neuen Bundes - 1. Intrade und Quartett - Tenor: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-i1b-carl-loewe-tenor
+
+Das Sühnopfer des neuen Bundes - 1. Intrade und Quartett - Sopraan: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-i1b-carl-loewe-soprano
+
+Das Sühnopfer des neuen Bundes - 1. Intrade und Quartett - Alt: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-i1b-carl-loewe-alto
+
+Das Sühnopfer des neuen Bundes - 1. Intrade und Quartett - All. Part.: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-i1b-carl-loewe
+
+Das Sühnopfer des neuen Bundes - 1. Intrade und Quartett - Bas: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-i1b-carl-loewe-bass
+
+Das Sühnopfer des neuen Bundes - 6. Choral - Alt: https://audio.com/sybermusic/audio/das-suehnopfer-des-neuen-bundes-i6-choral-carl-loewe-alto
+
+Das Sühnopfer des neuen Bundes - 6. Choral - All. Part.: https://audio.com/sybermusic/audio/das-suehnopfer-des-neuen-bundes-i6-choral-carl-loewe
+
+Das Sühnopfer des neuen Bundes - 6. Choral - Bas: https://audio.com/sybermusic/audio/das-suehnopfer-des-neuen-bundes-i6-choral-carl-loewe-bass
+
+Das Sühnopfer des neuen Bundes - 6. Choral - Sopraan: https://audio.com/sybermusic/audio/das-suehnopfer-des-neuen-bundes-i6-choral-carl-loewe-soprano
+
+Das Sühnopfer des neuen Bundes - 6. Choral - Tenor: https://audio.com/sybermusic/audio/das-suehnopfer-des-neuen-bundes-i6-choral-carl-loewe-tenor
+
+Das Sühnopfer des neuen Bundes - 20. Choral - All. Part.: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-ii20-choral-carl-loewe
+
+Das Sühnopfer des neuen Bundes - 20. Choral - Alt: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-ii20-choral-carl-loewe-alto
+
+Das Sühnopfer des neuen Bundes - 20. Choral - Bas: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-ii20-choral-carl-loewe-bass
+
+Das Sühnopfer des neuen Bundes - 20. Choral - Sopraan: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-ii20-choral-carl-loewe-soprano
+
+Das Sühnopfer des neuen Bundes - 20. Choral - Tenor: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-ii20-choral-carl-loewe-tenor
+
+Das Sühnopfer des neuen Bundes - 24. Chor - All. Part.: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-ii24-carl-loewe
+
+Das Sühnopfer des neuen Bundes - 24. Chor - Sopraan: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-ii24-carl-loewe-soprano
+
+Das Sühnopfer des neuen Bundes - 24. Chor - Tenor: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-ii24-carl-loewe-tenor
+
+Das Sühnopfer des neuen Bundes - 27. Rezitativ und CHor - Alt: https://audio.com/sybermusic/audio/das-suehnopfer-des-neuen-bundes-ii27-car-loewe-alto-1
+
+Das Sühnopfer des neuen Bundes - 27. Rezitativ und Chor - All. Part.: https://audio.com/sybermusic/audio/das-suehnopfer-des-neuen-bundes-ii27-car-loewe
+
+Das Sühnopfer des neuen Bundes - 27. Rezitativ und Chor - Bas: https://audio.com/sybermusic/audio/das-suehnopfer-des-neuen-bundes-ii27-car-loewe-bass
+
+Das Sühnopfer des neuen Bundes - 27. Rezitativ und CHor - Sopraan: https://audio.com/sybermusic/audio/das-suehnopfer-des-ne
+
+Das Sühnopfer des neuen Bundes - 27. Rezitativ und Chor - Tenor: https://audio.com/sybermusic/audio/das-suehnopfer-des-neuen-bundes-ii27-car-loewe-tenor
+
+Das Sühnopfer des neuen Bundes - 25. Chor - Alt: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-ii25-carl-loewe-alto
+
+
+Das Sühnopfer des neuen Bundes - 25. Chor - All. Part.: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-ii25-carl-loewe
+
+Das Sühnopfer des neuen Bundes - 25. Chor - Bas: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-ii25-carl-loewe-bass
+
+Das Sühnopfer des neuen Bundes - 25. Chor - Sopraan: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-ii25-carl-loewe-soprano
+
+Das Sühnopfer des neuen Bundes - 25. Chor - Tenor: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-ii25-carl-loewe-tenor
+
+Das Sühnopfer des neuen Bundes - 43. Chor - Bas: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-iii43-chor-carl-loewe-bass
+
+Das Sühnopfer des neuen Bundes - 43. Chor - Alt: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-iii43-chor-carl-loewe-alto
+
+Das Sühnopfer des neuen Bundes - 43. Chor - All. Part.: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-iii43-chor-carl-loewe
+
+Das Sühnopfer des neuen Bundes - 43. Chor - Sopraan: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-iii43-chor-carl-loewe-soprano
+
+Das Sühnopfer des neuen Bundes - 43. Chor - Tenor: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-iii43-chor-carl-loewe-tenor
+
+Das Sühnopfer des neuen Bundes - 43. Chor der auferstandenen Heiligen - All. Part.: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-iii43-chor-der-auferstandenen-heiligen-carl-loewe
+
+Das Sühnopfer des neuen Bundes - 43. Chor der auferstandenen Heiligen - Alt 1: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-iii43-chor-der-auferstandenen-heiligen-carl-loewe-alto-1
+
+Das Sühnopfer des neuen Bundes - 43. Chor der auferstandenen Heiligen - Alt 2: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-iii43-chor-der-auferstandenen-heiligen-carl-loewe-alto-2
+
+Das Sühnopfer des neuen Bundes - 43. Chor der auferstandenen Heiligen - Bas: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-iii43-chor-der-auferstandenen-heiligen-carl-loewe-basse
+
+
+Das Sühnopfer des neuen Bundes - 35. Chor des Volks - Tenor 2: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-iii35-carl-loewe-tenor-2
+
+
+Das Sühnopfer des neuen Bundes - 35. Chor des Volks - Tenor 1: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-iii35-carl-loewe-tenor-1
+
+Das Sühnopfer des neuen Bundes - 35. Chor des Volks - Sopraan 1: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-iii35-carl-loewe-soprano-1
+
+Das Sühnopfer des neuen Bundes -35. Chor des Volks - Sopraan: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-iii35-carl-loewe-soprano
+
+Das Sühnopfer des neuen Bundes - 35. Chor des Volks - Bas: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-iii35-carl-loewe-basse
+
+Das Sühnopfer des neuen Bundes - 35. Chor des Volks - Alt: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-iii35-carl-loewe-alto
+
+Das Sühnopfer des neuen Bundes - 35. Chor des Volks - All. Part.:https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-iii35-carl-loewe
+
+
+Das Sühnopfer des neuen Bundes -29a. Chor und Arie - Tenor: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-iii29a-carl-loewe-tenor
+
+Das Sühnopfer des neuen Bundes -29a. Chor und Arie - Sopraan: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-iii29a-carl-loewe-soprano
+
+Das Sühnopfer des neuen Bundes - 29a. Chor und Arie - Bas: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-iii29a-carl-loewe-bass
+
+Das Sühnopfer des neuen Bundes - 29a. Chor und Arie - Alt: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-iii29a-carl-loewe-alto
+
+Das Sühnopfer des neuen Bundes - 29a. Chor und Arie - All. Part.: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-iii29a-carl-loewe
+
+Das Sühnopfer des neuen Bundes - 23. Rezitativ und Chor - Tenor: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-ii23-carl-loewe-tenor
+
+Das Sühnopfer des neuen Bundes -23. Rezitativ und Chor - Sopraan: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-ii23-carl-loewe-soprano
+
+Das Sühnopfer des neuen Bundes - 23. Rezitativ und Chor - Bas: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-ii23-carl-loewe-basso
+
+Das Sühnopfer des neuen Bundes - 23. Rezitativ und Chor - All. Part.: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-ii23-carl-loewe
+
+Das Sühnopfer des neuen Bundes - 12. Schlusschor des ersten Teils - Tenor: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-i12-c-m-schlusschor-des-ersten-teils-carl-loewe-tenor
+
+Das Sühnopfer des neuen Bundes - 12. Schlusschor des ersten Teils - Sopraan: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-i12-c-m-schlusschor-des-ersten-teils-carl-loewe-soprano
+
+Das Sühnopfer des neuen Bundes - 12. Schlosschor des ersten Teils - Bas: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-i12-c-m-schlusschor-des-ersten-teils-carl-loewe-bass
+
+
+Das Sühnopfer des neuen Bundes - 12. Schlusschor des ersten Teils - Alt: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-i12-c-m-schlusschor-des-ersten-teils-carl-loewe-alto
+
+Das Sühnopfer des neuen Bundes - 12. Schlusschor des ersten Teils - All. Part.: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-i12-c-m-schlusschor-des-ersten-teils-carl-loewe
+
+Das Sühnopfer des neuen Bundes - 43. Chor der auferstandenen Heiligen - Tenor 2: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-iii43-chor-der-auferstandenen-heiligen-carl-loewe-tenor-2
+
+Das Sühnopfer des neuen Bundes - 43. Chor der auferstandenen Heiligen - Tenor 1: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-iii43-chor-der-auferstandenen-heiligen-carl-loewe-tenor-1
+
+Das Sühnopfer des neuen Bundes - 43. Chor der auferstandenen Heiligen - Sopraan 2: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-iii43-chor-der-auferstandenen-heiligen-carl-loewe-soprano-2
+
+Das Sühnopfer des neuen Bundes - 43. Chor der auferstandenen Heiligen - Sopraan 1: https://audio.com/sybermusic/audio/das-shnopfer-des-neuen-bundes-iii43-chor-der-auferstandenen-heiligen-carl-loewe-soprano-1
+
+9. Je stuurt niet heel veel tekst het gaat vooral om de koppeling
+10. Je stuurt je teksten 1 keer niet 2 keer want dit gebeurt soms
+11. Je moet altijd ook een titel van de url sturen anders werkt het niet goed
+12. Je moet onthouden welke partij er wordt gevraagd zodat je alleen de goede koppelingen stuur
+13. Wanneer er iets wordt gevraagd wat er niet is geef je aan dat het er niet is
+14. Onthoud dus goed *#https://url.com##Titel URL#* DIT IS EEN VOORBEELD MAAR ONTHOUD GOED DE *# ## #*
+15. JE MOET ECHT DE JUISTE HOEVEELHEID * EN # DOEN WANT ANDERS WERKT HET NIET
+16. JE DEELT OOK ALTIJD DE JUISTE KOPPELINGEN WANT SOMS VERZIN JE ZE NU DAT MAG NIET, OOK WIL IK DAT JE GOED ONTHOUD DAT JE MOET AANGEVEN DAT HET DEEL VOOR EEN PARTIJ NIET BESTAAT OF EVENTUEEL DAT HET HELE DEEL NIET BESTAAT ALS JE GEEN KOPPELING ERVOOR HEB
+17. JE VERZINT SOMS KOPPELINGEN TERWIJL DAT JE ZE WEL HEBT EN DIT WIL IK NIET DUS JE MOET ALTIJD ALLEEN DE GOEDE KOPPELINGEN DELEN!
+      18. WANNEER ER OM EEN BEPAALT DEEL WORDT GEVRAAGD MOET JE DIE OOK DELEN NIET EEN ANDER DEEL`
+        };
+
+        function getRandomApiKey() {
+            const randomIndex = Math.floor(Math.random() * API_KEYS.length);
+            return API_KEYS[randomIndex];
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            const sendButton = document.querySelector('.chat-input-container button');
+            
+            if (!message || isWaitingForResponse) return;
+
+            // Disable input en button
+            isWaitingForResponse = true;
+            input.disabled = true;
+            sendButton.disabled = true;
+            input.style.opacity = '0.5';
+            sendButton.style.opacity = '0.5';
+
+            addMessage(message, true);
+            input.value = '';
+            
+            const loadingContainer = document.createElement('div');
+            loadingContainer.classList.add('chat-message', 'bot', 'typing');
+            loadingContainer.textContent = 'Typing...';
+            document.querySelector('.chat-messages').appendChild(loadingContainer);
+            loadingContainer.scrollIntoView({ behavior: 'smooth' });
+
+            try {
+                const response = await tryMultipleModels(message);
+                loadingContainer.remove();
+                
+                if (response.text) {
+                    messageHistory.push({ role: "assistant", content: response.text });
+                    addMessage(response.text, false);
+                }
+            } catch (error) {
+                loadingContainer?.remove();
+                showError(error.message);
+            } finally {
+                // Enable input en button
+                isWaitingForResponse = false;
+                input.disabled = false;
+                sendButton.disabled = false;
+                input.style.opacity = '1';
+                sendButton.style.opacity = '1';
+                input.focus();
+            }
+        }
+
+        async function tryMultipleModels(userMessage) {
+            const timeout = 20000;
+            const usedApiKeys = new Set();
+
+            while (usedApiKeys.size < API_KEYS.length) {
+                const apiKey = getRandomApiKey();
+                if (usedApiKeys.has(apiKey)) continue;
+                usedApiKeys.add(apiKey);
+
+                for (let modelIndex = 0; modelIndex < models.length; modelIndex++) {
+                    try {
+                        // Voeg het nieuwe bericht toe aan de geschiedenis
+                        messageHistory.push({ role: "user", content: userMessage });
+                        
+                        const response = await Promise.race([
+                            fetch("https://openrouter.ai/api/v1/chat/completions", {
+                                method: "POST",
+                                headers: {
+                                    "Authorization": `Bearer ${apiKey}`,
+                                    "Content-Type": "application/json",
+                                    "HTTP-Referer": "https://syberofficial.com",
+                                    "X-Title": "SyberNeoRenew Byte"
+                                },
+                                body: JSON.stringify({
+                                    "model": models[modelIndex].name,
+                                    "messages": [
+                                        systemMessage,
+                                        ...messageHistory // Voeg de volledige geschiedenis toe
+                                    ]
+                                })
+                            }).then(res => res.json()),
+                            new Promise((_, reject) => 
+                                setTimeout(() => reject(new Error('Timeout')), timeout)
+                            )
+                        ]);
+
+                        if (response.choices && response.choices[0].message.content) {
+                            // Voeg het antwoord toe aan de geschiedenis
+                            messageHistory.push({ 
+                                role: "assistant", 
+                                content: response.choices[0].message.content 
+                            });
+                            return { text: response.choices[0].message.content };
+                        }
+                    } catch (error) {
+                        console.warn(`API key ${apiKey} with model ${models[modelIndex].name} failed:`, error.message);
+                        // Verwijder het laatste gebruikersbericht bij een fout
+                        messageHistory.pop();
+                        continue;
+                    }
+                }
+            }
+
+            throw new Error("Alle server-pogingen zijn mislukt. Probeer het later opnieuw.");
+        }
+
+        function addMessage(message, isUser) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('chat-message');
+            messageElement.classList.add(isUser ? 'user' : 'bot');
+            
+            // Parse URLs in het formaat *#URL#TITEL#*
+            const urlPattern = /\*#(https?:\/\/[^\s#]+)##([^#]+)#\*/g;
+            let htmlContent = message;
+            
+            // Vervang URL patronen met knoppen
+            htmlContent = htmlContent.replace(urlPattern, (match, url, title) => {
+                return `<a href="${url}" target="_blank" class="url-button" rel="noopener noreferrer">${title}</a>`;
+            });
+            
+            messageElement.innerHTML = htmlContent;
+            document.querySelector('.chat-messages').appendChild(messageElement);
+            messageElement.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function showWelcomeModal() {
+            const modal = document.createElement('div');
+            modal.className = 'modal-overlay';
+            modal.innerHTML = `
+                <div class="modal-window">
+                    <div class="modal-header">
+                        <span class="modal-title">Welkom bij SyberAI voor COV Laudando</span>
+                    </div>
+                    <div class="modal-content">
+                        <p>SyberAI staat klaar om u te helpen bij het gemakkelijk openen van de oefenfragmenten. Bent u bijvoorbeeld op zoek naar '1. Intrade und Quartett' voor tenor uit 'Das Sühnopfer des neuen Bundes'? Vraag dan simpelweg om deel 1 van Das Sühnopfer voor tenor. U ontvangt direct een bericht met een knop die u naar de juiste pagina op Audio.com leidt, welke in een nieuw tabblad wordt geopend. Deze handige methode is beschikbaar voor elk deel en elke partij.</p>
+                        <br>                       
+						<p>Soms deelt het programma de verkeerde koppeling, selecteer dan de instellingen bovenin en reset de chat. U kan het dan nog een keer vragen.</p>
+                        <br>                       
+						<p>Om deze popup te sluiten selecteert u naast de popup. U kan dan beginnen met chatten.</p>
+                    </div>
+                </div>
+            `;
+
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.remove();
+                }
+            });
+
+            document.body.appendChild(modal);
+        }
+
+        function showAboutModal() {
+            const modal = document.createElement('div');
+            modal.className = 'modal-overlay';
+            modal.innerHTML = `
+                <div class="modal-window">
+                    <div class="modal-header">
+                        <span class="modal-title">About SyberAI</span>
+                    </div>
+                    <div class="modal-content">
+                        <p>SyberAI is een geavanceerde chatbot aangedreven door de SyberNeoRenew Byte engine.</p>
+                        <br>
+                        <p>Version: First Public Preview</p>
+                        <p>Created by: SyberOfficial</p>
+                        <p>Contact: syberdesignstudio@gmail.com</p>
+                    </div>
+                </div>
+            `;
+
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.remove();
+                }
+            });
+
+            document.body.appendChild(modal);
+        }
+
+        function showSettingsModal() {
+            const modal = document.createElement('div');
+            modal.className = 'modal-overlay';
+            modal.innerHTML = `
+                <div class="modal-window">
+                    <div class="modal-header">
+                        <span class="modal-title">Settings</span>
+                    </div>
+                    <div class="modal-content settings-content">
+                        <div class="settings-button" onclick="resetChat()">
+                            <i class="fas fa-redo"></i>
+                            Reset Chat
+                        </div>
+                        <div class="settings-button" onclick="changeLanguage()">
+                            <i class="fas fa-language"></i>
+                            Language: ${currentLanguage}
+                        </div>
+                        <div class="settings-button" onclick="closeApp()">
+                            <i class="fas fa-times"></i>
+                            Close App
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.remove();
+                }
+            });
+
+            document.body.appendChild(modal);
+        }
+
+        function resetChat() {
+            document.querySelector('.chat-messages').innerHTML = '';
+            messageHistory = []; // Reset de geschiedenis array
+            showNotification('Chat reset successful');
+        }
+
+        function changeLanguage() {
+            const newLanguage = prompt('Enter your preferred language:', currentLanguage);
+            if (newLanguage && newLanguage.trim() !== '') {
+                currentLanguage = newLanguage.trim();
+                systemMessage.content = `${systemMessage.content}\nPlease always respond in ${currentLanguage}.`;
+                showNotification(`Language changed to: ${currentLanguage}`);
+            }
+        }
+
+        function closeApp() {
+            if (confirm('Are you sure you want to close SyberAI?')) {
+                window.close();
+            }
+        }
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.add('fade-out');
+                setTimeout(() => notification.remove(), 300);
+            }, 2000);
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        function contactEmail() {
+            window.location.href = 'mailto:syberdesignstudio@gmail.com';
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            showWelcomeModal();
+            
+            showNotification('SyberAI V0.9');
+            
+            document.querySelector('.brand').addEventListener('click', () => {
+                showAboutModal();
+            });
+
+            const inputField = document.querySelector('.chat-input-container input');
+            inputField.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+
+<script defer data-domain="html.cafe" src="https://milkymouse.com/js/script.js"></script>
+
+   
