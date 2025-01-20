@@ -39,8 +39,7 @@
       }
 
       :root[data-theme="light"] {
-        --background-image: url("https://pathetic-ai.vercel.app/dark%20background.jpg");
-        --background-color: #ffffff;
+        --background-color: rgba(255, 255, 255);
         --primary-color: #000000;
         --secondary-color: #6200ea;
         --border-color: rgba(0, 0, 0, 0.1);
@@ -60,8 +59,7 @@
       }
 
       :root[data-theme="dark"] {
-        --background-image: url("https://pathetic-ai.vercel.app/dark%20background.jpg");
-        --background-color: #121212;
+        --background-color: rgba(0, 0, 0);
         --primary-color: #ffffff;
         --secondary-color: #bb86fc;
         --border-color: rgba(255, 255, 255, 0.1);
@@ -81,7 +79,7 @@
       }
 
       body {
-        background-image: var(--background-image);
+        background-color: var(--background-color);
         background-size: cover;
         background-repeat: no-repeat;
         color: var(--primary-color);
@@ -145,7 +143,7 @@
 
       .taskbar button {
         background: var(--button-background);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border: 1px solid var(--border-color);
         color: var(--primary-color);
         padding: 8px 15px;
         border-radius: 30px;
@@ -162,7 +160,7 @@
       .chat-input-container button,
       .theme-selector button {
         background: var(--button-background);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border: 1px solid var(--border-color);
         color: var(--primary-color);
         padding: 8px 15px;
         border-radius: 30px;
@@ -242,7 +240,7 @@
 
       .chat-input-container button {
         background: var(--button-background);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border: 1px solid var(--border-color);
         color: var(--primary-color);
         padding: 8px 20px;
         border-radius: 30px;
@@ -322,7 +320,7 @@
 
       .settings-button {
         background: var(--button-background);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border: 1px solid var(--border-color);
         padding: 15px;
         border-radius: 15px;
         cursor: pointer;
@@ -380,7 +378,7 @@
         top: 5px;
         right: 5px;
         background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border: 1px solid var(--border-color);
         color: white;
         padding: 5px 10px;
         border-radius: 15px;
@@ -402,7 +400,7 @@
 
       .action-button {
         background: var(--button-background);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border: var(--border);
         color: var(--primary-color);
         padding: 3px 8px;
         border-radius: 12px;
@@ -411,7 +409,7 @@
       }
 
       .edit-mode {
-        border: 1px solid rgba(255, 255, 255, 0.3);
+        border: var(--border-color);
       }
 
       .edit-input {
@@ -465,12 +463,12 @@
 
       .theme-selector option:hover {
         background: var(--secondary-color);
-        color: white;
+        color: var(--color);
       }
 
       .theme-selector option[selected] {
         background: var(--secondary-color);
-        color: white;
+        color: var(--color);
       }
 
       .message-timestamp {
@@ -514,7 +512,7 @@
         backdrop-filter: blur(10px);
         padding: var(--spacing-normal);
         border-radius: 30px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid var(--border-color);
       }
 
       .chat-input-container textarea {
@@ -522,7 +520,7 @@
         background: transparent;
         border: none;
         outline: none;
-        color: white;
+        color: var(--color);
         font-size: 16px;
         padding: 10px;
         border-radius: 10px;
@@ -531,13 +529,13 @@
       }
 
       .chat-input-container input::placeholder {
-        color: rgba(255, 255, 255, 0.5);
+        color: var(--color);
       }
 
       .chat-input-container button {
         background: rgba(255, 255, 255, 0.1);
         border: 1px solid rgba(255, 255, 255, 0.2);
-        color: white;
+        color: var(--color);
         padding: 8px 20px;
         border-radius: 30px;
         cursor: pointer;
