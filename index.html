@@ -766,147 +766,187 @@
     </div>
   </body>
   <script>
-    const STORAGE_KEYS = {
-      THEME: 'theme',
-      API_KEY: 'openRouterApiKey',
-      MESSAGES: 'chatMessages',
-      LANGUAGE: 'preferredLanguage'
-    };
-    let messageHistory = JSON.parse(localStorage.getItem(STORAGE_KEYS.MESSAGES)) || [];
-    let currentLanguage = localStorage.getItem(STORAGE_KEYS.LANGUAGE) || 'English';
-    let isWaitingForResponse = false;
-    let editingMessageId = null;
-    const themeSelect = document.getElementById('themeSelect');
-    themeSelect.addEventListener('change', function() {
-      const newTheme = this.value;
-      document.documentElement.setAttribute('data-theme', newTheme);
-      localStorage.setItem(STORAGE_KEYS.THEME, newTheme);
-    });
-    const savedTheme = localStorage.getItem(STORAGE_KEYS.THEME) || 'dark';
-    document.documentElement.setAttribute('data-theme', savedTheme);
-    themeSelect.value = savedTheme;
-    const textarea = document.getElementById('messageInput');
-    textarea.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        sendMessage();
-      }
-    });
-    textarea.addEventListener('input', function() {
-      this.style.height = 'auto';
-      this.style.height = (this.scrollHeight) + 'px';
-      if (this.scrollHeight > 150) {
-        this.style.height = '150px';
-        this.style.overflowY = 'auto';
-      }
-    });
-    const models = [{
-      name: "google/gemini-2.0-flash-exp:free"
-    }, {
-      name: "meta-llama/llama-3.2-3b-instruct:free"
-    }, {
-      name: "qwen/qwen-2-7b-instruct:free"
-    }, {
-      name: "microsoft/phi-3-medium-128k-instruct:free"
-    }, {
-      name: "undi95/toppy-m-7b:free"
-    }, {
-      name: "google/gemini-2.0-flash-thinking-exp:free"
-    }, {
-      name: "microsoft/phi-3-mini-128k-instruct:free"
-    }, {
-      name: "microsoft/phi-3-medium-128k-instruct:free"
-    }];
-    const systemMessage = {
-      role: "system",
-      content: `
-    You are PatheticAI, a chatbot designed to be helpful, friendly, and empathetic.
+const STORAGE_KEYS = {
+  THEME: 'theme',
+  API_KEY: 'openRouterApiKey',
+  MESSAGES: 'chatMessages',
+  LANGUAGE: 'preferredLanguage'
+};
 
-    Key Traits:
-    - **Empathy & Friendliness**: You’re warm and approachable, always ready to listen and offer support, making users feel comfortable and understood without judgment.
-    - **Clear & Concise Knowledge**: You share helpful insights in a way that’s easy to understand, offering just the right amount of information without overwhelming the user.
-    - **Engaging & Approachable**: You sprinkle in light humor or friendly remarks to keep the conversation lively, but you know when to switch to a more serious tone if the situation calls for it.
-    - **Encouraging Conversation**: You ask open-ended questions that inspire users to share more, helping keep the conversation flowing naturally.
-    - **Polite & Respectful**: Above all, you’re always polite and considerate, adjusting your responses to match the user's needs and preferences.
+let messageHistory = JSON.parse(localStorage.getItem(STORAGE_KEYS.MESSAGES)) || [];
+let currentLanguage = localStorage.getItem(STORAGE_KEYS.LANGUAGE) || 'English';
+let isWaitingForResponse = false;
+let editingMessageId = null;
 
-    Your mission is to provide clear, helpful, and engaging support while making users feel valued and heard.
+const themeSelect = document.getElementById('themeSelect');
+themeSelect.addEventListener('change', function () {
+  const newTheme = this.value;
+  document.documentElement.setAttribute('data-theme', newTheme);
+  localStorage.setItem(STORAGE_KEYS.THEME, newTheme);
+});
+
+const savedTheme = localStorage.getItem(STORAGE_KEYS.THEME) || 'dark';
+document.documentElement.setAttribute('data-theme', savedTheme);
+themeSelect.value = savedTheme;
+
+const textarea = document.getElementById('messageInput');
+textarea.addEventListener('keydown', function (e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+});
+textarea.addEventListener('input', function () {
+  this.style.height = 'auto';
+  this.style.height = `${this.scrollHeight}px`;
+  if (this.scrollHeight > 150) {
+    this.style.height = '150px';
+    this.style.overflowY = 'auto';
+  }
+});
+
+const models = [
+  { name: "google/gemini-2.0-flash-exp:free" },
+  { name: "meta-llama/llama-3.2-3b-instruct:free" },
+  { name: "qwen/qwen-2-7b-instruct:free" },
+  { name: "microsoft/phi-3-medium-128k-instruct:free" },
+  { name: "undi95/toppy-m-7b:free" },
+  { name: "google/gemini-2.0-flash-thinking-exp:free" },
+  { name: "microsoft/phi-3-mini-128k-instruct:free" }
+];
+
+const systemMessage = {
+  role: "system",
+  content: `
+  You are PatheticAI, a chatbot designed to be helpful, friendly, and empathetic.
+  [Traits description here]
   `
-    };
+};
 
-    function formatTimestamp(date) {
-      return date.toLocaleTimeString() + ' ' + date.toLocaleDateString();
-    }
+function formatTimestamp(date) {
+  return `${date.toLocaleTimeString()} ${date.toLocaleDateString()}`;
+}
 
-    function createMessageElement(message, isUser, timestamp = new Date()) {
-      const messageId = Date.now().toString();
-      const messageElement = document.createElement('div');
-      messageElement.classList.add('chat-message');
-      messageElement.classList.add(isUser ? 'user' : 'bot');
-      messageElement.dataset.messageId = messageId;
-      const contentDiv = document.createElement('div');
-      contentDiv.classList.add('message-content');
-      if (!isUser) {
-        // Process code blocks in bot messages
-        const codeBlocks = message.match(/```[\s\S]*?```/g) || [];
-        let remainingMessage = message;
-        codeBlocks.forEach((block, index) => {
-          const code = block.replace(/```(\w+)?\n?|\n?```/g, '');
-          const language = block.match(/```(\w+)/)?.[1] || '';
-          const parts = remainingMessage.split(block);
-          if (parts[0]) {
-            contentDiv.appendChild(document.createTextNode(parts[0]));
-          }
-          const codeBlockDiv = document.createElement('div');
-          codeBlockDiv.className = 'code-block';
-          const pre = document.createElement('pre');
-          const codeElement = document.createElement('code');
-          if (language) codeElement.className = `language-${language}`;
-          codeElement.textContent = code;
-          pre.appendChild(codeElement);
-          codeBlockDiv.appendChild(pre);
-          const copyButton = document.createElement('button');
-          copyButton.className = 'copy-button';
-          copyButton.innerHTML = ' < i class = "fas fa-copy" > < /i>';
-          copyButton.onclick = () => copyToClipboard(code);
-          codeBlockDiv.appendChild(copyButton);
-          contentDiv.appendChild(codeBlockDiv);
-          remainingMessage = parts[1];
-        });
-        if (remainingMessage) {
-          contentDiv.appendChild(document.createTextNode(remainingMessage));
-        }
-      } else {
-        contentDiv.textContent = message;
+function createMessageElement(message, isUser, timestamp = new Date()) {
+  const messageId = Date.now().toString();
+  const messageElement = document.createElement('div');
+  messageElement.classList.add('chat-message');
+  messageElement.classList.add(isUser ? 'user' : 'bot');
+  messageElement.dataset.messageId = messageId;
+  const contentDiv = document.createElement('div');
+  contentDiv.classList.add('message-content');
+
+  // Markdown Processing for Bold and Headers
+  const processedMessage = processMarkdown(message);
+
+  // Insert the processed message as HTML to render bold, headers, etc.
+  if (!isUser) {
+    const codeBlocks = processedMessage.match(/```[\s\S]*?```/g) || [];
+    let remainingMessage = processedMessage;
+    codeBlocks.forEach((block) => {
+      const code = block.replace(/```(\w+)?\n?|\n?```/g, '');
+      const language = block.match(/```(\w+)/)?.[1] || '';
+      const parts = remainingMessage.split(block);
+      if (parts[0]) {
+        contentDiv.appendChild(document.createTextNode(parts[0]));
       }
-      messageElement.appendChild(contentDiv);
-      const timestampDiv = document.createElement('div');
-      timestampDiv.className = 'message-timestamp';
-      timestampDiv.textContent = formatTimestamp(timestamp);
-      messageElement.appendChild(timestampDiv);
-      const actionsDiv = document.createElement('div');
-      actionsDiv.className = 'message-actions';
-      if (isUser) {
-        const editButton = document.createElement('button');
-        editButton.className = 'action-button';
-        editButton.innerHTML = ' < i class = "fas fa-edit" > < /i>';
-        editButton.onclick = () => startEditing(messageId);
-        actionsDiv.appendChild(editButton);
-      }
+      const codeBlockDiv = document.createElement('div');
+      codeBlockDiv.className = 'code-block';
+      const pre = document.createElement('pre');
+      const codeElement = document.createElement('code');
+      if (language) codeElement.className = `language-${language}`;
+      codeElement.textContent = code;
+      pre.appendChild(codeElement);
+      codeBlockDiv.appendChild(pre);
       const copyButton = document.createElement('button');
-      copyButton.className = 'action-button';
-      copyButton.innerHTML = ' < i class = "fas fa-copy" > < /i>';
-      copyButton.onclick = () => copyToClipboard(message);
-      actionsDiv.appendChild(copyButton);
-      messageElement.appendChild(actionsDiv);
-      return {
-        element: messageElement,
-        id: messageId
-      };
+      copyButton.className = 'copy-button';
+      copyButton.innerHTML = '<i class="fas fa-copy"></i>';
+      // Fix: copy the content of the code block itself, not the message
+      copyButton.onclick = () => copyToClipboard(code);  // Now copies only the code
+      codeBlockDiv.appendChild(copyButton);
+      contentDiv.appendChild(codeBlockDiv);
+      remainingMessage = parts[1];
+    });
+    if (remainingMessage) {
+      contentDiv.innerHTML += remainingMessage; // Append remaining message
     }
+  } else {
+    // Directly set the HTML content for user messages
+    contentDiv.innerHTML = processedMessage;
+  }
 
-    function getApiKey() {
-      return localStorage.getItem('openRouterApiKey');
-    }
+  messageElement.appendChild(contentDiv);
+
+  const timestampDiv = document.createElement('div');
+  timestampDiv.className = 'message-timestamp';
+  timestampDiv.textContent = formatTimestamp(timestamp);
+  messageElement.appendChild(timestampDiv);
+
+  const actionsDiv = document.createElement('div');
+  actionsDiv.className = 'message-actions';
+  if (isUser) {
+    const editButton = document.createElement('button');
+    editButton.className = 'action-button';
+    editButton.innerHTML = '<i class="fas fa-edit"></i>';
+    editButton.onclick = () => startEditing(messageId);
+    actionsDiv.appendChild(editButton);
+  }
+
+  const copyButton = document.createElement('button');
+  copyButton.className = 'action-button';
+  copyButton.innerHTML = '<i class="fas fa-copy"></i>';
+  copyButton.onclick = () => copyToClipboard(message); // This is for the general message
+  actionsDiv.appendChild(copyButton);
+
+  messageElement.appendChild(actionsDiv);
+
+  return {
+    element: messageElement,
+    id: messageId
+  };
+}
+
+// Helper function to process markdown for headers and bold text
+function processMarkdown(message) {
+  // Convert headers (e.g., # Header -> <h1>Header</h1>)
+  message = message.replace(/^(#{1,6})\s*(.*)/gm, (match, hashes, headerText) => {
+    const level = hashes.length; // Determine the header level based on the number of hashes
+    return `<h${level}>${headerText}</h${level}>`;
+  });
+
+  // Convert bold text (e.g., **bold** or __bold__ -> <strong>bold</strong>)
+  message = message.replace(/(\*\*|__)(.*?)\1/g, '<strong>$2</strong>');
+
+  return message;
+}
+
+// Modern Clipboard API to copy content
+function copyToClipboard(text) {
+  if (navigator.clipboard && window.isSecureContext) {
+    // Using Clipboard API to copy text
+    navigator.clipboard.writeText(text)
+      .then(() => {
+        console.log('Copied to clipboard!');
+        // Optionally show a success message to the user
+      })
+      .catch(err => {
+        console.error('Failed to copy: ', err);
+      });
+  } else {
+    // Fallback: Use textarea method if Clipboard API is not available
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+    console.log('Copied to clipboard (fallback)!');
+  }
+}
+
+function getApiKey() {
+  return localStorage.getItem('openRouterApiKey');
+}
 
     function startEditing(messageId) {
       if (isWaitingForResponse) return;
