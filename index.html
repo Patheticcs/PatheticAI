@@ -1657,6 +1657,25 @@ function addCustomTheme(name, theme) {
 //   primaryColor: '#00ff00',
 //   // ... add all required theme properties
 // });
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  // Show your custom "Add to Home Screen" button here
+});
+
+document.getElementById('installButton').addEventListener('click', () => {
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then((choiceResult) => {
+    if (choiceResult.outcome === 'accepted') {
+      console.log('User accepted the A2HS prompt');
+    } else {
+      console.log('User dismissed the A2HS prompt');
+    }
+    deferredPrompt = null;
+  });
+});
+
       </script>
   </body>
 </html>
