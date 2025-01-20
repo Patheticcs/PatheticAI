@@ -16,62 +16,139 @@
     <meta property="og:locale" content="en_US">
     <link rel="icon" href="/icon.png" type="image/png">
     <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: 'Cabinet Grotesk', sans-serif;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-      }
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
 
-      *::-webkit-scrollbar {
-        display: none;
-      }
+        .hero {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            text-align: center;      }
 
-      body {
-        background-color: black;
-        color: var(--primary-color);
-        min-height: 100vh;
-        line-height: 1.6;
-        transition: var(--transition);
-        font-size: 16px;
-      }
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            background: #000;
+        }
 
-      .container {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: var(--container-width);
-        max-width: 90%;
-        padding: var(--spacing-normal);
-        text-align: center;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-        background-color: rgba(0, 0, 0, 0.7);
-        border-radius: var(--border-radius);
-        overflow-y: auto;
-      }
+        .hero-content {
+            z-index: 1;
+            padding: 20px;
+        }
 
-      .title {
-        font-size: 7em;
-        font-weight: 700;
-        color: white;
-        letter-spacing: 2px;
-      }
+        h1 {
+            font-size: 3em;
+            margin-bottom: 50px;
+        }
 
-      .message {
-        font-size: 0.8em;
-        font-weight: 700;
-        color: white;
-        margin-top: 40px;
-        letter-spacing: 2px;
-      }
+        p {
+            font-size: 14px;
+            max-width: 600px;
+        }
     </style>
-  </head>
-  <body>
-    <div class="container">
-      <div class="title">404</div>
+</head>
+<body>
+    <div class="hero">
+        <div id="particles-js"></div>
+        <div class="hero-content">
+            <h1>404</h1>
+            <p>The Page You Have Entered Has Not Been Found</p>
+        </div>
     </div>
-  </body>
-</html>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+
+    <script>
+    particlesJS("particles-js", {
+      "particles": {
+        "number": {
+          "value": 80,
+          "density": {
+            "enable": true,
+            "value_area": 800
+          }
+        },
+        "color": {
+          "value": "#ffffff"
+        },
+        "shape": {
+          "type": "circle",
+          "stroke": {
+            "width": 0,
+            "color": "#040404"
+          }
+        },
+        "opacity": {
+          "value": 0.5,
+          "random": true
+        },
+        "size": {
+          "value": 1.5,
+          "random": true
+        },
+        "move": {
+          "direction": "top",
+          "out_mode": "out",
+          "speed": 0.5,
+          "random": true
+        },
+        "line_linked": {
+          "enable": false
+        }
+      },
+      "interactivity": {
+        "detect_on": "canvas",
+        "events": {
+          "onhover": {
+            "enable": false,
+            "mode": "grab"
+          },
+          "onclick": {
+            "enable": false,
+            "mode": "push"
+          },
+          "resize": false
+        },
+        "modes": {
+          "grab": {
+            "distance": 400,
+            "line_linked": {
+              "opacity": 0.5
+            }
+          },
+          "bubble": {
+            "distance": 400,
+            "size": 4,
+            "duration": 0.3,
+            "opacity": 1,
+            "speed": 3
+          },
+          "repulse": {
+            "distance": 200,
+            "duration": 0.4
+          },
+          "push": {
+            "particles_nb": 4
+          },
+          "remove": {
+            "particles_nb": 2
+          }
+        }
+      },
+      "retina_detect": true
+    });
+    </script>
+</body>
