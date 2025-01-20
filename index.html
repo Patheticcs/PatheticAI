@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
   <head>
@@ -45,78 +46,73 @@
         --transition: all 0.3s ease;
       }
 
-:root[data-theme="light"] {
-    --background-gradient: linear-gradient(135deg, #f5f7fa 0, #c3cfe2 100%);
-    --overlay-color: rgba(255, 255, 255, 0.3);
-    --background-color: #ffffff;
-    --primary-color: #000000;
-    --secondary-color: #000000;
-    --border-color: rgba(0, 0, 0, 0.1);
-    --taskbar-background: rgba(255, 255, 255, 0.4);
-    --input-background: rgba(255, 255, 255, 0.9);
-    --button-background: rgba(0, 0, 0, 0.1);
-    --button-hover-background: rgba(0, 0, 0, 0.2);
-    --modal-background: rgba(255, 255, 255, 0.9);
-    --message-background: rgba(255, 255, 255, 0.9);
-    --message-user-background: rgba(255, 255, 255, 0.8);
-    --code-background: rgba(0, 0, 0, 0.1);
-    --code-text: #000000;
-    --notification-background: rgba(255, 255, 255, 0.8);
-    --notification-text: #000000;
-    --placeholder-color: rgba(0, 0, 0, 0.5);
-    --chat-input-container-background: rgba(255, 255, 255, 0.2);
-}
+      :root[data-theme="light"] {
+        --background-color: #ffffff;
+        --primary-color: #000000;
+        --secondary-color: #000000;
+        --border-color: rgba(0, 0, 0, 0.1);
+        --taskbar-background: rgba(255, 255, 255, 0.8);
+        --input-background: rgba(255, 255, 255, 0.9);
+        --button-background: rgba(0, 0, 0, 0.1);
+        --button-hover-background: rgba(0, 0, 0, 0.2);
+        --modal-background: rgba(255, 255, 255, 0.9);
+        --message-background: rgba(255, 255, 255, 0.9);
+        --message-user-background: rgba(255, 255, 255, 0.8);
+        --code-background: rgba(0, 0, 0, 0.1);
+        --code-text: #000000;
+        --notification-background: rgba(255, 255, 255, 0.8);
+        --notification-text: #000000;
+        --placeholder-color: rgba(0, 0, 0, 0.5);
+        --chat-input-container-background: rgba(255, 255, 255, 0.6);
+      }
 
+      :root[data-theme="dark"] {
+        --background-color: #000000;
+        --primary-color: #ffffff;
+        --secondary-color: #9c00d5;
+        --border-color: rgba(255, 255, 255, 0.1);
+        --taskbar-background: rgba(0, 0, 0, 0.8);
+        --input-background: rgba(0, 0, 0, 0.9);
+        --button-background: rgba(255, 255, 255, 0.1);
+        --button-hover-background: rgba(255, 255, 255, 0.2);
+        --modal-background: rgba(0, 0, 0, 0.9);
+        --message-background: rgba(0, 0, 0, 0.8);
+        --message-user-background: rgba(0, 0, 0, 0.7);
+        --code-background: rgba(255, 255, 255, 0.1);
+        --code-text: #ffffff;
+        --notification-background: rgba(0, 0, 0, 0.8);
+        --notification-text: #ffffff;
+        --placeholder-color: rgba(255, 255, 255, 0.5);
+        --chat-input-container-background: rgba(0, 0, 0, 0.6);
+      }
 
-:root[data-theme="dark"] {
-    --background-gradient: linear-gradient(135deg, #0a0805 0%, #333333 100%);
-    --overlay-color: rgba(0, 0, 0, 0.3);
-    --background-color: #000000;
-    --primary-color: #ffffff;
-    --secondary-color: #9c00d5;
-    --border-color: rgba(255, 255, 255, 0.1);
-    --taskbar-background: rgba(0, 0, 0, 0.4);
-    --input-background: rgba(0, 0, 0, 0.9);
-    --button-background: rgba(255, 255, 255, 0.1);
-    --button-hover-background: rgba(255, 255, 255, 0.2);
-    --modal-background: rgba(0, 0, 0, 0.9);
-    --message-background: rgba(0, 0, 0, 0.8);
-    --message-user-background: rgba(0, 0, 0, 0.7);
-    --code-background: rgba(255, 255, 255, 0.1);
-    --code-text: #ffffff;
-    --notification-background: rgba(0, 0, 0, 0.8);
-    --notification-text: #ffffff;
-    --placeholder-color: rgba(255, 255, 255, 0.5);
-    --chat-input-container-background: rgba(0, 0, 0, 0.2);
-}
+      body {
+        background: url('https://wallpapers.com/images/hd/4k-nature-in-ice-wvdjbvbvxn12plp6.jpg') no-repeat center center fixed;
+        background-size: cover;
+        background-attachment: fixed;
+        color: white;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        touch-action: none;
+        -webkit-overflow-scrolling: none;
+        overscroll-behavior: none;
+      }
 
-body {
-    background-color: var(--background-color);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    touch-action: none;
-    -webkit-overflow-scrolling: none;
-    overscroll-behavior: none;
-    background-size: cover;
-    background-attachment: fixed;
-    background-image: var(--background-gradient); /* Apply updated gradient */
-}
-
-.container {
-    position: fixed;
-    top: calc(60px + var(--spacing-normal) * 2);
-    bottom: calc(60px + var(--spacing-normal) * 2);
-    left: 50%;
-    transform: translateX(-50%);
-    width: var(--container-width);
-    overflow-y: auto;
-    padding-right: var(--spacing-small);
-}
+      .container {
+        position: fixed;
+        top: calc(60px + var(--spacing-normal) * 2);
+        bottom: calc(60px + var(--spacing-normal) * 2);
+        left: 50%;
+        transform: translateX(-50%);
+        width: var(--container-width);
+        overflow-y: auto;
+        padding-right: var(--spacing-small);
+      }
 
       .taskbar {
         position: fixed;
@@ -125,7 +121,6 @@ body {
         transform: translateX(-50%);
         width: var(--container-width);
         height: 60px;
-        width: 800px;
         background: var(--taskbar-background);
         backdrop-filter: blur(10px);
         border: 1px solid var(--border-color);
@@ -706,6 +701,7 @@ body {
             }
         }
 
+        /* Landscape mode optimalisatie */
         @media (max-height: 600px) and (orientation: landscape) {
             .container {
                 top: 70px;
@@ -726,6 +722,7 @@ body {
             }
         }
 
+        /* Touch device optimalisatie */
         @media (hover: none) {
             .chat-input-container button,
             .taskbar button,
@@ -750,136 +747,7 @@ body {
         .chat-input-container button:disabled:hover {
             background: rgba(255, 255, 255, 0.1);
             transform: none;
-        }      
-      /* New enhanced features styles */
-      .message-context {
-        font-size: 12px;
-        opacity: 0.7;
-        margin-bottom: 5px;
-      }
-      
-      .voice-input-button {
-        background: var(--button-background);
-        border: 1px solid var(--border-color);
-        color: var(--primary-color);
-        padding: 8px;
-        border-radius: 50%;
-        cursor: pointer;
-        transition: all 0.3s ease;
-      }
-      
-      .voice-input-button.recording {
-        background: #ff4444;
-        animation: pulse 1.5s infinite;
-      }
-      
-      .chat-suggestions {
-        display: flex;
-        gap: 8px;
-        margin-bottom: 10px;
-        flex-wrap: wrap;
-      }
-      
-      .suggestion-chip {
-        background: var(--button-background);
-        border: 1px solid var(--border-color);
-        color: var(--primary-color);
-        padding: 5px 12px;
-        border-radius: 15px;
-        cursor: pointer;
-        font-size: 14px;
-        transition: all 0.3s ease;
-      }
-      
-      .suggestion-chip:hover {
-        background: var(--button-hover-background);
-        transform: translateY(-1px);
-      }
-      
-      .chat-header {
-        padding: 10px;
-        text-align: center;
-        border-bottom: 1px solid var(--border-color);
-        margin-bottom: 15px;
-      }
-      
-      .typing-indicator {
-        display: flex;
-        gap: 4px;
-        padding: 10px;
-        align-items: center;
-      }
-      
-      .typing-dot {
-        width: 8px;
-        height: 8px;
-        background: var(--primary-color);
-        border-radius: 50%;
-        opacity: 0.6;
-        animation: typingAnimation 1s infinite ease-in-out;
-      }
-      
-      @keyframes typingAnimation {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-5px); }
-      }
-      
-      .typing-dot:nth-child(1) { animation-delay: 0s; }
-      .typing-dot:nth-child(2) { animation-delay: 0.2s; }
-      .typing-dot:nth-child(3) { animation-delay: 0.4s; }
-      
-      @keyframes pulse {
-        0% { transform: scale(1); }
-        50% { transform: scale(1.1); }
-        100% { transform: scale(1); }
-      }
-      
-      .markdown-content {
-        line-height: 1.6;
-      }
-      
-      .markdown-content p {
-        margin-bottom: 10px;
-      }
-      
-      .markdown-content h1,
-      .markdown-content h2,
-      .markdown-content h3 {
-        margin: 15px 0 10px;
-      }
-      
-      .markdown-content pre {
-        margin: 10px 0;
-        padding: 15px;
-        border-radius: 8px;
-        background: var(--code-background);
-      }
-      
-      .message-reactions {
-        display: flex;
-        gap: 8px;
-        margin-top: 5px;
-      }
-      
-      .reaction-button {
-        background: var(--button-background);
-        border: 1px solid var(--border-color);
-        color: var(--primary-color);
-        padding: 4px 8px;
-        border-radius: 12px;
-        cursor: pointer;
-        font-size: 12px;
-        transition: all 0.3s ease;
-      }
-      
-      .reaction-button:hover {
-        background: var(--button-hover-background);
-      }
-      
-      .reaction-button.active {
-        background: var(--secondary-color);
-        color: white;
-      }
+        }
     </style>
   </head>
   <body>
