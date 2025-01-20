@@ -1136,6 +1136,10 @@ function showSettingsModal() {
           <i class="fa fa-trash"></i>
           Clear Chat
         </div>
+<div class="settings-button" onclick="showAboutModal()">
+  <i class="fa fa-users"></i>
+  About Us
+</div>
         <div class="settings-button" onclick="changeLanguage()">
           <i class="fas fa-language"></i>
           Language: ${STATE.currentLanguage}
@@ -1293,6 +1297,43 @@ function removeApiKey() {
   localStorage.removeItem(CONFIG.STORAGE_KEYS.API_KEY);
   disableInput();
   showNotification('API key removed');
+}
+function showAboutModal() {
+  const modal = document.createElement('div');
+  modal.className = 'modal-overlay';
+  modal.innerHTML = `
+    <div class="modal-window">
+      <div class="modal-header">
+        <span class="modal-title">About PatheticAI</span>
+        <button class="close-button" onclick="this.closest('.modal-overlay').remove()">✖</button>
+      </div>
+      <div class="modal-content">
+        <p><strong>PatheticAI:</strong> 1.0 Enhanced</p>
+        <p><strong>API version:</strong> 1.0</p>
+        <p><strong>Contact:</strong> 
+          <a href="mailto:support@patheticai.com">support@patheticai.com</a>
+        </p>
+        <br>
+        <p><strong>Enhanced Features:</strong></p>
+        <ul>
+          <li>Improved message handling</li>
+          <li>Better code display and copying</li>
+          <li>Theme customization</li>
+          <li>Advanced editing capabilities</li>
+          <li>Persistent chat history</li>
+        </ul>
+      </div>
+    </div>
+  `;
+
+  // Close modal when clicking outside the modal window
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.remove();
+    }
+  });
+
+  document.body.appendChild(modal);
 }
 
 // UI Elements
