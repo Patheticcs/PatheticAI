@@ -1,13 +1,61 @@
 require('dotenv').config();
 const express = require('express');
+const rateLimit = require('express-rate-limit');
+const helmet = require('helmet');
+const cors = require('cors');
+const path = require('path');
+
 const app = express();
 
-app.use(express.json());
+// Security middleware
+app.use(helmet());
+app.use(cors({
+  origin: process.env.NODE_ENV === 'production' ? process.env.ALLOWED_ORIGIN : '*'
+}));
 
-app.post('/api/chat', async (req, res) => {
+// Rate limiting
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100 // limit each IP to 100 requests per windowMs
+});
+app.use('/api/', limiter);
+
+// Body parsing middleware
+app.use(express.json({ limit: '1mb' }));
+app.use(express.static('public'));
+
+// Input validation middleware
+const validateChatInput = (req, res, next) => {
+  const { messages, language } = req.body;
+  
+  if (!Array.isArray(messages) || !language || typeof language !== 'string') {
+    return res.status(400).json({ error: 'Invalid input format' });
+  }
+  
+  if (messages.length > 100) { // Limit conversation length
+    return res.status(400).json({ error: 'Conversation too long' });
+  }
+  
+  const validMessage = (msg) => {
+    return msg 
+      && typeof msg.role === 'string'
+      && typeof msg.content === 'string'
+      && ['user', 'assistant', 'system'].includes(msg.role)
+      && msg.content.length <= 4000; // Limit message size
+  };
+  
+  if (!messages.every(validMessage)) {
+    return res.status(400).json({ error: 'Invalid message format' });
+  }
+  
+  next();
+};
+
+// Chat endpoint
+app.post('/api/chat', validateChatInput, async (req, res) => {
+  const { messages, language } = req.body;
+  
   try {
-    const { messages, language } = req.body;
-    
     const response = await fetch('https://api.groq.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -19,27 +67,64 @@ app.post('/api/chat', async (req, res) => {
         messages: [
           {
             role: "system",
-            content: `You are PatheticAI, a helpful assistant. Please respond in ${language}.`
+            content: `You are PatheticAI, a helpful and friendly AI assistant focused on providing accurate and helpful responses. Please communicate in ${language}. If you receive any harmful or inappropriate requests, respond with a polite decline.`
           },
-          ...messages
-        ]
+          ...messages.slice(-20) // Only send last 20 messages to avoid token limits
+        ],
+        max_tokens: 2048,
+        temperature: 0.7,
+        top_p: 0.9,
+        stream: false
       })
     });
 
+    if (!response.ok) {
+      const error = await response.json();
+      console.error('Groq API Error:', error);
+      throw new Error('Failed to get response from Groq API');
+    }
+
     const data = await response.json();
     
-    if (data.choices && data.choices[0].message) {
-      res.json({ response: data.choices[0].message.content });
-    } else {
-      throw new Error('Invalid response from GroqCloud API');
+    if (!data.choices?.[0]?.message?.content) {
+      throw new Error('Invalid response format from Groq API');
     }
+
+    res.json({ 
+      response: data.choices[0].message.content,
+      usage: data.usage
+    });
+
   } catch (error) {
-    console.error('Error:', error);
-    res.status(500).json({ error: 'Failed to get response from AI' });
+    console.error('Error in /api/chat:', error);
+    
+    // Send appropriate error message based on error type
+    const errorMessage = error.response?.status === 429 
+      ? 'Rate limit exceeded. Please try again later.'
+      : 'Failed to get response from AI';
+      
+    res.status(error.response?.status || 500).json({ 
+      error: errorMessage,
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
   }
+});
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ 
+    error: 'Something broke!',
+    details: process.env.NODE_ENV === 'development' ? err.message : undefined
+  });
 });
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
 });
