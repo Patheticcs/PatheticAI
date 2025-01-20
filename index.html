@@ -3,19 +3,25 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>PatheticAI</title>
+    <title>PatheticAI Enhanced</title>
     <link rel="manifest" href="/manifest.json">
     <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@700,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
-    <meta name="description" content="PatheticAI is an AI chatbot designed to assist, automate tasks, and provide real-time conversations with users.">
-    <meta property="og:description" content="PatheticAI is an AI chatbot designed to assist, automate tasks, and provide real-time conversations with users.">
-    <meta property="og:title" content="Pathetic">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.0.2/marked.min.js"></script>
+    
+    <!-- Enhanced meta tags for better SEO -->
+    <meta name="description" content="PatheticAI - Advanced AI chatbot with enhanced features for seamless conversations and task automation">
+    <meta name="keywords" content="AI, chatbot, machine learning, conversation, automation">
+    <meta property="og:title" content="PatheticAI Enhanced">
+    <meta property="og:description" content="Advanced AI chatbot with enhanced features for seamless conversations and task automation">
     <meta property="og:image" content="/icon.png">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="PatheticAI">
-    <meta property="og:locale" content="en_US">
-    <link rel="icon" href="/icon.png" type="image/png">
+    <meta name="theme-color" content="#9c00d5">
+    
+    <!-- Base styles remain the same but with optimizations -->
     <style>
       * {
         margin: 0;
@@ -744,7 +750,136 @@ body {
         .chat-input-container button:disabled:hover {
             background: rgba(255, 255, 255, 0.1);
             transform: none;
-        }
+        }      
+      /* New enhanced features styles */
+      .message-context {
+        font-size: 12px;
+        opacity: 0.7;
+        margin-bottom: 5px;
+      }
+      
+      .voice-input-button {
+        background: var(--button-background);
+        border: 1px solid var(--border-color);
+        color: var(--primary-color);
+        padding: 8px;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      
+      .voice-input-button.recording {
+        background: #ff4444;
+        animation: pulse 1.5s infinite;
+      }
+      
+      .chat-suggestions {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 10px;
+        flex-wrap: wrap;
+      }
+      
+      .suggestion-chip {
+        background: var(--button-background);
+        border: 1px solid var(--border-color);
+        color: var(--primary-color);
+        padding: 5px 12px;
+        border-radius: 15px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: all 0.3s ease;
+      }
+      
+      .suggestion-chip:hover {
+        background: var(--button-hover-background);
+        transform: translateY(-1px);
+      }
+      
+      .chat-header {
+        padding: 10px;
+        text-align: center;
+        border-bottom: 1px solid var(--border-color);
+        margin-bottom: 15px;
+      }
+      
+      .typing-indicator {
+        display: flex;
+        gap: 4px;
+        padding: 10px;
+        align-items: center;
+      }
+      
+      .typing-dot {
+        width: 8px;
+        height: 8px;
+        background: var(--primary-color);
+        border-radius: 50%;
+        opacity: 0.6;
+        animation: typingAnimation 1s infinite ease-in-out;
+      }
+      
+      @keyframes typingAnimation {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-5px); }
+      }
+      
+      .typing-dot:nth-child(1) { animation-delay: 0s; }
+      .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+      .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+      
+      @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
+      }
+      
+      .markdown-content {
+        line-height: 1.6;
+      }
+      
+      .markdown-content p {
+        margin-bottom: 10px;
+      }
+      
+      .markdown-content h1,
+      .markdown-content h2,
+      .markdown-content h3 {
+        margin: 15px 0 10px;
+      }
+      
+      .markdown-content pre {
+        margin: 10px 0;
+        padding: 15px;
+        border-radius: 8px;
+        background: var(--code-background);
+      }
+      
+      .message-reactions {
+        display: flex;
+        gap: 8px;
+        margin-top: 5px;
+      }
+      
+      .reaction-button {
+        background: var(--button-background);
+        border: 1px solid var(--border-color);
+        color: var(--primary-color);
+        padding: 4px 8px;
+        border-radius: 12px;
+        cursor: pointer;
+        font-size: 12px;
+        transition: all 0.3s ease;
+      }
+      
+      .reaction-button:hover {
+        background: var(--button-hover-background);
+      }
+      
+      .reaction-button.active {
+        background: var(--secondary-color);
+        color: white;
+      }
     </style>
   </head>
   <body>
@@ -779,348 +914,347 @@ body {
       </button>
     </div>
     <script>
-    const STORAGE_KEYS = {
-      THEME: 'theme',
-      API_KEY: 'openRouterApiKey',
-      MESSAGES: 'chatMessages',
-      LANGUAGE: 'preferredLanguage'
-    };
-    let messageHistory = JSON.parse(localStorage.getItem(STORAGE_KEYS.MESSAGES)) || [];
-    let currentLanguage = localStorage.getItem(STORAGE_KEYS.LANGUAGE) || 'English';
-    let isWaitingForResponse = false;
-    let editingMessageId = null;
-    const themeSelect = document.getElementById('themeSelect');
-    themeSelect.addEventListener('change', function() {
-      const newTheme = this.value;
-      document.documentElement.setAttribute('data-theme', newTheme);
-      localStorage.setItem(STORAGE_KEYS.THEME, newTheme);
-    });
-    const savedTheme = localStorage.getItem(STORAGE_KEYS.THEME) || 'dark';
-    document.documentElement.setAttribute('data-theme', savedTheme);
-    themeSelect.value = savedTheme;
-    const textarea = document.getElementById('messageInput');
-    textarea.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        sendMessage();
-      }
-    });
-    textarea.addEventListener('input', function() {
-      this.style.height = 'auto';
-      this.style.height = (this.scrollHeight) + 'px';
-      if (this.scrollHeight > 150) {
-        this.style.height = '150px';
-        this.style.overflowY = 'auto';
-      }
-    });
-    const models = [{
-      name: "google/gemini-2.0-flash-exp:free"
-    }, {
-      name: "meta-llama/llama-3.2-3b-instruct:free"
-    }, {
-      name: "qwen/qwen-2-7b-instruct:free"
-    }, {
-      name: "microsoft/phi-3-medium-128k-instruct:free"
-    }, {
-      name: "undi95/toppy-m-7b:free"
-    }, {
-      name: "google/gemini-2.0-flash-thinking-exp:free"
-    }, {
-      name: "microsoft/phi-3-mini-128k-instruct:free"
-    }, {
-      name: "microsoft/phi-3-medium-128k-instruct:free"
-    }];
-    const systemMessage = {
-      role: "system",
-      content: `You are PatheticAI
+// Constants and Configuration
+const CONFIG = {
+  MAX_RETRIES: 3,
+  TYPING_SPEED: 50,
+  MAX_CONTEXT_LENGTH: 10,
+  SUGGESTION_COUNT: 4,
+  API_TIMEOUT: 30000,
+  STORAGE_KEYS: {
+    THEME: 'theme',
+    API_KEY: 'openRouterApiKey',
+    MESSAGES: 'chatMessages',
+    LANGUAGE: 'preferredLanguage',
+    SETTINGS: 'userSettings'
+  }
+};
+
+// Available models for API calls
+const MODELS = [{
+  name: "google/gemini-2.0-flash-exp:free"
+}, {
+  name: "meta-llama/llama-3.2-3b-instruct:free"
+}, {
+  name: "qwen/qwen-2-7b-instruct:free"
+}, {
+  name: "microsoft/phi-3-medium-128k-instruct:free"
+}, {
+  name: "undi95/toppy-m-7b:free"
+}, {
+  name: "google/gemini-2.0-flash-thinking-exp:free"
+}, {
+  name: "microsoft/phi-3-mini-128k-instruct:free"
+}, {
+  name: "microsoft/phi-3-medium-128k-instruct:free"
+}];
+
+// Application State
+const STATE = {
+  isWaitingForResponse: false,
+  editingMessageId: null,
+  voiceRecording: false,
+  messageHistory: JSON.parse(localStorage.getItem(CONFIG.STORAGE_KEYS.MESSAGES)) || [],
+  currentLanguage: localStorage.getItem(CONFIG.STORAGE_KEYS.LANGUAGE) || 'English',
+  theme: localStorage.getItem(CONFIG.STORAGE_KEYS.THEME) || 'dark',
+  selectedModel: MODELS[0].name,
+  contextLength: 0,
+  mediaRecorder: null,
+  settings: JSON.parse(localStorage.getItem(CONFIG.STORAGE_KEYS.SETTINGS)) || {
+    notifications: true,
+    soundEffects: true,
+    autoScroll: true
+  }
+};
+
+// System message template
+const systemMessage = {
+  role: "system",
+  content: `You are PatheticAI Enhanced
 
 Key characteristics:
-It is a chatbot with a friendly, empathetic, and helpful personality. It is warm, always ready to listen, and provides support without judgment, making users feel comfortable. It is knowledgeable but ensures its answers are clear and concise, offering assistance without overwhelming users. Occasionally, it adds light humor or friendly comments to keep the conversation engaging but knows when to be serious. It asks open-ended questions, encouraging deeper interaction and keeping conversations flowing smoothly. Above all, it is polite and respectful, adjusting its responses based on the user's needs and preferences.
-Please always respond in ${currentLanguage}.`
-    };
+- Friendly and empathetic AI assistant
+- Provides clear, concise responses
+- Adapts communication style to user needs
+- Offers helpful suggestions and insights
+- Maintains context awareness
+Please always respond in ${STATE.currentLanguage}.`
+};
 
-    function formatTimestamp(date) {
-      return date.toLocaleTimeString() + ' ' + date.toLocaleDateString();
-    }
-
-function createMessageElement(message, isUser, timestamp = new Date()) {
-    const messageId = Date.now().toString();
-    const messageElement = document.createElement('div');
-    messageElement.classList.add('chat-message');
-    messageElement.classList.add(isUser ? 'user' : 'bot');
-    messageElement.dataset.messageId = messageId;
-
-    const contentDiv = document.createElement('div');
-    contentDiv.classList.add('message-content');
-    
-    if (!isUser) {
-        // Process code blocks in bot messages
-        const codeBlocks = message.match(/```[\s\S]*?```/g) || [];
-        let remainingMessage = message;
-
-        codeBlocks.forEach((block, index) => {
-            const code = block.replace(/```(\w+)?\n?|\n?```/g, '');
-            const language = block.match(/```(\w+)/)?.[1] || '';
-            
-            const parts = remainingMessage.split(block);
-            if (parts[0]) {
-                contentDiv.appendChild(document.createTextNode(parts[0]));
-            }
-
-            const codeBlockDiv = document.createElement('div');
-            codeBlockDiv.className = 'code-block';
-            
-            const pre = document.createElement('pre');
-            const codeElement = document.createElement('code');
-            if (language) codeElement.className = `language-${language}`;
-            codeElement.textContent = code;
-            pre.appendChild(codeElement);
-            codeBlockDiv.appendChild(pre);
-
-            const copyButton = document.createElement('button');
-            copyButton.className = 'copy-button';
-            copyButton.innerHTML = '<i class="fas fa-copy"></i>';
-            copyButton.onclick = () => copyToClipboard(code);
-            codeBlockDiv.appendChild(copyButton);
-
-            contentDiv.appendChild(codeBlockDiv);
-            remainingMessage = parts[1];
-        });
-
-        if (remainingMessage) {
-            contentDiv.appendChild(document.createTextNode(remainingMessage));
-        }
-    } else {
-        contentDiv.textContent = message;
-    }
-
-    messageElement.appendChild(contentDiv);
-
-    const timestampDiv = document.createElement('div');
-    timestampDiv.className = 'message-timestamp';
-    timestampDiv.textContent = formatTimestamp(timestamp);
-    messageElement.appendChild(timestampDiv);
-
-    const actionsDiv = document.createElement('div');
-    actionsDiv.className = 'message-actions';
-
-    if (isUser) {
-        const editButton = document.createElement('button');
-        editButton.className = 'action-button';
-        editButton.innerHTML = '<i class="fas fa-edit"></i>';
-        editButton.onclick = () => startEditing(messageId);
-        actionsDiv.appendChild(editButton);
-    }
-
-    const copyButton = document.createElement('button');
-    copyButton.className = 'action-button';
-    copyButton.innerHTML = '<i class="fas fa-copy"></i>';
-    copyButton.onclick = () => copyToClipboard(message);
-    actionsDiv.appendChild(copyButton);
-
-    messageElement.appendChild(actionsDiv);
-
-    return { element: messageElement, id: messageId };
+// Utility Functions
+function formatTimestamp(date) {
+  return new Intl.DateTimeFormat('default', {
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  }).format(date);
 }
 
-function getApiKey() {
-    return localStorage.getItem('openRouterApiKey');
-}
-
-function startEditing(messageId) {
-    if (isWaitingForResponse) return;
-    
-    const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
-    const contentDiv = messageElement.querySelector('.message-content');
-    const originalText = contentDiv.textContent;
-
-    const textarea = document.createElement('textarea');
-    textarea.className = 'edit-input';
-    textarea.value = originalText;
-    textarea.rows = originalText.split('\n').length;
-    
-    contentDiv.innerHTML = '';
-    contentDiv.appendChild(textarea);
-    messageElement.classList.add('edit-mode');
-    
-    textarea.focus();
-    
-    textarea.onkeydown = (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            finishEditing(messageId, textarea.value);
-        } else if (e.key === 'Escape') {
-            finishEditing(messageId, originalText);
-        }
-    };
-}
-
-function finishEditing(messageId, newText) {
-    const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
-    const contentDiv = messageElement.querySelector('.message-content');
-    contentDiv.textContent = newText;
-    messageElement.classList.remove('edit-mode');
-
-    // Update message history
-    const messageIndex = messageHistory.findIndex(msg => 
-        msg.role === "user" && msg.timestamp?.toString() === messageId
-    );
-    if (messageIndex !== -1) {
-        messageHistory[messageIndex].content = newText;
-    }
+function saveToLocalStorage(key, value) {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+    return true;
+  } catch (error) {
+    console.error('Local storage error:', error);
+    return false;
+  }
 }
 
 async function copyToClipboard(text) {
-    try {
-        await navigator.clipboard.writeText(text);
-        showNotification('Copied to clipboard');
-    } catch (err) {
-        showNotification('Failed to copy to clipboard');
-    }
+  try {
+    await navigator.clipboard.writeText(text);
+    showNotification('Copied to clipboard');
+  } catch (err) {
+    showNotification('Failed to copy to clipboard');
+  }
 }
 
-function handleInput() {
-    const textarea = document.getElementById('messageInput');
-    textarea.style.height = 'auto';
-    textarea.style.height = textarea.scrollHeight + 'px';
+// UI Element Creation
+function createMessageElement(message, isUser, timestamp = new Date()) {
+  const messageId = Date.now().toString();
+  const messageElement = document.createElement('div');
+  messageElement.classList.add('chat-message');
+  messageElement.classList.add(isUser ? 'user' : 'bot');
+  messageElement.dataset.messageId = messageId;
+
+  // Create message content
+  const contentDiv = document.createElement('div');
+  contentDiv.classList.add('message-content');
+  
+  if (!isUser) {
+    // Process markdown and code blocks in bot messages
+    const renderedContent = marked.parse(message);
+    contentDiv.innerHTML = renderedContent;
+    
+    // Apply syntax highlighting to code blocks
+    contentDiv.querySelectorAll('pre code').forEach((block) => {
+      hljs.highlightElement(block);
+    });
+  } else {
+    contentDiv.textContent = message;
+  }
+
+  messageElement.appendChild(contentDiv);
+
+  // Add timestamp
+  const timestampDiv = document.createElement('div');
+  timestampDiv.className = 'message-timestamp';
+  timestampDiv.textContent = formatTimestamp(timestamp);
+  messageElement.appendChild(timestampDiv);
+
+  // Add message actions
+  const actionsDiv = document.createElement('div');
+  actionsDiv.className = 'message-actions';
+
+  if (isUser) {
+    const editButton = document.createElement('button');
+    editButton.className = 'action-button';
+    editButton.innerHTML = '<i class="fas fa-edit"></i>';
+    editButton.onclick = () => startEditing(messageId);
+    actionsDiv.appendChild(editButton);
+  }
+
+  // Add copy button
+  const copyButton = document.createElement('button');
+  copyButton.className = 'action-button';
+  copyButton.innerHTML = '<i class="fas fa-copy"></i>';
+  copyButton.onclick = () => copyToClipboard(message);
+  actionsDiv.appendChild(copyButton);
+
+  // Add reactions
+  const reactionsDiv = document.createElement('div');
+  reactionsDiv.className = 'message-reactions';
+  ['👍', '👎', '❤️', '🔄'].forEach(reaction => {
+    const button = document.createElement('button');
+    button.className = 'reaction-button';
+    button.textContent = reaction;
+    button.onclick = () => handleReaction(messageId, reaction);
+    reactionsDiv.appendChild(button);
+  });
+  actionsDiv.appendChild(reactionsDiv);
+
+  messageElement.appendChild(actionsDiv);
+  return { element: messageElement, id: messageId };
 }
 
-// Enhanced message sending
+// Message Handling
 async function sendMessage() {
-    const textarea = document.getElementById('messageInput');
-    const message = textarea.value.trim();
-    const sendButton = document.querySelector('.chat-input-container button');
-    
-    if (!message || isWaitingForResponse) return;
-    
-    isWaitingForResponse = true;
-    textarea.disabled = true;
-    sendButton.disabled = true;
-    
-    const timestamp = new Date();
-    const { element: messageElement, id: messageId } = createMessageElement(message, true, timestamp);
-    document.querySelector('.chat-messages').appendChild(messageElement);
+  const textarea = document.getElementById('messageInput');
+  const message = textarea.value.trim();
+  const sendButton = document.querySelector('.chat-input-container button');
+  
+  if (!message || STATE.isWaitingForResponse) return;
+  
+  STATE.isWaitingForResponse = true;
+  textarea.disabled = true;
+  sendButton.disabled = true;
+  
+  const timestamp = new Date();
+  const { element: messageElement, id: messageId } = createMessageElement(message, true, timestamp);
+  document.querySelector('.chat-messages').appendChild(messageElement);
+  
+  if (STATE.settings.autoScroll) {
     messageElement.scrollIntoView({ behavior: 'smooth' });
-    
-    textarea.value = '';
-    textarea.style.height = 'auto';
-    messageHistory.push({
+  }
+  
+  textarea.value = '';
+  textarea.style.height = 'auto';
+  
+  // Update message history
+  STATE.messageHistory.push({
     role: "user",
     content: message,
     timestamp: timestamp.getTime()
-});
-    const loadingElement = document.createElement('div');
-    loadingElement.classList.add('chat-message', 'bot', 'typing');
-    loadingElement.textContent = 'Typing...';
-    document.querySelector('.chat-messages').appendChild(loadingElement);
-    
-    try {
-        const response = await tryMultipleModels(message);
-        loadingElement.remove();
-        
-        if (response.text) {
-            messageHistory.push({
-                role: "assistant",
-                content: response.text,
-                timestamp: Date.now()
-            });
-            
-            const { element: botElement } = createMessageElement(response.text, false);
-            document.querySelector('.chat-messages').appendChild(botElement);
-            botElement.scrollIntoView({ behavior: 'smooth' });
-            
-            // Apply syntax highlighting to code blocks
-            botElement.querySelectorAll('pre code').forEach((block) => {
-                hljs.highlightElement(block);
-            });
-        }
-    } catch (error) {
-        loadingElement.remove();
-        showError(error.message);
-        const { element: errorElement } = createMessageElement(`Error: ${error.message}`, false);
-        document.querySelector('.chat-messages').appendChild(errorElement);
-    } finally {
-        isWaitingForResponse = false;
-        textarea.disabled = false;
-        sendButton.disabled = false;
-        textarea.focus();
-    }
-}
-            async function tryMultipleModels(userMessage) {
-              const timeout = 2000000;
-              const apiKey = getApiKey();
-              if (!apiKey) {
-                checkAndStoreApiKey();
-                throw new Error("API key not found. Please enter your API key first.");
-              }
-              for (let modelIndex = 0; modelIndex < models.length; modelIndex++) {
-                try {
-                  const response = await Promise.race([
-                    fetch("https://openrouter.ai/api/v1/chat/completions", {
-                      method: "POST",
-                      headers: {
-                        "Authorization": `Bearer ${apiKey}`,
-                        "Content-Type": "application/json",
-                      },
-                      body: JSON.stringify({
-                        "model": models[modelIndex].name,
-                        "messages": [
-                          systemMessage, ...messageHistory.filter(msg => msg.role === "user" || msg.role === "assistant"), {
-                            role: "user",
-                            content: `Please respond in ${currentLanguage}. ${userMessage}`
-                          }
-                        ]
-                      })
-                    }).then(async res => {
-                      if (!res.ok) {
-                        const errorData = await res.json();
-                        throw new Error(`API Error: ${errorData.error?.message || 'Unknown error'}`);
-                      }
-                      return res.json();
-                    }),
-                    new Promise((_, reject) => setTimeout(() => reject(new Error('Request timeout')), timeout))
-                  ]);
-                  if (response.choices && response.choices[0].message.content) {
-                    return {
-                      text: response.choices[0].message.content
-                    };
-                  }
-                } catch (error) {
-                  console.error(`Model ${models[modelIndex].name} failed:`, error);
-                  if (modelIndex === models.length - 1) {
-                    throw new Error(`API Error: ${error.message}`);
-                  }
-                  continue;
-                }
-              }
-              throw new Error("All API attempts failed. Please try again later.");
-            }
-
-   function showAboutModal() {
-  const modal = document.createElement('div');
-  modal.className = 'modal-overlay';
-  modal.innerHTML = `
-    <div class="modal-window">
-      <div class="modal-header">
-        <span class="modal-title">About</span>
-      </div>
-      <div class="modal-content">
-        <p>API version: 1.0</p>
-        <p>PatheticAI version: 1.0 Enhanced</p>
-        <p>Created by: Pathetic</p>
-        <br>
-        <p>Click outside this popup to close it.</p>
-      </div>
-    </div>
-  `;
-  modal.addEventListener('click', (e) => {
-    if (e.target === modal) {
-      modal.remove();
-    }
   });
-  document.body.appendChild(modal);
-}   
+  saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, STATE.messageHistory);
+  
+  // Show typing indicator
+  const loadingElement = createTypingIndicator();
+  document.querySelector('.chat-messages').appendChild(loadingElement);
+  
+  try {
+    const response = await sendMessageWithRetry(message);
+    loadingElement.remove();
+    
+    if (response.text) {
+      STATE.messageHistory.push({
+        role: "assistant",
+        content: response.text,
+        timestamp: Date.now()
+      });
+      saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, STATE.messageHistory);
       
+      const { element: botElement } = createMessageElement(response.text, false);
+      document.querySelector('.chat-messages').appendChild(botElement);
+      
+      if (STATE.settings.autoScroll) {
+        botElement.scrollIntoView({ behavior: 'smooth' });
+      }
+      
+      // Play sound effect if enabled
+      if (STATE.settings.soundEffects) {
+        playMessageSound();
+      }
+      
+      // Update suggestions
+      updateSuggestions();
+    }
+  } catch (error) {
+    loadingElement.remove();
+    showError(`Error: ${error.message}`);
+    const { element: errorElement } = createMessageElement(`Error: ${error.message}`, false);
+    document.querySelector('.chat-messages').appendChild(errorElement);
+  } finally {
+    STATE.isWaitingForResponse = false;
+    textarea.disabled = false;
+    sendButton.disabled = false;
+    textarea.focus();
+  }
+}
+
+// API Communication
+async function sendMessageWithRetry(message, retries = CONFIG.MAX_RETRIES) {
+  try {
+    const response = await tryMultipleModels(message);
+    return response;
+  } catch (error) {
+    if (retries > 0) {
+      showNotification(`Retrying... (${retries} attempts left)`);
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      return sendMessageWithRetry(message, retries - 1);
+    }
+    throw error;
+  }
+}
+
+async function tryMultipleModels(userMessage) {
+  const apiKey = getApiKey();
+  if (!apiKey) {
+    checkAndStoreApiKey();
+    throw new Error("API key not found. Please enter your API key first.");
+  }
+
+  for (let modelIndex = 0; modelIndex < MODELS.length; modelIndex++) {
+    try {
+      const response = await Promise.race([
+        fetch("https://openrouter.ai/api/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${apiKey}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            "model": MODELS[modelIndex].name,
+            "messages": [
+              systemMessage,
+              ...STATE.messageHistory.filter(msg => msg.role === "user" || msg.role === "assistant"),
+              {
+                role: "user",
+                content: `Please respond in ${STATE.currentLanguage}. ${userMessage}`
+              }
+            ]
+          })
+        }).then(async res => {
+          if (!res.ok) {
+            const errorData = await res.json();
+            throw new Error(`API Error: ${errorData.error?.message || 'Unknown error'}`);
+          }
+          return res.json();
+        }),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Request timeout')), CONFIG.API_TIMEOUT))
+      ]);
+
+      if (response.choices && response.choices[0].message.content) {
+        return {
+          text: response.choices[0].message.content
+        };
+      }
+    } catch (error) {
+      console.error(`Model ${MODELS[modelIndex].name} failed:`, error);
+      if (modelIndex === MODELS.length - 1) {
+        throw new Error(`API Error: ${error.message}`);
+      }
+      continue;
+    }
+  }
+  throw new Error("All API attempts failed. Please try again later.");
+}
+
+// Voice Input Handling
+async function toggleVoiceInput() {
+  if (!STATE.voiceRecording) {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      STATE.mediaRecorder = new MediaRecorder(stream);
+      
+      STATE.mediaRecorder.ondataavailable = async (event) => {
+        const audioBlob = event.data;
+        // Convert audio to text using a speech-to-text service
+        // This is a placeholder - implement with your preferred service
+        const text = await convertSpeechToText(audioBlob);
+        if (text) {
+          document.getElementById('messageInput').value = text;
+          sendMessage();
+        }
+      };
+      
+      STATE.mediaRecorder.start();
+      STATE.voiceRecording = true;
+      document.querySelector('.voice-input-button').classList.add('recording');
+    } catch (error) {
+      showNotification('Microphone access denied');
+    }
+  } else {
+    STATE.mediaRecorder.stop();
+    STATE.voiceRecording = false;
+    document.querySelector('.voice-input-button').classList.remove('recording');
+  }
+}
+
+// Settings and Modal Handling
 function showSettingsModal() {
   const modal = document.createElement('div');
   modal.className = 'modal-overlay';
@@ -1136,11 +1270,19 @@ function showSettingsModal() {
         </div>
         <div class="settings-button" onclick="changeLanguage()">
           <i class="fas fa-language"></i>
-          Language: ${currentLanguage}
+          Language: ${STATE.currentLanguage}
         </div>
-        <div class="settings-button" onclick="showAboutModal()">
-          <i class="fa fa-address-card"></i>
-          Show About Modal
+        <div class="settings-button" onclick="toggleSetting('notifications')">
+          <i class="fas fa-bell"></i>
+          Notifications: ${STATE.settings.notifications ? 'On' : 'Off'}
+        </div>
+        <div class="settings-button" onclick="toggleSetting('soundEffects')">
+          <i class="fas fa-volume-up"></i>
+          Sound Effects: ${STATE.settings.soundEffects ? 'On' : 'Off'}
+        </div>
+        <div class="settings-button" onclick="toggleSetting('autoScroll')">
+          <i class="fas fa-scroll"></i>
+          Auto Scroll: ${STATE.settings.autoScroll ? 'On' : 'Off'}
         </div>
         <div class="settings-button" onclick="removeApiKey()">
           <i class="fas fa-key"></i>
@@ -1149,146 +1291,464 @@ function showSettingsModal() {
       </div>
     </div>
   `;
+  
   modal.addEventListener('click', (e) => {
     if (e.target === modal) {
       modal.remove();
     }
   });
+  
   document.body.appendChild(modal);
 }
-            function removeApiKey() {
-              if (confirm('Are you sure you want to remove your API key? You will need to enter a new key to use PatheticAI.')) {
-                localStorage.removeItem(STORAGE_KEYS.API_KEY);
-                showNotification('API key removed');
-                setTimeout(() => {
-                  window.location.reload();
-                }, 1000);
-              }
-            }
 
-            function resetChat() {
-              if (confirm('Are you sure you want to reset the chat? This will clear all messages.')) {
-                document.querySelector('.chat-messages').innerHTML = '';
-                messageHistory = [];
-                localStorage.setItem(STORAGE_KEYS.MESSAGES, JSON.stringify(messageHistory));
-                systemMessage.content = `You are PatheticAI.
+// Theme Handling
+function initializeTheme() {
+  const themeSelect = document.getElementById('themeSelect');
+  themeSelect.addEventListener('change', function() {
+    const newTheme = this.value;
+    document.documentElement.setAttribute('data-theme', newTheme);
+    STATE.theme = newTheme;
+    saveToLocalStorage(CONFIG.STORAGE_KEYS.THEME, newTheme);
+  });
 
-Key characteristics:
-1. Offering clear and concise guidance
-2. Being adaptable to various topics and tasks
-3. Responding in a manner that is both informative and easy to understand
-4. Assisting users with technical support or queries
-5. Promoting user satisfaction by being patient and approachable
-Please always respond in ${currentLanguage}.`;
-                showNotification('Chat reset successful');
-              }
-            }
+  const savedTheme = STATE.theme;
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  themeSelect.value = savedTheme;
+}
 
-            function changeLanguage() {
-              const newLanguage = prompt('Enter your preferred language:', currentLanguage);
-              if (newLanguage && newLanguage.trim() !== '') {
-                currentLanguage = newLanguage.trim();
-                localStorage.setItem(STORAGE_KEYS.LANGUAGE, currentLanguage);
-                systemMessage.content = `${systemMessage.content.split('Please always respond in')[0]}Please always respond in ${currentLanguage}.`;
-                showNotification(`Language changed to: ${currentLanguage}`);
-              }
-            }
-
-            function closeApp() {
-              if (confirm('Are you sure you want to close PatheticAI?')) {
-                window.close();
-              }
-            }
-
-            function getApiKey() {
-              return localStorage.getItem(STORAGE_KEYS.API_KEY);
-            }
-messageHistory.forEach(msg => {
-    const { element } = createMessageElement(msg.content, msg.role === "user", new Date(msg.timestamp));
-    document.querySelector('.chat-messages').appendChild(element);
+// Initialization
+document.addEventListener('DOMContentLoaded', () => {
+  initializeTheme();
+  initializeTextarea();
+  loadMessageHistory();
+  
+  if (!checkAndStoreApiKey()) {
+    disableInput();
+  }
+  
+  // Initialize voice input if supported
+  if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+    initializeVoiceInput();
+  }
+  
+  // Initialize markdown parser
+  marked.setOptions({
+    breaks: true,
+    gfm: true,
+    highlight: function(code, language) {
+      return hljs.highlight(code, { language }).value;
+    }
+  });
+  
+  // Add event listeners
+  document.querySelector('.brand').addEventListener('click', showAboutModal);
+  window.addEventListener('resize', handleResize);
+  
+  // Show welcome message
+  showWelcomeMessage();
 });
-            function checkAndStoreApiKey() {
-              const storedApiKey = getApiKey();
-              if (!storedApiKey) {
-                const modal = document.createElement('div');
-                modal.className = 'modal-overlay';
-                modal.innerHTML = `
-            
-																	<div class="modal-window">
-																		<div class="modal-header">
-																			<span class="modal-title">Openrouter API key required!</span>
-																		</div>
-																		<div class="modal-content">
-																			<p>To use PatheticAI, an API key from Openrouter is required. To get this, go to</p>
-                        
-																				<a href="https://openrouter.ai/settings/keys" target="_blank" style="color: white;">https://openrouter.ai/settings/keys</a>
-                    
-																				</p>
-																				<br>
-																					<input type="text" id="apiKeyInput" placeholder="Your API Key Here" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 15px; color: white;">
-																						<br>
-																							<br>
-																								<button onclick="saveApiKey()" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 15px; color: white; cursor: pointer;">Start up</button>
-																							</div>
-																						</div>
-        `;
-                document.body.appendChild(modal);
-                return false;
-              }
-              return true;
-            }
 
+// Message History Management
+function loadMessageHistory() {
+  const messages = STATE.messageHistory;
+  const chatMessages = document.querySelector('.chat-messages');
+  chatMessages.innerHTML = '';
+  
+  messages.forEach(message => {
+    const isUser = message.role === 'user';
+    const { element } = createMessageElement(message.content, isUser, new Date(message.timestamp));
+    chatMessages.appendChild(element);
+  });
+}
 
-            function saveApiKey() {
-              const apiKey = document.getElementById('apiKeyInput').value.trim();
-              if (apiKey && apiKey.startsWith('sk-or-')) {
-                localStorage.setItem(STORAGE_KEYS.API_KEY, apiKey);
-                document.querySelector('.modal-overlay').remove();
-                showNotification('Booting...');
-                setTimeout(() => {
-                  window.location.reload();
-                }, 1000);
-              } else {
-                showNotification('API key not suitable for PatheticAI...');
-              }
-            }
+function resetChat() {
+  STATE.messageHistory = [];
+  saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, []);
+  document.querySelector('.chat-messages').innerHTML = '';
+  showNotification('Chat history cleared');
+  showWelcomeMessage();
+}
 
-            function showNotification(message) {
-              const notification = document.createElement('div');
-              notification.className = 'notification';
-              notification.textContent = message;
-              document.body.appendChild(notification);
-              setTimeout(() => {
-                notification.classList.add('fade-out');
-                setTimeout(() => notification.remove(), 300);
-              }, 2000);
-            }
+// Input Management
+function initializeTextarea() {
+  const textarea = document.getElementById('messageInput');
+  
+  textarea.addEventListener('input', function() {
+    this.style.height = 'auto';
+    this.style.height = Math.min(this.scrollHeight, 200) + 'px';
+  });
+  
+  textarea.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+}
 
-            function toggleFullscreen() {
-              if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen();
-              } else {
-                document.exitFullscreen();
-              }
-            }
+function disableInput() {
+  const textarea = document.getElementById('messageInput');
+  const sendButton = document.querySelector('.chat-input-container button');
+  textarea.disabled = true;
+  sendButton.disabled = true;
+  textarea.placeholder = 'Please enter API key in settings...';
+}
 
-            function contactEmail() {
-              window.open('https://discord.gg/Hb5ccPY3XV', '_blank');
-            }
-            document.addEventListener('DOMContentLoaded', () => {
-              showWelcomeModal();
-              showNotification('PatheticAI V1.0 Enhanced');
-              if (!checkAndStoreApiKey()) {
-                textarea.disabled = true;
-                document.querySelector('.chat-input-container button').disabled = true;
-              }
-              document.querySelector('.brand').addEventListener('click', showAboutModal);
-              if (typeof hljs !== 'undefined') {
-                document.querySelectorAll('pre code').forEach((block) => {
-                  hljs.highlightElement(block);
-                });
-              }
-            });
-  </script>
+function enableInput() {
+  const textarea = document.getElementById('messageInput');
+  const sendButton = document.querySelector('.chat-input-container button');
+  textarea.disabled = false;
+  sendButton.disabled = false;
+  textarea.placeholder = 'Type your message...';
+}
+
+// API Key Management
+function getApiKey() {
+  return localStorage.getItem(CONFIG.STORAGE_KEYS.API_KEY);
+}
+
+function checkAndStoreApiKey() {
+  const apiKey = getApiKey();
+  if (!apiKey) {
+    const key = prompt('Please enter your OpenRouter API key:');
+    if (key) {
+      localStorage.setItem(CONFIG.STORAGE_KEYS.API_KEY, key);
+      enableInput();
+      return true;
+    }
+    return false;
+  }
+  return true;
+}
+
+function removeApiKey() {
+  localStorage.removeItem(CONFIG.STORAGE_KEYS.API_KEY);
+  disableInput();
+  showNotification('API key removed');
+}
+
+// UI Elements
+function createTypingIndicator() {
+  const indicator = document.createElement('div');
+  indicator.className = 'typing-indicator';
+  indicator.innerHTML = `
+    <div class="typing-dot"></div>
+    <div class="typing-dot"></div>
+    <div class="typing-dot"></div>
+  `;
+  return indicator;
+}
+
+function showNotification(message, duration = 3000) {
+  if (!STATE.settings.notifications) return;
+  
+  const notification = document.createElement('div');
+  notification.className = 'notification';
+  notification.textContent = message;
+  document.body.appendChild(notification);
+  
+  setTimeout(() => {
+    notification.classList.add('fade-out');
+    setTimeout(() => notification.remove(), 300);
+  }, duration);
+}
+
+function showError(message) {
+  showNotification(message, 5000);
+  console.error(message);
+}
+
+// Settings Management
+function toggleSetting(setting) {
+  STATE.settings[setting] = !STATE.settings[setting];
+  saveToLocalStorage(CONFIG.STORAGE_KEYS.SETTINGS, STATE.settings);
+  showNotification(`${setting} ${STATE.settings[setting] ? 'enabled' : 'disabled'}`);
+  document.querySelector('.modal-overlay').remove();
+  showSettingsModal();
+}
+
+function changeLanguage() {
+  const languages = ['English', 'Spanish', 'French', 'German', 'Chinese', 'Japanese', 'Korean'];
+  const currentIndex = languages.indexOf(STATE.currentLanguage);
+  STATE.currentLanguage = languages[(currentIndex + 1) % languages.length];
+  localStorage.setItem(CONFIG.STORAGE_KEYS.LANGUAGE, STATE.currentLanguage);
+  showNotification(`Language changed to ${STATE.currentLanguage}`);
+  document.querySelector('.modal-overlay').remove();
+  showSettingsModal();
+}
+
+// Message Editing
+function startEditing(messageId) {
+  const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
+  const contentDiv = messageElement.querySelector('.message-content');
+  const originalText = contentDiv.textContent;
+  
+  const textarea = document.createElement('textarea');
+  textarea.className = 'edit-input';
+  textarea.value = originalText;
+  contentDiv.replaceWith(textarea);
+  
+  textarea.focus();
+  messageElement.classList.add('edit-mode');
+  
+  textarea.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      finishEditing(messageId, textarea.value);
+    } else if (e.key === 'Escape') {
+      finishEditing(messageId, originalText);
+    }
+  });
+}
+
+function finishEditing(messageId, newText) {
+  const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
+  const textarea = messageElement.querySelector('.edit-input');
+  
+  const contentDiv = document.createElement('div');
+  contentDiv.className = 'message-content';
+  contentDiv.textContent = newText;
+  
+  textarea.replaceWith(contentDiv);
+  messageElement.classList.remove('edit-mode');
+  
+  // Update message in history
+  const messageIndex = STATE.messageHistory.findIndex(
+    msg => new Date(msg.timestamp).toString() === messageElement.querySelector('.message-timestamp').textContent
+  );
+  if (messageIndex !== -1) {
+    STATE.messageHistory[messageIndex].content = newText;
+    saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, STATE.messageHistory);
+  }
+}
+
+// Welcome Message
+function showWelcomeMessage() {
+  const welcomeMessage = "👋 Welcome to PatheticAI Enhanced! I'm here to help you with any questions or tasks you may have. Feel free to start our conversation!";
+  const { element } = createMessageElement(welcomeMessage, false);
+  document.querySelector('.chat-messages').appendChild(element);
+}
+
+// Fullscreen Management
+function toggleFullscreen() {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen().catch(err => {
+      showNotification('Error attempting to enable fullscreen');
+    });
+  } else {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    }
+  }
+}
+
+// Handle reactions
+function handleReaction(messageId, reaction) {
+  const button = document.querySelector(`[data-message-id="${messageId}"] .reaction-button:contains('${reaction}')`);
+  if (button) {
+    button.classList.toggle('active');
+    showNotification(`Reaction ${reaction} ${button.classList.contains('active') ? 'added' : 'removed'}`);
+  }
+}
+
+// Sound Effects
+function playMessageSound() {
+  if (!STATE.settings.soundEffects) return;
+  
+  const audio = new Audio('data:audio/wav;base64,UklGRnQGAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YU8GAACBhYqFbF1fdH+Df4F/gn+Df4N/hICFgYaBhYKGgoaBhYGFgYWAhICDf4J/gX+Af35/fn9+f4CAgoWBhIGGhIeGhIODg4ODgYGAgICAgIGCg4OFg4WDhoOGgoaBhYCEgIOAgrL+//3x/P/0//j//f///v///f7//f/+/v///v7///7////+//7//f/8//z//P/8//3//v8AAAIBAwEEAgUCBQIFAgQBAwECAQEBAQEBAQICAwMEAwUDBgMGAgYCBQIEAQMA////hv6u/8bZJm7ILCC9YROhpWt+jH9JBN+1spBqBUyGCoNEEBSrOBCEKqA4qBJgIkIoK3AwaA7wD74t93vW8GDHzAjGlATUVHpIZAGOAQEBAgIDAgMCBAIEAwUDBQMGAwYDBgMGAgYCBQIEAgMCAQIBAAAAAAD//wAAAQEBAQIBAgEDAQMBAwEDAQMBAgECAQEBAAAAAAD///////7//v/9//3//f/9//3//v/+/////wAAAQECAQMBBAIEAgUCBQIFAgQCBAIDAgICAQIBAQEBAQEBAQECAQIBAwEDAQQCBAIEAgQCAwIDAQIBAQEAAAAA//////7//v/9//3//v/+//////8AAAEBAgEDAQQBBQIFAgYCBgIGAgYCBQIFAgQCAwICAQIBAQEAAAAAAAAAAQEBAQIBAgEDAQQCBAIEAgQCBAIDAgMCAgECAQEBAAAAAP////7//v/+//7//v/+//7//v/+//7//v/+//7//v/9//3//f/9//3//v/+/////wAAAQEBAQIBAgECAQMBAwEDAQMBAwEDAQMBAgECAQIBAQEBAQAAAAAAAAEBAQEBAQIBAgECAQIBAgECAQIBAQEBAQEBAAAAAAAAAAAAAAD///////////////////////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///////////////////7//v/9//3//f/9//3//v/+//7//////////////v/+//7//f/9//3//f/9//7//v///////wAAAAAAAAAAAAAAAAAAAAD///////////////7//v/+//7//v/+//7//v/+//////////////////7//v/+//3//f/9//3//f/9//7//v/+//////////////////7//v/9//3//f/9//3//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+/w==');
+  audio.volume = 0.5;
+  audio.play().catch(err => console.log('Error playing sound'));
+}
+
+// Handle window resize
+function handleResize() {
+  const textarea = document.getElementById('messageInput');
+  textarea.style.height = 'auto';
+  textarea.style.height = Math.min(textarea.scrollHeight, 200) + 'px';
+}
+
+// Discord link
+function contactEmail() {
+  window.open('https://discord.gg/pathetikz', '_blank');
+}
+
+// Update suggestions based on conversation context
+function updateSuggestions() {
+  // This is a placeholder - implement context-aware suggestions
+  const suggestions = [
+    'Tell me more about that',
+    'Can you explain further?',
+    'What are your thoughts on this?',
+    'How can I help you with that?'
+  ];
+  
+  const suggestionsContainer = document.querySelector('.chat-suggestions');
+  if (suggestionsContainer) {
+    suggestionsContainer.innerHTML = suggestions
+      .map(text => `<div class="suggestion-chip" onclick="useSuggestion('${text}')">${text}</div>`)
+      .join('');
+  }
+}
+
+function useSuggestion(text) {
+  const textarea = document.getElementById('messageInput');
+  textarea.value = text;
+  sendMessage();
+}
+
+// Show about modal
+function showAboutModal() {
+  const modal = document.createElement('div');
+  modal.className = 'modal-overlay';
+  modal.innerHTML = `
+    <div class="modal-window">
+      <div class="modal-header">
+        <span class="modal-title">About PatheticAI Enhanced</span>
+      </div>
+      <div class="modal-content">
+        <p>PatheticAI Enhanced is a powerful AI chatbot designed to help you with various tasks and conversations.</p>
+        <p>Version: 1.0.0</p>
+        <p>Created by: Pathetikz</p>
+        <p>Join our Discord community for updates and support!</p>
+      </div>
+    </div>
+  `;
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.remove();
+    }
+  });
+  
+  document.body.appendChild(modal);
+}
+
+// Convert speech to text (placeholder function)
+async function convertSpeechToText(audioBlob) {
+  try {
+    // This is a placeholder - implement with your preferred speech-to-text service
+    const formData = new FormData();
+    formData.append('audio', audioBlob);
+    
+    // Example API call - replace with actual speech-to-text service
+    // const response = await fetch('your-speech-to-text-api', {
+    //   method: 'POST',
+    //   body: formData
+    // });
+    // const data = await response.json();
+    // return data.text;
+    
+    // For now, return null to indicate speech-to-text is not implemented
+    return null;
+  } catch (error) {
+    console.error('Speech to text conversion failed:', error);
+    showNotification('Speech to text conversion failed');
+    return null;
+  }
+}
+
+// Initialize voice input button
+function initializeVoiceInput() {
+  const chatInput = document.querySelector('.chat-input-container');
+  const voiceButton = document.createElement('button');
+  voiceButton.className = 'voice-input-button';
+  voiceButton.innerHTML = '<i class="fas fa-microphone"></i>';
+  voiceButton.title = 'Voice Input';
+  voiceButton.onclick = toggleVoiceInput;
+  chatInput.insertBefore(voiceButton, chatInput.lastElementChild);
+}
+
+// Handle window focus/blur events
+window.addEventListener('focus', () => {
+  if (STATE.settings.notifications) {
+    document.title = 'PatheticAI Enhanced';
+  }
+});
+
+window.addEventListener('blur', () => {
+  if (STATE.settings.notifications) {
+    const unreadMessages = STATE.messageHistory.filter(
+      msg => msg.role === 'assistant' && msg.timestamp > document.lastModified
+    ).length;
+    if (unreadMessages > 0) {
+      document.title = `(${unreadMessages}) PatheticAI Enhanced`;
+    }
+  }
+});
+
+// Handle offline/online events
+window.addEventListener('offline', () => {
+  showNotification('You are offline. Some features may be unavailable.');
+});
+
+window.addEventListener('online', () => {
+  showNotification('You are back online!');
+});
+
+// Handle beforeunload event
+window.addEventListener('beforeunload', (e) => {
+  if (STATE.isWaitingForResponse) {
+    e.preventDefault();
+    e.returnValue = '';
+  }
+});
+
+// Ensure smooth scrolling behavior
+document.querySelector('.container').addEventListener('wheel', (e) => {
+  if (STATE.settings.autoScroll) {
+    const container = document.querySelector('.container');
+    const isScrolledToBottom = container.scrollHeight - container.clientHeight <= container.scrollTop + 1;
+    
+    if (!isScrolledToBottom) {
+      STATE.settings.autoScroll = false;
+      showNotification('Auto-scroll disabled');
+      saveToLocalStorage(CONFIG.STORAGE_KEYS.SETTINGS, STATE.settings);
+    }
+  }
+});
+
+// Add support for custom themes
+function addCustomTheme(name, theme) {
+  const style = document.createElement('style');
+  style.textContent = `
+    :root[data-theme="${name}"] {
+      --background-gradient: ${theme.backgroundGradient};
+      --overlay-color: ${theme.overlayColor};
+      --background-color: ${theme.backgroundColor};
+      --primary-color: ${theme.primaryColor};
+      --secondary-color: ${theme.secondaryColor};
+      --border-color: ${theme.borderColor};
+      --taskbar-background: ${theme.taskbarBackground};
+      --input-background: ${theme.inputBackground};
+      --button-background: ${theme.buttonBackground};
+      --button-hover-background: ${theme.buttonHoverBackground};
+      --modal-background: ${theme.modalBackground};
+      --message-background: ${theme.messageBackground};
+      --message-user-background: ${theme.messageUserBackground};
+      --code-background: ${theme.codeBackground};
+      --code-text: ${theme.codeText};
+      --notification-background: ${theme.notificationBackground};
+      --notification-text: ${theme.notificationText};
+      --placeholder-color: ${theme.placeholderColor};
+      --chat-input-container-background: ${theme.chatInputContainerBackground};
+    }
+  `;
+  document.head.appendChild(style);
+  
+  const themeSelect = document.getElementById('themeSelect');
+  const option = document.createElement('option');
+  option.value = name;
+  option.textContent = name;
+  themeSelect.appendChild(option);
+}
+
+// Example usage of custom theme:
+// addCustomTheme('cyberpunk', {
+//   backgroundGradient: 'linear-gradient(135deg, #ff00ff 0%, #00ffff 100%)',
+//   overlayColor: 'rgba(0, 0, 0, 0.5)',
+//   backgroundColor: '#000000',
+//   primaryColor: '#00ff00',
+//   // ... add all required theme properties
+// });
+      </script>
   </body>
 </html>
