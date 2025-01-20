@@ -29,64 +29,73 @@
         display: none;
       }
 
-      :root {
-        --container-width: min(90%, 800px);
-        --spacing-normal: clamp(16px, 2vw, 20px);
-        --spacing-small: clamp(8px, 1vw, 10px);
-        --border-radius: 30px;
-        --border-radius-small: 15px;
-        --transition: all 0.3s ease;
-      }
+:root {
+    --container-width: min(90%, 800px);
+    --spacing-normal: clamp(16px, 2vw, 20px);
+    --spacing-small: clamp(8px, 1vw, 10px);
+    --border-radius: 30px;
+    --border-radius-small: 15px;
+    --transition: all 0.3s ease;
+}
 
-      :root[data-theme="light"] {
-        --background-color: rgba(255, 255, 255);
-        --primary-color: #000000;
-        --secondary-color: #6200ea;
-        --border-color: rgba(0, 0, 0, 0.1);
-        --taskbar-background: rgba(255, 255, 255, 0.8);
-        --input-background: rgba(255, 255, 255, 0.9);
-        --button-background: rgba(0, 0, 0, 0.1);
-        --button-hover-background: rgba(0, 0, 0, 0.2);
-        --modal-background: rgba(255, 255, 255, 0.9);
-        --message-background: rgba(0, 0, 0, 0.05);
-        --message-user-background: rgba(0, 0, 0, 0.1);
-        --code-background: rgba(0, 0, 0, 0.8);
-        --code-text: #ffffff;
-        --notification-background: rgba(0, 0, 0, 0.8);
-        --notification-text: #ffffff;
-        --placeholder-color: rgba(0, 0, 0, 0.5);
-        --chat-input-container-background: rgba(255, 255, 255, 0.6);
-      }
+:root[data-theme="light"] {
+    --background-color: #ffffff;  /* Light background */
+    --primary-color: #000000;  /* Black text */
+    --secondary-color: #000000;  /* Black for accent text */
+    --border-color: rgba(0, 0, 0, 0.1);
+    --taskbar-background: rgba(255, 255, 255, 0.8);
+    --input-background: rgba(255, 255, 255, 0.9);  /* Lighter input background */
+    --button-background: rgba(0, 0, 0, 0.1);
+    --button-hover-background: rgba(0, 0, 0, 0.2);
+    --modal-background: rgba(255, 255, 255, 0.9);  /* Light background */
+    --message-background: rgba(255, 255, 255, 0.9);  /* Light background */
+    --message-user-background: rgba(255, 255, 255, 0.8);  /* Light background */
+    --code-background: rgba(0, 0, 0, 0.1);
+    --code-text: #000000;  /* Black text */
+    --notification-background: rgba(255, 255, 255, 0.8);  /* Light background */
+    --notification-text: #000000;  /* Black text */
+    --placeholder-color: rgba(0, 0, 0, 0.5);
+    --chat-input-container-background: rgba(255, 255, 255, 0.6);  /* Light background */
+}
 
-      :root[data-theme="dark"] {
-        --background-color: rgba(0, 0, 0);
-        --primary-color: #ffffff;
-        --secondary-color: #bb86fc;
-        --border-color: rgba(255, 255, 255, 0.1);
-        --taskbar-background: rgba(0, 0, 0, 0.4);
-        --input-background: rgba(0, 0, 0, 0.6);
-        --button-background: rgba(255, 255, 255, 0.1);
-        --button-hover-background: rgba(255, 255, 255, 0.2);
-        --modal-background: rgba(0, 0, 0, 0.8);
-        --message-background: rgba(255, 255, 255, 0.05);
-        --message-user-background: rgba(255, 255, 255, 0.1);
-        --code-background: rgba(0, 0, 0, 0.8);
-        --code-text: #e0e0e0;
-        --notification-background: rgba(0, 0, 0, 0.8);
-        --notification-text: #ffffff;
-        --placeholder-color: rgba(255, 255, 255, 0.5);
-        --chat-input-container-background: rgba(0, 0, 0, 0.6);
-      }
+:root[data-theme="dark"] {
+    --background-color: #000000;  /* Dark background */
+    --primary-color: #ffffff;  /* White text */
+    --secondary-color: #9c00d5;  /* Purple accent */
+    --border-color: rgba(255, 255, 255, 0.1);
+    --taskbar-background: rgba(0, 0, 0, 0.8);
+    --input-background: rgba(0, 0, 0, 0.9);  /* Darker input background */
+    --button-background: rgba(255, 255, 255, 0.1);
+    --button-hover-background: rgba(255, 255, 255, 0.2);
+    --modal-background: rgba(0, 0, 0, 0.9);  /* Dark background */
+    --message-background: rgba(0, 0, 0, 0.8);  /* Dark background */
+    --message-user-background: rgba(0, 0, 0, 0.7);  /* Dark background */
+    --code-background: rgba(255, 255, 255, 0.1);
+    --code-text: #ffffff;  /* White text */
+    --notification-background: rgba(0, 0, 0, 0.8);  /* Dark background */
+    --notification-text: #ffffff;  /* White text */
+    --placeholder-color: rgba(255, 255, 255, 0.5);
+    --chat-input-container-background: rgba(0, 0, 0, 0.6);  /* Dark background */
+}
 
-      body {
-        background-color: var(--background-color);
-        background-size: cover;
-        background-repeat: no-repeat;
-        color: var(--primary-color);
-        min-height: 100vh;
-        line-height: 1.5;
-        transition: var(--transition);
-      }
+
+
+ body {
+            background: url('https://wallpapers.com/images/hd/4k-nature-in-ice-wvdjbvbvxn12plp6.jpg') no-repeat center center fixed;
+            background-size: cover;
+            background-attachment: fixed;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+            -webkit-overflow-scrolling: none;
+            overscroll-behavior: none;
+        }
 
       .container {
         position: fixed;
@@ -204,6 +213,7 @@
         background: var(--message-background);
         align-self: flex-start;
         border-bottom-left-radius: 5px;
+        color: var(--primary-color);
       }
 
       .chat-input-container {
@@ -867,7 +877,7 @@ function createMessageElement(message, isUser, timestamp = new Date()) {
   contentDiv.classList.add('message-content');
 
   // Process markdown and code blocks
- if (!isUser) {
+  if (!isUser) {
     let processedContent = message;
     
     // Handle code blocks first
@@ -887,10 +897,7 @@ function createMessageElement(message, isUser, timestamp = new Date()) {
       const copyButton = document.createElement('button');
       copyButton.className = 'copy-button';
       copyButton.innerHTML = '<i class="fas fa-copy"></i>';
-      copyButton.onclick = (e) => {
-        e.stopPropagation(); // Prevent event bubbling
-        copyCodeToClipboard(code.trim(), copyButton);
-      };
+      copyButton.onclick = () => copyToClipboard(code.trim());
       
       codeBlockDiv.appendChild(pre);
       codeBlockDiv.appendChild(copyButton);
@@ -899,7 +906,8 @@ function createMessageElement(message, isUser, timestamp = new Date()) {
       wrapper.appendChild(codeBlockDiv);
       return wrapper.innerHTML;
     });
-      
+
+    // Process other markdown elements
     processedContent = processMarkdown(processedContent);
     contentDiv.innerHTML = processedContent;
   } else {
@@ -958,31 +966,13 @@ function processMarkdown(text) {
   return text;
 }
 
-async function copyCodeToClipboard(text, button) {
+async function copyToClipboard(text) {
   try {
     await navigator.clipboard.writeText(text);
-    
-    // Change button icon temporarily to show success
-    const originalHTML = button.innerHTML;
-    button.innerHTML = '<i class="fas fa-check"></i>';
-    
-    // Show notification
-    showNotification('Code copied to clipboard');
-    
-    // Reset button after 2 seconds
-    setTimeout(() => {
-      button.innerHTML = originalHTML;
-    }, 2000);
+    showNotification('Copied to clipboard');
   } catch (err) {
-    console.error('Failed to copy code:', err);
-    showNotification('Failed to copy code to clipboard');
-    
-    // Show error state
-    const originalHTML = button.innerHTML;
-    button.innerHTML = '<i class="fas fa-times"></i>';
-    setTimeout(() => {
-      button.innerHTML = originalHTML;
-    }, 2000);
+    showNotification('Failed to copy to clipboard');
+    console.error('Copy failed:', err);
   }
 }
 
@@ -1030,7 +1020,6 @@ function finishEditing(messageId, newText) {
     localStorage.setItem(STORAGE_KEYS.MESSAGES, JSON.stringify(messageHistory));
   }
 }
-
 async function sendMessage() {
   const textarea = document.getElementById('messageInput');
   const message = textarea.value.trim();
@@ -1098,6 +1087,7 @@ async function sendMessage() {
     textarea.focus();
   }
 }
+
     async function tryMultipleModels(userMessage) {
       const timeout = 2000000;
       const apiKey = getApiKey();
