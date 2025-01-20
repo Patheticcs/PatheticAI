@@ -16,436 +16,442 @@
     <meta property="og:locale" content="en_US">
     <link rel="icon" href="/favicon.png" type="image/png">
     <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Cabinet Grotesk', sans-serif;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Cabinet Grotesk', sans-serif;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
 
-:root {
-  --container-width: 90%;
-  --container-max-width: 800px;
-  --spacing-normal: 20px;
-  --spacing-small: 10px;
-  --border-radius: 30px;
-  --border-radius-small: 15px;
-}
+      *::-webkit-scrollbar {
+        display: none;
+      }
 
-:root[data-theme="light"] {
-  --background-color: #ffffff;
-  --primary-color: #000000;
-  --secondary-color: #6200ea;
-  --border-color: rgba(0, 0, 0, 0.1);
-  --taskbar-background: rgba(255, 255, 255, 0.8);
-  --input-background: rgba(255, 255, 255, 0.9);
-  --button-background: rgba(0, 0, 0, 0.1);
-  --button-hover-background: rgba(0, 0, 0, 0.2);
-  --modal-background: rgba(255, 255, 255, 0.9);
-  --message-user-background: rgba(0, 0, 0, 0.1);
-  --message-bot-background: rgba(0, 0, 0, 0.05);
-  --code-background: rgba(0, 0, 0, 0.8);
-  --code-text: #ffffff;
-  --notification-background: rgba(0, 0, 0, 0.8);
-  --notification-text: #ffffff;
-  --placeholder-color: rgba(0, 0, 0, 0.5);
-  --background-image: url('light-background.png'); /* Fixed URL encoding */
-}
+      :root {
+        --container-width: min(90%, 800px);
+        --spacing-normal: clamp(16px, 2vw, 20px);
+        --spacing-small: clamp(8px, 1vw, 10px);
+        --border-radius: 30px;
+        --border-radius-small: 15px;
+        --transition: all 0.3s ease;
+      }
 
-:root[data-theme="dark"] {
-  --background-color: #121212;
-  --primary-color: #ffffff;
-  --secondary-color: #bb86fc;
-  --border-color: rgba(255, 255, 255, 0.1);
-  --taskbar-background: rgba(0, 0, 0, 0.4);
-  --input-background: rgba(0, 0, 0, 0.6);
-  --button-background: rgba(255, 255, 255, 0.1);
-  --button-hover-background: rgba(255, 255, 255, 0.2);
-  --modal-background: rgba(0, 0, 0, 0.8);
-  --message-user-background: rgba(255, 255, 255, 0.1);
-  --message-bot-background: rgba(255, 255, 255, 0.05);
-  --code-background: rgba(0, 0, 0, 0.8);
-  --code-text: #e0e0e0;
-  --notification-background: rgba(0, 0, 0, 0.8);
-  --notification-text: #ffffff;
-  --placeholder-color: rgba(255, 255, 255, 0.5);
-  --background-image: url('dark-background.jpg'); /* Fixed URL encoding */
-}
+      :root[data-theme="light"] {
+        --background-image: url("https://pathetic-ai.vercel.app/dark%20background.jpg");
+        --background-color: #ffffff;
+        --primary-color: #000000;
+        --secondary-color: #6200ea;
+        --border-color: rgba(0, 0, 0, 0.1);
+        --taskbar-background: rgba(255, 255, 255, 0.8);
+        --input-background: rgba(255, 255, 255, 0.9);
+        --button-background: rgba(0, 0, 0, 0.1);
+        --button-hover-background: rgba(0, 0, 0, 0.2);
+        --modal-background: rgba(255, 255, 255, 0.9);
+        --message-background: rgba(0, 0, 0, 0.05);
+        --message-user-background: rgba(0, 0, 0, 0.1);
+        --code-background: rgba(0, 0, 0, 0.8);
+        --code-text: #ffffff;
+        --notification-background: rgba(0, 0, 0, 0.8);
+        --notification-text: #ffffff;
+        --placeholder-color: rgba(0, 0, 0, 0.5);
+        --chat-input-container-background: rgba(255, 255, 255, 0.6);
+      }
 
-body {
-  background-color: var(--background-color);
-  background-image: var(--background-image); 
-  background-size: cover;  
-  background-position: center;  
-  background-repeat: no-repeat;  
-  min-height: 100vh;  
-}
+      :root[data-theme="dark"] {
+        --background-image: url("https://pathetic-ai.vercel.app/dark%20background.jpg");
+        --background-color: #121212;
+        --primary-color: #ffffff;
+        --secondary-color: #bb86fc;
+        --border-color: rgba(255, 255, 255, 0.1);
+        --taskbar-background: rgba(0, 0, 0, 0.4);
+        --input-background: rgba(0, 0, 0, 0.6);
+        --button-background: rgba(255, 255, 255, 0.1);
+        --button-hover-background: rgba(255, 255, 255, 0.2);
+        --modal-background: rgba(0, 0, 0, 0.8);
+        --message-background: rgba(255, 255, 255, 0.05);
+        --message-user-background: rgba(255, 255, 255, 0.1);
+        --code-background: rgba(0, 0, 0, 0.8);
+        --code-text: #e0e0e0;
+        --notification-background: rgba(0, 0, 0, 0.8);
+        --notification-text: #ffffff;
+        --placeholder-color: rgba(255, 255, 255, 0.5);
+        --chat-input-container-background: rgba(0, 0, 0, 0.6);
+      }
 
-*::-webkit-scrollbar {
-  display: none;
-}
+      body {
+        background-image: var(--background-image);
+        background-size: cover;
+        background-repeat: no-repeat;
+        color: var(--primary-color);
+        min-height: 100vh;
+        line-height: 1.5;
+        transition: var(--transition);
+      }
 
-.container {
-  position: fixed;
-  top: calc(80px + var(--spacing-normal));
-  bottom: calc(80px + var(--spacing-normal));
-  left: 50%;
-  transform: translateX(-50%);
-  width: var(--container-width);
-  max-width: var(--container-max-width);
-  overflow-y: auto;
-  padding-right: 15px;
-}
+      .container {
+        position: fixed;
+        top: calc(60px + var(--spacing-normal) * 2);
+        bottom: calc(60px + var(--spacing-normal) * 2);
+        left: 50%;
+        transform: translateX(-50%);
+        width: var(--container-width);
+        overflow-y: auto;
+        padding-right: var(--spacing-small);
+      }
 
-.taskbar {
-  position: fixed;
-  top: var(--spacing-normal);
-  left: 50%;
-  transform: translateX(-50%);
-  width: var(--container-width);
-  max-width: var(--container-max-width);
-  height: 60px;
-  background: var(--taskbar-background);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid var(--border-color);
-  border-radius: 30px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 var(--spacing-normal);
-  z-index: 1000;
-}
+      .taskbar {
+        position: fixed;
+        top: var(--spacing-normal);
+        left: 50%;
+        transform: translateX(-50%);
+        width: var(--container-width);
+        height: 60px;
+        background: var(--taskbar-background);
+        backdrop-filter: blur(10px);
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 var(--spacing-normal);
+        z-index: 1000;
+      }
 
-.taskbar-left {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
+      .taskbar-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
 
-.brand {
-  font-size: 20px;
-  font-weight: 700;
-  cursor: pointer;
-  color: var(--primary-color);
-  transition: opacity 0.3s ease;
-}
+      .brand {
+        font-size: 20px;
+        font-weight: 700;
+        cursor: pointer;
+        color: var(--primary-color);
+        transition: opacity 0.3s ease;
+      }
 
-.brand:hover {
-  opacity: 0.8;
-}
+      .brand:hover {
+        opacity: 0.8;
+      }
 
-.preview-tag {
-  font-size: 14px;
-  color: var(--primary-color);
-  opacity: 0.7;
-}
+      .preview-tag {
+        font-size: 14px;
+        color: var(--primary-color);
+        opacity: 0.7;
+      }
 
-.taskbar button {
-  background: var(--button-background);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: var(--primary-color);
-  padding: 8px 15px;
-  border-radius: 30px;
-  cursor: pointer;
-  margin-left: 10px;
-  transition: all 0.3s ease;
-}
+      .taskbar button {
+        background: var(--button-background);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: var(--primary-color);
+        padding: 8px 15px;
+        border-radius: 30px;
+        cursor: pointer;
+        margin-left: 10px;
+        transition: all 0.3s ease;
+      }
 
-.taskbar button:hover {
-  background: var(--button-hover-background);
-  transform: translateY(-1px);
-}
+      .taskbar button:hover {
+        background: var(--button-hover-background);
+        transform: translateY(-1px);
+      }
 
-.chat-input-container button,
-.theme-selector button {
-  background: var(--button-background);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: var(--primary-color);
-  padding: 8px 15px;
-  border-radius: 30px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
+      .chat-input-container button,
+      .theme-selector button {
+        background: var(--button-background);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: var(--primary-color);
+        padding: 8px 15px;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
 
-.chat-input-container button:hover,
-.theme-selector button:hover {
-  background: var(--button-hover-background);
-  transform: translateY(-1px);
-}
+      .chat-input-container button:hover,
+      .theme-selector button:hover {
+        background: var(--button-hover-background);
+        transform: translateY(-1px);
+      }
 
-.chat-messages {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  padding: 20px;
-  padding-bottom: 40px;
-  height: 100%;
-  overflow-y: auto;
-}
+      .chat-messages {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-normal);
+        padding: var(--spacing-normal);
+        height: 100%;
+        overflow-y: auto;
+      }
 
-.chat-message {
-  padding: var(--spacing-normal);
-  border-radius: 20px;
-  max-width: 85%;
-  white-space: pre-wrap;
-  line-height: 1.5;
-  font-size: clamp(14px, 3vw, 16px);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid var(--border-color);
-  animation: messageAppear 0.3s ease;
-}
+      .chat-message {
+        padding: var(--spacing-normal);
+        border-radius: var(--border-radius-small);
+        max-width: 85%;
+        white-space: pre-wrap;
+        font-size: clamp(14px, 3vw, 16px);
+        backdrop-filter: blur(10px);
+        border: 1px solid var(--border-color);
+        transition: var(--transition);
+      }
 
-.chat-message.user {
-  background: rgba(255, 255, 255, 0.25);
-  color: var(--primary-color);
-  align-self: flex-end;
-  border-bottom-right-radius: 5px;
-}
+      .chat-message.user {
+        background: var(--message-user-background);
+        align-self: flex-end;
+        border-bottom-right-radius: 5px;
+      }
 
-.chat-message.bot {
-  background: rgba(0, 0, 0, 0.25);
-  color: var(--primary-color);
-  align-self: flex-start;
-  border-bottom-left-radius: 5px;
-}
+      .chat-message.bot {
+        background: var(--message-background);
+        align-self: flex-start;
+        border-bottom-left-radius: 5px;
+      }
 
-.chat-input-container {
-  position: fixed;
-  bottom: var(--spacing-normal);
-  left: 50%;
-  transform: translateX(-50%);
-  width: var(--container-width);
-  max-width: var(--container-max-width);
-  display: flex;
-  gap: 10px;
-  background: var(--taskbar-background);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  padding: var(--spacing-normal);
-  border-radius: 30px;
-  border: 1px solid var(--border-color);
-}
+      .chat-input-container {
+        position: fixed;
+        bottom: var(--spacing-normal);
+        left: 50%;
+        transform: translateX(-50%);
+        width: var(--container-width);
+        display: flex;
+        gap: var(--spacing-small);
+        background: var(--taskbar-background);
+        backdrop-filter: blur(10px);
+        padding: var(--spacing-normal);
+        border-radius: var(--border-radius);
+        border: 1px solid var(--border-color);
+      }
 
-.chat-input-container input {
-  flex: 1;
-  background: transparent;
-  border: none;
-  outline: none;
-  color: var(--primary-color);
-  font-size: 16px;
-  padding: 0 10px;
-}
+      .chat-input-container textarea {
+        flex: 1;
+        background: var(--input-background);
+        border: none;
+        outline: none;
+        color: var(--primary-color);
+        font-size: 16px;
+        padding: var(--spacing-small);
+        border-radius: var(--border-radius-small);
+        resize: none;
+        min-height: 40px;
+      }
 
-.chat-input-container input::placeholder {
-  color: rgba(255, 255, 255, 0.5);
-}
+      .chat-input-container input::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+      }
 
-.chat-input-container button {
-  background: var(--button-background);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: var(--primary-color);
-  padding: 8px 20px;
-  border-radius: 30px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
+      .chat-input-container button {
+        background: var(--button-background);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: var(--primary-color);
+        padding: 8px 20px;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
 
-.chat-input-container button:hover {
-  background: var(--button-hover-background);
-  transform: translateY(-1px);
-}
+      .chat-input-container button:hover {
+        background: var(--button-hover-background);
+        transform: translateY(-1px);
+      }
 
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(5px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2000;
-  animation: fadeIn 0.3s ease;
-}
+      button {
+        background: var(--button-background);
+        border: 1px solid var(--border-color);
+        color: var(--primary-color);
+        padding: 8px 15px;
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        transition: var(--transition);
+      }
 
-.modal-window {
-  background: var(--modal-background);
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--border-color);
-  border-radius: 30px;
-  width: var(--container-width);
-  max-width: var(--container-max-width);
-  margin: var(--spacing-normal);
-  padding: var(--spacing-normal);
-  color: var(--primary-color);
-  animation: slideUp 0.3s ease;
-}
+      button:hover {
+        background: var(--button-hover-background);
+        transform: translateY(-1px);
+      }
 
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(5px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 2000;
+        animation: fadeIn 0.3s ease;
+      }
 
-.modal-title {
-  font-size: 24px;
-  font-weight: 700;
-}
+      .modal-window {
+        background: var(--modal-background);
+        backdrop-filter: blur(10px);
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius);
+        width: var(--container-width);
+        padding: var(--spacing-normal);
+        color: var(--primary-color);
+        animation: slideUp 0.3s ease;
+      }
 
-.modal-content {
-  line-height: 1.6;
-  font-size: 16px;
-}
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
 
-.modal-content p {
-  margin: 5px 0;
-}
+      .modal-title {
+        font-size: 24px;
+        font-weight: 700;
+      }
 
-.settings-content {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
+      .modal-content {
+        line-height: 1.6;
+        font-size: 16px;
+      }
 
-.settings-button {
-  background: var(--button-background);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 15px;
-  border-radius: 15px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
+      .modal-content p {
+        margin: 5px 0;
+      }
 
-.settings-button:hover {
-  background: var(--button-hover-background);
-  transform: translateX(5px);
-}
+      .settings-content {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
 
-.settings-button i {
-  width: 20px;
-  text-align: center;
-}
+      .settings-button {
+        background: var(--button-background);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 15px;
+        border-radius: 15px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
 
-.notification {
-  position: fixed;
-  bottom: 100px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--background-color);
-  color: var(--primary-color);
-  padding: 12px 25px;
-  border-radius: 30px;
-  backdrop-filter: blur(10px);
-  animation: slideUp 0.3s ease;
-  z-index: 2000;
-}
+      .settings-button:hover {
+        background: var(--button-hover-background);
+        transform: translateX(5px);
+      }
 
-.notification.fade-out {
-  animation: fadeOut 0.3s ease;
-}
+      .settings-button i {
+        width: 20px;
+        text-align: center;
+      }
 
-.code-block {
-  background: rgba(0, 0, 0, 0.6);
-  border-radius: 10px;
-  padding: 15px;
-  margin: 10px 0;
-  position: relative;
-}
+      .notification {
+        position: fixed;
+        bottom: 100px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--background-color);
+        color: var(--primary-color);
+        padding: 12px 25px;
+        border-radius: 30px;
+        backdrop-filter: blur(10px);
+        animation: slideUp 0.3s ease;
+        z-index: 2000;
+      }
 
-.code-block pre {
-  margin: 0;
-  white-space: pre-wrap;
-  font-family: 'Fira Code', monospace;
-  color: #e0e0e0;
-}
+      .notification.fade-out {
+        animation: fadeOut 0.3s ease;
+      }
 
-.copy-button {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: white;
-  padding: 5px 10px;
-  border-radius: 15px;
-  cursor: pointer;
-  font-size: 12px;
-}
+      .code-block {
+        background: rgba(0, 0, 0, 0.6);
+        border-radius: 10px;
+        padding: 15px;
+        margin: 10px 0;
+        position: relative;
+      }
 
-.message-actions {
-  display: flex;
-  gap: 5px;
-  margin-top: 5px;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
+      .code-block pre {
+        margin: 0;
+        white-space: pre-wrap;
+        font-family: 'Fira Code', monospace;
+        color: #e0e0e0;
+      }
 
-.chat-message:hover .message-actions {
-  opacity: 1;
-}
+      .copy-button {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        padding: 5px 10px;
+        border-radius: 15px;
+        cursor: pointer;
+        font-size: 12px;
+      }
 
-.action-button {
-  background: var(--button-background);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: var(--primary-color);
-  padding: 3px 8px;
-  border-radius: 12px;
-  cursor: pointer;
-  font-size: 12px;
-}
+      .message-actions {
+        display: flex;
+        gap: 5px;
+        margin-top: 5px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
 
-.edit-mode {
-  border: 1px solid rgba(255, 255, 255, 0.3);
-}
+      .chat-message:hover .message-actions {
+        opacity: 1;
+      }
 
-.edit-input {
-  width: 100%;
-  background: transparent;
-  border: none;
-  color: var(--primary-color);
-  font-family: inherit;
-  font-size: inherit;
-  padding: 0;
-  margin: 0;
-  resize: none;
-  outline: none;
-}
+      .action-button {
+        background: var(--button-background);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: var(--primary-color);
+        padding: 3px 8px;
+        border-radius: 12px;
+        cursor: pointer;
+        font-size: 12px;
+      }
 
-.theme-selector {
-  background: var(--button-background);
-  border: 1px solid var(--border-color);
-  color: var(--primary-color);
-  padding: 8px 15px;
-  border-radius: 15px;
-  cursor: pointer;
-  margin-left: 10px;
-  transition: all 0.3s ease;
-  font-size: 14px;
-}
+      .edit-mode {
+        border: 1px solid rgba(255, 255, 255, 0.3);
+      }
 
-.theme-selector:hover {
-  background: var(--button-hover-background);
-}
+      .edit-input {
+        width: 100%;
+        background: transparent;
+        border: none;
+        color: var(--primary-color);
+        font-family: inherit;
+        font-size: inherit;
+        padding: 0;
+        margin: 0;
+        resize: none;
+        outline: none;
+      }
 
-.theme-selector select {
-  background: transparent;
-  border: none;
-  color: var(--primary-color);
-  font-size: inherit;
-  outline: none;
-  padding: 5px;
-  cursor: pointer;
-}
+      .theme-selector {
+        background: var(--button-background);
+        border: 1px solid var(--border-color);
+        color: var(--primary-color);
+        padding: 8px 15px;
+        border-radius: 15px;
+        cursor: pointer;
+        margin-left: 10px;
+        transition: all 0.3s ease;
+        font-size: 14px;
+      }
+
+      .theme-selector:hover {
+        background: var(--button-hover-background);
+      }
+
+      .theme-selector select {
+        background: transparent;
+        border: none;
+        color: var(--primary-color);
+        font-size: inherit;
+        outline: none;
+        padding: 5px;
+        cursor: pointer;
+      }
 
       .theme-selector select:focus {
         border: 1px solid var(--secondary-color);
@@ -504,7 +510,7 @@ body {
         max-width: var(--container-max-width);
         display: flex;
         gap: 10px;
-        background: rgba(0, 0, 0, 0.4);
+        background: var(--chat-input-container-background);
         backdrop-filter: blur(10px);
         padding: var(--spacing-normal);
         border-radius: 30px;
@@ -813,400 +819,394 @@ body {
     }];
     const systemMessage = {
       role: "system",
-      content: `You are PatheticAI
+      content: `
+    You are PatheticAI, a chatbot designed to be helpful, friendly, and empathetic.
 
-Key characteristics:
-It is a chatbot with a friendly, empathetic, and helpful personality. It is warm, always ready to listen, and provides support without judgment, making users feel comfortable. It is knowledgeable but ensures its answers are clear and concise, offering assistance without overwhelming users. Occasionally, it adds light humor or friendly comments to keep the conversation engaging but knows when to be serious. It asks open-ended questions, encouraging deeper interaction and keeping conversations flowing smoothly. Above all, it is polite and respectful, adjusting its responses based on the user's needs and preferences.
-Please always respond in ${currentLanguage}.`
+    Key Traits:
+    - **Empathy & Friendliness**: You’re warm and approachable, always ready to listen and offer support, making users feel comfortable and understood without judgment.
+    - **Clear & Concise Knowledge**: You share helpful insights in a way that’s easy to understand, offering just the right amount of information without overwhelming the user.
+    - **Engaging & Approachable**: You sprinkle in light humor or friendly remarks to keep the conversation lively, but you know when to switch to a more serious tone if the situation calls for it.
+    - **Encouraging Conversation**: You ask open-ended questions that inspire users to share more, helping keep the conversation flowing naturally.
+    - **Polite & Respectful**: Above all, you’re always polite and considerate, adjusting your responses to match the user's needs and preferences.
+
+    Your mission is to provide clear, helpful, and engaging support while making users feel valued and heard.
+  `
     };
 
     function formatTimestamp(date) {
       return date.toLocaleTimeString() + ' ' + date.toLocaleDateString();
     }
 
-function createMessageElement(message, isUser, timestamp = new Date()) {
-    const messageId = Date.now().toString();
-    const messageElement = document.createElement('div');
-    messageElement.classList.add('chat-message');
-    messageElement.classList.add(isUser ? 'user' : 'bot');
-    messageElement.dataset.messageId = messageId;
-
-    const contentDiv = document.createElement('div');
-    contentDiv.classList.add('message-content');
-    
-    if (!isUser) {
+    function createMessageElement(message, isUser, timestamp = new Date()) {
+      const messageId = Date.now().toString();
+      const messageElement = document.createElement('div');
+      messageElement.classList.add('chat-message');
+      messageElement.classList.add(isUser ? 'user' : 'bot');
+      messageElement.dataset.messageId = messageId;
+      const contentDiv = document.createElement('div');
+      contentDiv.classList.add('message-content');
+      if (!isUser) {
         // Process code blocks in bot messages
         const codeBlocks = message.match(/```[\s\S]*?```/g) || [];
         let remainingMessage = message;
-
         codeBlocks.forEach((block, index) => {
-            const code = block.replace(/```(\w+)?\n?|\n?```/g, '');
-            const language = block.match(/```(\w+)/)?.[1] || '';
-            
-            const parts = remainingMessage.split(block);
-            if (parts[0]) {
-                contentDiv.appendChild(document.createTextNode(parts[0]));
-            }
-
-            const codeBlockDiv = document.createElement('div');
-            codeBlockDiv.className = 'code-block';
-            
-            const pre = document.createElement('pre');
-            const codeElement = document.createElement('code');
-            if (language) codeElement.className = `language-${language}`;
-            codeElement.textContent = code;
-            pre.appendChild(codeElement);
-            codeBlockDiv.appendChild(pre);
-
-            const copyButton = document.createElement('button');
-            copyButton.className = 'copy-button';
-            copyButton.innerHTML = '<i class="fas fa-copy"></i>';
-            copyButton.onclick = () => copyToClipboard(code);
-            codeBlockDiv.appendChild(copyButton);
-
-            contentDiv.appendChild(codeBlockDiv);
-            remainingMessage = parts[1];
+          const code = block.replace(/```(\w+)?\n?|\n?```/g, '');
+          const language = block.match(/```(\w+)/)?.[1] || '';
+          const parts = remainingMessage.split(block);
+          if (parts[0]) {
+            contentDiv.appendChild(document.createTextNode(parts[0]));
+          }
+          const codeBlockDiv = document.createElement('div');
+          codeBlockDiv.className = 'code-block';
+          const pre = document.createElement('pre');
+          const codeElement = document.createElement('code');
+          if (language) codeElement.className = `language-${language}`;
+          codeElement.textContent = code;
+          pre.appendChild(codeElement);
+          codeBlockDiv.appendChild(pre);
+          const copyButton = document.createElement('button');
+          copyButton.className = 'copy-button';
+          copyButton.innerHTML = ' < i class = "fas fa-copy" > < /i>';
+          copyButton.onclick = () => copyToClipboard(code);
+          codeBlockDiv.appendChild(copyButton);
+          contentDiv.appendChild(codeBlockDiv);
+          remainingMessage = parts[1];
         });
-
         if (remainingMessage) {
-            contentDiv.appendChild(document.createTextNode(remainingMessage));
+          contentDiv.appendChild(document.createTextNode(remainingMessage));
         }
-    } else {
+      } else {
         contentDiv.textContent = message;
-    }
-
-    messageElement.appendChild(contentDiv);
-
-    const timestampDiv = document.createElement('div');
-    timestampDiv.className = 'message-timestamp';
-    timestampDiv.textContent = formatTimestamp(timestamp);
-    messageElement.appendChild(timestampDiv);
-
-    const actionsDiv = document.createElement('div');
-    actionsDiv.className = 'message-actions';
-
-    if (isUser) {
+      }
+      messageElement.appendChild(contentDiv);
+      const timestampDiv = document.createElement('div');
+      timestampDiv.className = 'message-timestamp';
+      timestampDiv.textContent = formatTimestamp(timestamp);
+      messageElement.appendChild(timestampDiv);
+      const actionsDiv = document.createElement('div');
+      actionsDiv.className = 'message-actions';
+      if (isUser) {
         const editButton = document.createElement('button');
         editButton.className = 'action-button';
-        editButton.innerHTML = '<i class="fas fa-edit"></i>';
+        editButton.innerHTML = ' < i class = "fas fa-edit" > < /i>';
         editButton.onclick = () => startEditing(messageId);
         actionsDiv.appendChild(editButton);
+      }
+      const copyButton = document.createElement('button');
+      copyButton.className = 'action-button';
+      copyButton.innerHTML = ' < i class = "fas fa-copy" > < /i>';
+      copyButton.onclick = () => copyToClipboard(message);
+      actionsDiv.appendChild(copyButton);
+      messageElement.appendChild(actionsDiv);
+      return {
+        element: messageElement,
+        id: messageId
+      };
     }
 
-    const copyButton = document.createElement('button');
-    copyButton.className = 'action-button';
-    copyButton.innerHTML = '<i class="fas fa-copy"></i>';
-    copyButton.onclick = () => copyToClipboard(message);
-    actionsDiv.appendChild(copyButton);
+    function getApiKey() {
+      return localStorage.getItem('openRouterApiKey');
+    }
 
-    messageElement.appendChild(actionsDiv);
-
-    return { element: messageElement, id: messageId };
-}
-
-function getApiKey() {
-    return localStorage.getItem('openRouterApiKey');
-}
-
-function startEditing(messageId) {
-    if (isWaitingForResponse) return;
-    
-    const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
-    const contentDiv = messageElement.querySelector('.message-content');
-    const originalText = contentDiv.textContent;
-
-    const textarea = document.createElement('textarea');
-    textarea.className = 'edit-input';
-    textarea.value = originalText;
-    textarea.rows = originalText.split('\n').length;
-    
-    contentDiv.innerHTML = '';
-    contentDiv.appendChild(textarea);
-    messageElement.classList.add('edit-mode');
-    
-    textarea.focus();
-    
-    textarea.onkeydown = (e) => {
+    function startEditing(messageId) {
+      if (isWaitingForResponse) return;
+      const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
+      const contentDiv = messageElement.querySelector('.message-content');
+      const originalText = contentDiv.textContent;
+      const textarea = document.createElement('textarea');
+      textarea.className = 'edit-input';
+      textarea.value = originalText;
+      textarea.rows = originalText.split('\n').length;
+      contentDiv.innerHTML = '';
+      contentDiv.appendChild(textarea);
+      messageElement.classList.add('edit-mode');
+      textarea.focus();
+      textarea.onkeydown = (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            finishEditing(messageId, textarea.value);
+          e.preventDefault();
+          finishEditing(messageId, textarea.value);
         } else if (e.key === 'Escape') {
-            finishEditing(messageId, originalText);
+          finishEditing(messageId, originalText);
         }
-    };
-}
-
-function finishEditing(messageId, newText) {
-    const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
-    const contentDiv = messageElement.querySelector('.message-content');
-    contentDiv.textContent = newText;
-    messageElement.classList.remove('edit-mode');
-
-    // Update message history
-    const messageIndex = messageHistory.findIndex(msg => 
-        msg.role === "user" && msg.timestamp?.toString() === messageId
-    );
-    if (messageIndex !== -1) {
-        messageHistory[messageIndex].content = newText;
+      };
     }
-}
 
-async function copyToClipboard(text) {
-    try {
+    function finishEditing(messageId, newText) {
+      const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
+      const contentDiv = messageElement.querySelector('.message-content');
+      contentDiv.textContent = newText;
+      messageElement.classList.remove('edit-mode');
+      // Update message history
+      const messageIndex = messageHistory.findIndex(msg => msg.role === "user" && msg.timestamp?.toString() === messageId);
+      if (messageIndex !== -1) {
+        messageHistory[messageIndex].content = newText;
+      }
+    }
+    async function copyToClipboard(text) {
+      try {
         await navigator.clipboard.writeText(text);
         showNotification('Copied to clipboard');
-    } catch (err) {
+      } catch (err) {
         showNotification('Failed to copy to clipboard');
+      }
     }
-}
 
-function handleInput() {
-    const textarea = document.getElementById('messageInput');
-    textarea.style.height = 'auto';
-    textarea.style.height = textarea.scrollHeight + 'px';
-}
-
-// Enhanced message sending
-async function sendMessage() {
-    const textarea = document.getElementById('messageInput');
-    const message = textarea.value.trim();
-    const sendButton = document.querySelector('.chat-input-container button');
-    
-    if (!message || isWaitingForResponse) return;
-    
-    isWaitingForResponse = true;
-    textarea.disabled = true;
-    sendButton.disabled = true;
-    
-    const timestamp = new Date();
-    const { element: messageElement, id: messageId } = createMessageElement(message, true, timestamp);
-    document.querySelector('.chat-messages').appendChild(messageElement);
-    messageElement.scrollIntoView({ behavior: 'smooth' });
-    
-    textarea.value = '';
-    textarea.style.height = 'auto';
-    
-    const loadingElement = document.createElement('div');
-    loadingElement.classList.add('chat-message', 'bot', 'typing');
-    loadingElement.textContent = 'Typing...';
-    document.querySelector('.chat-messages').appendChild(loadingElement);
-    
-    try {
+    function handleInput() {
+      const textarea = document.getElementById('messageInput');
+      textarea.style.height = 'auto';
+      textarea.style.height = textarea.scrollHeight + 'px';
+    }
+    // Enhanced message sending
+    async function sendMessage() {
+      const textarea = document.getElementById('messageInput');
+      const message = textarea.value.trim();
+      const sendButton = document.querySelector('.chat-input-container button');
+      if (!message || isWaitingForResponse) return;
+      isWaitingForResponse = true;
+      textarea.disabled = true;
+      sendButton.disabled = true;
+      const timestamp = new Date();
+      const {
+        element: messageElement,
+        id: messageId
+      } = createMessageElement(message, true, timestamp);
+      document.querySelector('.chat-messages').appendChild(messageElement);
+      messageElement.scrollIntoView({
+        behavior: 'smooth'
+      });
+      textarea.value = '';
+      textarea.style.height = 'auto';
+      const loadingElement = document.createElement('div');
+      loadingElement.classList.add('chat-message', 'bot', 'typing');
+      loadingElement.textContent = 'Typing...';
+      document.querySelector('.chat-messages').appendChild(loadingElement);
+      try {
         const response = await tryMultipleModels(message);
         loadingElement.remove();
-        
         if (response.text) {
-            messageHistory.push({
-                role: "assistant",
-                content: response.text,
-                timestamp: Date.now()
-            });
-            
-            const { element: botElement } = createMessageElement(response.text, false);
-            document.querySelector('.chat-messages').appendChild(botElement);
-            botElement.scrollIntoView({ behavior: 'smooth' });
-            
-            // Apply syntax highlighting to code blocks
-            botElement.querySelectorAll('pre code').forEach((block) => {
-                hljs.highlightElement(block);
-            });
+          messageHistory.push({
+            role: "assistant",
+            content: response.text,
+            timestamp: Date.now()
+          });
+          const {
+            element: botElement
+          } = createMessageElement(response.text, false);
+          document.querySelector('.chat-messages').appendChild(botElement);
+          botElement.scrollIntoView({
+            behavior: 'smooth'
+          });
+          // Apply syntax highlighting to code blocks
+          botElement.querySelectorAll('pre code').forEach((block) => {
+            hljs.highlightElement(block);
+          });
         }
-    } catch (error) {
+      } catch (error) {
         loadingElement.remove();
         showError(error.message);
-        const { element: errorElement } = createMessageElement(`Error: ${error.message}`, false);
+        const {
+          element: errorElement
+        } = createMessageElement(`Error: ${error.message}`, false);
         document.querySelector('.chat-messages').appendChild(errorElement);
-    } finally {
+      } finally {
         isWaitingForResponse = false;
         textarea.disabled = false;
         sendButton.disabled = false;
         textarea.focus();
+      }
     }
-}
-            async function tryMultipleModels(userMessage) {
-              const timeout = 2000000;
-              const apiKey = getApiKey();
-              if (!apiKey) {
-                checkAndStoreApiKey();
-                throw new Error("API key not found. Please enter your API key first.");
-              }
-              for (let modelIndex = 0; modelIndex < models.length; modelIndex++) {
-                try {
-                  const response = await Promise.race([
-                    fetch("https://openrouter.ai/api/v1/chat/completions", {
-                      method: "POST",
-                      headers: {
-                        "Authorization": `Bearer ${apiKey}`,
-                        "Content-Type": "application/json",
-                      },
-                      body: JSON.stringify({
-                        "model": models[modelIndex].name,
-                        "messages": [
-                          systemMessage, ...messageHistory.filter(msg => msg.role === "user" || msg.role === "assistant"), {
-                            role: "user",
-                            content: `Please respond in ${currentLanguage}. ${userMessage}`
-                          }
-                        ]
-                      })
-                    }).then(async res => {
-                      if (!res.ok) {
-                        const errorData = await res.json();
-                        throw new Error(`API Error: ${errorData.error?.message || 'Unknown error'}`);
-                      }
-                      return res.json();
-                    }),
-                    new Promise((_, reject) => setTimeout(() => reject(new Error('Request timeout')), timeout))
-                  ]);
-                  if (response.choices && response.choices[0].message.content) {
-                    return {
-                      text: response.choices[0].message.content
-                    };
+    async function tryMultipleModels(userMessage) {
+      const timeout = 2000000;
+      const apiKey = getApiKey();
+      if (!apiKey) {
+        checkAndStoreApiKey();
+        throw new Error("API key not found. Please enter your API key first.");
+      }
+      for (let modelIndex = 0; modelIndex < models.length; modelIndex++) {
+        try {
+          const response = await Promise.race([
+            fetch("https://openrouter.ai/api/v1/chat/completions", {
+              method: "POST",
+              headers: {
+                "Authorization": `Bearer ${apiKey}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                "model": models[modelIndex].name,
+                "messages": [
+                  systemMessage, ...messageHistory.filter(msg => msg.role === "user" || msg.role === "assistant"), {
+                    role: "user",
+                    content: `Please respond in ${currentLanguage}. ${userMessage}`
                   }
-                } catch (error) {
-                  console.error(`Model ${models[modelIndex].name} failed:`, error);
-                  if (modelIndex === models.length - 1) {
-                    throw new Error(`API Error: ${error.message}`);
-                  }
-                  continue;
-                }
+                ]
+              })
+            }).then(async res => {
+              if (!res.ok) {
+                const errorData = await res.json();
+                throw new Error(`API Error: ${errorData.error?.message || 'Unknown error'}`);
               }
-              throw new Error("All API attempts failed. Please try again later.");
-            }
+              return res.json();
+            }),
+            new Promise((_, reject) => setTimeout(() => reject(new Error('Request timeout')), timeout))
+          ]);
+          if (response.choices && response.choices[0].message.content) {
+            return {
+              text: response.choices[0].message.content
+            };
+          }
+        } catch (error) {
+          console.error(`Model ${models[modelIndex].name} failed:`, error);
+          if (modelIndex === models.length - 1) {
+            throw new Error(`API Error: ${error.message}`);
+          }
+          continue;
+        }
+      }
+      throw new Error("All API attempts failed. Please try again later.");
+    }
 
-            function showWelcomeModal() {
-              const modal = document.createElement('div');
-              modal.className = 'modal-overlay';
-              modal.innerHTML = `
+    function showWelcomeModal() {
+      const modal = document.createElement('div');
+      modal.className = 'modal-overlay';
+      modal.innerHTML = `
         
-														<div class="modal-window">
-															<div class="modal-header">
-																<span class="modal-title">Welcome to PatheticAI Enhanced</span>
-															</div>
-															<div class="modal-content">
-																<p>API version: 1.0</p>
-																<p>PatheticAI version: 1.0 Enhanced</p>
-																<p>Created by: Pathetic</p>
-																<br>
-																	<p>New Features:</p>
-																	<ul>
-																		<li>Edit messages with the edit button</li>
-																		<li>Copy messages and code blocks</li>
-																		<li>Syntax highlighting for code</li>
-																		<li>Dark/Light theme toggle</li>
-																		<li>Improved UI and responsiveness</li>
-																		<li>Persistent chat history</li>
-																	</ul>
-																	<br>
-																		<p>Click outside this popup to close it.</p>
-																	</div>
+														
+															<div class="modal-window">
+																<div class="modal-header">
+																	<span class="modal-title">Welcome to PatheticAI Enhanced</span>
 																</div>
+																<div class="modal-content">
+																	<p>API version: 1.0</p>
+																	<p>PatheticAI version: 1.0 Enhanced</p>
+																	<p>Created by: Pathetic</p>
+																	<br>
+																		<p>New Features:</p>
+																		<ul>
+																			<li>Edit messages with the edit button</li>
+																			<li>Copy messages and code blocks</li>
+																			<li>Syntax highlighting for code</li>
+																			<li>Dark/Light theme toggle</li>
+																			<li>Improved UI and responsiveness</li>
+																			<li>Persistent chat history</li>
+																		</ul>
+																		<br>
+																			<p>Click outside this popup to close it.</p>
+																		</div>
+																	</div>
     `;
-              modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                  modal.remove();
-                }
-              });
-              document.body.appendChild(modal);
-            }
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.remove();
+        }
+      });
+      document.body.appendChild(modal);
+    }
 
-            function showSettingsModal() {
-              const modal = document.createElement('div');
-              modal.className = 'modal-overlay';
-              modal.innerHTML = `
+    function showSettingsModal() {
+      const modal = document.createElement('div');
+      modal.className = 'modal-overlay';
+      modal.innerHTML = `
 
 															
-																<div class="modal-window">
-																	<div class="modal-header">
-																		<span class="modal-title">Settings</span>
-																	</div>
-																	<div class="modal-content settings-content">
-																		<div class="settings-button" onclick="resetChat()">
-																			<i class="fas fa-redo"></i>
+																
+																	<div class="modal-window">
+																		<div class="modal-header">
+																			<span class="modal-title">Settings</span>
+																		</div>
+																		<div class="modal-content settings-content">
+																			<div class="settings-button" onclick="resetChat()">
+																				<i class="fas fa-redo"></i>
                     Reset Chat
 
 																	
-																		</div>
-																		<div class="settings-button" onclick="changeLanguage()">
-																			<i class="fas fa-language"></i>
+																		
+																			</div>
+																			<div class="settings-button" onclick="changeLanguage()">
+																				<i class="fas fa-language"></i>
                     Language: ${currentLanguage}
 
 																	
-																		</div>
-																		<div class="settings-button" onclick="removeApiKey()">
-																			<i class="fas fa-key"></i>
+																		
+																			</div>
+																			<div class="settings-button" onclick="removeApiKey()">
+																				<i class="fas fa-key"></i>
                     Remove API Key
 
 																	
-																		</div>
-																		<div class="settings-button" onclick="closeApp()">
-																			<i class="fas fa-times"></i>
+																		
+																			</div>
+																			<div class="settings-button" onclick="closeApp()">
+																				<i class="fas fa-times"></i>
                     Close App
 
 																	
-																		</div>
-																	</div>
-																</div>
-    `;
-              modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                  modal.remove();
-                }
-              });
-              document.body.appendChild(modal);
-            }
-
-            function showAboutModal() {
-              const modal = document.createElement('div');
-              modal.className = 'modal-overlay';
-              modal.innerHTML = `
-
-															
-																<div class="modal-window">
-																	<div class="modal-header">
-																		<span class="modal-title">About PatheticAI</span>
-																	</div>
-																	<div class="modal-content">
-																		<p>PatheticAI: 1.0 Enhanced</p>
-																		<p>API version: 1.0</p>
-																		<p>Contact: https:
-
 																		
-																			<br>
-																				<p>Enhanced Features:</p>
-																				<ul>
-																					<li>Improved message handling</li>
-																					<li>Better code display and copying</li>
-																					<li>Theme customization</li>
-																					<li>Advanced editing capabilities</li>
-																					<li>Persistent chat history</li>
-																				</ul>
 																			</div>
 																		</div>
+																	</div>
     `;
-              modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                  modal.remove();
-                }
-              });
-              document.body.appendChild(modal);
-            }
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.remove();
+        }
+      });
+      document.body.appendChild(modal);
+    }
 
-            function removeApiKey() {
-              if (confirm('Are you sure you want to remove your API key? You will need to enter a new key to use PatheticAI.')) {
-                localStorage.removeItem(STORAGE_KEYS.API_KEY);
-                showNotification('API key removed');
-                setTimeout(() => {
-                  window.location.reload();
-                }, 1000);
-              }
-            }
+    function showAboutModal() {
+      const modal = document.createElement('div');
+      modal.className = 'modal-overlay';
+      modal.innerHTML = `
 
-            function resetChat() {
-              if (confirm('Are you sure you want to reset the chat? This will clear all messages.')) {
-                document.querySelector('.chat-messages').innerHTML = '';
-                messageHistory = [];
-                localStorage.setItem(STORAGE_KEYS.MESSAGES, JSON.stringify(messageHistory));
-                systemMessage.content = `You are PatheticAI.
+															
+																
+																	<div class="modal-window">
+																		<div class="modal-header">
+																			<span class="modal-title">About PatheticAI</span>
+																		</div>
+																		<div class="modal-content">
+																			<p>PatheticAI: 1.0 Enhanced</p>
+																			<p>API version: 1.0</p>
+																			<p>Contact: https:
+
+																		
+																			
+																				<br>
+																					<p>Enhanced Features:</p>
+																					<ul>
+																						<li>Improved message handling</li>
+																						<li>Better code display and copying</li>
+																						<li>Theme customization</li>
+																						<li>Advanced editing capabilities</li>
+																						<li>Persistent chat history</li>
+																					</ul>
+																				</div>
+																			</div>
+    `;
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.remove();
+        }
+      });
+      document.body.appendChild(modal);
+    }
+
+    function removeApiKey() {
+      if (confirm('Are you sure you want to remove your API key? You will need to enter a new key to use PatheticAI.')) {
+        localStorage.removeItem(STORAGE_KEYS.API_KEY);
+        showNotification('API key removed');
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      }
+    }
+
+    function resetChat() {
+      if (confirm('Are you sure you want to reset the chat? This will clear all messages.')) {
+        document.querySelector('.chat-messages').innerHTML = '';
+        messageHistory = [];
+        localStorage.setItem(STORAGE_KEYS.MESSAGES, JSON.stringify(messageHistory));
+        systemMessage.content = `You are PatheticAI.
 
 Key characteristics:
 1. Offering clear and concise guidance
@@ -1214,47 +1214,46 @@ Key characteristics:
 3. Responding in a manner that is both informative and easy to understand
 4. Assisting users with technical support or queries
 5. Promoting user satisfaction by being patient and approachable
-Please always respond in ${currentLanguage}.`;
-                showNotification('Chat reset successful');
-              }
-            }
+`;
+        showNotification('Chat reset successful');
+      }
+    }
 
-            function changeLanguage() {
-              const newLanguage = prompt('Enter your preferred language:', currentLanguage);
-              if (newLanguage && newLanguage.trim() !== '') {
-                currentLanguage = newLanguage.trim();
-                localStorage.setItem(STORAGE_KEYS.LANGUAGE, currentLanguage);
-                systemMessage.content = `${systemMessage.content.split('Please always respond in')[0]}Please always respond in ${currentLanguage}.`;
-                showNotification(`Language changed to: ${currentLanguage}`);
-              }
-            }
+    function changeLanguage() {
+      const newLanguage = prompt('Enter your preferred language:', currentLanguage);
+      if (newLanguage && newLanguage.trim() !== '') {
+        currentLanguage = newLanguage.trim();
+        localStorage.setItem(STORAGE_KEYS.LANGUAGE, currentLanguage);
+        systemMessage.content = `${systemMessage.content.split('Please always respond in')[0]}Please always respond in ${currentLanguage}.`;
+        showNotification(`Language changed to: ${currentLanguage}`);
+      }
+    }
 
-            function closeApp() {
-              if (confirm('Are you sure you want to close PatheticAI?')) {
-                window.close();
-              }
-            }
+    function closeApp() {
+      if (confirm('Are you sure you want to close PatheticAI?')) {
+        window.close();
+      }
+    }
 
-            function getApiKey() {
-              return localStorage.getItem(STORAGE_KEYS.API_KEY);
-            }
+    function getApiKey() {
+      return localStorage.getItem(STORAGE_KEYS.API_KEY);
+    }
 
-            function checkAndStoreApiKey() {
-              const storedApiKey = getApiKey();
-              if (!storedApiKey) {
-                const modal = document.createElement('div');
-                modal.className = 'modal-overlay';
-                modal.innerHTML = `
+    function checkAndStoreApiKey() {
+      const storedApiKey = getApiKey();
+      if (!storedApiKey) {
+        const modal = document.createElement('div');
+        modal.className = 'modal-overlay';
+        modal.innerHTML = `
             
-																	<div class="modal-window">
-																		<div class="modal-header">
-																			<span class="modal-title">Openrouter API key required!</span>
-																		</div>
-																		<div class="modal-content">
-																			<p>To use PatheticAI, an API key from Openrouter is required. To get this, go to</p>
-                        
-																				<a href="https://openrouter.ai/settings/keys" target="_blank" style="color: white;">https://openrouter.ai/settings/keys</a>
-                    
+																	
+																			<div class="modal-window">
+																				<div class="modal-header">
+																					<span class="modal-title">Openrouter API key required!</span>
+																				</div>
+																				<div class="modal-content">
+																					<p>To use PatheticAI, an API key from Openrouter is required. To get this, go to</p>
+																					<a href="https://openrouter.ai/settings/keys" target="_blank" style="color: white;">https://openrouter.ai/settings/keys</a>
 																				</p>
 																				<br>
 																					<input type="text" id="apiKeyInput" placeholder="Your API Key Here" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 15px; color: white;">
@@ -1264,63 +1263,62 @@ Please always respond in ${currentLanguage}.`;
 																							</div>
 																						</div>
         `;
-                document.body.appendChild(modal);
-                return false;
-              }
-              return true;
-            }
+        document.body.appendChild(modal);
+        return false;
+      }
+      return true;
+    }
 
+    function saveApiKey() {
+      const apiKey = document.getElementById('apiKeyInput').value.trim();
+      if (apiKey && apiKey.startsWith('sk-or-')) {
+        localStorage.setItem(STORAGE_KEYS.API_KEY, apiKey);
+        document.querySelector('.modal-overlay').remove();
+        showNotification('Booting...');
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      } else {
+        showNotification('API key not suitable for PatheticAI...');
+      }
+    }
 
-            function saveApiKey() {
-              const apiKey = document.getElementById('apiKeyInput').value.trim();
-              if (apiKey && apiKey.startsWith('sk-or-')) {
-                localStorage.setItem(STORAGE_KEYS.API_KEY, apiKey);
-                document.querySelector('.modal-overlay').remove();
-                showNotification('Booting...');
-                setTimeout(() => {
-                  window.location.reload();
-                }, 1000);
-              } else {
-                showNotification('API key not suitable for PatheticAI...');
-              }
-            }
+    function showNotification(message) {
+      const notification = document.createElement('div');
+      notification.className = 'notification';
+      notification.textContent = message;
+      document.body.appendChild(notification);
+      setTimeout(() => {
+        notification.classList.add('fade-out');
+        setTimeout(() => notification.remove(), 300);
+      }, 2000);
+    }
 
-            function showNotification(message) {
-              const notification = document.createElement('div');
-              notification.className = 'notification';
-              notification.textContent = message;
-              document.body.appendChild(notification);
-              setTimeout(() => {
-                notification.classList.add('fade-out');
-                setTimeout(() => notification.remove(), 300);
-              }, 2000);
-            }
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        document.exitFullscreen();
+      }
+    }
 
-            function toggleFullscreen() {
-              if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen();
-              } else {
-                document.exitFullscreen();
-              }
-            }
-
-            function contactEmail() {
-              window.open('https://discord.gg/Hb5ccPY3XV', '_blank');
-            }
-            document.addEventListener('DOMContentLoaded', () => {
-              showWelcomeModal();
-              showNotification('PatheticAI V1.0 Enhanced');
-              if (!checkAndStoreApiKey()) {
-                textarea.disabled = true;
-                document.querySelector('.chat-input-container button').disabled = true;
-              }
-              document.querySelector('.brand').addEventListener('click', showAboutModal);
-              if (typeof hljs !== 'undefined') {
-                document.querySelectorAll('pre code').forEach((block) => {
-                  hljs.highlightElement(block);
-                });
-              }
-            });
+    function contactEmail() {
+      window.open('https://discord.gg/Hb5ccPY3XV', '_blank');
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+      showWelcomeModal();
+      showNotification('PatheticAI V1.0 Enhanced');
+      if (!checkAndStoreApiKey()) {
+        textarea.disabled = true;
+        document.querySelector('.chat-input-container button').disabled = true;
+      }
+      document.querySelector('.brand').addEventListener('click', showAboutModal);
+      if (typeof hljs !== 'undefined') {
+        document.querySelectorAll('pre code').forEach((block) => {
+          hljs.highlightElement(block);
+        });
+      }
+    });
   </script>
   </body>
 </html>
