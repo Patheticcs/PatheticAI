@@ -732,6 +732,7 @@
     </style>
   </head>
   <body>
+    <!-- Taskbar with improved structure -->
     <div class="taskbar">
       <div class="taskbar-left">
         <span class="brand">PatheticAI</span>
@@ -742,28 +743,38 @@
         </select>
       </div>
       <div class="taskbar-right">
-        <button onclick="showSettingsModal()">
+        <button onclick="showSettingsModal()" title="Settings">
           <i class="fas fa-cog"></i>
         </button>
-        <button onclick="toggleFullscreen()">
+        <button onclick="toggleFullscreen()" title="Toggle Fullscreen">
           <i class="fas fa-expand"></i>
         </button>
-        <button onclick="contactEmail()">
+        <button onclick="contactEmail()" title="Join Discord">
           <i class="fa-brands fa-discord"></i>
         </button>
       </div>
     </div>
+
+    <!-- Main chat container -->
     <div class="container">
       <div class="chat-messages"></div>
     </div>
+
+    <!-- Enhanced chat input -->
     <div class="chat-input-container">
-      <textarea id="messageInput" placeholder="Type your message... (Press Shift + Enter for new line)" rows="1"></textarea>
-      <button onclick="sendMessage()">
+      <textarea 
+        id="messageInput" 
+        placeholder="Type your message... (Shift + Enter for new line, Enter to send)" 
+        rows="1"
+        maxlength="2000"
+      ></textarea>
+      <button onclick="sendMessage()" title="Send Message">
         <i class="fas fa-paper-plane"></i>
       </button>
     </div>
-  </body>
-  <script>
+
+    <!-- Enhanced JavaScript -->
+    <script>
 const STORAGE_KEYS = {
   THEME: 'theme',
   API_KEY: 'openRouterApiKey',
@@ -845,7 +856,6 @@ function formatTimestamp(date) {
   return `${date.toLocaleTimeString()} ${date.toLocaleDateString()}`;
 }
 
-// Enhanced createMessageElement function with proper markdown and code handling
 function createMessageElement(message, isUser, timestamp = new Date()) {
   const messageId = timestamp.getTime().toString();
   const messageElement = document.createElement('div');
@@ -857,7 +867,7 @@ function createMessageElement(message, isUser, timestamp = new Date()) {
   contentDiv.classList.add('message-content');
 
   // Process markdown and code blocks
-  if (!isUser) {
+ if (!isUser) {
     let processedContent = message;
     
     // Handle code blocks first
@@ -877,7 +887,10 @@ function createMessageElement(message, isUser, timestamp = new Date()) {
       const copyButton = document.createElement('button');
       copyButton.className = 'copy-button';
       copyButton.innerHTML = '<i class="fas fa-copy"></i>';
-      copyButton.onclick = () => copyToClipboard(code.trim());
+      copyButton.onclick = (e) => {
+        e.stopPropagation(); // Prevent event bubbling
+        copyCodeToClipboard(code.trim(), copyButton);
+      };
       
       codeBlockDiv.appendChild(pre);
       codeBlockDiv.appendChild(copyButton);
@@ -886,8 +899,7 @@ function createMessageElement(message, isUser, timestamp = new Date()) {
       wrapper.appendChild(codeBlockDiv);
       return wrapper.innerHTML;
     });
-
-    // Process other markdown elements
+      
     processedContent = processMarkdown(processedContent);
     contentDiv.innerHTML = processedContent;
   } else {
@@ -946,13 +958,31 @@ function processMarkdown(text) {
   return text;
 }
 
-async function copyToClipboard(text) {
+async function copyCodeToClipboard(text, button) {
   try {
     await navigator.clipboard.writeText(text);
-    showNotification('Copied to clipboard');
+    
+    // Change button icon temporarily to show success
+    const originalHTML = button.innerHTML;
+    button.innerHTML = '<i class="fas fa-check"></i>';
+    
+    // Show notification
+    showNotification('Code copied to clipboard');
+    
+    // Reset button after 2 seconds
+    setTimeout(() => {
+      button.innerHTML = originalHTML;
+    }, 2000);
   } catch (err) {
-    showNotification('Failed to copy to clipboard');
-    console.error('Copy failed:', err);
+    console.error('Failed to copy code:', err);
+    showNotification('Failed to copy code to clipboard');
+    
+    // Show error state
+    const originalHTML = button.innerHTML;
+    button.innerHTML = '<i class="fas fa-times"></i>';
+    setTimeout(() => {
+      button.innerHTML = originalHTML;
+    }, 2000);
   }
 }
 
