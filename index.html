@@ -599,247 +599,148 @@
         }
       }
 
-      @media (max-width: 768px) {
-        :root {
-          --container-width: 95%;
-          --spacing-normal: 15px;
-          --spacing-small: 8px;
-          --font-size-base: 14px;
+        @media (max-width: 768px) {
+            :root {
+                --container-width: 95%;
+                --spacing-normal: 15px;
+                --spacing-small: 8px;
+            }
+
+            .taskbar {
+                height: auto;
+                padding: 10px var(--spacing-normal);
+            }
+
+            .taskbar-right {
+                display: flex;
+                gap: 8px;
+            }
+
+            .taskbar button {
+                padding: 6px 12px;
+                font-size: 14px;
+            }
+
+            .brand {
+                font-size: 18px;
+            }
+
+            .preview-tag {
+                font-size: 12px;
+            }
+
+            .chat-input-container {
+                padding: 10px;
+            }
+
+            .chat-input-container input {
+                font-size: 14px;
+            }
+
+            .chat-input-container button {
+                padding: 6px 15px;
+            }
         }
 
-        body {
-          font-size: var(--font-size-base);
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
+        @media (max-width: 480px) {
+            :root {
+                --container-width: 98%;
+                --spacing-normal: 10px;
+                --spacing-small: 5px;
+            }
+
+            .taskbar {
+                padding: 8px var(--spacing-normal);
+            }
+
+            .taskbar-right button {
+                padding: 5px 10px;
+                font-size: 13px;
+            }
+
+            .brand {
+                font-size: 16px;
+            }
+
+            .preview-tag {
+                font-size: 11px;
+            }
+
+            .chat-message {
+                max-width: 90%;
+                padding: 12px 15px;
+            }
+
+            .modal-window {
+                padding: 15px;
+            }
+
+            .modal-title {
+                font-size: 20px;
+            }
+
+            .modal-content {
+                font-size: 14px;
+            }
+
+            .settings-button {
+                padding: 12px;
+                font-size: 14px;
+            }
+
+            .notification {
+                font-size: 13px;
+                padding: 10px 20px;
+            }
         }
 
-        .container {
-          position: absolute;
-          top: 80px;
-          bottom: 80px;
-          left: 50%;
-          transform: translateX(-50%);
-          width: var(--container-width);
-          max-width: 100%;
-          padding-right: var(--spacing-small);
-          overflow-y: auto;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
+        /* Landscape mode optimalisatie */
+        @media (max-height: 600px) and (orientation: landscape) {
+            .container {
+                top: 70px;
+                bottom: 70px;
+            }
+
+            .taskbar {
+                height: 50px;
+            }
+
+            .chat-input-container {
+                padding: 8px 15px;
+            }
+
+            .chat-message {
+                padding: 10px 15px;
+                margin-bottom: 8px;
+            }
         }
 
-        .taskbar {
-          width: 100%;
-          padding: 10px var(--spacing-normal);
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          box-sizing: border-box;
+        /* Touch device optimalisatie */
+        @media (hover: none) {
+            .chat-input-container button,
+            .taskbar button,
+            .settings-button {
+                transition: none;
+            }
+
+            .chat-input-container button:active,
+            .taskbar button:active,
+            .settings-button:active {
+                background: rgba(255, 255, 255, 0.2);
+            }
         }
 
-        .taskbar-left {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          flex-wrap: wrap;
+        .chat-input-container input:disabled,
+        .chat-input-container button:disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+            transition: opacity 0.3s ease;
         }
 
-        .brand {
-          font-size: 18px;
+        .chat-input-container button:disabled:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: none;
         }
-
-        .preview-tag {
-          font-size: 12px;
-        }
-
-        .chat-input-container {
-          width: 100%;
-          position: absolute;
-          bottom: var(--spacing-normal);
-          left: 50%;
-          transform: translateX(-50%);
-          display: flex;
-          gap: var(--spacing-small);
-          background: var(--chat-input-container-background);
-          backdrop-filter: blur(10px);
-          padding: var(--spacing-normal);
-          border-radius: var(--border-radius);
-          border: 1px solid var(--border-color);
-          box-sizing: border-box;
-        }
-
-        .chat-input-container textarea {
-          font-size: 14px;
-          padding: 8px;
-          min-height: 40px;
-          flex: 1;
-          box-sizing: border-box;
-        }
-
-        .chat-input-container button {
-          padding: 6px 12px;
-        }
-
-        .chat-messages {
-          width: 100%;
-          padding: var(--spacing-normal);
-          padding-bottom: 60px;
-          display: flex;
-          flex-direction: column;
-          gap: 10px;
-          box-sizing: border-box;
-          overflow-y: auto;
-        }
-
-        .chat-message {
-          padding: var(--spacing-small);
-          font-size: 14px;
-          max-width: 95%;
-          white-space: pre-wrap;
-          backdrop-filter: blur(10px);
-          border-radius: 10px;
-          box-sizing: border-box;
-          display: inline-block;
-        }
-
-        .chat-message.user {
-          align-self: flex-end;
-          background-color: var(--user-message-bg);
-          color: var(--user-message-color);
-        }
-
-        .chat-message.bot {
-          align-self: flex-start;
-          background-color: var(--bot-message-bg);
-          color: var(--bot-message-color);
-        }
-
-        .modal-window {
-          padding: var(--spacing-normal);
-        }
-
-        .modal-title {
-          font-size: 20px;
-        }
-
-        .modal-content {
-          font-size: 14px;
-        }
-
-        .theme-selector {
-          font-size: 12px;
-          padding: 6px 12px;
-          margin-left: 0;
-        }
-
-        .notification {
-          font-size: 14px;
-          padding: 10px 20px;
-        }
-      }
-
-      @media (max-width: 480px) {
-        :root {
-          --container-width: 98%;
-          --spacing-normal: 10px;
-          --spacing-small: 5px;
-          --font-size-base: 12px;
-        }
-
-        body {
-          font-size: var(--font-size-base);
-        }
-
-        .container {
-          position: absolute;
-          top: 60px;
-          bottom: 60px;
-          left: 50%;
-          transform: translateX(-50%);
-          width: var(--container-width);
-          padding-right: var(--spacing-small);
-          overflow-y: auto;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-        }
-
-        .taskbar {
-          width: 100%;
-          padding: 8px var(--spacing-small);
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-        }
-
-        .taskbar button {
-          padding: 5px 10px;
-          font-size: 13px;
-        }
-
-        .brand {
-          font-size: 11px;
-        }
-
-        .preview-tag {
-          font-size: 8px;
-        }
-
-        .chat-input-container {
-          width: 100%;
-          padding: 8px;
-        }
-
-        .chat-input-container textarea {
-          font-size: 12px;
-          padding: 6px;
-          min-height: 30px;
-        }
-
-        .chat-input-container button {
-          padding: 5px 12px;
-        }
-
-        .chat-messages {
-          width: 100%;
-          padding: var(--spacing-small);
-          padding-bottom: 50px;
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
-        }
-
-        .chat-message {
-          font-size: 12px;
-          padding: 10px 12px;
-          max-width: 95%;
-          white-space: pre-wrap;
-          display: inline-block;
-        }
-
-        .modal-window {
-          padding: 12px;
-        }
-
-        .modal-title {
-          font-size: 18px;
-        }
-
-        .modal-content {
-          font-size: 12px;
-        }
-
-        .theme-selector {
-          font-size: 10px;
-          padding: 5px 10px;
-        }
-
-        .notification {
-          font-size: 13px;
-          padding: 8px 15px;
-        }
-      }
     </style>
   </head>
   <body>
