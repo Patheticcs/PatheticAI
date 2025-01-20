@@ -922,7 +922,6 @@ function processMarkdown(text) {
   return text;
 }
 
-// Message sending and API interaction
 async function sendMessage() {
   const textarea = document.getElementById('messageInput');
   const message = textarea.value.trim();
@@ -962,13 +961,16 @@ async function sendMessage() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        messages: messageHistory,
+        messages: messageHistory.map(msg => ({
+          role: msg.role,
+          content: msg.content
+        })),
         language: currentLanguage
       })
     });
 
     if (!response.ok) {
-      throw new Error('Failed to get response from server');
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
 
     const data = await response.json();
@@ -988,15 +990,16 @@ async function sendMessage() {
       document.querySelector('.chat-messages').appendChild(botElement);
       botElement.scrollIntoView({ behavior: 'smooth' });
 
-      botElement.querySelectorAll('pre code').forEach((block) => {
-        hljs.highlightElement(block);
-      });
+      if (typeof hljs !== 'undefined') {
+        botElement.querySelectorAll('pre code').forEach((block) => {
+          hljs.highlightElement(block);
+        });
+      }
     }
   } catch (error) {
+    console.error('Error:', error);
     loadingElement.remove();
-    showError('Failed to get response from AI');
-    const { element: errorElement } = createMessageElement(`Error: ${error.message}`, false);
-    document.querySelector('.chat-messages').appendChild(errorElement);
+    showNotification('Failed to get response from AI: ' + error.message);
   } finally {
     isWaitingForResponse = false;
     textarea.disabled = false;
