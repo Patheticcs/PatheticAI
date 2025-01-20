@@ -771,13 +771,32 @@ const STORAGE_KEYS = {
   LANGUAGE: 'preferredLanguage'
 };
 
-let messageHistory = JSON.parse(localStorage.getItem(STORAGE_KEYS.MESSAGES)) || [];
+// Initialize message history from localStorage
+let messageHistory = [];
+try {
+  const savedMessages = localStorage.getItem(STORAGE_KEYS.MESSAGES);
+  if (savedMessages) {
+    messageHistory = JSON.parse(savedMessages);
+    // Restore saved messages to the chat interface on load
+    document.addEventListener('DOMContentLoaded', () => {
+      messageHistory.forEach(msg => {
+        const isUser = msg.role === "user";
+        const { element } = createMessageElement(msg.content, isUser, new Date(msg.timestamp));
+        document.querySelector('.chat-messages').appendChild(element);
+      });
+    });
+  }
+} catch (e) {
+  console.error('Error loading message history:', e);
+  messageHistory = [];
+}
+
 let currentLanguage = localStorage.getItem(STORAGE_KEYS.LANGUAGE) || 'English';
 let isWaitingForResponse = false;
 let editingMessageId = null;
 
 const themeSelect = document.getElementById('themeSelect');
-themeSelect.addEventListener('change', function () {
+themeSelect.addEventListener('change', function() {
   const newTheme = this.value;
   document.documentElement.setAttribute('data-theme', newTheme);
   localStorage.setItem(STORAGE_KEYS.THEME, newTheme);
@@ -788,13 +807,14 @@ document.documentElement.setAttribute('data-theme', savedTheme);
 themeSelect.value = savedTheme;
 
 const textarea = document.getElementById('messageInput');
-textarea.addEventListener('keydown', function (e) {
+textarea.addEventListener('keydown', function(e) {
   if (e.key === 'Enter' && !e.shiftKey) {
     e.preventDefault();
     sendMessage();
   }
 });
-textarea.addEventListener('input', function () {
+
+textarea.addEventListener('input', function() {
   this.style.height = 'auto';
   this.style.height = `${this.scrollHeight}px`;
   if (this.scrollHeight > 150) {
@@ -825,52 +845,53 @@ function formatTimestamp(date) {
   return `${date.toLocaleTimeString()} ${date.toLocaleDateString()}`;
 }
 
+// Enhanced createMessageElement function with proper markdown and code handling
 function createMessageElement(message, isUser, timestamp = new Date()) {
-  const messageId = Date.now().toString();
+  const messageId = timestamp.getTime().toString();
   const messageElement = document.createElement('div');
   messageElement.classList.add('chat-message');
   messageElement.classList.add(isUser ? 'user' : 'bot');
   messageElement.dataset.messageId = messageId;
+  
   const contentDiv = document.createElement('div');
   contentDiv.classList.add('message-content');
 
-  // Markdown Processing for Bold and Headers
-  const processedMessage = processMarkdown(message);
-
-  // Insert the processed message as HTML to render bold, headers, etc.
+  // Process markdown and code blocks
   if (!isUser) {
-    const codeBlocks = processedMessage.match(/```[\s\S]*?```/g) || [];
-    let remainingMessage = processedMessage;
-    codeBlocks.forEach((block) => {
-      const code = block.replace(/```(\w+)?\n?|\n?```/g, '');
-      const language = block.match(/```(\w+)/)?.[1] || '';
-      const parts = remainingMessage.split(block);
-      if (parts[0]) {
-        contentDiv.appendChild(document.createTextNode(parts[0]));
-      }
+    let processedContent = message;
+    
+    // Handle code blocks first
+    const codeBlockRegex = /```(\w+)?\n([\s\S]*?)```/g;
+    processedContent = processedContent.replace(codeBlockRegex, (match, language, code) => {
       const codeBlockDiv = document.createElement('div');
       codeBlockDiv.className = 'code-block';
+      
       const pre = document.createElement('pre');
       const codeElement = document.createElement('code');
-      if (language) codeElement.className = `language-${language}`;
-      codeElement.textContent = code;
+      if (language) {
+        codeElement.className = `language-${language}`;
+      }
+      codeElement.textContent = code.trim();
       pre.appendChild(codeElement);
-      codeBlockDiv.appendChild(pre);
+      
       const copyButton = document.createElement('button');
       copyButton.className = 'copy-button';
       copyButton.innerHTML = '<i class="fas fa-copy"></i>';
-      // Fix: copy the content of the code block itself, not the message
-      copyButton.onclick = () => copyToClipboard(code);  // Now copies only the code
+      copyButton.onclick = () => copyToClipboard(code.trim());
+      
+      codeBlockDiv.appendChild(pre);
       codeBlockDiv.appendChild(copyButton);
-      contentDiv.appendChild(codeBlockDiv);
-      remainingMessage = parts[1];
+      
+      const wrapper = document.createElement('div');
+      wrapper.appendChild(codeBlockDiv);
+      return wrapper.innerHTML;
     });
-    if (remainingMessage) {
-      contentDiv.innerHTML += remainingMessage; // Append remaining message
-    }
+
+    // Process other markdown elements
+    processedContent = processMarkdown(processedContent);
+    contentDiv.innerHTML = processedContent;
   } else {
-    // Directly set the HTML content for user messages
-    contentDiv.innerHTML = processedMessage;
+    contentDiv.textContent = message;
   }
 
   messageElement.appendChild(contentDiv);
@@ -882,6 +903,7 @@ function createMessageElement(message, isUser, timestamp = new Date()) {
 
   const actionsDiv = document.createElement('div');
   actionsDiv.className = 'message-actions';
+
   if (isUser) {
     const editButton = document.createElement('button');
     editButton.className = 'action-button';
@@ -893,7 +915,7 @@ function createMessageElement(message, isUser, timestamp = new Date()) {
   const copyButton = document.createElement('button');
   copyButton.className = 'action-button';
   copyButton.innerHTML = '<i class="fas fa-copy"></i>';
-  copyButton.onclick = () => copyToClipboard(message); // This is for the general message
+  copyButton.onclick = () => copyToClipboard(message);
   actionsDiv.appendChild(copyButton);
 
   messageElement.appendChild(actionsDiv);
@@ -904,155 +926,148 @@ function createMessageElement(message, isUser, timestamp = new Date()) {
   };
 }
 
-// Helper function to process markdown for headers and bold text
-function processMarkdown(message) {
-  // Convert headers (e.g., # Header -> <h1>Header</h1>)
-  message = message.replace(/^(#{1,6})\s*(.*)/gm, (match, hashes, headerText) => {
-    const level = hashes.length; // Determine the header level based on the number of hashes
-    return `<h${level}>${headerText}</h${level}>`;
+function processMarkdown(text) {
+  // Headers
+  text = text.replace(/^(#{1,6})\s*(.*?)$/gm, (match, hashes, content) => {
+    const level = hashes.length;
+    return `<h${level}>${content}</h${level}>`;
   });
 
-  // Convert bold text (e.g., **bold** or __bold__ -> <strong>bold</strong>)
-  message = message.replace(/(\*\*|__)(.*?)\1/g, '<strong>$2</strong>');
+  // Bold
+  text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  
+  // Italic
+  text = text.replace(/\*(.*?)\*/g, '<em>$1</em>');
 
-  return message;
+  // Lists
+  text = text.replace(/^-\s*(.*?)$/gm, '<li>$1</li>');
+  text = text.replace(/(<li>.*?<\/li>)\n?/gs, '<ul>$1</ul>');
+
+  return text;
 }
 
-// Modern Clipboard API to copy content
-function copyToClipboard(text) {
-  if (navigator.clipboard && window.isSecureContext) {
-    // Using Clipboard API to copy text
-    navigator.clipboard.writeText(text)
-      .then(() => {
-        console.log('Copied to clipboard!');
-        // Optionally show a success message to the user
-      })
-      .catch(err => {
-        console.error('Failed to copy: ', err);
-      });
-  } else {
-    // Fallback: Use textarea method if Clipboard API is not available
-    const textarea = document.createElement('textarea');
-    textarea.value = text;
-    document.body.appendChild(textarea);
-    textarea.select();
-    document.execCommand('copy');
-    document.body.removeChild(textarea);
-    console.log('Copied to clipboard (fallback)!');
+async function copyToClipboard(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    showNotification('Copied to clipboard');
+  } catch (err) {
+    showNotification('Failed to copy to clipboard');
+    console.error('Copy failed:', err);
   }
 }
 
-function getApiKey() {
-  return localStorage.getItem('openRouterApiKey');
+function startEditing(messageId) {
+  if (isWaitingForResponse) return;
+  
+  const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
+  const contentDiv = messageElement.querySelector('.message-content');
+  const originalText = contentDiv.textContent;
+  
+  const textarea = document.createElement('textarea');
+  textarea.className = 'edit-input';
+  textarea.value = originalText;
+  textarea.rows = originalText.split('\n').length;
+  
+  contentDiv.innerHTML = '';
+  contentDiv.appendChild(textarea);
+  messageElement.classList.add('edit-mode');
+  
+  textarea.focus();
+  textarea.onkeydown = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      finishEditing(messageId, textarea.value);
+    } else if (e.key === 'Escape') {
+      finishEditing(messageId, originalText);
+    }
+  };
 }
 
-    function startEditing(messageId) {
-      if (isWaitingForResponse) return;
-      const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
-      const contentDiv = messageElement.querySelector('.message-content');
-      const originalText = contentDiv.textContent;
-      const textarea = document.createElement('textarea');
-      textarea.className = 'edit-input';
-      textarea.value = originalText;
-      textarea.rows = originalText.split('\n').length;
-      contentDiv.innerHTML = '';
-      contentDiv.appendChild(textarea);
-      messageElement.classList.add('edit-mode');
-      textarea.focus();
-      textarea.onkeydown = (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-          e.preventDefault();
-          finishEditing(messageId, textarea.value);
-        } else if (e.key === 'Escape') {
-          finishEditing(messageId, originalText);
-        }
+function finishEditing(messageId, newText) {
+  const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
+  const contentDiv = messageElement.querySelector('.message-content');
+  contentDiv.textContent = newText;
+  messageElement.classList.remove('edit-mode');
+
+  // Update message history
+  const messageIndex = messageHistory.findIndex(msg => 
+    msg.role === "user" && msg.timestamp.toString() === messageId
+  );
+  
+  if (messageIndex !== -1) {
+    messageHistory[messageIndex].content = newText;
+    // Save updated history to localStorage
+    localStorage.setItem(STORAGE_KEYS.MESSAGES, JSON.stringify(messageHistory));
+  }
+}
+
+async function sendMessage() {
+  const textarea = document.getElementById('messageInput');
+  const message = textarea.value.trim();
+  const sendButton = document.querySelector('.chat-input-container button');
+  
+  if (!message || isWaitingForResponse) return;
+  
+  isWaitingForResponse = true;
+  textarea.disabled = true;
+  sendButton.disabled = true;
+
+  const timestamp = new Date();
+  const userMessage = {
+    role: "user",
+    content: message,
+    timestamp: timestamp.getTime()
+  };
+  messageHistory.push(userMessage);
+
+  const { element: messageElement } = createMessageElement(message, true, timestamp);
+  document.querySelector('.chat-messages').appendChild(messageElement);
+  messageElement.scrollIntoView({ behavior: 'smooth' });
+
+  textarea.value = '';
+  textarea.style.height = 'auto';
+
+  const loadingElement = document.createElement('div');
+  loadingElement.classList.add('chat-message', 'bot', 'typing');
+  loadingElement.textContent = 'Typing...';
+  document.querySelector('.chat-messages').appendChild(loadingElement);
+
+  try {
+    const response = await tryMultipleModels(message);
+    loadingElement.remove();
+
+    if (response.text) {
+      const botMessage = {
+        role: "assistant",
+        content: response.text,
+        timestamp: Date.now()
       };
-    }
+      messageHistory.push(botMessage);
+      
+      // Save to localStorage after each message
+      localStorage.setItem(STORAGE_KEYS.MESSAGES, JSON.stringify(messageHistory));
 
-    function finishEditing(messageId, newText) {
-      const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
-      const contentDiv = messageElement.querySelector('.message-content');
-      contentDiv.textContent = newText;
-      messageElement.classList.remove('edit-mode');
-      // Update message history
-      const messageIndex = messageHistory.findIndex(msg => msg.role === "user" && msg.timestamp?.toString() === messageId);
-      if (messageIndex !== -1) {
-        messageHistory[messageIndex].content = newText;
-      }
-    }
-    async function copyToClipboard(text) {
-      try {
-        await navigator.clipboard.writeText(text);
-        showNotification('Copied to clipboard');
-      } catch (err) {
-        showNotification('Failed to copy to clipboard');
-      }
-    }
+      const { element: botElement } = createMessageElement(response.text, false, new Date());
+      document.querySelector('.chat-messages').appendChild(botElement);
+      botElement.scrollIntoView({ behavior: 'smooth' });
 
-    function handleInput() {
-      const textarea = document.getElementById('messageInput');
-      textarea.style.height = 'auto';
-      textarea.style.height = textarea.scrollHeight + 'px';
-    }
-    // Enhanced message sending
-    async function sendMessage() {
-      const textarea = document.getElementById('messageInput');
-      const message = textarea.value.trim();
-      const sendButton = document.querySelector('.chat-input-container button');
-      if (!message || isWaitingForResponse) return;
-      isWaitingForResponse = true;
-      textarea.disabled = true;
-      sendButton.disabled = true;
-      const timestamp = new Date();
-      const {
-        element: messageElement,
-        id: messageId
-      } = createMessageElement(message, true, timestamp);
-      document.querySelector('.chat-messages').appendChild(messageElement);
-      messageElement.scrollIntoView({
-        behavior: 'smooth'
+      // Apply syntax highlighting
+      botElement.querySelectorAll('pre code').forEach((block) => {
+        hljs.highlightElement(block);
       });
-      textarea.value = '';
-      textarea.style.height = 'auto';
-      const loadingElement = document.createElement('div');
-      loadingElement.classList.add('chat-message', 'bot', 'typing');
-      loadingElement.textContent = 'Typing...';
-      document.querySelector('.chat-messages').appendChild(loadingElement);
-      try {
-        const response = await tryMultipleModels(message);
-        loadingElement.remove();
-        if (response.text) {
-          messageHistory.push({
-            role: "assistant",
-            content: response.text,
-            timestamp: Date.now()
-          });
-          const {
-            element: botElement
-          } = createMessageElement(response.text, false);
-          document.querySelector('.chat-messages').appendChild(botElement);
-          botElement.scrollIntoView({
-            behavior: 'smooth'
-          });
-          // Apply syntax highlighting to code blocks
-          botElement.querySelectorAll('pre code').forEach((block) => {
-            hljs.highlightElement(block);
-          });
-        }
-      } catch (error) {
-        loadingElement.remove();
-        showError(error.message);
-        const {
-          element: errorElement
-        } = createMessageElement(`Error: ${error.message}`, false);
-        document.querySelector('.chat-messages').appendChild(errorElement);
-      } finally {
-        isWaitingForResponse = false;
-        textarea.disabled = false;
-        sendButton.disabled = false;
-        textarea.focus();
-      }
     }
+  } catch (error) {
+    loadingElement.remove();
+    showError(error.message);
+    const { element: errorElement } = createMessageElement(`Error: ${error.message}`, false);
+    document.querySelector('.chat-messages').appendChild(errorElement);
+  } finally {
+    isWaitingForResponse = false;
+    textarea.disabled = false;
+    sendButton.disabled = false;
+    textarea.focus();
+  }
+}
     async function tryMultipleModels(userMessage) {
       const timeout = 2000000;
       const apiKey = getApiKey();
