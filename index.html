@@ -39,73 +39,78 @@
         --transition: all 0.3s ease;
       }
 
-      :root[data-theme="light"] {
-        --background-color: #ffffff;
-        --primary-color: #000000;
-        --secondary-color: #000000;
-        --border-color: rgba(0, 0, 0, 0.1);
-        --taskbar-background: rgba(255, 255, 255, 0.8);
-        --input-background: rgba(255, 255, 255, 0.9);
-        --button-background: rgba(0, 0, 0, 0.1);
-        --button-hover-background: rgba(0, 0, 0, 0.2);
-        --modal-background: rgba(255, 255, 255, 0.9);
-        --message-background: rgba(255, 255, 255, 0.9);
-        --message-user-background: rgba(255, 255, 255, 0.8);
-        --code-background: rgba(0, 0, 0, 0.1);
-        --code-text: #000000;
-        --notification-background: rgba(255, 255, 255, 0.8);
-        --notification-text: #000000;
-        --placeholder-color: rgba(0, 0, 0, 0.5);
-        --chat-input-container-background: rgba(255, 255, 255, 0.6);
-      }
+:root[data-theme="light"] {
+    --background-gradient: linear-gradient(135deg, #f5f7fa 0, #c3cfe2 100%);
+    --overlay-color: rgba(255, 255, 255, 0.3);
+    --background-color: #ffffff;
+    --primary-color: #000000;
+    --secondary-color: #000000;
+    --border-color: rgba(0, 0, 0, 0.1);
+    --taskbar-background: rgba(255, 255, 255, 0.4);
+    --input-background: rgba(255, 255, 255, 0.9);
+    --button-background: rgba(0, 0, 0, 0.1);
+    --button-hover-background: rgba(0, 0, 0, 0.2);
+    --modal-background: rgba(255, 255, 255, 0.9);
+    --message-background: rgba(255, 255, 255, 0.9);
+    --message-user-background: rgba(255, 255, 255, 0.8);
+    --code-background: rgba(0, 0, 0, 0.1);
+    --code-text: #000000;
+    --notification-background: rgba(255, 255, 255, 0.8);
+    --notification-text: #000000;
+    --placeholder-color: rgba(0, 0, 0, 0.5);
+    --chat-input-container-background: rgba(255, 255, 255, 0.2);
+}
 
-      :root[data-theme="dark"] {
-        --background-color: #000000;
-        --primary-color: #ffffff;
-        --secondary-color: #9c00d5;
-        --border-color: rgba(255, 255, 255, 0.1);
-        --taskbar-background: rgba(0, 0, 0, 0.8);
-        --input-background: rgba(0, 0, 0, 0.9);
-        --button-background: rgba(255, 255, 255, 0.1);
-        --button-hover-background: rgba(255, 255, 255, 0.2);
-        --modal-background: rgba(0, 0, 0, 0.9);
-        --message-background: rgba(0, 0, 0, 0.8);
-        --message-user-background: rgba(0, 0, 0, 0.7);
-        --code-background: rgba(255, 255, 255, 0.1);
-        --code-text: #ffffff;
-        --notification-background: rgba(0, 0, 0, 0.8);
-        --notification-text: #ffffff;
-        --placeholder-color: rgba(255, 255, 255, 0.5);
-        --chat-input-container-background: rgba(0, 0, 0, 0.6);
-      }
 
-      body {
-        background: url('https://wallpapers.com/images/hd/4k-nature-in-ice-wvdjbvbvxn12plp6.jpg') no-repeat center center fixed;
-        background-size: cover;
-        background-attachment: fixed;
-        color: white;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-        position: fixed;
-        width: 100%;
-        height: 100%;
-        touch-action: none;
-        -webkit-overflow-scrolling: none;
-        overscroll-behavior: none;
-      }
+:root[data-theme="dark"] {
+    --background-gradient: linear-gradient(135deg, #0a0805 0%, #333333 100%);
+    --overlay-color: rgba(0, 0, 0, 0.3);
+    --background-color: #000000;
+    --primary-color: #ffffff;
+    --secondary-color: #9c00d5;
+    --border-color: rgba(255, 255, 255, 0.1);
+    --taskbar-background: rgba(0, 0, 0, 0.4);
+    --input-background: rgba(0, 0, 0, 0.9);
+    --button-background: rgba(255, 255, 255, 0.1);
+    --button-hover-background: rgba(255, 255, 255, 0.2);
+    --modal-background: rgba(0, 0, 0, 0.9);
+    --message-background: rgba(0, 0, 0, 0.8);
+    --message-user-background: rgba(0, 0, 0, 0.7);
+    --code-background: rgba(255, 255, 255, 0.1);
+    --code-text: #ffffff;
+    --notification-background: rgba(0, 0, 0, 0.8);
+    --notification-text: #ffffff;
+    --placeholder-color: rgba(255, 255, 255, 0.5);
+    --chat-input-container-background: rgba(0, 0, 0, 0.2);
+}
 
-      .container {
-        position: fixed;
-        top: calc(60px + var(--spacing-normal) * 2);
-        bottom: calc(60px + var(--spacing-normal) * 2);
-        left: 50%;
-        transform: translateX(-50%);
-        width: var(--container-width);
-        overflow-y: auto;
-        padding-right: var(--spacing-small);
-      }
+body {
+    background-color: var(--background-color);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    touch-action: none;
+    -webkit-overflow-scrolling: none;
+    overscroll-behavior: none;
+    background-size: cover;
+    background-attachment: fixed;
+    background-image: var(--background-gradient); /* Apply updated gradient */
+}
+
+.container {
+    position: fixed;
+    top: calc(60px + var(--spacing-normal) * 2);
+    bottom: calc(60px + var(--spacing-normal) * 2);
+    left: 50%;
+    transform: translateX(-50%);
+    width: var(--container-width);
+    overflow-y: auto;
+    padding-right: var(--spacing-small);
+}
 
       .taskbar {
         position: fixed;
@@ -114,6 +119,7 @@
         transform: translateX(-50%);
         width: var(--container-width);
         height: 60px;
+        width: 800px;
         background: var(--taskbar-background);
         backdrop-filter: blur(10px);
         border: 1px solid var(--border-color);
@@ -694,7 +700,6 @@
             }
         }
 
-        /* Landscape mode optimalisatie */
         @media (max-height: 600px) and (orientation: landscape) {
             .container {
                 top: 70px;
@@ -715,7 +720,6 @@
             }
         }
 
-        /* Touch device optimalisatie */
         @media (hover: none) {
             .chat-input-container button,
             .taskbar button,
@@ -744,7 +748,6 @@
     </style>
   </head>
   <body>
-    <!-- Taskbar with improved structure -->
     <div class="taskbar">
       <div class="taskbar-left">
         <span class="brand">PatheticAI</span>
@@ -766,649 +769,526 @@
         </button>
       </div>
     </div>
-    <!-- Main chat container -->
     <div class="container">
       <div class="chat-messages"></div>
     </div>
-    <!-- Enhanced chat input -->
     <div class="chat-input-container">
       <textarea id="messageInput" placeholder="Type your message..." rows="1" maxlength="2000"></textarea>
       <button onclick="sendMessage()" title="Send Message">
         <i class="fas fa-paper-plane"></i>
       </button>
     </div>
-    <!-- Enhanced JavaScript -->
     <script>
-      const STORAGE_KEYS = {
-        THEME: 'theme',
-        API_KEY: 'openRouterApiKey',
-        MESSAGES: 'chatMessages',
-        LANGUAGE: 'preferredLanguage'
-      };
-      // Initialize message history from localStorage
-      let messageHistory = [];
-      try {
-        const savedMessages = localStorage.getItem(STORAGE_KEYS.MESSAGES);
-        if (savedMessages) {
-          messageHistory = JSON.parse(savedMessages);
-          // Restore saved messages to the chat interface on load
-          document.addEventListener('DOMContentLoaded', () => {
-            messageHistory.forEach(msg => {
-              const isUser = msg.role === "user";
-              const {
-                element
-              } = createMessageElement(msg.content, isUser, new Date(msg.timestamp));
-              document.querySelector('.chat-messages').appendChild(element);
-            });
-          });
-        }
-      } catch (e) {
-        console.error('Error loading message history:', e);
-        messageHistory = [];
+    const STORAGE_KEYS = {
+      THEME: 'theme',
+      API_KEY: 'openRouterApiKey',
+      MESSAGES: 'chatMessages',
+      LANGUAGE: 'preferredLanguage'
+    };
+    let messageHistory = JSON.parse(localStorage.getItem(STORAGE_KEYS.MESSAGES)) || [];
+    let currentLanguage = localStorage.getItem(STORAGE_KEYS.LANGUAGE) || 'English';
+    let isWaitingForResponse = false;
+    let editingMessageId = null;
+    const themeSelect = document.getElementById('themeSelect');
+    themeSelect.addEventListener('change', function() {
+      const newTheme = this.value;
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem(STORAGE_KEYS.THEME, newTheme);
+    });
+    const savedTheme = localStorage.getItem(STORAGE_KEYS.THEME) || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    themeSelect.value = savedTheme;
+    const textarea = document.getElementById('messageInput');
+    textarea.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
       }
-      let currentLanguage = localStorage.getItem(STORAGE_KEYS.LANGUAGE) || 'English';
-      let isWaitingForResponse = false;
-      let editingMessageId = null;
-      const themeSelect = document.getElementById('themeSelect');
-      themeSelect.addEventListener('change', function() {
-        const newTheme = this.value;
-        document.documentElement.setAttribute('data-theme', newTheme);
-        localStorage.setItem(STORAGE_KEYS.THEME, newTheme);
-      });
-      const savedTheme = localStorage.getItem(STORAGE_KEYS.THEME) || 'dark';
-      document.documentElement.setAttribute('data-theme', savedTheme);
-      themeSelect.value = savedTheme;
-      const textarea = document.getElementById('messageInput');
-      textarea.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' && !e.shiftKey) {
-          e.preventDefault();
-          sendMessage();
-        }
-      });
-      textarea.addEventListener('input', function() {
-        this.style.height = 'auto';
-        this.style.height = `${this.scrollHeight}px`;
-        if (this.scrollHeight > 150) {
-          this.style.height = '150px';
-          this.style.overflowY = 'auto';
-        }
-      });
-      const models = [{
-        name: "google/gemini-2.0-flash-exp:free"
-      }, {
-        name: "meta-llama/llama-3.2-3b-instruct:free"
-      }, {
-        name: "qwen/qwen-2-7b-instruct:free"
-      }, {
-        name: "microsoft/phi-3-medium-128k-instruct:free"
-      }, {
-        name: "undi95/toppy-m-7b:free"
-      }, {
-        name: "google/gemini-2.0-flash-thinking-exp:free"
-      }, {
-        name: "microsoft/phi-3-mini-128k-instruct:free"
-      }];
-const systemMessage = {
-  role: "system",
-  content: `
-    You are PatheticAI, a chatbot designed to be helpful, friendly, and empathetic.
-    Your tone is clear, concise, and approachable, making users feel comfortable asking questions.
-    You adapt to different topics with ease, offering guidance that's both informative and easy to understand.
-    You prioritize user satisfaction by being patient and responsive, ensuring a professional yet friendly interaction.
-    Remember relevant details from past interactions to provide a personalized experience. Keep track of user preferences and respond with context-aware answers to make each conversation more meaningful.
-    Always remain adaptable to the user's needs and adjust your tone accordingly, whether the conversation is casual or technical.
-  `
-};
+    });
+    textarea.addEventListener('input', function() {
+      this.style.height = 'auto';
+      this.style.height = (this.scrollHeight) + 'px';
+      if (this.scrollHeight > 150) {
+        this.style.height = '150px';
+        this.style.overflowY = 'auto';
+      }
+    });
+    const models = [{
+      name: "google/gemini-2.0-flash-exp:free"
+    }, {
+      name: "meta-llama/llama-3.2-3b-instruct:free"
+    }, {
+      name: "qwen/qwen-2-7b-instruct:free"
+    }, {
+      name: "microsoft/phi-3-medium-128k-instruct:free"
+    }, {
+      name: "undi95/toppy-m-7b:free"
+    }, {
+      name: "google/gemini-2.0-flash-thinking-exp:free"
+    }, {
+      name: "microsoft/phi-3-mini-128k-instruct:free"
+    }, {
+      name: "microsoft/phi-3-medium-128k-instruct:free"
+    }];
+    const systemMessage = {
+      role: "system",
+      content: `You are PatheticAI
 
-      function formatTimestamp(date) {
-        return `${date.toLocaleTimeString()} ${date.toLocaleDateString()}`;
-      }
+Key characteristics:
+It is a chatbot with a friendly, empathetic, and helpful personality. It is warm, always ready to listen, and provides support without judgment, making users feel comfortable. It is knowledgeable but ensures its answers are clear and concise, offering assistance without overwhelming users. Occasionally, it adds light humor or friendly comments to keep the conversation engaging but knows when to be serious. It asks open-ended questions, encouraging deeper interaction and keeping conversations flowing smoothly. Above all, it is polite and respectful, adjusting its responses based on the user's needs and preferences.
+Please always respond in ${currentLanguage}.`
+    };
+
+    function formatTimestamp(date) {
+      return date.toLocaleTimeString() + ' ' + date.toLocaleDateString();
+    }
 
 function createMessageElement(message, isUser, timestamp = new Date()) {
-  const messageId = timestamp.getTime().toString();
-  const messageElement = document.createElement('div');
-  messageElement.classList.add('chat-message');
-  messageElement.classList.add(isUser ? 'user' : 'bot');
-  messageElement.dataset.messageId = messageId;
+    const messageId = Date.now().toString();
+    const messageElement = document.createElement('div');
+    messageElement.classList.add('chat-message');
+    messageElement.classList.add(isUser ? 'user' : 'bot');
+    messageElement.dataset.messageId = messageId;
 
-  const contentDiv = document.createElement('div');
-  contentDiv.classList.add('message-content');
+    const contentDiv = document.createElement('div');
+    contentDiv.classList.add('message-content');
+    
+    if (!isUser) {
+        // Process code blocks in bot messages
+        const codeBlocks = message.match(/```[\s\S]*?```/g) || [];
+        let remainingMessage = message;
 
-  // Process markdown and code blocks
-  if (!isUser) {
-    let processedContent = message;
+        codeBlocks.forEach((block, index) => {
+            const code = block.replace(/```(\w+)?\n?|\n?```/g, '');
+            const language = block.match(/```(\w+)/)?.[1] || '';
+            
+            const parts = remainingMessage.split(block);
+            if (parts[0]) {
+                contentDiv.appendChild(document.createTextNode(parts[0]));
+            }
 
-    // Handle code blocks first
-    const codeBlockRegex = /```(\w+)?\n([\s\S]*?)```/g;
-    processedContent = processedContent.replace(codeBlockRegex, (match, language, code) => {
-      const codeBlockDiv = document.createElement('div');
-      codeBlockDiv.className = 'code-block';
-      
-      const pre = document.createElement('pre');
-      const codeElement = document.createElement('code');
-      if (language) {
-        codeElement.className = `language-${language}`;
-      }
-      codeElement.textContent = code.trim();
-      
-      pre.appendChild(codeElement);
-      
-      const copyButton = document.createElement('button');
-      copyButton.className = 'copy-button';
-      copyButton.innerHTML = '<i class="fas fa-copy"></i>';
-      copyButton.onclick = () => copyToClipboard(code.trim());
-      
-      codeBlockDiv.appendChild(pre);
-      codeBlockDiv.appendChild(copyButton);
-      
-      const wrapper = document.createElement('div');
-      wrapper.appendChild(codeBlockDiv);
-      return wrapper.innerHTML;
-    });
+            const codeBlockDiv = document.createElement('div');
+            codeBlockDiv.className = 'code-block';
+            
+            const pre = document.createElement('pre');
+            const codeElement = document.createElement('code');
+            if (language) codeElement.className = `language-${language}`;
+            codeElement.textContent = code;
+            pre.appendChild(codeElement);
+            codeBlockDiv.appendChild(pre);
 
-    // Process other markdown elements
-    processedContent = processMarkdown(processedContent);
-    contentDiv.innerHTML = processedContent;
-  } else {
-    contentDiv.textContent = message;
-  }
+            const copyButton = document.createElement('button');
+            copyButton.className = 'copy-button';
+            copyButton.innerHTML = '<i class="fas fa-copy"></i>';
+            copyButton.onclick = () => copyToClipboard(code);
+            codeBlockDiv.appendChild(copyButton);
 
-  messageElement.appendChild(contentDiv);
+            contentDiv.appendChild(codeBlockDiv);
+            remainingMessage = parts[1];
+        });
 
-  // Add timestamp
-  const timestampDiv = document.createElement('div');
-  timestampDiv.className = 'message-timestamp';
-  timestampDiv.textContent = formatTimestamp(timestamp);
-  messageElement.appendChild(timestampDiv);
+        if (remainingMessage) {
+            contentDiv.appendChild(document.createTextNode(remainingMessage));
+        }
+    } else {
+        contentDiv.textContent = message;
+    }
 
-  // Add actions (Edit and Copy)
-  const actionsDiv = document.createElement('div');
-  actionsDiv.className = 'message-actions';
+    messageElement.appendChild(contentDiv);
 
-  if (isUser) {
-    const editButton = document.createElement('button');
-    editButton.className = 'action-button';
-    editButton.innerHTML = '<i class="fas fa-edit"></i>';
-    editButton.onclick = () => startEditing(messageId);
-    actionsDiv.appendChild(editButton);
-  }
+    const timestampDiv = document.createElement('div');
+    timestampDiv.className = 'message-timestamp';
+    timestampDiv.textContent = formatTimestamp(timestamp);
+    messageElement.appendChild(timestampDiv);
 
-  const copyButton = document.createElement('button');
-  copyButton.className = 'action-button';
-  copyButton.innerHTML = '<i class="fas fa-copy"></i>';
-  copyButton.onclick = () => copyToClipboard(message);
-  actionsDiv.appendChild(copyButton);
+    const actionsDiv = document.createElement('div');
+    actionsDiv.className = 'message-actions';
 
-  messageElement.appendChild(actionsDiv);
+    if (isUser) {
+        const editButton = document.createElement('button');
+        editButton.className = 'action-button';
+        editButton.innerHTML = '<i class="fas fa-edit"></i>';
+        editButton.onclick = () => startEditing(messageId);
+        actionsDiv.appendChild(editButton);
+    }
 
-  return {
-    element: messageElement,
-    id: messageId
-  };
+    const copyButton = document.createElement('button');
+    copyButton.className = 'action-button';
+    copyButton.innerHTML = '<i class="fas fa-copy"></i>';
+    copyButton.onclick = () => copyToClipboard(message);
+    actionsDiv.appendChild(copyButton);
+
+    messageElement.appendChild(actionsDiv);
+
+    return { element: messageElement, id: messageId };
 }
 
+function getApiKey() {
+    return localStorage.getItem('openRouterApiKey');
+}
 
-      function processMarkdown(text) {
-        // Headers
-        text = text.replace(/^(#{1,6})\s*(.*?)$/gm, (match, hashes, content) => {
-          const level = hashes.length;
-          return `
-																	
-																	<h${level}>${content}</h${level}>`;
-        });
-        // Bold
-        text = text.replace(/\*\*(.*?)\*\*/g, ' < strong > $1 < /strong>');
-        // Italic
-        text = text.replace(/\*(.*?)\*/g, ' < em > $1 < /em>');
-        // Lists
-        text = text.replace(/^-\s*(.*?)$/gm, ' < li > $1 < /li>');
-        text = text.replace(/( < li > .* ? < \/li>)\n?/gs, ' < ul > $1 < /ul>');
-        return text;
-      }
-      async function copyToClipboard(text) {
-        try {
-          await navigator.clipboard.writeText(text);
-          showNotification('Copied to clipboard');
-        } catch (err) {
-          showNotification('Failed to copy to clipboard');
-          console.error('Copy failed:', err);
-        }
-      }
+function startEditing(messageId) {
+    if (isWaitingForResponse) return;
+    
+    const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
+    const contentDiv = messageElement.querySelector('.message-content');
+    const originalText = contentDiv.textContent;
 
-      function startEditing(messageId) {
-        if (isWaitingForResponse) return;
-        const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
-        const contentDiv = messageElement.querySelector('.message-content');
-        const originalText = contentDiv.textContent;
-        const textarea = document.createElement('textarea');
-        textarea.className = 'edit-input';
-        textarea.value = originalText;
-        textarea.rows = originalText.split('\n').length;
-        contentDiv.innerHTML = '';
-        contentDiv.appendChild(textarea);
-        messageElement.classList.add('edit-mode');
-        textarea.focus();
-        textarea.onkeydown = (e) => {
-          if (e.key === 'Enter' && !e.shiftKey) {
+    const textarea = document.createElement('textarea');
+    textarea.className = 'edit-input';
+    textarea.value = originalText;
+    textarea.rows = originalText.split('\n').length;
+    
+    contentDiv.innerHTML = '';
+    contentDiv.appendChild(textarea);
+    messageElement.classList.add('edit-mode');
+    
+    textarea.focus();
+    
+    textarea.onkeydown = (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
             finishEditing(messageId, textarea.value);
-          } else if (e.key === 'Escape') {
+        } else if (e.key === 'Escape') {
             finishEditing(messageId, originalText);
-          }
-        };
-      }
-
-      function finishEditing(messageId, newText) {
-        const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
-        const contentDiv = messageElement.querySelector('.message-content');
-        contentDiv.textContent = newText;
-        messageElement.classList.remove('edit-mode');
-        // Update message history
-        const messageIndex = messageHistory.findIndex(msg => msg.role === "user" && msg.timestamp.toString() === messageId);
-        if (messageIndex !== -1) {
-          messageHistory[messageIndex].content = newText;
-          // Save updated history to localStorage
-          localStorage.setItem(STORAGE_KEYS.MESSAGES, JSON.stringify(messageHistory));
         }
-      }
-      async function sendMessage() {
-        const textarea = document.getElementById('messageInput');
-        const message = textarea.value.trim();
-        const sendButton = document.querySelector('.chat-input-container button');
-        if (!message || isWaitingForResponse) return;
-        isWaitingForResponse = true;
-        textarea.disabled = true;
-        sendButton.disabled = true;
-        const timestamp = new Date();
-        const userMessage = {
-          role: "user",
-          content: message,
-          timestamp: timestamp.getTime()
-        };
-        messageHistory.push(userMessage);
-        const {
-          element: messageElement
-        } = createMessageElement(message, true, timestamp);
-        document.querySelector('.chat-messages').appendChild(messageElement);
-        messageElement.scrollIntoView({
-          behavior: 'smooth'
-        });
-        textarea.value = '';
-        textarea.style.height = 'auto';
-        const loadingElement = document.createElement('div');
-        loadingElement.classList.add('chat-message', 'bot', 'typing');
-        loadingElement.textContent = 'Typing...';
-        document.querySelector('.chat-messages').appendChild(loadingElement);
-        try {
-          const response = await tryMultipleModels(message);
-          loadingElement.remove();
-          if (response.text) {
-            const botMessage = {
-              role: "assistant",
-              content: response.text,
-              timestamp: Date.now()
-            };
-            messageHistory.push(botMessage);
-            // Save to localStorage after each message
-            localStorage.setItem(STORAGE_KEYS.MESSAGES, JSON.stringify(messageHistory));
-            const {
-              element: botElement
-            } = createMessageElement(response.text, false, new Date());
-            document.querySelector('.chat-messages').appendChild(botElement);
-            botElement.scrollIntoView({
-              behavior: 'smooth'
-            });
-            // Apply syntax highlighting
-            botElement.querySelectorAll('pre code').forEach((block) => {
-              hljs.highlightElement(block);
-            });
-          }
-        } catch (error) {
-          loadingElement.remove();
-          showError(error.message);
-          const {
-            element: errorElement
-          } = createMessageElement(`Error: ${error.message}`, false);
-          document.querySelector('.chat-messages').appendChild(errorElement);
-        } finally {
-          isWaitingForResponse = false;
-          textarea.disabled = false;
-          sendButton.disabled = false;
-          textarea.focus();
-        }
-      }
-      async function tryMultipleModels(userMessage) {
-        const timeout = 2000000;
-        const apiKey = getApiKey();
-        if (!apiKey) {
-          checkAndStoreApiKey();
-          throw new Error("API key not found. Please enter your API key first.");
-        }
-        for (let modelIndex = 0; modelIndex < models.length; modelIndex++) {
-          try {
-            const response = await Promise.race([
-              fetch("https://openrouter.ai/api/v1/chat/completions", {
-                method: "POST",
-                headers: {
-                  "Authorization": `Bearer ${apiKey}`,
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  "model": models[modelIndex].name,
-                  "messages": [
-                    systemMessage, ...messageHistory.filter(msg => msg.role === "user" || msg.role === "assistant"), {
-                      role: "user",
-                      content: `Please respond in ${currentLanguage}. ${userMessage}`
-                    }
-                  ]
-                })
-              }).then(async res => {
-                if (!res.ok) {
-                  const errorData = await res.json();
-                  throw new Error(`API Error: ${errorData.error?.message || 'Unknown error'}`);
-                }
-                return res.json();
-              }),
-              new Promise((_, reject) => setTimeout(() => reject(new Error('Request timeout')), timeout))
-            ]);
-            if (response.choices && response.choices[0].message.content) {
-              return {
-                text: response.choices[0].message.content
-              };
-            }
-          } catch (error) {
-            console.error(`Model ${models[modelIndex].name} failed:`, error);
-            if (modelIndex === models.length - 1) {
-              throw new Error(`API Error: ${error.message}`);
-            }
-            continue;
-          }
-        }
-        throw new Error("All API attempts failed. Please try again later.");
-      }
-
-      function showWelcomeModal() {
-        const modal = document.createElement('div');
-        modal.className = 'modal-overlay';
-        modal.innerHTML = `
-        
-														
-															
-																		
-																	<div class="modal-window">
-																		<div class="modal-header">
-																			<span class="modal-title">Welcome to PatheticAI Enhanced</span>
-																		</div>
-																		<div class="modal-content">
-																			<p>API version: 1.0</p>
-																			<p>PatheticAI version: 1.0 Enhanced</p>
-																			<p>Created by: Pathetic</p>
-																			<br>
-																				<p>New Features:</p>
-																				<ul>
-																					<li>Edit messages with the edit button</li>
-																					<li>Copy messages and code blocks</li>
-																					<li>Syntax highlighting for code</li>
-																					<li>Dark/Light theme toggle</li>
-																					<li>Improved UI and responsiveness</li>
-																					<li>Persistent chat history</li>
-																				</ul>
-																				<br>
-																					<p>Click outside this popup to close it.</p>
-																				</div>
-																			</div>
-    `;
-        modal.addEventListener('click', (e) => {
-          if (e.target === modal) {
-            modal.remove();
-          }
-        });
-        document.body.appendChild(modal);
-      }
-
-      function showSettingsModal() {
-        const modal = document.createElement('div');
-        modal.className = 'modal-overlay';
-        modal.innerHTML = `
-
-															
-																
-																	
-																				
-																			<div class="modal-window">
-																				<div class="modal-header">
-																					<span class="modal-title">Settings</span>
-																				</div>
-																				<div class="modal-content settings-content">
-																					<div class="settings-button" onclick="resetChat()">
-																						<i class="fas fa-redo"></i>
-                    Reset Chat
-
-																	
-																		
-																			
-																						
-																					</div>
-																					<div class="settings-button" onclick="changeLanguage()">
-																						<i class="fas fa-language"></i>
-                    Language: ${currentLanguage}
-
-																	
-																		
-																			
-																						
-																					</div>
-																					<div class="settings-button" onclick="removeApiKey()">
-																						<i class="fas fa-key"></i>
-                    Remove API Key
-
-																	
-																		
-																			
-																						
-																					</div>
-																					<div class="settings-button" onclick="closeApp()">
-																						<i class="fas fa-times"></i>
-                    Close App
-
-																	
-																		
-																			
-																						
-																					</div>
-																				</div>
-																			</div>
-    `;
-        modal.addEventListener('click', (e) => {
-          if (e.target === modal) {
-            modal.remove();
-          }
-        });
-        document.body.appendChild(modal);
-      }
-
-      function showAboutModal() {
-        const modal = document.createElement('div');
-        modal.className = 'modal-overlay';
-        modal.innerHTML = `
-
-															
-																
-																	
-																				
-																			<div class="modal-window">
-																				<div class="modal-header">
-																					<span class="modal-title">About PatheticAI</span>
-																				</div>
-																				<div class="modal-content">
-																					<p>PatheticAI: 1.0 Enhanced</p>
-																					<p>API version: 1.0</p>
-																					<p>Contact: https:
-
-																		
-																			
-																				
-																							
-																						<br>
-																							<p>Enhanced Features:</p>
-																							<ul>
-																								<li>Improved message handling</li>
-																								<li>Better code display and copying</li>
-																								<li>Theme customization</li>
-																								<li>Advanced editing capabilities</li>
-																								<li>Persistent chat history</li>
-																							</ul>
-																						</div>
-																					</div>
-    `;
-        modal.addEventListener('click', (e) => {
-          if (e.target === modal) {
-            modal.remove();
-          }
-        });
-        document.body.appendChild(modal);
-      }
-
-      function removeApiKey() {
-        if (confirm('Are you sure you want to remove your API key? You will need to enter a new key to use PatheticAI.')) {
-          localStorage.removeItem(STORAGE_KEYS.API_KEY);
-          showNotification('API key removed');
-          setTimeout(() => {
-            window.location.reload();
-          }, 1000);
-        }
-      }
-
-function resetChat() {
-  if (confirm('Are you sure you want to reset the chat? This will clear all messages.')) {
-    document.querySelector('.chat-messages').innerHTML = '';
-    messageHistory = [];
-    localStorage.setItem(STORAGE_KEYS.MESSAGES, JSON.stringify(messageHistory));
-
-    systemMessage.content = `
-      You are PatheticAI, a chatbot designed to be helpful, friendly, and empathetic.
-      Your tone is clear, concise, and approachable, making users feel comfortable asking questions.
-      You adapt to different topics with ease, offering guidance that's both informative and easy to understand.
-      You prioritize user satisfaction by being patient and responsive, ensuring a professional yet friendly interaction.
-      Remember relevant details from past interactions to provide a personalized experience. Keep track of user preferences and respond with context-aware answers to make each conversation more meaningful.
-      Always remain adaptable to the user's needs and adjust your tone accordingly, whether the conversation is casual or technical.
-    `;
-    
-    showNotification('Chat reset successful');
-  }
+    };
 }
 
-      function changeLanguage() {
-        const newLanguage = prompt('Enter your preferred language:', currentLanguage);
-        if (newLanguage && newLanguage.trim() !== '') {
-          currentLanguage = newLanguage.trim();
-          localStorage.setItem(STORAGE_KEYS.LANGUAGE, currentLanguage);
-          systemMessage.content = `${systemMessage.content.split('Please always respond in')[0]}Please always respond in ${currentLanguage}.`;
-          showNotification(`Language changed to: ${currentLanguage}`);
-        }
-      }
+function finishEditing(messageId, newText) {
+    const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
+    const contentDiv = messageElement.querySelector('.message-content');
+    contentDiv.textContent = newText;
+    messageElement.classList.remove('edit-mode');
 
-      function closeApp() {
-        if (confirm('Are you sure you want to close PatheticAI?')) {
-          window.close();
-        }
-      }
+    // Update message history
+    const messageIndex = messageHistory.findIndex(msg => 
+        msg.role === "user" && msg.timestamp?.toString() === messageId
+    );
+    if (messageIndex !== -1) {
+        messageHistory[messageIndex].content = newText;
+    }
+}
 
-      function getApiKey() {
-        return localStorage.getItem(STORAGE_KEYS.API_KEY);
-      }
+async function copyToClipboard(text) {
+    try {
+        await navigator.clipboard.writeText(text);
+        showNotification('Copied to clipboard');
+    } catch (err) {
+        showNotification('Failed to copy to clipboard');
+    }
+}
 
-      function checkAndStoreApiKey() {
-        const storedApiKey = getApiKey();
-        if (!storedApiKey) {
-          const modal = document.createElement('div');
-          modal.className = 'modal-overlay';
-          modal.innerHTML = `
-            
-																	
-																			
-																						
-																					<div class="modal-window">
-																						<div class="modal-header">
-																							<span class="modal-title">Openrouter API key required!</span>
-																						</div>
-																						<div class="modal-content">
-																							<p>To use PatheticAI, an API key from Openrouter is required. To get this, go to</p>
-																							<a href="https://openrouter.ai/settings/keys" target="_blank" style="color: white;">https://openrouter.ai/settings/keys</a>
-																						</p>
-																						<br>
-																							<input type="text" id="apiKeyInput" placeholder="Your API Key Here" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 15px; color: white;">
-																								<br>
-																									<br>
-																										<button onclick="saveApiKey()" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 15px; color: white; cursor: pointer;">Start up</button>
-																									</div>
-																								</div>
-        `;
-          document.body.appendChild(modal);
-          return false;
-        }
-        return true;
-      }
+function handleInput() {
+    const textarea = document.getElementById('messageInput');
+    textarea.style.height = 'auto';
+    textarea.style.height = textarea.scrollHeight + 'px';
+}
 
-      function saveApiKey() {
-        const apiKey = document.getElementById('apiKeyInput').value.trim();
-        if (apiKey && apiKey.startsWith('sk-or-')) {
-          localStorage.setItem(STORAGE_KEYS.API_KEY, apiKey);
-          document.querySelector('.modal-overlay').remove();
-          showNotification('Booting...');
-          setTimeout(() => {
-            window.location.reload();
-          }, 1000);
-        } else {
-          showNotification('API key not suitable for PatheticAI...');
-        }
-      }
-
-      function showNotification(message) {
-        const notification = document.createElement('div');
-        notification.className = 'notification';
-        notification.textContent = message;
-        document.body.appendChild(notification);
-        setTimeout(() => {
-          notification.classList.add('fade-out');
-          setTimeout(() => notification.remove(), 300);
-        }, 2000);
-      }
-
-      function toggleFullscreen() {
-        if (!document.fullscreenElement) {
-          document.documentElement.requestFullscreen();
-        } else {
-          document.exitFullscreen();
-        }
-      }
-
-      function contactEmail() {
-        window.open('https://discord.gg/Hb5ccPY3XV', '_blank');
-      }
-      document.addEventListener('DOMContentLoaded', () => {
-        showWelcomeModal();
-        showNotification('PatheticAI V1.0 Enhanced');
-        if (!checkAndStoreApiKey()) {
-          textarea.disabled = true;
-          document.querySelector('.chat-input-container button').disabled = true;
-        }
-        document.querySelector('.brand').addEventListener('click', showAboutModal);
-        if (typeof hljs !== 'undefined') {
-          document.querySelectorAll('pre code').forEach((block) => {
-            hljs.highlightElement(block);
-          });
-        }
-        if ('serviceWorker' in navigator) {
-          window.addEventListener('load', () => {
-            navigator.serviceWorker.register('/service-worker.js').then(registration => {
-              console.log('Service Worker registered with scope:', registration.scope);
-            }).catch(error => {
-              console.log('Service Worker registration failed:', error);
+// Enhanced message sending
+async function sendMessage() {
+    const textarea = document.getElementById('messageInput');
+    const message = textarea.value.trim();
+    const sendButton = document.querySelector('.chat-input-container button');
+    
+    if (!message || isWaitingForResponse) return;
+    
+    isWaitingForResponse = true;
+    textarea.disabled = true;
+    sendButton.disabled = true;
+    
+    const timestamp = new Date();
+    const { element: messageElement, id: messageId } = createMessageElement(message, true, timestamp);
+    document.querySelector('.chat-messages').appendChild(messageElement);
+    messageElement.scrollIntoView({ behavior: 'smooth' });
+    
+    textarea.value = '';
+    textarea.style.height = 'auto';
+    messageHistory.push({
+    role: "user",
+    content: message,
+    timestamp: timestamp.getTime()
+});
+    const loadingElement = document.createElement('div');
+    loadingElement.classList.add('chat-message', 'bot', 'typing');
+    loadingElement.textContent = 'Typing...';
+    document.querySelector('.chat-messages').appendChild(loadingElement);
+    
+    try {
+        const response = await tryMultipleModels(message);
+        loadingElement.remove();
+        
+        if (response.text) {
+            messageHistory.push({
+                role: "assistant",
+                content: response.text,
+                timestamp: Date.now()
             });
-          });
+            
+            const { element: botElement } = createMessageElement(response.text, false);
+            document.querySelector('.chat-messages').appendChild(botElement);
+            botElement.scrollIntoView({ behavior: 'smooth' });
+            
+            // Apply syntax highlighting to code blocks
+            botElement.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightElement(block);
+            });
         }
-      });
-    </script>
+    } catch (error) {
+        loadingElement.remove();
+        showError(error.message);
+        const { element: errorElement } = createMessageElement(`Error: ${error.message}`, false);
+        document.querySelector('.chat-messages').appendChild(errorElement);
+    } finally {
+        isWaitingForResponse = false;
+        textarea.disabled = false;
+        sendButton.disabled = false;
+        textarea.focus();
+    }
+}
+            async function tryMultipleModels(userMessage) {
+              const timeout = 2000000;
+              const apiKey = getApiKey();
+              if (!apiKey) {
+                checkAndStoreApiKey();
+                throw new Error("API key not found. Please enter your API key first.");
+              }
+              for (let modelIndex = 0; modelIndex < models.length; modelIndex++) {
+                try {
+                  const response = await Promise.race([
+                    fetch("https://openrouter.ai/api/v1/chat/completions", {
+                      method: "POST",
+                      headers: {
+                        "Authorization": `Bearer ${apiKey}`,
+                        "Content-Type": "application/json",
+                      },
+                      body: JSON.stringify({
+                        "model": models[modelIndex].name,
+                        "messages": [
+                          systemMessage, ...messageHistory.filter(msg => msg.role === "user" || msg.role === "assistant"), {
+                            role: "user",
+                            content: `Please respond in ${currentLanguage}. ${userMessage}`
+                          }
+                        ]
+                      })
+                    }).then(async res => {
+                      if (!res.ok) {
+                        const errorData = await res.json();
+                        throw new Error(`API Error: ${errorData.error?.message || 'Unknown error'}`);
+                      }
+                      return res.json();
+                    }),
+                    new Promise((_, reject) => setTimeout(() => reject(new Error('Request timeout')), timeout))
+                  ]);
+                  if (response.choices && response.choices[0].message.content) {
+                    return {
+                      text: response.choices[0].message.content
+                    };
+                  }
+                } catch (error) {
+                  console.error(`Model ${models[modelIndex].name} failed:`, error);
+                  if (modelIndex === models.length - 1) {
+                    throw new Error(`API Error: ${error.message}`);
+                  }
+                  continue;
+                }
+              }
+              throw new Error("All API attempts failed. Please try again later.");
+            }
+
+   function showAboutModal() {
+  const modal = document.createElement('div');
+  modal.className = 'modal-overlay';
+  modal.innerHTML = `
+    <div class="modal-window">
+      <div class="modal-header">
+        <span class="modal-title">About</span>
+      </div>
+      <div class="modal-content">
+        <p>API version: 1.0</p>
+        <p>PatheticAI version: 1.0 Enhanced</p>
+        <p>Created by: Pathetic</p>
+        <br>
+        <p>Click outside this popup to close it.</p>
+      </div>
+    </div>
+  `;
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.remove();
+    }
+  });
+  document.body.appendChild(modal);
+}   
+      
+function showSettingsModal() {
+  const modal = document.createElement('div');
+  modal.className = 'modal-overlay';
+  modal.innerHTML = `
+    <div class="modal-window">
+      <div class="modal-header">
+        <span class="modal-title">Settings</span>
+      </div>
+      <div class="modal-content settings-content">
+        <div class="settings-button" onclick="resetChat()">
+          <i class="fa fa-trash"></i>
+          Clear Chat
+        </div>
+        <div class="settings-button" onclick="changeLanguage()">
+          <i class="fas fa-language"></i>
+          Language: ${currentLanguage}
+        </div>
+        <div class="settings-button" onclick="showAboutModal()">
+          <i class="fa fa-address-card"></i>
+          Show About Modal
+        </div>
+        <div class="settings-button" onclick="removeApiKey()">
+          <i class="fas fa-key"></i>
+          Remove API Key
+        </div>
+      </div>
+    </div>
+  `;
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.remove();
+    }
+  });
+  document.body.appendChild(modal);
+}
+            function removeApiKey() {
+              if (confirm('Are you sure you want to remove your API key? You will need to enter a new key to use PatheticAI.')) {
+                localStorage.removeItem(STORAGE_KEYS.API_KEY);
+                showNotification('API key removed');
+                setTimeout(() => {
+                  window.location.reload();
+                }, 1000);
+              }
+            }
+
+            function resetChat() {
+              if (confirm('Are you sure you want to reset the chat? This will clear all messages.')) {
+                document.querySelector('.chat-messages').innerHTML = '';
+                messageHistory = [];
+                localStorage.setItem(STORAGE_KEYS.MESSAGES, JSON.stringify(messageHistory));
+                systemMessage.content = `You are PatheticAI.
+
+Key characteristics:
+1. Offering clear and concise guidance
+2. Being adaptable to various topics and tasks
+3. Responding in a manner that is both informative and easy to understand
+4. Assisting users with technical support or queries
+5. Promoting user satisfaction by being patient and approachable
+Please always respond in ${currentLanguage}.`;
+                showNotification('Chat reset successful');
+              }
+            }
+
+            function changeLanguage() {
+              const newLanguage = prompt('Enter your preferred language:', currentLanguage);
+              if (newLanguage && newLanguage.trim() !== '') {
+                currentLanguage = newLanguage.trim();
+                localStorage.setItem(STORAGE_KEYS.LANGUAGE, currentLanguage);
+                systemMessage.content = `${systemMessage.content.split('Please always respond in')[0]}Please always respond in ${currentLanguage}.`;
+                showNotification(`Language changed to: ${currentLanguage}`);
+              }
+            }
+
+            function closeApp() {
+              if (confirm('Are you sure you want to close PatheticAI?')) {
+                window.close();
+              }
+            }
+
+            function getApiKey() {
+              return localStorage.getItem(STORAGE_KEYS.API_KEY);
+            }
+messageHistory.forEach(msg => {
+    const { element } = createMessageElement(msg.content, msg.role === "user", new Date(msg.timestamp));
+    document.querySelector('.chat-messages').appendChild(element);
+});
+            function checkAndStoreApiKey() {
+              const storedApiKey = getApiKey();
+              if (!storedApiKey) {
+                const modal = document.createElement('div');
+                modal.className = 'modal-overlay';
+                modal.innerHTML = `
+            
+																	<div class="modal-window">
+																		<div class="modal-header">
+																			<span class="modal-title">Openrouter API key required!</span>
+																		</div>
+																		<div class="modal-content">
+																			<p>To use PatheticAI, an API key from Openrouter is required. To get this, go to</p>
+                        
+																				<a href="https://openrouter.ai/settings/keys" target="_blank" style="color: white;">https://openrouter.ai/settings/keys</a>
+                    
+																				</p>
+																				<br>
+																					<input type="text" id="apiKeyInput" placeholder="Your API Key Here" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 15px; color: white;">
+																						<br>
+																							<br>
+																								<button onclick="saveApiKey()" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 15px; color: white; cursor: pointer;">Start up</button>
+																							</div>
+																						</div>
+        `;
+                document.body.appendChild(modal);
+                return false;
+              }
+              return true;
+            }
+
+
+            function saveApiKey() {
+              const apiKey = document.getElementById('apiKeyInput').value.trim();
+              if (apiKey && apiKey.startsWith('sk-or-')) {
+                localStorage.setItem(STORAGE_KEYS.API_KEY, apiKey);
+                document.querySelector('.modal-overlay').remove();
+                showNotification('Booting...');
+                setTimeout(() => {
+                  window.location.reload();
+                }, 1000);
+              } else {
+                showNotification('API key not suitable for PatheticAI...');
+              }
+            }
+
+            function showNotification(message) {
+              const notification = document.createElement('div');
+              notification.className = 'notification';
+              notification.textContent = message;
+              document.body.appendChild(notification);
+              setTimeout(() => {
+                notification.classList.add('fade-out');
+                setTimeout(() => notification.remove(), 300);
+              }, 2000);
+            }
+
+            function toggleFullscreen() {
+              if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+              } else {
+                document.exitFullscreen();
+              }
+            }
+
+            function contactEmail() {
+              window.open('https://discord.gg/Hb5ccPY3XV', '_blank');
+            }
+            document.addEventListener('DOMContentLoaded', () => {
+              showWelcomeModal();
+              showNotification('PatheticAI V1.0 Enhanced');
+              if (!checkAndStoreApiKey()) {
+                textarea.disabled = true;
+                document.querySelector('.chat-input-container button').disabled = true;
+              }
+              document.querySelector('.brand').addEventListener('click', showAboutModal);
+              if (typeof hljs !== 'undefined') {
+                document.querySelectorAll('pre code').forEach((block) => {
+                  hljs.highlightElement(block);
+                });
+              }
+            });
+  </script>
   </body>
 </html>
