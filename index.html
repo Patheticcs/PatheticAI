@@ -1497,45 +1497,17 @@ function checkAndStoreApiKey() {
 }
 
 function getApiKey() {
-  const apiKeyData = JSON.parse(localStorage.getItem(CONFIG.STORAGE_KEYS.API_KEY));
-  if (apiKeyData && apiKeyData.key && apiKeyData.expiry > Date.now()) {
-    return apiKeyData.key; // API key is valid
+  const apiKey = localStorage.getItem('openRouterApiKey'); // Directly retrieve the API key string
+  if (apiKey && apiKey.startsWith('sk-or-')) {
+    return apiKey; // Return the API key if it's valid
   }
-  return null; // API key is expired or missing
-}
-
-function checkAndStoreApiKey() {
-    const storedApiKey = localStorage.getItem('openRouterApiKey');
-    if (!storedApiKey) {
-        const modal = document.createElement('div');
-        modal.className = 'modal-overlay';
-        modal.innerHTML = `
-            <div class="modal-window">
-                <div class="modal-header">
-                    <span class="modal-title">Openrouter API key required!</span>
-                </div>
-                <div class="modal-content">
-                    <p>To use PatheticAI, an API key from Openrouter is required. To get this, go to 
-                        <a href="https://openrouter.ai/settings/keys" target="_blank" style="color: white;">https://openrouter.ai/settings/keys</a>
-                    </p>
-                    <input type="text" id="apiKeyInput" placeholder="Your API Key Here" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 15px; color: white;">
-                    <br><br>
-                    <button onclick="saveApiKey()" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 15px; color: white; cursor: pointer;">Start up</button>
-                </div>
-            </div>
-        `;
-        document.body.appendChild(modal);
-        return false;
-    }
-    return true;
+  return null; // Return null if there's no valid key
 }
 
 function saveApiKey() {
   const apiKey = document.getElementById('apiKeyInput').value.trim();
   if (apiKey && apiKey.startsWith('sk-or-')) {
-    const expiryTime = Date.now() + 24 * 60 * 60 * 1000; // Set expiry time (24 hours from now)
-    const apiKeyData = { key: apiKey, expiry: expiryTime };
-    localStorage.setItem(CONFIG.STORAGE_KEYS.API_KEY, JSON.stringify(apiKeyData));
+    localStorage.setItem('openRouterApiKey', apiKey); // Save the plain API key as a string
     document.querySelector('.modal-overlay').remove();
     showNotification('API key saved successfully');
     enableInput();
@@ -1545,7 +1517,51 @@ function saveApiKey() {
   return false;
 }
 
-function removeApiKey() {
+function checkAndStoreApiKey() {
+  const storedApiKey = getApiKey();
+  if (!storedApiKey) {
+    const modal = document.createElement('div');
+    modal.className = 'modal-overlay';
+    modal.innerHTML = `
+      <div class="modal-window">
+        <div class="modal-header">
+          <span class="modal-title">Openrouter API key required!</span>
+        </div>
+        <div class="modal-content">
+          <p>To use PatheticAI, an API key from Openrouter is required. To get this, go to</p>
+          <a href="https://openrouter.ai/settings/keys" target="_blank" style="color: white;">https://openrouter.ai/settings/keys</a>
+          <br><br>
+          <input type="text" id="apiKeyInput" placeholder="Your API Key Here" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 15px; color: white;">
+          <br><br>
+          <button id="startupButton" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 15px; color: white; cursor: pointer;">Start up</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+    
+    // Attach event listener to the button after modal is created
+    document.getElementById('startupButton').addEventListener('click', saveApiKey);
+
+    return false;
+  }
+  return true;
+}
+function saveApiKey() {
+  const apiKey = document.getElementById('apiKeyInput').value.trim();
+  if (apiKey && apiKey.startsWith('sk-or-')) {
+    localStorage.setItem('openRouterApiKey', apiKey); // Save the API key directly
+    document.querySelector('.modal-overlay').remove(); // Close modal after saving
+    showNotification('Booting...');
+    setTimeout(() => {
+      window.location.reload(); // Reload after API key save
+    }, 1000);
+  } else {
+    showNotification('API key not suitable for PatheticAI...');
+  }
+}
+
+                                                                                      
+function removeApiKey() { 
   localStorage.removeItem(CONFIG.STORAGE_KEYS.API_KEY);
   disableInput();
   showNotification('API key removed');
@@ -1554,8 +1570,8 @@ function removeApiKey() {
 function disableInput() {
   const textarea = document.getElementById('messageInput');
   const sendButton = document.querySelector('.chat-input-container button');
-  textarea.disabled = true;
-  sendButton.disabled = true;
+  textarea.disabled = false;
+  sendButton.disabled = false;
   textarea.placeholder = 'Please enter API key in settings...';
 }
 
@@ -1567,9 +1583,16 @@ function enableInput() {
   textarea.placeholder = 'Type your message...';
 }
 
-function showNotification(message) {
-  alert(message);  // Show a simple alert for notifications
-}
+    function showNotification(message) {
+      const notification = document.createElement('div');
+      notification.className = 'notification';
+      notification.textContent = message;
+      document.body.appendChild(notification);
+      setTimeout(() => {
+        notification.classList.add('fade-out');
+        setTimeout(() => notification.remove(), 300);
+      }, 2000);
+    }
 
 // A simple function to handle UI initialization (can be extended with more logic)
 function initializeUI() {
@@ -1585,10 +1608,9 @@ function setupEventListeners() {
   // More functionality can be added here as per requirements
 }
 
-// Show a welcome message when the app starts
 function showWelcomeMessage() {
-  console.log("Welcome to PatheticAI Enhanced!");
-  // You can display a user-friendly message in the UI instead of using console.log
+  const welcomeMessage = "👋 Welcome to PatheticAI Enhanced! I'm here to help you with any questions or tasks you may have. Feel free to start our conversation!";
+  const { element } = createMessageElement(welcomeMessage, false);
+  document.querySelector('.chat-messages').appendChild(element);
 }
-
         </script>
