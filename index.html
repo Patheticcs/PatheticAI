@@ -41,46 +41,45 @@
         --transition: all 0.3s ease;
       }
 
-:root[data-theme="light"] {
-    --background-color: #ffffff;
-    --primary-color: #000000;
-    --secondary-color: #9c00d5;
-    --border-color: rgba(0, 0, 0, 0.05);
-    --taskbar-background: rgba(255, 255, 255, 0.6);
-    --input-background: rgba(255, 255, 255, 0.7);
-    --button-background: rgba(0, 0, 0, 0.02);
-    --button-hover-background: rgba(0, 0, 0, 0.05);
-    --modal-background: rgba(255, 255, 255, 0.7);
-    --message-background: rgba(255, 255, 255, 0.6);
-    --message-user-background: rgba(255, 255, 255, 0.5);
-    --code-background: rgba(0, 0, 0, 0.02);
-    --code-text: #000000;
-    --notification-background: rgba(255, 255, 255, 0.6);
-    --notification-text: #000000;
-    --placeholder-color: rgba(0, 0, 0, 0.2);
-    --chat-input-container-background: rgba(255, 255, 255, 0.5);
-}
+      :root[data-theme="light"] {
+        --background-color: #ffffff;
+        --primary-color: #000000;
+        --secondary-color: #9c00d5;
+        --border-color: rgba(0, 0, 0, 0.05);
+        --taskbar-background: rgba(255, 255, 255, 0.6);
+        --input-background: rgba(255, 255, 255, 0.7);
+        --button-background: rgba(0, 0, 0, 0.02);
+        --button-hover-background: rgba(0, 0, 0, 0.05);
+        --modal-background: rgba(255, 255, 255, 0.7);
+        --message-background: rgba(255, 255, 255, 0.6);
+        --message-user-background: rgba(255, 255, 255, 0.5);
+        --code-background: rgba(0, 0, 0, 0.02);
+        --code-text: #000000;
+        --notification-background: rgba(255, 255, 255, 0.6);
+        --notification-text: #000000;
+        --placeholder-color: rgba(0, 0, 0, 0.2);
+        --chat-input-container-background: rgba(255, 255, 255, 0.5);
+      }
 
-:root[data-theme="dark"] {
-    --background-color: #000000;
-    --primary-color: #ffffff;
-    --secondary-color: #9c00d5;
-    --border-color: rgba(255, 255, 255, 0.03);
-    --taskbar-background: rgba(0, 0, 0, 0.5);
-    --input-background: rgba(0, 0, 0, 0.6);
-    --button-background: rgba(255, 255, 255, 0.02);
-    --button-hover-background: rgba(255, 255, 255, 0.05);
-    --modal-background: rgba(0, 0, 0, 0.6);
-    --message-background: rgba(0, 0, 0, 0.5);
-    --message-user-background: rgba(0, 0, 0, 0.4);
-    --code-background: rgba(255, 255, 255, 0.02);
-    --code-text: #ffffff;
-    --notification-background: rgba(0, 0, 0, 0.5);
-    --notification-text: #ffffff;
-    --placeholder-color: rgba(255, 255, 255, 0.2);
-    --chat-input-container-background: rgba(0, 0, 0, 0.4);
-}
-
+      :root[data-theme="dark"] {
+        --background-color: #000000;
+        --primary-color: #ffffff;
+        --secondary-color: #9c00d5;
+        --border-color: rgba(255, 255, 255, 0.03);
+        --taskbar-background: rgba(0, 0, 0, 0.5);
+        --input-background: rgba(0, 0, 0, 0.6);
+        --button-background: rgba(255, 255, 255, 0.02);
+        --button-hover-background: rgba(255, 255, 255, 0.05);
+        --modal-background: rgba(0, 0, 0, 0.6);
+        --message-background: rgba(0, 0, 0, 0.5);
+        --message-user-background: rgba(0, 0, 0, 0.4);
+        --code-background: rgba(255, 255, 255, 0.02);
+        --code-text: #ffffff;
+        --notification-background: rgba(0, 0, 0, 0.5);
+        --notification-text: #ffffff;
+        --placeholder-color: rgba(255, 255, 255, 0.2);
+        --chat-input-container-background: rgba(0, 0, 0, 0.4);
+      }
 
       body {
         background: url('https://wallpapers.com/images/hd/4k-nature-in-ice-wvdjbvbvxn12plp6.jpg') no-repeat center center fixed;
@@ -497,62 +496,61 @@
       .theme-options.active {
         display: block;
       }
-      
-.language-selector-container {
-  position: relative;
-  display: inline-block;
-  width: 100%;
-}
 
-.language-selector {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: var(--spacing-small) var(--spacing-normal);
-  background-color: var(--button-background);
-  border: 1px solid var(--border-color);
-  cursor: pointer;
-  border-radius: var(--border-radius);
-  transition: background 0.3s ease;
-}
+      .language-selector-container {
+        position: relative;
+        display: inline-block;
+        width: 100%;
+      }
 
-.language-selector i {
-  font-size: 14px;
-}
+      .language-selector {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--spacing-small) var(--spacing-normal);
+        background-color: var(--button-background);
+        border: 1px solid var(--border-color);
+        cursor: pointer;
+        border-radius: var(--border-radius);
+        transition: background 0.3s ease;
+      }
 
-.language-selector:hover {
-  background-color: var(--button-hover-background);
-}
+      .language-selector i {
+        font-size: 14px;
+      }
 
-.language-options {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  width: 100%;
-  display: none;
-  background-color: var(--background-color);
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius);
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-  z-index: 10;
-}
+      .language-selector:hover {
+        background-color: var(--button-hover-background);
+      }
 
-.language-option {
-  padding: var(--spacing-small);
-  cursor: pointer;
-  font-size: 14px;
-  color: var(--primary-color);
-  transition: background 0.3s ease;
-}
+      .language-options {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        display: none;
+        background-color: var(--background-color);
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius);
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        z-index: 10;
+      }
 
-.language-option:hover {
-  background-color: var(--button-hover-background);
-}
+      .language-option {
+        padding: var(--spacing-small);
+        cursor: pointer;
+        font-size: 14px;
+        color: var(--primary-color);
+        transition: background 0.3s ease;
+      }
 
-.language-options.active {
-  display: block;
-}
+      .language-option:hover {
+        background-color: var(--button-hover-background);
+      }
 
+      .language-options.active {
+        display: block;
+      }
 
       .message-timestamp {
         font-size: 11px;
@@ -629,7 +627,6 @@
         background: rgba(255, 255, 255, 0.2);
         transform: translateY(-1px);
       }
-     
 
       @keyframes fadeIn {
         from {
@@ -675,43 +672,68 @@
       @media (max-width: 768px) {
         :root {
           --container-width: 95%;
-          --spacing-normal: 15px;
-          --spacing-small: 8px;
+          --spacing-normal: clamp(12px, 3vw, 15px);
+          --spacing-small: clamp(6px, 2vw, 8px);
+          --border-radius: 20px;
+          --border-radius-small: 12px;
         }
 
-        .taskbar {
-          height: auto;
-          padding: 10px var(--spacing-normal);
-        }
-
-        .taskbar-right {
-          display: flex;
-          gap: 8px;
-        }
-
-        .taskbar button {
-          padding: 6px 12px;
-          font-size: 14px;
-        }
-
-        .brand {
-          font-size: 18px;
-        }
-
-        .preview-tag {
-          font-size: 12px;
+        .chat-message {
+          max-width: 90%;
+          font-size: var(--font-size-base);
         }
 
         .chat-input-container {
-          padding: 10px;
+          padding: calc(var(--spacing-small) * 1.5);
         }
 
-        .chat-input-container input {
-          font-size: 14px;
+        .chat-input-container textarea {
+          font-size: var(--font-size-base);
         }
 
-        .chat-input-container button {
-          padding: 6px 15px;
+        button {
+          min-height: 44px;
+          min-width: 44px;
+          padding: 10px 20px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+          scroll-behavior: auto !important;
+        }
+      }
+
+      @media (prefers-contrast: more) {
+
+        :root[data-theme="light"],
+        :root[data-theme="dark"] {
+          --border-color: currentColor;
+          --button-background: transparent;
+          --button-hover-background: currentColor;
+        }
+      }
+
+      @media print {
+
+        .chat-input-container,
+        .taskbar {
+          display: none !important;
+        }
+
+        .container {
+          position: static;
+          transform: none;
+          overflow: visible;
+          height: auto;
+        }
+
+        .chat-message {
+          break-inside: avoid;
+          page-break-inside: avoid;
         }
       }
 
@@ -842,7 +864,8 @@
     <div class="chat-input-container">
       <textarea id="messageInput" placeholder="Type your message..." rows="1" maxlength="2000"></textarea>
       <button onclick="sendMessage()" title="Send Message">
-      <i class="fas fa-paper-plane"></i><span>‎ ‎ ‎ Send</span>
+        <i class="fas fa-paper-plane"></i>
+        <span>‎ ‎ ‎ Send</span>
       </button>
     </div>
     <script>
