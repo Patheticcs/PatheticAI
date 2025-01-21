@@ -789,60 +789,59 @@
       </button>
     </div>
     <script>
+const CONFIG = {
+  MAX_RETRIES: 3,
+  TYPING_SPEED: 50,
+  MAX_CONTEXT_LENGTH: 10,
+  SUGGESTION_COUNT: 4,
+  API_TIMEOUT: 30000,
+  STORAGE_KEYS: {
+    THEME: 'theme',
+    API_KEY: 'openRouterApiKey',
+    MESSAGES: 'chatMessages',
+    LANGUAGE: 'preferredLanguage',
+    SETTINGS: 'userSettings'
+  }
+};
 
-      const CONFIG = {
-        MAX_RETRIES: 3,
-        TYPING_SPEED: 50,
-        MAX_CONTEXT_LENGTH: 10,
-        SUGGESTION_COUNT: 4,
-        API_TIMEOUT: 30000,
-        STORAGE_KEYS: {
-          THEME: 'theme',
-          API_KEY: 'openRouterApiKey',
-          MESSAGES: 'chatMessages',
-          LANGUAGE: 'preferredLanguage',
-          SETTINGS: 'userSettings'
-        }
-      };
+const MODELS = [{
+  name: "google/gemini-2.0-flash-exp:free"
+}, {
+  name: "meta-llama/llama-3.2-3b-instruct:free"
+}, {
+  name: "qwen/qwen-2-7b-instruct:free"
+}, {
+  name: "microsoft/phi-3-medium-128k-instruct:free"
+}, {
+  name: "undi95/toppy-m-7b:free"
+}, {
+  name: "google/gemini-2.0-flash-thinking-exp:free"
+}, {
+  name: "microsoft/phi-3-mini-128k-instruct:free"
+}, {
+  name: "microsoft/phi-3-medium-128k-instruct:free"
+}];
 
-      const MODELS = [{
-        name: "google/gemini-2.0-flash-exp:free"
-      }, {
-        name: "meta-llama/llama-3.2-3b-instruct:free"
-      }, {
-        name: "qwen/qwen-2-7b-instruct:free"
-      }, {
-        name: "microsoft/phi-3-medium-128k-instruct:free"
-      }, {
-        name: "undi95/toppy-m-7b:free"
-      }, {
-        name: "google/gemini-2.0-flash-thinking-exp:free"
-      }, {
-        name: "microsoft/phi-3-mini-128k-instruct:free"
-      }, {
-        name: "microsoft/phi-3-medium-128k-instruct:free"
-      }];
+let STATE = {
+  isWaitingForResponse: false,
+  editingMessageId: null,
+  voiceRecording: false,
+  messageHistory: [],
+  currentLanguage: 'English',
+  theme: 'dark',
+  selectedModel: MODELS[0].name,
+  contextLength: 0,
+  mediaRecorder: null,
+  settings: {
+    notifications: true,
+    soundEffects: true,
+    autoScroll: true
+  }
+};
 
-      const STATE = {
-        isWaitingForResponse: false,
-        editingMessageId: null,
-        voiceRecording: false,
-        messageHistory: JSON.parse(localStorage.getItem(CONFIG.STORAGE_KEYS.MESSAGES)) || [],
-        currentLanguage: localStorage.getItem(CONFIG.STORAGE_KEYS.LANGUAGE) || 'English',
-        theme: localStorage.getItem(CONFIG.STORAGE_KEYS.THEME) || 'dark',
-        selectedModel: MODELS[0].name,
-        contextLength: 0,
-        mediaRecorder: null,
-        settings: JSON.parse(localStorage.getItem(CONFIG.STORAGE_KEYS.SETTINGS)) || {
-          notifications: true,
-          soundEffects: true,
-          autoScroll: true
-        }
-      };
-
-      const systemMessage = {
-        role: "system",
-        content: `You are PatheticAI Enhanced
+const systemMessage = {
+  role: "system",
+  content: `You are PatheticAI Enhanced
 
 Key characteristics:
 - Friendly and empathetic AI assistant
@@ -851,324 +850,318 @@ Key characteristics:
 - Offers helpful suggestions and insights
 - Maintains context awareness
 Please always respond in ${STATE.currentLanguage}.`
-      };
+};
 
-      function formatTimestamp(date) {
-        return new Intl.DateTimeFormat('default', {
-          hour: 'numeric',
-          minute: 'numeric',
-          second: 'numeric',
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric'
-        }).format(date);
-      }
+function formatTimestamp(date) {
+  return new Intl.DateTimeFormat('default', {
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  }).format(date);
+}
 
-      function saveToLocalStorage(key, value) {
-        try {
-          localStorage.setItem(key, JSON.stringify(value));
-          return true;
-        } catch (error) {
-          console.error('Local storage error:', error);
-          return false;
-        }
-      }
-      async function copyToClipboard(text) {
-        try {
-          await navigator.clipboard.writeText(text);
-          showNotification('Copied to clipboard');
-        } catch (err) {
-          showNotification('Failed to copy to clipboard');
-        }
-      }
+function saveToLocalStorage(key, value) {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+    return true;
+  } catch (error) {
+    console.error('Local storage error:', error);
+    return false;
+  }
+}
 
-      function createMessageElement(message, isUser, timestamp = new Date()) {
-        const messageId = Date.now().toString();
-        const messageElement = document.createElement('div');
-        messageElement.classList.add('chat-message', isUser ? 'user' : 'bot');
-        messageElement.dataset.messageId = messageId;
+async function copyToClipboard(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    showNotification('Copied to clipboard');
+  } catch (err) {
+    showNotification('Failed to copy to clipboard');
+  }
+}
 
-        const contentDiv = document.createElement('div');
-        contentDiv.classList.add('message-content');
-        if (!isUser) {
-          const renderedContent = marked.parse(message);
-          contentDiv.innerHTML = renderedContent;
-          contentDiv.querySelectorAll('pre code').forEach((block) => {
-            hljs.highlightElement(block);
-          });
-        } else {
-          contentDiv.textContent = message;
-        }
-        messageElement.appendChild(contentDiv);
+function createMessageElement(message, isUser, timestamp = new Date()) {
+  const messageId = Date.now().toString();
+  const messageElement = document.createElement('div');
+  messageElement.classList.add('chat-message', isUser ? 'user' : 'bot');
+  messageElement.dataset.messageId = messageId;
 
-        const timestampDiv = document.createElement('div');
-        timestampDiv.className = 'message-timestamp';
-        timestampDiv.textContent = formatTimestamp(timestamp);
-        messageElement.appendChild(timestampDiv);
+  const contentDiv = document.createElement('div');
+  contentDiv.classList.add('message-content');
+  if (!isUser) {
+    const renderedContent = marked.parse(message);
+    contentDiv.innerHTML = renderedContent;
+    contentDiv.querySelectorAll('pre code').forEach((block) => {
+      hljs.highlightElement(block);
+    });
+  } else {
+    contentDiv.textContent = message;
+  }
+  messageElement.appendChild(contentDiv);
 
-        const actionsDiv = document.createElement('div');
-        actionsDiv.className = 'message-actions';
+  const timestampDiv = document.createElement('div');
+  timestampDiv.className = 'message-timestamp';
+  timestampDiv.textContent = formatTimestamp(timestamp);
+  messageElement.appendChild(timestampDiv);
 
-        if (isUser) {
-          const editButton = document.createElement('button');
-          editButton.className = 'action-button';
-          editButton.innerHTML = '<i class = "fas fa-edit"></i>';
-          editButton.onclick = () => startEditing(messageId);
-          actionsDiv.appendChild(editButton);
-        }
+  const actionsDiv = document.createElement('div');
+  actionsDiv.className = 'message-actions';
 
-        const copyButton = document.createElement('button');
-        copyButton.className = 'action-button';
-        copyButton.innerHTML = '<i class="fas fa-copy"></i>';
-        copyButton.onclick = () => copyToClipboard(message);
-        actionsDiv.appendChild(copyButton);
+  if (isUser) {
+    const editButton = document.createElement('button');
+    editButton.className = 'action-button';
+    editButton.innerHTML = '<i class = "fas fa-edit"></i>';
+    editButton.onclick = () => startEditing(messageId);
+    actionsDiv.appendChild(editButton);
+  }
 
-        const reactionsDiv = document.createElement('div');
-        reactionsDiv.className = 'message-reactions';
-        ['👍', '👎', '❤️', '🔄'].forEach((reaction) => {
-          const button = document.createElement('button');
-          button.className = 'reaction-button';
-          button.textContent = reaction;
-          button.onclick = () => handleReaction(messageId, reaction);
-          reactionsDiv.appendChild(button);
+  const copyButton = document.createElement('button');
+  copyButton.className = 'action-button';
+  copyButton.innerHTML = '<i class="fas fa-copy"></i>';
+  copyButton.onclick = () => copyToClipboard(message);
+  actionsDiv.appendChild(copyButton);
+
+  const reactionsDiv = document.createElement('div');
+  reactionsDiv.className = 'message-reactions';
+  ['👍', '👎', '❤️', '🔄'].forEach((reaction) => {
+    const button = document.createElement('button');
+    button.className = 'reaction-button';
+    button.textContent = reaction;
+    button.onclick = () => handleReaction(messageId, reaction);
+    reactionsDiv.appendChild(button);
+  });
+  actionsDiv.appendChild(reactionsDiv);
+  messageElement.appendChild(actionsDiv);
+  return {
+    element: messageElement,
+    id: messageId,
+  };
+}
+
+async function sendMessage() {
+  const textarea = document.getElementById('messageInput');
+  const message = textarea.value.trim();
+  const sendButton = document.querySelector('.chat-input-container button');
+  if (!message || STATE.isWaitingForResponse) return;
+  STATE.isWaitingForResponse = true;
+  textarea.disabled = true;
+  sendButton.disabled = true;
+  const timestamp = new Date();
+  const {
+    element: messageElement,
+    id: messageId
+  } = createMessageElement(message, true, timestamp);
+  document.querySelector('.chat-messages').appendChild(messageElement);
+  if (STATE.settings.autoScroll) {
+    messageElement.scrollIntoView({
+      behavior: 'smooth'
+    });
+  }
+  textarea.value = '';
+  textarea.style.height = 'auto';
+
+  STATE.messageHistory.push({
+    role: "user",
+    content: message,
+    timestamp: timestamp.getTime()
+  });
+  saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, STATE.messageHistory);
+
+  const loadingElement = createTypingIndicator();
+  document.querySelector('.chat-messages').appendChild(loadingElement);
+  try {
+    const response = await sendMessageWithRetry(message);
+    loadingElement.remove();
+    if (response.text) {
+      STATE.messageHistory.push({
+        role: "assistant",
+        content: response.text,
+        timestamp: Date.now()
+      });
+      saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, STATE.messageHistory);
+      const {
+        element: botElement
+      } = createMessageElement(response.text, false);
+      document.querySelector('.chat-messages').appendChild(botElement);
+      if (STATE.settings.autoScroll) {
+        botElement.scrollIntoView({
+          behavior: 'smooth'
         });
-        actionsDiv.appendChild(reactionsDiv);
-        messageElement.appendChild(actionsDiv);
+      }
+
+      if (STATE.settings.soundEffects) {
+        playMessageSound();
+      }
+
+      updateSuggestions();
+    }
+  } catch (error) {
+    loadingElement.remove();
+    showError(`Error: ${error.message}`);
+    const {
+      element: errorElement
+    } = createMessageElement(`Error: ${error.message}`, false);
+    document.querySelector('.chat-messages').appendChild(errorElement);
+  } finally {
+    STATE.isWaitingForResponse = false;
+    textarea.disabled = false;
+    sendButton.disabled = false;
+    textarea.focus();
+  }
+}
+
+async function sendMessageWithRetry(message, retries = CONFIG.MAX_RETRIES) {
+  try {
+    const response = await tryMultipleModels(message);
+    return response;
+  } catch (error) {
+    if (retries > 0) {
+      showNotification(`Retrying... (${retries} attempts left)`);
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      return sendMessageWithRetry(message, retries - 1);
+    }
+    throw error;
+  }
+}
+
+async function tryMultipleModels(userMessage) {
+  const apiKey = getApiKey();
+  if (!apiKey) {
+    checkAndStoreApiKey();
+    throw new Error("API key not found. Please enter your API key first.");
+  }
+  for (let modelIndex = 0; modelIndex < MODELS.length; modelIndex++) {
+    try {
+      const response = await Promise.race([
+        fetch("https://openrouter.ai/api/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${apiKey}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            "model": MODELS[modelIndex].name,
+            "messages": [
+              systemMessage, ...STATE.messageHistory.filter(msg => msg.role === "user" || msg.role === "assistant"), {
+                role: "user",
+                content: `Please respond in ${STATE.currentLanguage}. ${userMessage}`
+              }
+            ]
+          })
+        }).then(async res => {
+          if (!res.ok) {
+            const errorData = await res.json();
+            throw new Error(`API Error: ${errorData.error?.message || 'Unknown error'}`);
+          }
+          return res.json();
+        }),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Request timeout')), CONFIG.API_TIMEOUT))
+      ]);
+      if (response.choices && response.choices[0].message.content) {
         return {
-          element: messageElement,
-          id: messageId,
+          text: response.choices[0].message.content
         };
       }
-
-      async function sendMessage() {
-        const textarea = document.getElementById('messageInput');
-        const message = textarea.value.trim();
-        const sendButton = document.querySelector('.chat-input-container button');
-        if (!message || STATE.isWaitingForResponse) return;
-        STATE.isWaitingForResponse = true;
-        textarea.disabled = true;
-        sendButton.disabled = true;
-        const timestamp = new Date();
-        const {
-          element: messageElement,
-          id: messageId
-        } = createMessageElement(message, true, timestamp);
-        document.querySelector('.chat-messages').appendChild(messageElement);
-        if (STATE.settings.autoScroll) {
-          messageElement.scrollIntoView({
-            behavior: 'smooth'
-          });
-        }
-        textarea.value = '';
-        textarea.style.height = 'auto';
-
-        STATE.messageHistory.push({
-          role: "user",
-          content: message,
-          timestamp: timestamp.getTime()
-        });
-        saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, STATE.messageHistory);
-
-        const loadingElement = createTypingIndicator();
-        document.querySelector('.chat-messages').appendChild(loadingElement);
-        try {
-          const response = await sendMessageWithRetry(message);
-          loadingElement.remove();
-          if (response.text) {
-            STATE.messageHistory.push({
-              role: "assistant",
-              content: response.text,
-              timestamp: Date.now()
-            });
-            saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, STATE.messageHistory);
-            const {
-              element: botElement
-            } = createMessageElement(response.text, false);
-            document.querySelector('.chat-messages').appendChild(botElement);
-            if (STATE.settings.autoScroll) {
-              botElement.scrollIntoView({
-                behavior: 'smooth'
-              });
-            }
-
-            if (STATE.settings.soundEffects) {
-              playMessageSound();
-            }
-
-            updateSuggestions();
-          }
-        } catch (error) {
-          loadingElement.remove();
-          showError(`Error: ${error.message}`);
-          const {
-            element: errorElement
-          } = createMessageElement(`Error: ${error.message}`, false);
-          document.querySelector('.chat-messages').appendChild(errorElement);
-        } finally {
-          STATE.isWaitingForResponse = false;
-          textarea.disabled = false;
-          sendButton.disabled = false;
-          textarea.focus();
-        }
+    } catch (error) {
+      console.error(`Model ${MODELS[modelIndex].name} failed:`, error);
+      if (modelIndex === MODELS.length - 1) {
+        throw new Error(`API Error: ${error.message}`);
       }
+      continue;
+    }
+  }
+  throw new Error("All API attempts failed. Please try again later.");
+}
 
-      async function sendMessageWithRetry(message, retries = CONFIG.MAX_RETRIES) {
-        try {
-          const response = await tryMultipleModels(message);
-          return response;
-        } catch (error) {
-          if (retries > 0) {
-            showNotification(`Retrying... (${retries} attempts left)`);
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            return sendMessageWithRetry(message, retries - 1);
-          }
-          throw error;
+async function toggleVoiceInput() {
+  if (!STATE.voiceRecording) {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: true
+      });
+      STATE.mediaRecorder = new MediaRecorder(stream);
+      STATE.mediaRecorder.ondataavailable = async (event) => {
+        const audioBlob = event.data;
+
+        const text = await convertSpeechToText(audioBlob);
+        if (text) {
+          document.getElementById('messageInput').value = text;
+          sendMessage();
         }
-      }
-      async function tryMultipleModels(userMessage) {
-        const apiKey = getApiKey();
-        if (!apiKey) {
-          checkAndStoreApiKey();
-          throw new Error("API key not found. Please enter your API key first.");
-        }
-        for (let modelIndex = 0; modelIndex < MODELS.length; modelIndex++) {
-          try {
-            const response = await Promise.race([
-              fetch("https://openrouter.ai/api/v1/chat/completions", {
-                method: "POST",
-                headers: {
-                  "Authorization": `Bearer ${apiKey}`,
-                  "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                  "model": MODELS[modelIndex].name,
-                  "messages": [
-                    systemMessage, ...STATE.messageHistory.filter(msg => msg.role === "user" || msg.role === "assistant"), {
-                      role: "user",
-                      content: `Please respond in ${STATE.currentLanguage}. ${userMessage}`
-                    }
-                  ]
-                })
-              }).then(async res => {
-                if (!res.ok) {
-                  const errorData = await res.json();
-                  throw new Error(`API Error: ${errorData.error?.message || 'Unknown error'}`);
-                }
-                return res.json();
-              }),
-              new Promise((_, reject) => setTimeout(() => reject(new Error('Request timeout')), CONFIG.API_TIMEOUT))
-            ]);
-            if (response.choices && response.choices[0].message.content) {
-              return {
-                text: response.choices[0].message.content
-              };
-            }
-          } catch (error) {
-            console.error(`Model ${MODELS[modelIndex].name} failed:`, error);
-            if (modelIndex === MODELS.length - 1) {
-              throw new Error(`API Error: ${error.message}`);
-            }
-            continue;
-          }
-        }
-        throw new Error("All API attempts failed. Please try again later.");
-      }
+      };
+      STATE.mediaRecorder.start();
+      STATE.voiceRecording = true;
+      document.querySelector('.voice-input-button').classList.add('recording');
+    } catch (error) {
+      showNotification('Microphone access denied');
+    }
+  } else {
+    STATE.mediaRecorder.stop();
+    STATE.voiceRecording = false;
+    document.querySelector('.voice-input-button').classList.remove('recording');
+  }
+}
 
-      async function toggleVoiceInput() {
-        if (!STATE.voiceRecording) {
-          try {
-            const stream = await navigator.mediaDevices.getUserMedia({
-              audio: true
-            });
-            STATE.mediaRecorder = new MediaRecorder(stream);
-            STATE.mediaRecorder.ondataavailable = async (event) => {
-              const audioBlob = event.data;
-
-              const text = await convertSpeechToText(audioBlob);
-              if (text) {
-                document.getElementById('messageInput').value = text;
-                sendMessage();
-              }
-            };
-            STATE.mediaRecorder.start();
-            STATE.voiceRecording = true;
-            document.querySelector('.voice-input-button').classList.add('recording');
-          } catch (error) {
-            showNotification('Microphone access denied');
-          }
-        } else {
-          STATE.mediaRecorder.stop();
-          STATE.voiceRecording = false;
-          document.querySelector('.voice-input-button').classList.remove('recording');
-        }
-      }
-
-      function showSettingsModal() {
-        const modal = document.createElement('div');
-        modal.className = 'modal-overlay';
-        modal.innerHTML = `
-
-																	<div class="modal-window">
-																		<div class="modal-header">
-																			<span class="modal-title">Settings</span>
-																			<button class="close-button" onclick="this.closest('.modal-overlay').remove()">✖</button>
-																		</div>
-																		<div class="modal-content settings-content">
-																			<div class="settings-button" onclick="resetChat()">
-																				<i class="fa fa-trash"></i>
+function showSettingsModal() {
+  const modal = document.createElement('div');
+  modal.className = 'modal-overlay';
+  modal.innerHTML = `
+    <div class="modal-window">
+      <div class="modal-header">
+        <span class="modal-title">Settings</span>
+        <button class="close-button" onclick="this.closest('.modal-overlay').remove()">✖</button>
+      </div>
+      <div class="modal-content settings-content">
+        <div class="settings-button" onclick="resetChat()">
+          <i class="fa fa-trash"></i>
           Clear Chat
-
-																			</div>
-																			<div class="settings-button" onclick="showAboutModal()">
-																				<i class="fa fa-users"></i>
+        </div>
+        <div class="settings-button" onclick="showAboutModal()">
+          <i class="fa fa-users"></i>
           About Us
-
-																			</div>
-																			<div class="settings-button" onclick="changeLanguage()">
-																				<i class="fas fa-language"></i>
+        </div>
+        <div class="settings-button" onclick="changeLanguage()">
+          <i class="fas fa-language"></i>
           Language: ${STATE.currentLanguage}
-
-																			</div>
-																			<div class="settings-button" onclick="toggleSetting('notifications')">
-																				<i class="fas fa-bell"></i>
+        </div>
+        <div class="settings-button" onclick="toggleSetting('notifications')">
+          <i class="fas fa-bell"></i>
           Notifications: ${STATE.settings.notifications ? 'On' : 'Off'}
-
-																			</div>
-																			<div class="settings-button" onclick="toggleSetting('soundEffects')">
-																				<i class="fas fa-volume-up"></i>
+        </div>
+        <div class="settings-button" onclick="toggleSetting('soundEffects')">
+          <i class="fas fa-volume-up"></i>
           Sound Effects: ${STATE.settings.soundEffects ? 'On' : 'Off'}
-
-																			</div>
-																			<div class="settings-button" onclick="toggleSetting('autoScroll')">
-																				<i class="fas fa-scroll"></i>
+        </div>
+        <div class="settings-button" onclick="toggleSetting('autoScroll')">
+          <i class="fas fa-scroll"></i>
           Auto Scroll: ${STATE.settings.autoScroll ? 'On' : 'Off'}
-
-																			</div>
-																			<div class="settings-button" onclick="removeApiKey()">
-																				<i class="fas fa-key"></i>
+        </div>
+        <div class="settings-button" onclick="removeApiKey()">
+          <i class="fas fa-key"></i>
           Remove API Key
-
-																			</div>
-																			<div class="theme-selector-container">
-																				<div class="theme-selector" onclick="toggleThemeSelector()">
-																					<span>Select Theme</span>
-																					<i class="fa fa-chevron-down"></i>
-																				</div>
-																				<div class="theme-options">
-																					<div class="theme-option" data-theme="light" onclick="changeTheme('light')">Light</div>
-																					<div class="theme-option" data-theme="dark" onclick="changeTheme('dark')">Dark</div>
-																				</div>
-																			</div>
-																		</div>
-																	</div>
+        </div>
+        <div class="theme-selector-container">
+          <div class="theme-selector" onclick="toggleThemeSelector()">
+            <span>Select Theme</span>
+            <i class="fa fa-chevron-down"></i>
+          </div>
+          <div class="theme-options">
+            <div class="theme-option" data-theme="light" onclick="changeTheme('light')">Light</div>
+            <div class="theme-option" data-theme="dark" onclick="changeTheme('dark')">Dark</div>
+          </div>
+        </div>
+      </div>
+    </div>
   `;
-        modal.addEventListener('click', (e) => {
-          if (e.target === modal) {
-            modal.remove();
-          }
-        });
-        document.body.appendChild(modal);
-      }
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.remove();
+    }
+  });
+  document.body.appendChild(modal);
+}
 
       function toggleThemeSelector() {
         const themeOptions = document.querySelector('.theme-options');
@@ -1479,12 +1472,13 @@ function showAboutModal() {
         }
       }
 
-      function playMessageSound() {
-        if (!STATE.settings.soundEffects) return;
-        const audio = new Audio('data:audio/wav;base64,UklGRnQGAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YU8GAACBhYqFbF1fdH+Df4F/gn+Df4N/hICFgYaBhYKGgoaBhYGFgYWAhICDf4J/gX+Af35/fn9+f4CAgoWBhIGGhIeGhIODg4ODgYGAgICAgIGCg4OFg4WDhoOGgoaBhYCEgIOAgrL+//3x/P/0//j//f///v///f7//f/+/v///v7///7////+//7//f/8//z//P/8//3//v8AAAIBAwEEAgUCBQIFAgQBAwECAQEBAQEBAQICAwMEAwUDBgMGAgYCBQIEAQMA////hv6u/8bZJm7ILCC9YROhpWt+jH9JBN+1spBqBUyGCoNEEBSrOBCEKqA4qBJgIkIoK3AwaA7wD74t93vW8GDHzAjGlATUVHpIZAGOAQEBAgIDAgMCBAIEAwUDBQMGAwYDBgMGAgYCBQIEAgMCAQIBAAAAAAD//wAAAQEBAQIBAgEDAQMBAwEDAQMBAgECAQEBAAAAAAD///////7//v/9//3//f/9//3//v/+/////wAAAQECAQMBBAIEAgUCBQIFAgQCBAIDAgICAQIBAQEBAQEBAQECAQIBAwEDAQQCBAIEAgQCAwIDAQIBAQEAAAAA//////7//v/9//3//v/+//////8AAAEBAgEDAQQBBQIFAgYCBgIGAgYCBQIFAgQCAwICAQIBAQEAAAAAAAAAAQEBAQIBAgEDAQQCBAIEAgQCBAIDAgMCAgECAQEBAAAAAP////7//v/+//7//v/+//7//v/+//7//v/+//7//v/9//3//f/9//3//v/+/////wAAAQEBAQIBAgECAQMBAwEDAQMBAwEDAQMBAgECAQIBAQEBAQAAAAAAAAEBAQEBAQIBAgECAQIBAgECAQIBAQEBAQEBAAAAAAAAAAAAAAD///////////////////////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///////////////////7//v/9//3//f/9//3//v/+//7//////////////v/+//7//f/9//3//f/9//7//v///////wAAAAAAAAAAAAAAAAAAAAD///////////////7//v/+//7//v/+//7//v/+//////////////////7//v/+//3//f/9//3//f/9//7//v/+//////////////////7//v/9//3//f/9//3//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+/w==');
-        audio.volume = 0.5;
-        audio.play().catch(err => console.log('Error playing sound'));
-      }
+function playNotificationSound() {
+    if (!STATE.settings.soundEffects) return;
+
+    const audio = new Audio('notificationsound.mp3');
+    audio.volume = 0.5;
+    audio.play().catch(err => console.log('Error playing sound', err));
+}
 
       function handleResize() {
         const textarea = document.getElementById('messageInput');
