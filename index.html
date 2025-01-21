@@ -1613,7 +1613,13 @@ function checkAndStoreApiKey() {
   }
   return true;
 }
-
+function playMessageSound() {
+  if (!STATE.settings.soundEffects) return;
+  
+  const audio = new Audio('data:audio/wav;base64,UklGRnQGAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YU8GAACBhYqFbF1fdH+Df4F/gn+Df4N/hICFgYaBhYKGgoaBhYGFgYWAhICDf4J/gX+Af35/fn9+f4CAgoWBhIGGhIeGhIODg4ODgYGAgICAgIGCg4OFg4WDhoOGgoaBhYCEgIOAgrL+//3x/P/0//j//f///v///f7//f/+/v///v7///7////+//7//f/8//z//P/8//3//v8AAAIBAwEEAgUCBQIFAgQBAwECAQEBAQEBAQICAwMEAwUDBgMGAgYCBQIEAQMA////hv6u/8bZJm7ILCC9YROhpWt+jH9JBN+1spBqBUyGCoNEEBSrOBCEKqA4qBJgIkIoK3AwaA7wD74t93vW8GDHzAjGlATUVHpIZAGOAQEBAgIDAgMCBAIEAwUDBQMGAwYDBgMGAgYCBQIEAgMCAQIBAAAAAAD//wAAAQEBAQIBAgEDAQMBAwEDAQMBAgECAQEBAAAAAAD///////7//v/9//3//f/9//3//v/+/////wAAAQECAQMBBAIEAgUCBQIFAgQCBAIDAgICAQIBAQEBAQEBAQECAQIBAwEDAQQCBAIEAgQCAwIDAQIBAQEAAAAA//////7//v/9//3//v/+//////8AAAEBAgEDAQQBBQIFAgYCBgIGAgYCBQIFAgQCAwICAQIBAQEAAAAAAAAAAQEBAQIBAgEDAQQCBAIEAgQCBAIDAgMCAgECAQEBAAAAAP////7//v/+//7//v/+//7//v/+//7//v/+//7//v/9//3//f/9//3//v/+/////wAAAQEBAQIBAgECAQMBAwEDAQMBAwEDAQMBAgECAQIBAQEBAQAAAAAAAAEBAQEBAQIBAgECAQIBAgECAQIBAQEBAQEBAAAAAAAAAAAAAAD///////////////////////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///////////////////7//v/9//3//f/9//3//v/+//7//////////////v/+//7//f/9//3//f/9//7//v///////wAAAAAAAAAAAAAAAAAAAAD///////////////7//v/+//7//v/+//7//v/+//////////////////7//v/+//3//f/9//3//f/9//7//v/+//////////////////7//v/9//3//f/9//3//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+/w==');
+  audio.volume = 0.5;
+  audio.play().catch(err => console.log('Error playing sound'));
+}
 function saveApiKey() {
   const apiKey = document.getElementById('apiKeyInput').value.trim();
   if (apiKey && apiKey.startsWith('sk-or-')) {
