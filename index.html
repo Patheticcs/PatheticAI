@@ -1,844 +1,847 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
-	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-		<title>PatheticAI Enhanced</title>
-		<link rel="manifest" href="/manifest.json">
-		<link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@700,400&display=swap" rel="stylesheet">
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/github-dark.min.css">
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.0.2/marked.min.js"></script>
-		<meta name="description" content="PatheticAI - Advanced AI chatbot with enhanced features for seamless conversations and task automation">
-		<meta name="keywords" content="AI, chatbot, machine learning, conversation, automation">
-		<meta property="og:title" content="PatheticAI Enhanced">
-		<meta property="og:description" content="Advanced AI chatbot with enhanced features for seamless conversations and task automation">
-		<meta property="og:image" content="/icon.png">
-		<meta property="og:type" content="website">
-		<meta property="og:site_name" content="PatheticAI">
-		<meta name="theme-color" content="#fff">
-		<style>
-			* {
-				margin: 0;
-				padding: 0;
-				box-sizing: border-box;
-				font-family: 'Cabinet Grotesk', sans-serif;
-				scrollbar-width: none;
-				-ms-overflow-style: none;
-			}
-
-			*::-webkit-scrollbar {
-				display: none;
-			}
-
-			:root {
-				--container-width: min(90%, 800px);
-				--spacing-normal: clamp(16px, 2vw, 20px);
-				--spacing-small: clamp(8px, 1vw, 10px);
-				--border-radius: 30px;
-				--border-radius-small: 15px;
-				--transition: all 0.3s ease;
-			}
-
-			:root[data-theme="light"] {
-				--background-color: #ffffff;
-				--primary-color: #000000;
-				--secondary-color: #9c00d5;
-				--border-color: rgba(0, 0, 0, 0.05);
-				--taskbar-background: rgba(255, 255, 255, 0.6);
-				--input-background: rgba(255, 255, 255, 0.7);
-				--button-background: rgba(0, 0, 0, 0.02);
-				--button-hover-background: rgba(0, 0, 0, 0.05);
-				--modal-background: rgba(255, 255, 255, 0.7);
-				--message-background: rgba(255, 255, 255, 0.6);
-				--message-user-background: rgba(255, 255, 255, 0.5);
-				--code-background: rgba(0, 0, 0, 0.02);
-				--code-text: #000000;
-				--notification-background: rgba(255, 255, 255, 0.6);
-				--notification-text: #000000;
-				--placeholder-color: rgba(0, 0, 0, 0.2);
-				--chat-input-container-background: rgba(255, 255, 255, 0.5);
-			}
-
-			:root[data-theme="dark"] {
-				--background-color: #000000;
-				--primary-color: #ffffff;
-				--secondary-color: #9c00d5;
-				--border-color: rgba(255, 255, 255, 0.03);
-				--taskbar-background: rgba(0, 0, 0, 0.5);
-				--input-background: rgba(0, 0, 0, 0.6);
-				--button-background: rgba(255, 255, 255, 0.02);
-				--button-hover-background: rgba(255, 255, 255, 0.05);
-				--modal-background: rgba(0, 0, 0, 0.6);
-				--message-background: rgba(0, 0, 0, 0.5);
-				--message-user-background: rgba(0, 0, 0, 0.4);
-				--code-background: rgba(255, 255, 255, 0.02);
-				--code-text: #ffffff;
-				--notification-background: rgba(0, 0, 0, 0.5);
-				--notification-text: #ffffff;
-				--placeholder-color: rgba(255, 255, 255, 0.2);
-				--chat-input-container-background: rgba(0, 0, 0, 0.4);
-			}
-
-			body {
-				background: url('https://wallpapers.com/images/hd/4k-nature-in-ice-wvdjbvbvxn12plp6.jpg') no-repeat center center fixed;
-				background-size: cover;
-				background-attachment: fixed;
-				color: white;
-				min-height: 100vh;
-				display: flex;
-				flex-direction: column;
-				overflow: hidden;
-				position: fixed;
-				width: 100%;
-				height: 100%;
-				touch-action: none;
-				-webkit-overflow-scrolling: none;
-				overscroll-behavior: none;
-			}
-
-			.container {
-				position: fixed;
-				top: calc(60px + var(--spacing-normal) * 2);
-				bottom: calc(60px + var(--spacing-normal) * 2);
-				left: 50%;
-				transform: translateX(-50%);
-				width: var(--container-width);
-				overflow-y: auto;
-				padding-right: var(--spacing-small);
-			}
-
-			.taskbar {
-				position: fixed;
-				top: var(--spacing-normal);
-				left: 50%;
-				transform: translateX(-50%);
-				width: var(--container-width);
-				height: 60px;
-				background: var(--taskbar-background);
-				backdrop-filter: blur(10px);
-				border: 1px solid var(--border-color);
-				border-radius: var(--border-radius);
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-				padding: 0 var(--spacing-normal);
-				z-index: 1000;
-				overflow-x: visible;
-			}
-
-			.taskbar-left {
-				display: flex;
-				align-items: center;
-				gap: 10px;
-			}
-
-			.brand {
-				font-size: 20px;
-				font-weight: 700;
-				cursor: pointer;
-				color: var(--primary-color);
-				transition: opacity 0.3s ease;
-			}
-
-			.brand:hover {
-				opacity: 0.8;
-			}
-
-			.preview-tag {
-				font-size: 14px;
-				color: var(--primary-color);
-				opacity: 0.7;
-			}
-
-			.taskbar button {
-				background: var(--button-background);
-				border: 1px solid var(--border-color);
-				color: var(--primary-color);
-				padding: 8px 15px;
-				border-radius: 30px;
-				cursor: pointer;
-				margin-left: 10px;
-				transition: all 0.3s ease;
-			}
-
-			.taskbar button:hover {
-				background: var(--button-hover-background);
-				transform: translateY(-1px);
-			}
-
-			.chat-input-container button,
-			.theme-selector button {
-				background: var(--button-background);
-				border: 1px solid var(--border-color);
-				color: var(--primary-color);
-				padding: 8px 15px;
-				border-radius: 30px;
-				cursor: pointer;
-				transition: all 0.3s ease;
-			}
-
-			.chat-input-container button:hover,
-			.theme-selector button:hover {
-				background: var(--button-hover-background);
-				transform: translateY(-1px);
-			}
-
-			.chat-messages {
-				display: flex;
-				flex-direction: column;
-				gap: var(--spacing-normal);
-				padding: var(--spacing-normal);
-				height: 100%;
-				overflow-y: auto;
-			}
-
-			.chat-message {
-				padding: var(--spacing-normal);
-				border-radius: var(--border-radius-small);
-				max-width: 85%;
-				white-space: pre-wrap;
-				font-size: clamp(14px, 3vw, 16px);
-				backdrop-filter: blur(10px);
-				border: 1px solid var(--border-color);
-				transition: var(--transition);
-				color: var(--primary-color);
-			}
-
-			.chat-message.user {
-				background: var(--message-user-background);
-				align-self: flex-end;
-				border-bottom-right-radius: 5px;
-			}
-
-			.chat-message.bot {
-				background: var(--message-background);
-				align-self: flex-start;
-				border-bottom-left-radius: 5px;
-				color: var(--primary-color);
-			}
-
-			.chat-input-container {
-				position: fixed;
-				bottom: var(--spacing-normal);
-				left: 50%;
-				transform: translateX(-50%);
-				width: var(--container-width);
-				display: flex;
-				gap: var(--spacing-small);
-				background: var(--taskbar-background);
-				backdrop-filter: blur(10px);
-				padding: var(--spacing-normal);
-				border-radius: var(--border-radius);
-				border: 1px solid var(--border-color);
-			}
-
-			.chat-input-container textarea {
-				flex: 1;
-				background: var(--input-background);
-				border: none;
-				outline: none;
-				color: var(--primary-color);
-				font-size: 16px;
-				padding: var(--spacing-small);
-				border-radius: var(--border-radius-small);
-				resize: none;
-				min-height: 40px;
-			}
-
-			.chat-input-container input::placeholder {
-				color: rgba(255, 255, 255, 0.5);
-			}
-
-			.chat-input-container button {
-				background: var(--button-background);
-				border: 1px solid var(--border-color);
-				color: var(--primary-color);
-				padding: 8px 20px;
-				border-radius: 30px;
-				cursor: pointer;
-				transition: all 0.3s ease;
-			}
-
-			.chat-input-container button:hover {
-				background: var(--button-hover-background);
-				transform: translateY(-1px);
-			}
-
-			button {
-				background: var(--button-background);
-				border: 1px solid var(--border-color);
-				color: var(--primary-color);
-				padding: 8px 15px;
-				border-radius: var(--border-radius);
-				cursor: pointer;
-				transition: var(--transition);
-			}
-
-			button:hover {
-				background: var(--button-hover-background);
-				transform: translateY(-1px);
-			}
-
-			.modal-overlay {
-				position: fixed;
-				inset: 0;
-				background: rgba(0, 0, 0, 0.5);
-				backdrop-filter: blur(5px);
-				display: flex;
-				justify-content: center;
-				align-items: center;
-				z-index: 2000;
-				animation: fadeIn 0.3s ease;
-			}
-
-			.modal-window {
-				background: var(--modal-background);
-				backdrop-filter: blur(10px);
-				border: 1px solid var(--border-color);
-				border-radius: var(--border-radius);
-				width: var(--container-width);
-				padding: var(--spacing-normal);
-				color: var(--primary-color);
-				animation: slideUp 0.3s ease;
-			}
-
-			.modal-header {
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-				margin-bottom: 20px;
-			}
-
-			.modal-title {
-				font-size: 24px;
-				font-weight: 700;
-			}
-
-			.modal-content {
-				line-height: 1.6;
-				font-size: 16px;
-			}
-
-			.modal-content p {
-				margin: 5px 0;
-			}
-
-			.settings-content {
-				display: flex;
-				flex-direction: column;
-				gap: 15px;
-			}
-
-			.settings-button {
-				background: var(--button-background);
-				border: 1px solid var(--border-color);
-				padding: 15px;
-				border-radius: 15px;
-				cursor: pointer;
-				transition: all 0.3s ease;
-				display: flex;
-				align-items: center;
-				gap: 10px;
-			}
-
-			.settings-button:hover {
-				background: var(--button-hover-background);
-				transform: translateX(5px);
-			}
-
-			.settings-button i {
-				width: 20px;
-				text-align: center;
-			}
-
-			.notification {
-				position: fixed;
-				bottom: 100px;
-				left: 50%;
-				transform: translateX(-50%);
-				background: var(--background-color);
-				color: var(--primary-color);
-				padding: 12px 25px;
-				border-radius: 30px;
-				backdrop-filter: blur(10px);
-				animation: slideUp 0.3s ease;
-				z-index: 2000;
-			}
-
-			.notification.fade-out {
-				animation: fadeOut 0.3s ease;
-			}
-
-			.code-block {
-				background: rgba(0, 0, 0, 0.6);
-				border-radius: 10px;
-				padding: 15px;
-				margin: 10px 0;
-				position: relative;
-			}
-
-			.code-block pre {
-				margin: 0;
-				white-space: pre-wrap;
-				font-family: 'Fira Code', monospace;
-				color: #e0e0e0;
-			}
-
-			.copy-button {
-				position: absolute;
-				top: 5px;
-				right: 5px;
-				background: rgba(255, 255, 255, 0.1);
-				border: 1px solid var(--border-color);
-				color: white;
-				padding: 5px 10px;
-				border-radius: 15px;
-				cursor: pointer;
-				font-size: 12px;
-			}
-
-			.message-actions {
-				display: flex;
-				gap: 5px;
-				margin-top: 5px;
-				opacity: 0;
-				transition: opacity 0.3s ease;
-			}
-
-			.chat-message:hover .message-actions {
-				opacity: 1;
-			}
-
-			.action-button {
-				background: var(--button-background);
-				border: var(--border);
-				color: var(--primary-color);
-				padding: 3px 8px;
-				border-radius: 12px;
-				cursor: pointer;
-				font-size: 12px;
-			}
-
-			.edit-mode {
-				border: var(--border-color);
-			}
-
-			.edit-input {
-				width: 100%;
-				background: transparent;
-				border: none;
-				color: var(--primary-color);
-				font-family: inherit;
-				font-size: inherit;
-				padding: 0;
-				margin: 0;
-				resize: none;
-				outline: none;
-			}
-
-			.theme-selector-container {
-				position: relative;
-				display: inline-block;
-				width: 100%;
-			}
-
-			.theme-selector {
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-				padding: var(--spacing-small) var(--spacing-normal);
-				background-color: var(--button-background);
-				border: 1px solid var(--border-color);
-				cursor: pointer;
-				border-radius: var(--border-radius);
-				transition: background 0.3s ease;
-			}
-
-			.theme-selector i {
-				font-size: 14px;
-			}
-
-			.theme-selector:hover {
-				background-color: var(--button-hover-background);
-			}
-
-			.theme-options {
-				position: absolute;
-				top: 100%;
-				left: 0;
-				width: 100%;
-				display: none;
-				background-color: var(--background-color);
-				border: 1px solid var(--border-color);
-				border-radius: var(--border-radius);
-				box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-				z-index: 10;
-			}
-
-			.theme-option {
-				padding: var(--spacing-small);
-				cursor: pointer;
-				font-size: 14px;
-				color: var(--primary-color);
-				transition: background 0.3s ease;
-			}
-
-			.theme-option:hover {
-				background-color: var(--button-hover-background);
-			}
-
-			.theme-options {
-				display: none;
-			}
-
-			.theme-options.active {
-				display: block;
-			}
-
-			.message-timestamp {
-				font-size: 11px;
-				opacity: 0.7;
-				margin-top: 5px;
-			}
-
-			.container {
-				position: fixed;
-				top: calc(80px + var(--spacing-normal));
-				bottom: calc(80px + var(--spacing-normal));
-				left: 50%;
-				transform: translateX(-50%);
-				width: var(--container-width);
-				max-width: var(--container-max-width);
-				overflow-y: auto;
-				padding-right: 15px;
-			}
-
-			.chat-messages {
-				display: flex;
-				flex-direction: column;
-				gap: 15px;
-				padding: 20px;
-				padding-bottom: 40px;
-				height: 100%;
-				overflow-y: auto;
-			}
-
-			.chat-input-container {
-				position: fixed;
-				bottom: var(--spacing-normal);
-				left: 50%;
-				transform: translateX(-50%);
-				width: var(--container-width);
-				max-width: var(--container-max-width);
-				display: flex;
-				gap: 10px;
-				background: var(--chat-input-container-background);
-				backdrop-filter: blur(10px);
-				padding: var(--spacing-normal);
-				border-radius: 30px;
-				border: 1px solid var(--border-color);
-			}
-
-			.chat-input-container textarea {
-				flex: 1;
-				background: transparent;
-				border: none;
-				outline: none;
-				color: var(--color);
-				font-size: 16px;
-				padding: 10px;
-				border-radius: 10px;
-				resize: none;
-				min-height: 40px;
-			}
-
-			.chat-input-container input::placeholder {
-				color: var(--color);
-			}
-
-			.chat-input-container button {
-				background: rgba(255, 255, 255, 0.1);
-				border: 1px solid rgba(255, 255, 255, 0.2);
-				color: var(--color);
-				padding: 8px 20px;
-				border-radius: 30px;
-				cursor: pointer;
-				transition: all 0.3s ease;
-			}
-
-			.chat-input-container button:hover {
-				background: rgba(255, 255, 255, 0.2);
-				transform: translateY(-1px);
-			}
-
-			@keyframes fadeIn {
-				from {
-					opacity: 0;
-				}
-
-				to {
-					opacity: 1;
-				}
-			}
-
-			@keyframes slideUp {
-				from {
-					transform: translateY(20px);
-					opacity: 0;
-				}
-
-				to {
-					transform: translateY(0);
-					opacity: 1;
-				}
-			}
-
-			@keyframes messageAppear {
-				from {
-					transform: translateY(10px);
-					opacity: 0;
-				}
-
-				to {
-					transform: translateY(0);
-					opacity: 1;
-				}
-			}
-
-			@keyframes fadeOut {
-				to {
-					opacity: 0;
-					transform: translate(-50%, 20px);
-				}
-			}
-
-			@media (max-width: 768px) {
-				:root {
-					--container-width: 95%;
-					--spacing-normal: 15px;
-					--spacing-small: 8px;
-				}
-
-				.taskbar {
-					height: auto;
-					padding: 10px var(--spacing-normal);
-				}
-
-				.taskbar-right {
-					display: flex;
-					gap: 8px;
-				}
-
-				.taskbar button {
-					padding: 6px 12px;
-					font-size: 14px;
-				}
-
-				.brand {
-					font-size: 18px;
-				}
-
-				.preview-tag {
-					font-size: 12px;
-				}
-
-				.chat-input-container {
-					padding: 10px;
-				}
-
-				.chat-input-container input {
-					font-size: 14px;
-				}
-
-				.chat-input-container button {
-					padding: 6px 15px;
-				}
-			}
-
-			@media (max-width: 480px) {
-				:root {
-					--container-width: 98%;
-					--spacing-normal: 10px;
-					--spacing-small: 5px;
-				}
-
-				.taskbar {
-					padding: 8px var(--spacing-normal);
-				}
-
-				.taskbar-right button {
-					padding: 5px 10px;
-					font-size: 13px;
-				}
-
-				.brand {
-					font-size: 16px;
-				}
-
-				.preview-tag {
-					font-size: 11px;
-				}
-
-				.chat-message {
-					max-width: 90%;
-					padding: 12px 15px;
-				}
-
-				.modal-window {
-					padding: 15px;
-				}
-
-				.modal-title {
-					font-size: 20px;
-				}
-
-				.modal-content {
-					font-size: 14px;
-				}
-
-				.settings-button {
-					padding: 12px;
-					font-size: 14px;
-				}
-
-				.notification {
-					font-size: 13px;
-					padding: 10px 20px;
-				}
-			}
-
-			@media (max-height: 600px) and (orientation: landscape) {
-				.container {
-					top: 70px;
-					bottom: 70px;
-				}
-
-				.taskbar {
-					height: 50px;
-				}
-
-				.chat-input-container {
-					padding: 8px 15px;
-				}
-
-				.chat-message {
-					padding: 10px 15px;
-					margin-bottom: 8px;
-				}
-			}
-
-			@media (hover: none) {
-
-				.chat-input-container button,
-				.taskbar button,
-				.settings-button {
-					transition: none;
-				}
-
-				.chat-input-container button:active,
-				.taskbar button:active,
-				.settings-button:active {
-					background: rgba(255, 255, 255, 0.2);
-				}
-			}
-
-			.chat-input-container input:disabled,
-			.chat-input-container button:disabled {
-				cursor: not-allowed;
-				opacity: 0.5;
-				transition: opacity 0.3s ease;
-			}
-
-			.chat-input-container button:disabled:hover {
-				background: rgba(255, 255, 255, 0.1);
-				transform: none;
-			}
-		</style>
-	</head>
-	<body>
-		<div class="taskbar">
-			<div class="taskbar-left">
-				<span class="brand">PatheticAI</span>
-				<span class="preview-tag">Enhanced Edition</span>
-			</div>
-			<div class="taskbar-right">
-				<button onclick="showSettingsModal()" title="Settings">
-					<i class="fas fa-cog"></i>
-				</button>
-				<button onclick="toggleFullscreen()" title="Toggle Fullscreen">
-					<i class="fas fa-expand"></i>
-				</button>
-				<button onclick="showAboutModal()" title="Join Discord">
-					<i class="fa fa-user-group"></i>
-				</button>
-				<button onclick="contactEmail()" title="Join Discord">
-					<i class="fa-brands fa-discord"></i>
-				</button>
-			</div>
-		</div>
-		<div class="container">
-			<div class="chat-messages"></div>
-		</div>
-		<div class="chat-input-container">
-			<textarea id="messageInput" placeholder="Type your message..." rows="1" maxlength="2000"></textarea>
-			<button onclick="sendMessage()" title="Send Message">
-				<i class="fas fa-paper-plane"></i>
-				<span>‎ ‎ ‎ Send</span>
-			</button>
-		</div>
-		<script>
-			const CONFIG = {
-				MAX_RETRIES: 3,
-				TYPING_SPEED: 50,
-				MAX_CONTEXT_LENGTH: 10,
-				SUGGESTION_COUNT: 4,
-				API_TIMEOUT: 30000,
-				STORAGE_KEYS: {
-					THEME: 'theme',
-					API_KEY: 'openRouterApiKey',
-					MESSAGES: 'chatMessages',
-					LANGUAGE: 'preferredLanguage',
-					SETTINGS: 'userSettings'
-				}
-			};
-			const MODELS = [{
-				name: "google/gemini-2.0-flash-exp:free"
-			}, {
-				name: "meta-llama/llama-3.2-3b-instruct:free"
-			}, {
-				name: "qwen/qwen-2-7b-instruct:free"
-			}, {
-				name: "microsoft/phi-3-medium-128k-instruct:free"
-			}, {
-				name: "undi95/toppy-m-7b:free"
-			}, {
-				name: "google/gemini-2.0-flash-thinking-exp:free"
-			}, {
-				name: "microsoft/phi-3-mini-128k-instruct:free"
-			}, {
-				name: "microsoft/phi-3-medium-128k-instruct:free"
-			}];
-			let STATE = {
-				isWaitingForResponse: false,
-				editingMessageId: null,
-				voiceRecording: false,
-				messageHistory: [],
-				currentLanguage: 'English',
-				theme: 'dark',
-				selectedModel: MODELS[0].name,
-				contextLength: 0,
-				mediaRecorder: null,
-				settings: {
-					notifications: true,
-					soundEffects: true,
-					autoScroll: true
-				}
-			};
-			const systemMessage = {
-				role: "system",
-				content: `You are PatheticAI Enhanced
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>PatheticAI Enhanced</title>
+    <link rel="manifest" href="/manifest.json">
+    <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@700,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.0.2/marked.min.js"></script>
+    <meta name="description" content="PatheticAI - Advanced AI chatbot with enhanced features for seamless conversations and task automation">
+    <meta name="keywords" content="AI, chatbot, machine learning, conversation, automation">
+    <meta property="og:title" content="PatheticAI Enhanced">
+    <meta property="og:description" content="Advanced AI chatbot with enhanced features for seamless conversations and task automation">
+    <meta property="og:image" content="/icon.png">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="PatheticAI">
+    <meta name="theme-color" content="#fff">
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Cabinet Grotesk', sans-serif;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+
+      *::-webkit-scrollbar {
+        display: none;
+      }
+
+      :root {
+        --container-width: min(90%, 800px);
+        --spacing-normal: clamp(16px, 2vw, 20px);
+        --spacing-small: clamp(8px, 1vw, 10px);
+        --border-radius: 30px;
+        --border-radius-small: 15px;
+        --transition: all 0.3s ease;
+      }
+
+:root[data-theme="light"] {
+    --background-color: #ffffff;
+    --primary-color: #000000;
+    --secondary-color: #9c00d5;
+    --border-color: rgba(0, 0, 0, 0.05);
+    --taskbar-background: rgba(255, 255, 255, 0.6);
+    --input-background: rgba(255, 255, 255, 0.7);
+    --button-background: rgba(0, 0, 0, 0.02);
+    --button-hover-background: rgba(0, 0, 0, 0.05);
+    --modal-background: rgba(255, 255, 255, 0.7);
+    --message-background: rgba(255, 255, 255, 0.6);
+    --message-user-background: rgba(255, 255, 255, 0.5);
+    --code-background: rgba(0, 0, 0, 0.02);
+    --code-text: #000000;
+    --notification-background: rgba(255, 255, 255, 0.6);
+    --notification-text: #000000;
+    --placeholder-color: rgba(0, 0, 0, 0.2);
+    --chat-input-container-background: rgba(255, 255, 255, 0.5);
+}
+
+:root[data-theme="dark"] {
+    --background-color: #000000;
+    --primary-color: #ffffff;
+    --secondary-color: #9c00d5;
+    --border-color: rgba(255, 255, 255, 0.03);
+    --taskbar-background: rgba(0, 0, 0, 0.5);
+    --input-background: rgba(0, 0, 0, 0.6);
+    --button-background: rgba(255, 255, 255, 0.02);
+    --button-hover-background: rgba(255, 255, 255, 0.05);
+    --modal-background: rgba(0, 0, 0, 0.6);
+    --message-background: rgba(0, 0, 0, 0.5);
+    --message-user-background: rgba(0, 0, 0, 0.4);
+    --code-background: rgba(255, 255, 255, 0.02);
+    --code-text: #ffffff;
+    --notification-background: rgba(0, 0, 0, 0.5);
+    --notification-text: #ffffff;
+    --placeholder-color: rgba(255, 255, 255, 0.2);
+    --chat-input-container-background: rgba(0, 0, 0, 0.4);
+}
+
+
+      body {
+        background: url('https://wallpapers.com/images/hd/4k-nature-in-ice-wvdjbvbvxn12plp6.jpg') no-repeat center center fixed;
+        background-size: cover;
+        background-attachment: fixed;
+        color: white;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        touch-action: none;
+        -webkit-overflow-scrolling: none;
+        overscroll-behavior: none;
+      }
+
+      .container {
+        position: fixed;
+        top: calc(60px + var(--spacing-normal) * 2);
+        bottom: calc(60px + var(--spacing-normal) * 2);
+        left: 50%;
+        transform: translateX(-50%);
+        width: var(--container-width);
+        overflow-y: auto;
+        padding-right: var(--spacing-small);
+      }
+
+      .taskbar {
+        position: fixed;
+        top: var(--spacing-normal);
+        left: 50%;
+        transform: translateX(-50%);
+        width: var(--container-width);
+        height: 60px;
+        background: var(--taskbar-background);
+        backdrop-filter: blur(10px);
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 var(--spacing-normal);
+        z-index: 1000;
+        overflow-x: visible;
+      }
+
+      .taskbar-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .brand {
+        font-size: 20px;
+        font-weight: 700;
+        cursor: pointer;
+        color: var(--primary-color);
+        transition: opacity 0.3s ease;
+      }
+
+      .brand:hover {
+        opacity: 0.8;
+      }
+
+      .preview-tag {
+        font-size: 14px;
+        color: var(--primary-color);
+        opacity: 0.7;
+      }
+
+      .taskbar button {
+        background: var(--button-background);
+        border: 1px solid var(--border-color);
+        color: var(--primary-color);
+        padding: 8px 15px;
+        border-radius: 30px;
+        cursor: pointer;
+        margin-left: 10px;
+        transition: all 0.3s ease;
+      }
+
+      .taskbar button:hover {
+        background: var(--button-hover-background);
+        transform: translateY(-1px);
+      }
+
+      .chat-input-container button,
+      .theme-selector button {
+        background: var(--button-background);
+        border: 1px solid var(--border-color);
+        color: var(--primary-color);
+        padding: 8px 15px;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .chat-input-container button:hover,
+      .theme-selector button:hover {
+        background: var(--button-hover-background);
+        transform: translateY(-1px);
+      }
+
+      .chat-messages {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-normal);
+        padding: var(--spacing-normal);
+        height: 100%;
+        overflow-y: auto;
+      }
+
+      .chat-message {
+        padding: var(--spacing-normal);
+        border-radius: var(--border-radius-small);
+        max-width: 85%;
+        white-space: pre-wrap;
+        font-size: clamp(14px, 3vw, 16px);
+        backdrop-filter: blur(10px);
+        border: 1px solid var(--border-color);
+        transition: var(--transition);
+        color: var(--primary-color);
+      }
+
+      .chat-message.user {
+        background: var(--message-user-background);
+        align-self: flex-end;
+        border-bottom-right-radius: 5px;
+      }
+
+      .chat-message.bot {
+        background: var(--message-background);
+        align-self: flex-start;
+        border-bottom-left-radius: 5px;
+        color: var(--primary-color);
+      }
+
+      .chat-input-container {
+        position: fixed;
+        bottom: var(--spacing-normal);
+        left: 50%;
+        transform: translateX(-50%);
+        width: var(--container-width);
+        display: flex;
+        gap: var(--spacing-small);
+        background: var(--taskbar-background);
+        backdrop-filter: blur(10px);
+        padding: var(--spacing-normal);
+        border-radius: var(--border-radius);
+        border: 1px solid var(--border-color);
+      }
+
+      .chat-input-container textarea {
+        flex: 1;
+        background: var(--input-background);
+        border: none;
+        outline: none;
+        color: var(--primary-color);
+        font-size: 16px;
+        padding: var(--spacing-small);
+        border-radius: var(--border-radius-small);
+        resize: none;
+        min-height: 40px;
+      }
+
+      .chat-input-container input::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+      }
+
+      .chat-input-container button {
+        background: var(--button-background);
+        border: 1px solid var(--border-color);
+        color: var(--primary-color);
+        padding: 8px 20px;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .chat-input-container button:hover {
+        background: var(--button-hover-background);
+        transform: translateY(-1px);
+      }
+
+      button {
+        background: var(--button-background);
+        border: 1px solid var(--border-color);
+        color: var(--primary-color);
+        padding: 8px 15px;
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        transition: var(--transition);
+      }
+
+      button:hover {
+        background: var(--button-hover-background);
+        transform: translateY(-1px);
+      }
+
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(5px);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 2000;
+        animation: fadeIn 0.3s ease;
+      }
+
+      .modal-window {
+        background: var(--modal-background);
+        backdrop-filter: blur(10px);
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius);
+        width: var(--container-width);
+        padding: var(--spacing-normal);
+        color: var(--primary-color);
+        animation: slideUp 0.3s ease;
+      }
+
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .modal-title {
+        font-size: 24px;
+        font-weight: 700;
+      }
+
+      .modal-content {
+        line-height: 1.6;
+        font-size: 16px;
+      }
+
+      .modal-content p {
+        margin: 5px 0;
+      }
+
+      .settings-content {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .settings-button {
+        background: var(--button-background);
+        border: 1px solid var(--border-color);
+        padding: 15px;
+        border-radius: 15px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .settings-button:hover {
+        background: var(--button-hover-background);
+        transform: translateX(5px);
+      }
+
+      .settings-button i {
+        width: 20px;
+        text-align: center;
+      }
+
+      .notification {
+        position: fixed;
+        bottom: 100px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--background-color);
+        color: var(--primary-color);
+        padding: 12px 25px;
+        border-radius: 30px;
+        backdrop-filter: blur(10px);
+        animation: slideUp 0.3s ease;
+        z-index: 2000;
+      }
+
+      .notification.fade-out {
+        animation: fadeOut 0.3s ease;
+      }
+
+      .code-block {
+        background: rgba(0, 0, 0, 0.6);
+        border-radius: 10px;
+        padding: 15px;
+        margin: 10px 0;
+        position: relative;
+      }
+
+      .code-block pre {
+        margin: 0;
+        white-space: pre-wrap;
+        font-family: 'Fira Code', monospace;
+        color: #e0e0e0;
+      }
+
+      .copy-button {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid var(--border-color);
+        color: white;
+        padding: 5px 10px;
+        border-radius: 15px;
+        cursor: pointer;
+        font-size: 12px;
+      }
+
+      .message-actions {
+        display: flex;
+        gap: 5px;
+        margin-top: 5px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .chat-message:hover .message-actions {
+        opacity: 1;
+      }
+
+      .action-button {
+        background: var(--button-background);
+        border: var(--border);
+        color: var(--primary-color);
+        padding: 3px 8px;
+        border-radius: 12px;
+        cursor: pointer;
+        font-size: 12px;
+      }
+
+      .edit-mode {
+        border: var(--border-color);
+      }
+
+      .edit-input {
+        width: 100%;
+        background: transparent;
+        border: none;
+        color: var(--primary-color);
+        font-family: inherit;
+        font-size: inherit;
+        padding: 0;
+        margin: 0;
+        resize: none;
+        outline: none;
+      }
+
+      .theme-selector-container {
+        position: relative;
+        display: inline-block;
+        width: 100%;
+      }
+
+      .theme-selector {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--spacing-small) var(--spacing-normal);
+        background-color: var(--button-background);
+        border: 1px solid var(--border-color);
+        cursor: pointer;
+        border-radius: var(--border-radius);
+        transition: background 0.3s ease;
+      }
+
+      .theme-selector i {
+        font-size: 14px;
+      }
+
+      .theme-selector:hover {
+        background-color: var(--button-hover-background);
+      }
+
+      .theme-options {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        display: none;
+        background-color: var(--background-color);
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius);
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        z-index: 10;
+      }
+
+      .theme-option {
+        padding: var(--spacing-small);
+        cursor: pointer;
+        font-size: 14px;
+        color: var(--primary-color);
+        transition: background 0.3s ease;
+      }
+
+      .theme-option:hover {
+        background-color: var(--button-hover-background);
+      }
+
+      .theme-options {
+        display: none;
+      }
+
+      .theme-options.active {
+        display: block;
+      }
+
+      .message-timestamp {
+        font-size: 11px;
+        opacity: 0.7;
+        margin-top: 5px;
+      }
+
+      .container {
+        position: fixed;
+        top: calc(80px + var(--spacing-normal));
+        bottom: calc(80px + var(--spacing-normal));
+        left: 50%;
+        transform: translateX(-50%);
+        width: var(--container-width);
+        max-width: var(--container-max-width);
+        overflow-y: auto;
+        padding-right: 15px;
+      }
+
+      .chat-messages {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        padding: 20px;
+        padding-bottom: 40px;
+        height: 100%;
+        overflow-y: auto;
+      }
+
+      .chat-input-container {
+        position: fixed;
+        bottom: var(--spacing-normal);
+        left: 50%;
+        transform: translateX(-50%);
+        width: var(--container-width);
+        max-width: var(--container-max-width);
+        display: flex;
+        gap: 10px;
+        background: var(--chat-input-container-background);
+        backdrop-filter: blur(10px);
+        padding: var(--spacing-normal);
+        border-radius: 30px;
+        border: 1px solid var(--border-color);
+      }
+
+      .chat-input-container textarea {
+        flex: 1;
+        background: transparent;
+        border: none;
+        outline: none;
+        color: var(--color);
+        font-size: 16px;
+        padding: 10px;
+        border-radius: 10px;
+        resize: none;
+        min-height: 40px;
+      }
+
+      .chat-input-container input::placeholder {
+        color: var(--color);
+      }
+
+      .chat-input-container button {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: var(--color);
+        padding: 8px 20px;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .chat-input-container button:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-1px);
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes slideUp {
+        from {
+          transform: translateY(20px);
+          opacity: 0;
+        }
+
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      @keyframes messageAppear {
+        from {
+          transform: translateY(10px);
+          opacity: 0;
+        }
+
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      @keyframes fadeOut {
+        to {
+          opacity: 0;
+          transform: translate(-50%, 20px);
+        }
+      }
+
+      @media (max-width: 768px) {
+        :root {
+          --container-width: 95%;
+          --spacing-normal: 15px;
+          --spacing-small: 8px;
+        }
+
+        .taskbar {
+          height: auto;
+          padding: 10px var(--spacing-normal);
+        }
+
+        .taskbar-right {
+          display: flex;
+          gap: 8px;
+        }
+
+        .taskbar button {
+          padding: 6px 12px;
+          font-size: 14px;
+        }
+
+        .brand {
+          font-size: 18px;
+        }
+
+        .preview-tag {
+          font-size: 12px;
+        }
+
+        .chat-input-container {
+          padding: 10px;
+        }
+
+        .chat-input-container input {
+          font-size: 14px;
+        }
+
+        .chat-input-container button {
+          padding: 6px 15px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        :root {
+          --container-width: 98%;
+          --spacing-normal: 10px;
+          --spacing-small: 5px;
+        }
+
+        .taskbar {
+          padding: 8px var(--spacing-normal);
+        }
+
+        .taskbar-right button {
+          padding: 5px 10px;
+          font-size: 13px;
+        }
+
+        .brand {
+          font-size: 16px;
+        }
+
+        .preview-tag {
+          font-size: 11px;
+        }
+
+        .chat-message {
+          max-width: 90%;
+          padding: 12px 15px;
+        }
+
+        .modal-window {
+          padding: 15px;
+        }
+
+        .modal-title {
+          font-size: 20px;
+        }
+
+        .modal-content {
+          font-size: 14px;
+        }
+
+        .settings-button {
+          padding: 12px;
+          font-size: 14px;
+        }
+
+        .notification {
+          font-size: 13px;
+          padding: 10px 20px;
+        }
+      }
+
+      @media (max-height: 600px) and (orientation: landscape) {
+        .container {
+          top: 70px;
+          bottom: 70px;
+        }
+
+        .taskbar {
+          height: 50px;
+        }
+
+        .chat-input-container {
+          padding: 8px 15px;
+        }
+
+        .chat-message {
+          padding: 10px 15px;
+          margin-bottom: 8px;
+        }
+      }
+
+      @media (hover: none) {
+
+        .chat-input-container button,
+        .taskbar button,
+        .settings-button {
+          transition: none;
+        }
+
+        .chat-input-container button:active,
+        .taskbar button:active,
+        .settings-button:active {
+          background: rgba(255, 255, 255, 0.2);
+        }
+      }
+
+      .chat-input-container input:disabled,
+      .chat-input-container button:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+        transition: opacity 0.3s ease;
+      }
+
+      .chat-input-container button:disabled:hover {
+        background: rgba(255, 255, 255, 0.1);
+        transform: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="taskbar">
+      <div class="taskbar-left">
+        <span class="brand">PatheticAI</span>
+        <span class="preview-tag">Enhanced Edition</span>
+      </div>
+      <div class="taskbar-right">
+        <button onclick="showSettingsModal()" title="Settings">
+          <i class="fas fa-cog"></i>
+        </button>
+        <button onclick="toggleFullscreen()" title="Toggle Fullscreen">
+          <i class="fas fa-expand"></i>
+        </button>
+        <button onclick="showAboutModal()" title="Join Discord">
+          <i class="fa fa-user-group"></i>
+        </button>
+        <button onclick="contactEmail()" title="Join Discord">
+          <i class="fa-brands fa-discord"></i>
+        </button>
+      </div>
+    </div>
+    <div class="container">
+      <div class="chat-messages"></div>
+    </div>
+    <div class="chat-input-container">
+      <textarea id="messageInput" placeholder="Type your message..." rows="1" maxlength="2000"></textarea>
+      <button onclick="sendMessage()" title="Send Message">
+      <i class="fas fa-paper-plane"></i><span>‎ ‎ ‎ Send</span>
+      </button>
+    </div>
+    <script>
+const CONFIG = {
+  MAX_RETRIES: 3,
+  TYPING_SPEED: 50,
+  MAX_CONTEXT_LENGTH: 10,
+  SUGGESTION_COUNT: 4,
+  API_TIMEOUT: 30000,
+  STORAGE_KEYS: {
+    THEME: 'theme',
+    API_KEY: 'openRouterApiKey',
+    MESSAGES: 'chatMessages',
+    LANGUAGE: 'preferredLanguage',
+    SETTINGS: 'userSettings'
+  }
+};
+
+const MODELS = [{
+  name: "google/gemini-2.0-flash-exp:free"
+}, {
+  name: "meta-llama/llama-3.2-3b-instruct:free"
+}, {
+  name: "qwen/qwen-2-7b-instruct:free"
+}, {
+  name: "microsoft/phi-3-medium-128k-instruct:free"
+}, {
+  name: "undi95/toppy-m-7b:free"
+}, {
+  name: "google/gemini-2.0-flash-thinking-exp:free"
+}, {
+  name: "microsoft/phi-3-mini-128k-instruct:free"
+}, {
+  name: "microsoft/phi-3-medium-128k-instruct:free"
+}];
+
+let STATE = {
+  isWaitingForResponse: false,
+  editingMessageId: null,
+  voiceRecording: false,
+  messageHistory: [],
+  currentLanguage: 'English',
+  theme: 'dark',
+  selectedModel: MODELS[0].name,
+  contextLength: 0,
+  mediaRecorder: null,
+  settings: {
+    notifications: true,
+    soundEffects: true,
+    autoScroll: true
+  }
+};
+
+const systemMessage = {
+  role: "system",
+  content: `You are PatheticAI Enhanced
 
 Key characteristics:
 - Friendly and empathetic AI assistant
@@ -846,620 +849,693 @@ Key characteristics:
 - Adapts communication style to user needs
 - Offers helpful suggestions and insights
 - Maintains context awareness`
-			};
-			document.addEventListener('DOMContentLoaded', () => {
-				initializeApp();
-			});
+};
 
-			function initializeApp() {
-				loadSavedState();
-				initializeUI();
-				setupEventListeners();
-				showWelcomeMessage();
-				if (!checkAndStoreApiKey()) {
-					disableInput();
-				}
-			}
+// Initialize app when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+  initializeApp();
+});
 
-			function loadSavedState() {
-				try {
-					const savedMessages = localStorage.getItem(CONFIG.STORAGE_KEYS.MESSAGES);
-					if (savedMessages) {
-						STATE.messageHistory = JSON.parse(savedMessages);
-						STATE.messageHistory = STATE.messageHistory.filter(msg => msg && msg.role && msg.content && msg.timestamp);
-					}
-					const savedSettings = localStorage.getItem(CONFIG.STORAGE_KEYS.SETTINGS);
-					if (savedSettings) {
-						const parsedSettings = JSON.parse(savedSettings);
-						STATE.settings = {
-							...STATE.settings,
-							...parsedSettings
-						};
-					}
-					const savedTheme = localStorage.getItem(CONFIG.STORAGE_KEYS.THEME);
-					if (savedTheme) {
-						STATE.theme = savedTheme;
-						document.documentElement.setAttribute('data-theme', savedTheme);
-					}
-					const savedLanguage = localStorage.getItem(CONFIG.STORAGE_KEYS.LANGUAGE);
-					if (savedLanguage) {
-						STATE.currentLanguage = savedLanguage;
-					}
-				} catch (error) {
-					console.error('Error loading saved state:', error);
-					STATE.messageHistory = [];
-					saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, []);
-				}
-			}
+function initializeApp() {
+  loadSavedState();
+  initializeUI();
+  setupEventListeners();
+  showWelcomeMessage();
+  if (!checkAndStoreApiKey()) {
+    disableInput();
+  }
+}
 
-			function saveToLocalStorage(key, value) {
-				try {
-					localStorage.setItem(key, typeof value === 'string' ? value : JSON.stringify(value));
-					return true;
-				} catch (error) {
-					console.error('Local storage error:', error);
-					return false;
-				}
-			}
+function loadSavedState() {
+  try {
+    // Load saved messages
+    const savedMessages = localStorage.getItem(CONFIG.STORAGE_KEYS.MESSAGES);
+    if (savedMessages) {
+      STATE.messageHistory = JSON.parse(savedMessages);
+      // Validate loaded messages by checking for necessary keys
+      STATE.messageHistory = STATE.messageHistory.filter(msg => 
+        msg && msg.role && msg.content && msg.timestamp
+      );
+    }
 
-			function formatTimestamp(date) {
-				return new Intl.DateTimeFormat('default', {
-					hour: 'numeric',
-					minute: 'numeric',
-					second: 'numeric',
-					year: 'numeric',
-					month: 'short',
-					day: 'numeric'
-				}).format(date);
-			}
-			async function copyToClipboard(text) {
-				try {
-					await navigator.clipboard.writeText(text);
-					showNotification('Copied to clipboard');
-				} catch (err) {
-					showNotification('Failed to copy to clipboard');
-				}
-			}
+    // Load settings
+    const savedSettings = localStorage.getItem(CONFIG.STORAGE_KEYS.SETTINGS);
+    if (savedSettings) {
+      const parsedSettings = JSON.parse(savedSettings);
+      STATE.settings = { ...STATE.settings, ...parsedSettings };
+    }
 
-			function createMessageElement(message, isUser, timestamp = new Date()) {
-				const messageId = Date.now().toString();
-				const messageElement = document.createElement('div');
-				messageElement.classList.add('chat-message', isUser ? 'user' : 'bot');
-				messageElement.dataset.messageId = messageId;
-				const contentDiv = document.createElement('div');
-				contentDiv.classList.add('message-content');
-				if (!isUser) {
-					contentDiv.innerHTML = marked.parse(message);
-					contentDiv.querySelectorAll('pre code').forEach((block) => {
-						hljs.highlightElement(block);
-					});
-				} else {
-					contentDiv.textContent = message;
-				}
-				messageElement.appendChild(contentDiv);
-				const timestampDiv = document.createElement('div');
-				timestampDiv.className = 'message-timestamp';
-				timestampDiv.textContent = formatTimestamp(timestamp);
-				messageElement.appendChild(timestampDiv);
-				const actionsDiv = document.createElement('div');
-				actionsDiv.className = 'message-actions';
-				if (isUser) {
-					const editButton = document.createElement('button');
-					editButton.className = 'action-button';
+    // Load theme
+    const savedTheme = localStorage.getItem(CONFIG.STORAGE_KEYS.THEME);
+    if (savedTheme) {
+      STATE.theme = savedTheme;
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    }
+
+    // Load language
+    const savedLanguage = localStorage.getItem(CONFIG.STORAGE_KEYS.LANGUAGE);
+    if (savedLanguage) {
+      STATE.currentLanguage = savedLanguage;
+      // Apply language settings here if applicable (e.g., change UI text)
+    }
+  } catch (error) {
+    console.error('Error loading saved state:', error);
+    STATE.messageHistory = [];
+    saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, []);
+  }
+}
+
+function saveToLocalStorage(key, value) {
+  try {
+    localStorage.setItem(key, typeof value === 'string' ? value : JSON.stringify(value));
+    return true;
+  } catch (error) {
+    console.error('Local storage error:', error);
+    return false;
+  }
+}
+      
+function formatTimestamp(date) {
+  return new Intl.DateTimeFormat('default', {
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  }).format(date);
+}
+
+async function copyToClipboard(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    showNotification('Copied to clipboard');
+  } catch (err) {
+    showNotification('Failed to copy to clipboard');
+  }
+}
+
+function createMessageElement(message, isUser, timestamp = new Date()) {
+  const messageId = Date.now().toString();
+  const messageElement = document.createElement('div');
+  messageElement.classList.add('chat-message', isUser ? 'user' : 'bot');
+  messageElement.dataset.messageId = messageId;
+
+  const contentDiv = document.createElement('div');
+  contentDiv.classList.add('message-content');
+  
+  if (!isUser) {
+    contentDiv.innerHTML = marked.parse(message);
+    contentDiv.querySelectorAll('pre code').forEach((block) => {
+      hljs.highlightElement(block);
+    });
+  } else {
+    contentDiv.textContent = message;
+  }
+  
+  messageElement.appendChild(contentDiv);
+
+  const timestampDiv = document.createElement('div');
+  timestampDiv.className = 'message-timestamp';
+  timestampDiv.textContent = formatTimestamp(timestamp);
+  messageElement.appendChild(timestampDiv);
+
+  const actionsDiv = document.createElement('div');
+  actionsDiv.className = 'message-actions';
+
+  if (isUser) {
+    const editButton = document.createElement('button');
+    editButton.className = 'action-button';
     editButton.innerHTML = '<i class="fas fa-edit"></i>';
-					editButton.onclick = () => startEditing(messageId);
-					actionsDiv.appendChild(editButton);
-				}
-				const copyButton = document.createElement('button');
-				copyButton.className = 'action-button';
-    editButton.innerHTML = '<i class="fas fa-copy"></i>';
-				copyButton.onclick = () => copyToClipboard(message);
-				actionsDiv.appendChild(copyButton);
-				messageElement.appendChild(actionsDiv);
-				return {
-					element: messageElement,
-					id: messageId
-				};
-			}
-			async function startEditing(messageId) {
-				if (STATE.isWaitingForResponse) return;
-				const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
-				if (!messageElement) return;
-				const contentDiv = messageElement.querySelector('.message-content');
-				const originalText = contentDiv.textContent;
-				const textarea = document.createElement('textarea');
-				textarea.className = 'edit-input';
-				textarea.value = originalText;
-				contentDiv.replaceWith(textarea);
-				textarea.focus();
-				messageElement.classList.add('edit-mode');
-				STATE.editingMessageId = messageId;
-				const handleEdit = async (e) => {
-					if (e.key === 'Enter' && !e.shiftKey) {
-						e.preventDefault();
-						await finishEditing(messageId, textarea.value.trim());
-					} else if (e.key === 'Escape') {
-						finishEditing(messageId, originalText);
-					}
-				};
-				textarea.addEventListener('keydown', handleEdit);
-			}
-			async function finishEditing(messageId, newText) {
-				if (!messageId || !newText || STATE.isWaitingForResponse) return;
-				const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
-				if (!messageElement) return;
-				const textarea = messageElement.querySelector('.edit-input');
-				const contentDiv = document.createElement('div');
-				contentDiv.className = 'message-content';
-				contentDiv.textContent = newText;
-				textarea.replaceWith(contentDiv);
-				messageElement.classList.remove('edit-mode');
-				const messageIndex = STATE.messageHistory.findIndex(msg => msg.id === messageId);
-				if (messageIndex === -1) return;
-				STATE.messageHistory[messageIndex].content = newText;
-				const nextIndex = messageIndex + 1;
-				if (nextIndex < STATE.messageHistory.length && STATE.messageHistory[nextIndex].role === 'assistant') {
-					STATE.messageHistory.splice(nextIndex, 1);
-					const nextElement = messageElement.nextElementSibling;
-					if (nextElement) nextElement.remove();
-				}
-				try {
-					STATE.isWaitingForResponse = true;
-					const response = await sendMessageWithRetry(newText);
-					if (response.text) {
-						const botMessageObj = {
-							role: "assistant",
-							content: response.text,
-							timestamp: Date.now(),
-							replyTo: messageId
-						};
-						STATE.messageHistory.splice(nextIndex, 0, botMessageObj);
-						const {
-							element: botElement
-						} = createMessageElement(response.text, false);
-						messageElement.after(botElement);
-						if (STATE.settings.autoScroll) {
-							botElement.scrollIntoView({
-								behavior: 'smooth'
-							});
-						}
-						if (STATE.settings.soundEffects) {
-							playMessageSound();
-						}
-					}
-				} catch (error) {
-					showError(`Error updating response: ${error.message}`);
-				} finally {
-					STATE.isWaitingForResponse = false;
-					STATE.editingMessageId = null;
-				}
-				saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, STATE.messageHistory);
-			}
-			async function sendMessage() {
-				const textarea = document.getElementById('messageInput');
-				const message = textarea.value.trim();
-				if (!message || STATE.isWaitingForResponse || STATE.editingMessageId) return;
-				STATE.isWaitingForResponse = true;
-				disableInput();
-				const timestamp = new Date();
-				const {
-					element: messageElement,
-					id: messageId
-				} = createMessageElement(message, true, timestamp);
-				document.querySelector('.chat-messages').appendChild(messageElement);
-				if (STATE.settings.autoScroll) {
-					messageElement.scrollIntoView({
-						behavior: 'smooth'
-					});
-				}
-				textarea.value = '';
-				textarea.style.height = 'auto';
-				const messageObj = {
-					role: "user",
-					content: message,
-					timestamp: timestamp.getTime(),
-					id: messageId
-				};
-				STATE.messageHistory.push(messageObj);
-				saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, STATE.messageHistory);
-				try {
-					const response = await sendMessageWithRetry(message);
-					if (response.text) {
-						const botMessageObj = {
-							role: "assistant",
-							content: response.text,
-							timestamp: Date.now(),
-							replyTo: messageId
-						};
-						STATE.messageHistory.push(botMessageObj);
-						saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, STATE.messageHistory);
-						const {
-							element: botElement
-						} = createMessageElement(response.text, false);
-						document.querySelector('.chat-messages').appendChild(botElement);
-						if (STATE.settings.autoScroll) {
-							botElement.scrollIntoView({
-								behavior: 'smooth'
-							});
-						}
-						if (STATE.settings.soundEffects) {
-							playMessageSound();
-						}
-					}
-				} catch (error) {
-					showError(`Error: ${error.message}`);
-				} finally {
-					STATE.isWaitingForResponse = false;
-					enableInput();
-					textarea.focus();
-				}
-			}
-			async function sendMessageWithRetry(message, retries = CONFIG.MAX_RETRIES) {
-				try {
-					const response = await tryMultipleModels(message);
-					return response;
-				} catch (error) {
-					if (retries > 0) {
-						showNotification(`Retrying... (${retries} attempts left)`);
-						await new Promise(resolve => setTimeout(resolve, 1000));
-						return sendMessageWithRetry(message, retries - 1);
-					}
-					throw error;
-				}
-			}
-			async function tryMultipleModels(userMessage) {
-				const apiKey = getApiKey();
-				if (!apiKey) {
-					throw new Error("API key not found. Please enter your API key first.");
-				}
-				for (let modelIndex = 0; modelIndex < MODELS.length; modelIndex++) {
-					try {
-						const response = await Promise.race([
-							fetch("https://openrouter.ai/api/v1/chat/completions", {
-								method: "POST",
-								headers: {
-									"Authorization": `Bearer ${apiKey}`,
-									"Content-Type": "application/json"
-								},
-								body: JSON.stringify({
-									"model": MODELS[modelIndex].name,
-									"messages": [
-										systemMessage, ...STATE.messageHistory.filter(msg => msg.role === "user" || msg.role === "assistant"), {
-											role: "user",
-											content: `Please respond in ${STATE.currentLanguage}. ${userMessage}`
-										}
-									]
-								})
-							}).then(async res => {
-								if (!res.ok) {
-									const errorData = await res.json();
-									throw new Error(`API Error: ${errorData.error?.message || 'Unknown error'}`);
-								}
-								return res.json();
-							}),
-							new Promise((_, reject) => setTimeout(() => reject(new Error('Request timeout')), CONFIG.API_TIMEOUT))
-						]);
-						if (response.choices && response.choices[0].message.content) {
-							return {
-								text: response.choices[0].message.content
-							};
-						}
-					} catch (error) {
-						console.error(`Model ${MODELS[modelIndex].name} failed:`, error);
-						if (modelIndex === MODELS.length - 1) {
-							throw new Error(`API Error: ${error.message}`);
-						}
-						continue;
-					}
-				}
-				throw new Error("All API attempts failed. Please try again later.");
-			}
-			async function toggleVoiceInput() {
-				const voiceButton = document.querySelector('.voice-input-button');
-				const messageInput = document.getElementById('messageInput');
-				const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-				if (!STATE.voiceRecording) {
-					if (!SpeechRecognition) {
-						showError('Your browser does not support the Web Speech API');
-						return;
-					}
-					try {
-						const recognition = new SpeechRecognition();
-						recognition.continuous = false;
-						recognition.interimResults = true;
-						recognition.lang = 'en-US';
-						STATE.recognition = recognition;
-						recognition.onstart = () => {
-							STATE.voiceRecording = true;
-							voiceButton.classList.add('recording');
-							showNotification('Voice recording started');
-						};
-						recognition.onresult = (event) => {
-							let transcript = '';
-							for (let i = event.resultIndex; i < event.results.length; i++) {
-								transcript += event.results[i][0].transcript;
-							}
-							messageInput.value = transcript;
-							messageInput.focus();
-						};
-						recognition.onerror = (event) => {
-							showError('Speech recognition error');
-							console.error('Speech recognition error:', event.error);
-						};
-						recognition.onend = () => {
-							STATE.voiceRecording = false;
-							voiceButton.classList.remove('recording');
-							showNotification('Voice recording stopped');
-						};
-						recognition.start();
-					} catch (error) {
-						showError('Microphone access denied');
-						voiceButton.disabled = true;
-					}
-				} else {
-					if (STATE.recognition) {
-						STATE.recognition.stop();
-						STATE.voiceRecording = false;
-						voiceButton.classList.remove('recording');
-						showNotification('Voice recording stopped');
-					}
-				}
-			}
+    editButton.onclick = () => startEditing(messageId);
+    actionsDiv.appendChild(editButton);
+  }
 
-			function initializeUI() {
-				initializeTextarea();
-				initializeTheme();
-				if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-					initializeVoiceInput();
-				}
-			}
+  const copyButton = document.createElement('button');
+  copyButton.className = 'action-button';
+  copyButton.innerHTML = '<i class="fas fa-copy"></i>';
+  copyButton.onclick = () => copyToClipboard(message);
+  actionsDiv.appendChild(copyButton);
 
-			function initializeTextarea() {
-				const textarea = document.getElementById('messageInput');
-				textarea.addEventListener('input', function() {
-					this.style.height = 'auto';
-					this.style.height = Math.min(this.scrollHeight, 200) + 'px';
-				});
-				textarea.addEventListener('keydown', function(e) {
-					if (e.key === 'Enter' && !e.shiftKey) {
-						e.preventDefault();
-						sendMessage();
-					}
-				});
-			}
+  messageElement.appendChild(actionsDiv);
+  return { element: messageElement, id: messageId };
+}
 
-			function initializeVoiceInput() {
-				const chatInput = document.querySelector('.chat-input-container');
-				if (chatInput) {
-					const voiceButton = document.createElement('button');
-					voiceButton.className = 'voice-input-button';
-					voiceButton.innerHTML = '<i class="fa fa-microphone"></i>';
-					voiceButton.title = 'Voice Input';
-					voiceButton.onclick = toggleVoiceInput;
-					chatInput.insertBefore(voiceButton, chatInput.lastElementChild);
-				}
-			}
+async function startEditing(messageId) {
+  if (STATE.isWaitingForResponse) return;
+  
+  const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
+  if (!messageElement) return;
+  
+  const contentDiv = messageElement.querySelector('.message-content');
+  const originalText = contentDiv.textContent;
+  
+  const textarea = document.createElement('textarea');
+  textarea.className = 'edit-input';
+  textarea.value = originalText;
+  
+  contentDiv.replaceWith(textarea);
+  textarea.focus();
+  messageElement.classList.add('edit-mode');
+  STATE.editingMessageId = messageId;
+  
+  const handleEdit = async (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      await finishEditing(messageId, textarea.value.trim());
+    } else if (e.key === 'Escape') {
+      finishEditing(messageId, originalText);
+    }
+  };
+  
+  textarea.addEventListener('keydown', handleEdit);
+}
 
-			function setupEventListeners() {
-				window.addEventListener('focus', handleWindowFocus);
-				window.addEventListener('blur', handleWindowBlur);
-				window.addEventListener('online', () => showNotification('You are back online!'));
-				window.addEventListener('offline', () => showNotification('You are offline. Some features may be unavailable.'));
-				window.addEventListener('beforeunload', handleBeforeUnload);
-				document.querySelector('.container').addEventListener('wheel', handleScroll);
-				document.querySelector('.brand').addEventListener('click', showAboutModal);
-				window.addEventListener('resize', handleResize);
-			}
-
-			function handleWindowFocus() {
-				if (STATE.settings.notifications) {
-					document.title = 'PatheticAI Enhanced';
-				}
-			}
-
-			function handleWindowBlur() {
-				if (STATE.settings.notifications) {
-					const unreadMessages = STATE.messageHistory.filter(msg => msg.role === 'assistant' && msg.timestamp > document.lastModified).length;
-					if (unreadMessages > 0) {
-						document.title = `(${unreadMessages}) PatheticAI Enhanced`;
-					}
-				}
-			}
-
-			function handleBeforeUnload(e) {
-				if (STATE.isWaitingForResponse || STATE.editingMessageId) {
-					e.preventDefault();
-					e.returnValue = '';
-				}
-			}
-
-			function handleScroll(e) {
-				if (STATE.settings.autoScroll) {
-					const container = document.querySelector('.container');
-					const isScrolledToBottom = container.scrollHeight - container.clientHeight <= container.scrollTop + 1;
-					if (!isScrolledToBottom) {
-						STATE.settings.autoScroll = false;
-						showNotification('Auto-scroll disabled');
-						saveToLocalStorage(CONFIG.STORAGE_KEYS.SETTINGS, STATE.settings);
-					}
-				}
-			}
-
-			function handleResize() {
-				const textarea = document.getElementById('messageInput');
-				if (textarea) {
-					textarea.style.height = 'auto';
-					textarea.style.height = Math.min(textarea.scrollHeight, 200) + 'px';
-				}
-			}
-
-			function showSettingsModal() {
-				const modal = document.createElement('div');
-				modal.className = 'modal-overlay';
-				modal.innerHTML = `
+async function finishEditing(messageId, newText) {
+  if (!messageId || !newText || STATE.isWaitingForResponse) return;
+  
+  const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
+  if (!messageElement) return;
+  
+  // Update UI
+  const textarea = messageElement.querySelector('.edit-input');
+  const contentDiv = document.createElement('div');
+  contentDiv.className = 'message-content';
+  contentDiv.textContent = newText;
+  textarea.replaceWith(contentDiv);
+  messageElement.classList.remove('edit-mode');
+  
+  // Find message in history
+  const messageIndex = STATE.messageHistory.findIndex(msg => msg.id === messageId);
+  if (messageIndex === -1) return;
+  
+  // Update message in history
+  STATE.messageHistory[messageIndex].content = newText;
+  
+  // Remove subsequent bot response if it exists
+  const nextIndex = messageIndex + 1;
+  if (nextIndex < STATE.messageHistory.length && STATE.messageHistory[nextIndex].role === 'assistant') {
+    STATE.messageHistory.splice(nextIndex, 1);
+    const nextElement = messageElement.nextElementSibling;
+    if (nextElement) nextElement.remove();
+  }
+  
+  // Get new bot response
+  try {
+    STATE.isWaitingForResponse = true;
+    const response = await sendMessageWithRetry(newText);
     
-																	<div class="modal-window">
-																		<div class="modal-header">
-																			<span class="modal-title">Settings</span>
-																			<button class="close-button" onclick="this.closest('.modal-overlay').remove()">✖</button>
-																		</div>
-																		<div class="modal-content settings-content">
-																			<div class="settings-button" onclick="resetChat()">
-																				<i class="fa fa-trash"></i>
+    if (response.text) {
+      const botMessageObj = {
+        role: "assistant",
+        content: response.text,
+        timestamp: Date.now(),
+        replyTo: messageId
+      };
+      
+      STATE.messageHistory.splice(nextIndex, 0, botMessageObj);
+      
+      const { element: botElement } = createMessageElement(response.text, false);
+      messageElement.after(botElement);
+      
+      if (STATE.settings.autoScroll) {
+        botElement.scrollIntoView({ behavior: 'smooth' });
+      }
+      
+      if (STATE.settings.soundEffects) {
+        playMessageSound();
+      }
+    }
+  } catch (error) {
+    showError(`Error updating response: ${error.message}`);
+  } finally {
+    STATE.isWaitingForResponse = false;
+    STATE.editingMessageId = null;
+  }
+  
+  saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, STATE.messageHistory);
+}
+
+async function sendMessage() {
+  const textarea = document.getElementById('messageInput');
+  const message = textarea.value.trim();
+  if (!message || STATE.isWaitingForResponse || STATE.editingMessageId) return;
+
+  STATE.isWaitingForResponse = true;
+  disableInput();
+
+  const timestamp = new Date();
+  const { element: messageElement, id: messageId } = createMessageElement(message, true, timestamp);
+  document.querySelector('.chat-messages').appendChild(messageElement);
+
+  if (STATE.settings.autoScroll) {
+    messageElement.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  textarea.value = '';
+  textarea.style.height = 'auto';
+
+  const messageObj = {
+    role: "user",
+    content: message,
+    timestamp: timestamp.getTime(),
+    id: messageId
+  };
+  STATE.messageHistory.push(messageObj);
+  saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, STATE.messageHistory);
+
+  try {
+    const response = await sendMessageWithRetry(message);
+    if (response.text) {
+      const botMessageObj = {
+        role: "assistant",
+        content: response.text,
+        timestamp: Date.now(),
+        replyTo: messageId
+      };
+      STATE.messageHistory.push(botMessageObj);
+      saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, STATE.messageHistory);
+
+      const { element: botElement } = createMessageElement(response.text, false);
+      document.querySelector('.chat-messages').appendChild(botElement);
+
+      if (STATE.settings.autoScroll) {
+        botElement.scrollIntoView({ behavior: 'smooth' });
+      }
+
+      if (STATE.settings.soundEffects) {
+        playMessageSound();
+      }
+    }
+  } catch (error) {
+    showError(`Error: ${error.message}`);
+  } finally {
+    STATE.isWaitingForResponse = false;
+    enableInput();
+    textarea.focus();
+  }
+}
+
+async function sendMessageWithRetry(message, retries = CONFIG.MAX_RETRIES) {
+  try {
+    const response = await tryMultipleModels(message);
+    return response;
+  } catch (error) {
+    if (retries > 0) {
+      showNotification(`Retrying... (${retries} attempts left)`);
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      return sendMessageWithRetry(message, retries - 1);
+    }
+    throw error;
+  }
+}
+
+async function tryMultipleModels(userMessage) {
+  const apiKey = getApiKey();
+  if (!apiKey) {
+    throw new Error("API key not found. Please enter your API key first.");
+  }
+  
+  for (let modelIndex = 0; modelIndex < MODELS.length; modelIndex++) {
+    try {
+      const response = await Promise.race([
+        fetch("https://openrouter.ai/api/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${apiKey}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            "model": MODELS[modelIndex].name,
+            "messages": [
+              systemMessage,
+              ...STATE.messageHistory.filter(msg => msg.role === "user" || msg.role === "assistant"),
+              {
+                role: "user",
+                content: `Please respond in ${STATE.currentLanguage}. ${userMessage}`
+              }
+            ]
+          })
+        }).then(async res => {
+          if (!res.ok) {
+            const errorData = await res.json();
+            throw new Error(`API Error: ${errorData.error?.message || 'Unknown error'}`);
+          }
+          return res.json();
+        }),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Request timeout')), CONFIG.API_TIMEOUT))
+      ]);
+      
+      if (response.choices && response.choices[0].message.content) {
+        return {
+          text: response.choices[0].message.content
+        };
+      }
+    } catch (error) {
+      console.error(`Model ${MODELS[modelIndex].name} failed:`, error);
+      if (modelIndex === MODELS.length - 1) {
+        throw new Error(`API Error: ${error.message}`);
+      }
+      continue;
+    }
+  }
+  throw new Error("All API attempts failed. Please try again later.");
+}
+
+// Speech to text functionality
+async function toggleVoiceInput() {
+  const voiceButton = document.querySelector('.voice-input-button');
+  
+  if (!STATE.voiceRecording) {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      STATE.mediaRecorder = new MediaRecorder(stream);
+      
+      let audioChunks = [];
+      
+      STATE.mediaRecorder.ondataavailable = (event) => {
+        audioChunks.push(event.data);
+      };
+
+      STATE.mediaRecorder.onstop = async () => {
+        const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+        
+        // Create FormData and append audio file
+        const formData = new FormData();
+        formData.append('file', audioBlob, 'recording.wav');
+        formData.append('model', 'whisper-1');
+
+        try {
+          // Replace with your preferred speech-to-text API endpoint
+          const response = await fetch('https://api.openai.com/v1/audio/transcriptions', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${getApiKey()}`
+            },
+            body: formData
+          });
+
+          if (!response.ok) throw new Error('Transcription failed');
+          
+const data = await response.json();
+            if (data.text) {
+              document.getElementById('messageInput').value = data.text;
+              document.getElementById('messageInput').focus();
+            }
+          } catch (error) {
+            showError('Speech to text conversion failed');
+            console.error('Speech to text error:', error);
+          }
+      };
+
+      STATE.mediaRecorder.start();
+      STATE.voiceRecording = true;
+      voiceButton.classList.add('recording');
+      showNotification('Voice recording started');
+    } catch (error) {
+      showError('Microphone access denied');
+      voiceButton.disabled = true;
+    }
+  } else {
+    STATE.mediaRecorder.stop();
+    STATE.voiceRecording = false;
+    voiceButton.classList.remove('recording');
+    showNotification('Voice recording stopped');
+    
+    // Stop all tracks in the stream
+    STATE.mediaRecorder.stream.getTracks().forEach(track => track.stop());
+  }
+}
+
+function initializeUI() {
+  initializeTextarea();
+  initializeTheme();
+  if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+    initializeVoiceInput();
+  }
+}
+
+function initializeTextarea() {
+  const textarea = document.getElementById('messageInput');
+  textarea.addEventListener('input', function() {
+    this.style.height = 'auto';
+    this.style.height = Math.min(this.scrollHeight, 200) + 'px';
+  });
+  
+  textarea.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+}
+
+function initializeVoiceInput() {
+  const chatInput = document.querySelector('.chat-input-container');
+  if (chatInput) {
+    const voiceButton = document.createElement('button');
+    voiceButton.className = 'voice-input-button';
+    voiceButton.innerHTML = '<i class="fas fa-microphone"></i>';
+    voiceButton.title = 'Voice Input';
+    voiceButton.onclick = toggleVoiceInput;
+    chatInput.insertBefore(voiceButton, chatInput.lastElementChild);
+  }
+}
+
+function setupEventListeners() {
+  window.addEventListener('focus', handleWindowFocus);
+  window.addEventListener('blur', handleWindowBlur);
+  window.addEventListener('online', () => showNotification('You are back online!'));
+  window.addEventListener('offline', () => showNotification('You are offline. Some features may be unavailable.'));
+  window.addEventListener('beforeunload', handleBeforeUnload);
+  
+  document.querySelector('.container').addEventListener('wheel', handleScroll);
+  document.querySelector('.brand').addEventListener('click', showAboutModal);
+  window.addEventListener('resize', handleResize);
+}
+
+function handleWindowFocus() {
+  if (STATE.settings.notifications) {
+    document.title = 'PatheticAI Enhanced';
+  }
+}
+
+function handleWindowBlur() {
+  if (STATE.settings.notifications) {
+    const unreadMessages = STATE.messageHistory.filter(msg => 
+      msg.role === 'assistant' && msg.timestamp > document.lastModified
+    ).length;
+    if (unreadMessages > 0) {
+      document.title = `(${unreadMessages}) PatheticAI Enhanced`;
+    }
+  }
+}
+
+function handleBeforeUnload(e) {
+  if (STATE.isWaitingForResponse || STATE.editingMessageId) {
+    e.preventDefault();
+    e.returnValue = '';
+  }
+}
+
+function handleScroll(e) {
+  if (STATE.settings.autoScroll) {
+    const container = document.querySelector('.container');
+    const isScrolledToBottom = container.scrollHeight - container.clientHeight <= container.scrollTop + 1;
+    if (!isScrolledToBottom) {
+      STATE.settings.autoScroll = false;
+      showNotification('Auto-scroll disabled');
+      saveToLocalStorage(CONFIG.STORAGE_KEYS.SETTINGS, STATE.settings);
+    }
+  }
+}
+
+function handleResize() {
+  const textarea = document.getElementById('messageInput');
+  if (textarea) {
+    textarea.style.height = 'auto';
+    textarea.style.height = Math.min(textarea.scrollHeight, 200) + 'px';
+  }
+}
+
+function showSettingsModal() {
+  const modal = document.createElement('div');
+  modal.className = 'modal-overlay';
+  modal.innerHTML = `
+    <div class="modal-window">
+      <div class="modal-header">
+        <span class="modal-title">Settings</span>
+        <button class="close-button" onclick="this.closest('.modal-overlay').remove()">✖</button>
+      </div>
+      <div class="modal-content settings-content">
+        <div class="settings-button" onclick="resetChat()">
+          <i class="fa fa-trash"></i>
           Clear Chat
-        
-																			</div>
-																			<div class="settings-button" onclick="showAboutModal()">
-																				<i class="fa fa-users"></i>
+        </div>
+        <div class="settings-button" onclick="showAboutModal()">
+          <i class="fa fa-users"></i>
           About Us
-        
-																			</div>
-																			<div class="settings-button" onclick="changeLanguage()">
-																				<i class="fas fa-language"></i>
+        </div>
+        <div class="settings-button" onclick="changeLanguage()">
+          <i class="fas fa-language"></i>
           Language: ${STATE.currentLanguage}
-        
-																			</div>
-																			<div class="settings-button" onclick="toggleSetting('notifications')">
-																				<i class="fas fa-bell"></i>
+        </div>
+        <div class="settings-button" onclick="toggleSetting('notifications')">
+          <i class="fas fa-bell"></i>
           Notifications: ${STATE.settings.notifications ? 'On' : 'Off'}
-        
-																			</div>
-																			<div class="settings-button" onclick="toggleSetting('soundEffects')">
-																				<i class="fas fa-volume-up"></i>
+        </div>
+        <div class="settings-button" onclick="toggleSetting('soundEffects')">
+          <i class="fas fa-volume-up"></i>
           Sound Effects: ${STATE.settings.soundEffects ? 'On' : 'Off'}
-        
-																			</div>
-																			<div class="settings-button" onclick="toggleSetting('autoScroll')">
-																				<i class="fas fa-scroll"></i>
+        </div>
+        <div class="settings-button" onclick="toggleSetting('autoScroll')">
+          <i class="fas fa-scroll"></i>
           Auto Scroll: ${STATE.settings.autoScroll ? 'On' : 'Off'}
-        
-																			</div>
-																			<div class="settings-button" onclick="removeApiKey()">
-																				<i class="fas fa-key"></i>
+        </div>
+        <div class="settings-button" onclick="removeApiKey()">
+          <i class="fas fa-key"></i>
           Remove API Key
-        
-																			</div>
-																			<div class="theme-selector-container">
-																				<div class="theme-selector" onclick="toggleThemeSelector()">
-																					<span>Select Theme</span>
-																					<i class="fa fa-chevron-down"></i>
-																				</div>
-																				<div class="theme-options">
-																					<div class="theme-option" data-theme="light" onclick="changeTheme('light')">Light</div>
-																					<div class="theme-option" data-theme="dark" onclick="changeTheme('dark')">Dark</div>
-																				</div>
-																			</div>
-																		</div>
-																	</div>
+        </div>
+        <div class="theme-selector-container">
+          <div class="theme-selector" onclick="toggleThemeSelector()">
+            <span>Select Theme</span>
+            <i class="fa fa-chevron-down"></i>
+          </div>
+          <div class="theme-options">
+            <div class="theme-option" data-theme="light" onclick="changeTheme('light')">Light</div>
+            <div class="theme-option" data-theme="dark" onclick="changeTheme('dark')">Dark</div>
+          </div>
+        </div>
+      </div>
+    </div>
   `;
-				modal.addEventListener('click', (e) => {
-					if (e.target === modal) {
-						modal.remove();
-					}
-				});
-				document.body.appendChild(modal);
-			}
+  
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.remove();
+    }
+  });
+  
+  document.body.appendChild(modal);
+}
 
-			function showNotification(message, duration = 3000) {
-				if (!STATE.settings.notifications) return;
-				const notification = document.createElement('div');
-				notification.className = 'notification';
-				notification.textContent = message;
-				document.body.appendChild(notification);
-				setTimeout(() => {
-					notification.classList.add('fade-out');
-					setTimeout(() => notification.remove(), 300);
-				}, duration);
-			}
+function showNotification(message, duration = 3000) {
+  if (!STATE.settings.notifications) return;
+  
+  const notification = document.createElement('div');
+  notification.className = 'notification';
+  notification.textContent = message;
+  document.body.appendChild(notification);
+  
+  setTimeout(() => {
+    notification.classList.add('fade-out');
+    setTimeout(() => notification.remove(), 300);
+  }, duration);
+}
 
-			function showError(message) {
-				showNotification(message, 5000);
-				console.error(message);
-			}
+function showError(message) {
+  showNotification(message, 5000);
+  console.error(message);
+}
 
-			function toggleSetting(setting) {
-				STATE.settings[setting] = !STATE.settings[setting];
-				saveToLocalStorage(CONFIG.STORAGE_KEYS.SETTINGS, STATE.settings);
-				showNotification(`${setting} ${STATE.settings[setting] ? 'enabled' : 'disabled'}`);
-				document.querySelector('.modal-overlay').remove();
-				showSettingsModal();
-			}
+function toggleSetting(setting) {
+  STATE.settings[setting] = !STATE.settings[setting];
+  saveToLocalStorage(CONFIG.STORAGE_KEYS.SETTINGS, STATE.settings);
+  showNotification(`${setting} ${STATE.settings[setting] ? 'enabled' : 'disabled'}`);
+  document.querySelector('.modal-overlay').remove();
+  showSettingsModal();
+}
 
-			function resetChat() {
-				STATE.messageHistory = [];
-				saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, []);
-				document.querySelector('.chat-messages').innerHTML = '';
-				showNotification('Chat history cleared');
-				showWelcomeMessage();
-			}
+function resetChat() {
+  STATE.messageHistory = [];
+  saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, []);
+  document.querySelector('.chat-messages').innerHTML = '';
+  showNotification('Chat history cleared');
+  showWelcomeMessage();
+}
 
-			function showWelcomeMessage() {
-				const welcomeMessage = "👋 Welcome to PatheticAI Enhanced! I'm here to help you with any questions or tasks you may have. Feel free to start our conversation!";
-				const {
-					element
-				} = createMessageElement(welcomeMessage, false);
-				document.querySelector('.chat-messages').appendChild(element);
-			}
+function showWelcomeMessage() {
+  const welcomeMessage = "👋 Welcome to PatheticAI Enhanced! I'm here to help you with any questions or tasks you may have. Feel free to start our conversation!";
+  const { element } = createMessageElement(welcomeMessage, false);
+  document.querySelector('.chat-messages').appendChild(element);
+}
 
-			function playMessageSound() {
-				if (!STATE.settings.soundEffects) return;
-				const audio = new Audio('notification.mp3');
-				audio.volume = 0.5;
-				audio.play().catch(err => console.log('Error playing sound', err));
-			}
+function playMessageSound() {
+  if (!STATE.settings.soundEffects) return;
+  const audio = new Audio('notification.mp3');
+  audio.volume = 0.5;
+  audio.play().catch(err => console.log('Error playing sound', err));
+}
 
-			function toggleThemeSelector() {
-				const themeOptions = document.querySelector('.theme-options');
-				themeOptions.classList.toggle('active');
-			}
+// Theme management
+function toggleThemeSelector() {
+  const themeOptions = document.querySelector('.theme-options');
+  themeOptions.classList.toggle('active');
+}
 
-			function changeTheme(newTheme) {
-				document.documentElement.setAttribute('data-theme', newTheme);
-				STATE.theme = newTheme;
-				saveToLocalStorage(CONFIG.STORAGE_KEYS.THEME, newTheme);
-				const themeOptions = document.querySelector('.theme-options');
-				themeOptions.classList.remove('active');
-			}
+function changeTheme(newTheme) {
+  document.documentElement.setAttribute('data-theme', newTheme);
+  STATE.theme = newTheme;
+  saveToLocalStorage(CONFIG.STORAGE_KEYS.THEME, newTheme);
+  const themeOptions = document.querySelector('.theme-options');
+  themeOptions.classList.remove('active');
+}
 
-			function initializeTheme() {
-				const savedTheme = localStorage.getItem(CONFIG.STORAGE_KEYS.THEME) || 'light';
-				document.documentElement.setAttribute('data-theme', savedTheme);
-				STATE.theme = savedTheme;
-			}
-
-function getApiKey() {
-  return localStorage.getItem(CONFIG.STORAGE_KEYS.API_KEY);
+function initializeTheme() {
+  const savedTheme = localStorage.getItem(CONFIG.STORAGE_KEYS.THEME) || 'light';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  STATE.theme = savedTheme;
 }
 
 function checkAndStoreApiKey() {
   const apiKey = getApiKey();
   if (!apiKey) {
-    const modal = document.createElement('div');
-    modal.className = 'modal-overlay';
-    modal.innerHTML = `
-      <div class="modal-window">
-        <div class="modal-header">
-          <span class="modal-title">OpenRouter API Key Required</span>
-        </div>
-        <div class="modal-content">
-          <p>To use PatheticAI, an API key from OpenRouter is required. Get it at:
-            <a href="https://openrouter.ai/settings/keys" target="_blank">https://openrouter.ai/settings/keys</a>
-          </p>
-          <input type="text" id="apiKeyInput" placeholder="Your API Key Here">
-          <button onclick="saveApiKey()">Start Chat</button>
-        </div>
-      </div>
-    `;
-    document.body.appendChild(modal);
+    showApiKeyModal();
     return false;
   }
   return true;
 }
 
+function getApiKey() {
+  const apiKeyData = JSON.parse(localStorage.getItem(CONFIG.STORAGE_KEYS.API_KEY));
+  if (apiKeyData && apiKeyData.key && apiKeyData.expiry > Date.now()) {
+    return apiKeyData.key; // API key is valid
+  }
+  return null; // API key is expired or missing
+}
+
+function checkAndStoreApiKey() {
+    const storedApiKey = localStorage.getItem('openRouterApiKey');
+    if (!storedApiKey) {
+        const modal = document.createElement('div');
+        modal.className = 'modal-overlay';
+        modal.innerHTML = `
+            <div class="modal-window">
+                <div class="modal-header">
+                    <span class="modal-title">Openrouter API key required!</span>
+                </div>
+                <div class="modal-content">
+                    <p>To use PatheticAI, an API key from Openrouter is required. To get this, go to 
+                        <a href="https://openrouter.ai/settings/keys" target="_blank" style="color: white;">https://openrouter.ai/settings/keys</a>
+                    </p>
+                    <input type="text" id="apiKeyInput" placeholder="Your API Key Here" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 15px; color: white;">
+                    <br><br>
+                    <button onclick="saveApiKey()" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 15px; color: white; cursor: pointer;">Start up</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+        return false;
+    }
+    return true;
+}
+
 function saveApiKey() {
   const apiKey = document.getElementById('apiKeyInput').value.trim();
   if (apiKey && apiKey.startsWith('sk-or-')) {
-    localStorage.setItem(CONFIG.STORAGE_KEYS.API_KEY, apiKey);
+    const expiryTime = Date.now() + 24 * 60 * 60 * 1000; // Set expiry time (24 hours from now)
+    const apiKeyData = { key: apiKey, expiry: expiryTime };
+    localStorage.setItem(CONFIG.STORAGE_KEYS.API_KEY, JSON.stringify(apiKeyData));
     document.querySelector('.modal-overlay').remove();
     showNotification('API key saved successfully');
     enableInput();
@@ -1474,24 +1550,45 @@ function removeApiKey() {
   disableInput();
   showNotification('API key removed');
 }
-			function disableInput() {
-				const textarea = document.getElementById('messageInput');
-				const sendButton = document.querySelector('.chat-input-container button');
-				textarea.disabled = true;
-				sendButton.disabled = true;
-				textarea.placeholder = 'Please enter API key in settings...';
-			}
 
-			function enableInput() {
-				const textarea = document.getElementById('messageInput');
-				const sendButton = document.querySelector('.chat-input-container button');
-				textarea.disabled = false;
-				sendButton.disabled = false;
-				textarea.placeholder = 'Type your message...';
-			}
-			window.addEventListener('load', () => {
-				initializeApp();
-			});
-		</script>
-	</body>
-</html>
+function disableInput() {
+  const textarea = document.getElementById('messageInput');
+  const sendButton = document.querySelector('.chat-input-container button');
+  textarea.disabled = true;
+  sendButton.disabled = true;
+  textarea.placeholder = 'Please enter API key in settings...';
+}
+
+function enableInput() {
+  const textarea = document.getElementById('messageInput');
+  const sendButton = document.querySelector('.chat-input-container button');
+  textarea.disabled = false;
+  sendButton.disabled = false;
+  textarea.placeholder = 'Type your message...';
+}
+
+function showNotification(message) {
+  alert(message);  // Show a simple alert for notifications
+}
+
+// A simple function to handle UI initialization (can be extended with more logic)
+function initializeUI() {
+  // Initialize UI based on the current state, e.g., set theme and language
+  // You could apply language-specific text and adjust the theme here if needed
+  console.log("UI Initialized with Theme:", STATE.theme);
+  console.log("Current Language:", STATE.currentLanguage);
+}
+
+// Set up event listeners for user interactions (to be implemented further)
+function setupEventListeners() {
+  // Example: Add an event listener for sending a message or changing settings
+  // More functionality can be added here as per requirements
+}
+
+// Show a welcome message when the app starts
+function showWelcomeMessage() {
+  console.log("Welcome to PatheticAI Enhanced!");
+  // You can display a user-friendly message in the UI instead of using console.log
+}
+
+        </script>
