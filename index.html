@@ -497,6 +497,62 @@
       .theme-options.active {
         display: block;
       }
+      
+.language-selector-container {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.language-selector {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-small) var(--spacing-normal);
+  background-color: var(--button-background);
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  border-radius: var(--border-radius);
+  transition: background 0.3s ease;
+}
+
+.language-selector i {
+  font-size: 14px;
+}
+
+.language-selector:hover {
+  background-color: var(--button-hover-background);
+}
+
+.language-options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  display: none;
+  background-color: var(--background-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
+.language-option {
+  padding: var(--spacing-small);
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--primary-color);
+  transition: background 0.3s ease;
+}
+
+.language-option:hover {
+  background-color: var(--button-hover-background);
+}
+
+.language-options.active {
+  display: block;
+}
+
 
       .message-timestamp {
         font-size: 11px;
@@ -573,6 +629,7 @@
         background: rgba(255, 255, 255, 0.2);
         transform: translateY(-1px);
       }
+     
 
       @keyframes fadeIn {
         from {
@@ -1373,20 +1430,26 @@ function showSettingsModal() {
     <div class="modal-window">
       <div class="modal-header">
         <span class="modal-title">Settings</span>
-        <button class="close-button" onclick="this.closest('.modal-overlay').remove()">✖</button>
+        <button class="close-button" aria-label="Close settings" onclick="this.closest('.modal-overlay').remove()">✖</button>
       </div>
       <div class="modal-content settings-content">
         <div class="settings-button" onclick="resetChat()">
           <i class="fa fa-trash"></i>
           Clear Chat
         </div>
-        <div class="settings-button" onclick="showAboutModal()">
-          <i class="fa fa-users"></i>
-          About Us
-        </div>
-        <div class="settings-button" onclick="changeLanguage()">
-          <i class="fas fa-language"></i>
-          Language: ${STATE.currentLanguage}
+        <div class="language-selector-container">
+          <div class="language-selector" onclick="toggleLanguageSelector()">
+            <span>Language: ${STATE.currentLanguage}</span> <!-- Show current language here -->
+            <i class="fa fa-chevron-down"></i>
+          </div>
+          <div class="language-options">
+            <div class="language-option" data-language="English" onclick="changeLanguage('English')">English</div>
+            <div class="language-option" data-language="Spanish" onclick="changeLanguage('Spanish')">Spanish</div>
+            <div class="language-option" data-language="French" onclick="changeLanguage('French')">French</div>
+            <div class="language-option" data-language="German" onclick="changeLanguage('German')">German</div>
+            <div class="language-option" data-language="Italian" onclick="changeLanguage('Italian')">Italian</div>
+            <!-- Add more languages as needed -->
+          </div>
         </div>
         <div class="settings-button" onclick="toggleSetting('notifications')">
           <i class="fas fa-bell"></i>
@@ -1426,6 +1489,24 @@ function showSettingsModal() {
   
   document.body.appendChild(modal);
 }
+
+function toggleLanguageSelector() {
+  const languageOptions = document.querySelector('.language-options');
+  languageOptions.classList.toggle('active');
+}
+
+function changeLanguage(language) {
+  // Update the state with the new language
+  STATE.currentLanguage = language;
+  
+  // Update the language selector button text to show "Language: (language)"
+  const languageSelector = document.querySelector('.language-selector span');
+  languageSelector.textContent = `Language: ${language}`;
+  
+  // Optionally, add logic to handle switching text/content for the selected language
+}
+
+
 
 function showNotification(message, duration = 3000) {
   if (!STATE.settings.notifications) return;
