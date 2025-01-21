@@ -20,8 +20,6 @@
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="PatheticAI">
     <meta name="theme-color" content="#fff">
-    
-    <!-- Base styles remain the same but with optimizations -->
     <style>
       * {
         margin: 0;
@@ -766,6 +764,9 @@
         <button onclick="toggleFullscreen()" title="Toggle Fullscreen">
           <i class="fas fa-expand"></i>
         </button>
+        <button onclick="showAboutModal()" title="Join Discord">
+          <i class="fa fa-user-group"></i>
+        </button>
         <button onclick="contactEmail()" title="Join Discord">
           <i class="fa-brands fa-discord"></i>
         </button>
@@ -879,43 +880,37 @@ async function copyToClipboard(text) {
   }
 }
 
-// UI Element Creation
 function createMessageElement(message, isUser, timestamp = new Date()) {
   const messageId = Date.now().toString();
   const messageElement = document.createElement('div');
-  messageElement.classList.add('chat-message');
-  messageElement.classList.add(isUser ? 'user' : 'bot');
+  messageElement.classList.add('chat-message', isUser ? 'user' : 'bot');
   messageElement.dataset.messageId = messageId;
 
-  // Create message content
+  // Content div
   const contentDiv = document.createElement('div');
   contentDiv.classList.add('message-content');
-  
   if (!isUser) {
-    // Process markdown and code blocks in bot messages
     const renderedContent = marked.parse(message);
     contentDiv.innerHTML = renderedContent;
-    
-    // Apply syntax highlighting to code blocks
     contentDiv.querySelectorAll('pre code').forEach((block) => {
       hljs.highlightElement(block);
     });
   } else {
     contentDiv.textContent = message;
   }
-
   messageElement.appendChild(contentDiv);
 
-  // Add timestamp
+  // Timestamp div
   const timestampDiv = document.createElement('div');
   timestampDiv.className = 'message-timestamp';
   timestampDiv.textContent = formatTimestamp(timestamp);
   messageElement.appendChild(timestampDiv);
 
-  // Add message actions
+  // Actions div
   const actionsDiv = document.createElement('div');
   actionsDiv.className = 'message-actions';
 
+  // Edit button (for user messages)
   if (isUser) {
     const editButton = document.createElement('button');
     editButton.className = 'action-button';
@@ -924,17 +919,17 @@ function createMessageElement(message, isUser, timestamp = new Date()) {
     actionsDiv.appendChild(editButton);
   }
 
-  // Add copy button
+  // Copy button
   const copyButton = document.createElement('button');
   copyButton.className = 'action-button';
   copyButton.innerHTML = '<i class="fas fa-copy"></i>';
   copyButton.onclick = () => copyToClipboard(message);
   actionsDiv.appendChild(copyButton);
 
-  // Add reactions
+  // Reactions div
   const reactionsDiv = document.createElement('div');
   reactionsDiv.className = 'message-reactions';
-  ['👍', '👎', '❤️', '🔄'].forEach(reaction => {
+  ['👍', '👎', '❤️', '🔄'].forEach((reaction) => {
     const button = document.createElement('button');
     button.className = 'reaction-button';
     button.textContent = reaction;
@@ -944,8 +939,13 @@ function createMessageElement(message, isUser, timestamp = new Date()) {
   actionsDiv.appendChild(reactionsDiv);
 
   messageElement.appendChild(actionsDiv);
-  return { element: messageElement, id: messageId };
+
+  return {
+    element: messageElement,
+    id: messageId,
+  };
 }
+
 
 // Message Handling
 async function sendMessage() {
@@ -1172,20 +1172,34 @@ function showSettingsModal() {
   document.body.appendChild(modal);
 }
 
-// Theme Handling
 function initializeTheme() {
-  const themeSelect = document.getElementById('themeSelect');
-  themeSelect.addEventListener('change', function() {
-    const newTheme = this.value;
-    document.documentElement.setAttribute('data-theme', newTheme);
-    STATE.theme = newTheme;
-    saveToLocalStorage(CONFIG.STORAGE_KEYS.THEME, newTheme);
-  });
+    const themeSelect = document.getElementById('themeSelect');
 
-  const savedTheme = STATE.theme;
-  document.documentElement.setAttribute('data-theme', savedTheme);
-  themeSelect.value = savedTheme;
+    // Load saved theme from local storage or use a default theme
+    const savedTheme = loadFromLocalStorage(CONFIG.STORAGE_KEYS.THEME) || 'default'; // Replace 'default' with your fallback theme
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    STATE.theme = savedTheme; // Update the global state
+    themeSelect.value = savedTheme;
+
+    // Add event listener to handle theme changes
+    themeSelect.addEventListener('change', function() {
+        const newTheme = this.value;
+        document.documentElement.setAttribute('data-theme', newTheme);
+        STATE.theme = newTheme; // Update the global state
+        saveToLocalStorage(CONFIG.STORAGE_KEYS.THEME, newTheme);
+    });
 }
+
+// Helper function to load from local storage
+function loadFromLocalStorage(key) {
+    return localStorage.getItem(key);
+}
+
+// Helper function to save to local storage
+function saveToLocalStorage(key, value) {
+    localStorage.setItem(key, value);
+}
+
 
 // Initialization
 document.addEventListener('DOMContentLoaded', () => {
@@ -1450,22 +1464,16 @@ function toggleFullscreen() {
   }
 }
 
-// Handle reactions
 function handleReaction(messageId, reaction) {
-  const button = document.querySelector(`[data-message-id="${messageId}"] .reaction-button:contains('${reaction}')`);
-  if (button) {
-    button.classList.toggle('active');
-    showNotification(`Reaction ${reaction} ${button.classList.contains('active') ? 'added' : 'removed'}`);
-  }
-}
+  // Use Array.from to get a list of all reaction buttons for the message
+  const reactionButton = Array.from(document.querySelectorAll(`[data-message-id="${messageId}"] .reaction-button`))
+    .find(button => button.textContent === reaction);
 
-// Sound Effects
-function playMessageSound() {
-  if (!STATE.settings.soundEffects) return;
-  
-  const audio = new Audio('data:audio/wav;base64,UklGRnQGAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YU8GAACBhYqFbF1fdH+Df4F/gn+Df4N/hICFgYaBhYKGgoaBhYGFgYWAhICDf4J/gX+Af35/fn9+f4CAgoWBhIGGhIeGhIODg4ODgYGAgICAgIGCg4OFg4WDhoOGgoaBhYCEgIOAgrL+//3x/P/0//j//f///v///f7//f/+/v///v7///7////+//7//f/8//z//P/8//3//v8AAAIBAwEEAgUCBQIFAgQBAwECAQEBAQEBAQICAwMEAwUDBgMGAgYCBQIEAQMA////hv6u/8bZJm7ILCC9YROhpWt+jH9JBN+1spBqBUyGCoNEEBSrOBCEKqA4qBJgIkIoK3AwaA7wD74t93vW8GDHzAjGlATUVHpIZAGOAQEBAgIDAgMCBAIEAwUDBQMGAwYDBgMGAgYCBQIEAgMCAQIBAAAAAAD//wAAAQEBAQIBAgEDAQMBAwEDAQMBAgECAQEBAAAAAAD///////7//v/9//3//f/9//3//v/+/////wAAAQECAQMBBAIEAgUCBQIFAgQCBAIDAgICAQIBAQEBAQEBAQECAQIBAwEDAQQCBAIEAgQCAwIDAQIBAQEAAAAA//////7//v/9//3//v/+//////8AAAEBAgEDAQQBBQIFAgYCBgIGAgYCBQIFAgQCAwICAQIBAQEAAAAAAAAAAQEBAQIBAgEDAQQCBAIEAgQCBAIDAgMCAgECAQEBAAAAAP////7//v/+//7//v/+//7//v/+//7//v/+//7//v/9//3//f/9//3//v/+/////wAAAQEBAQIBAgECAQMBAwEDAQMBAwEDAQMBAgECAQIBAQEBAQAAAAAAAAEBAQEBAQIBAgECAQIBAgECAQIBAQEBAQEBAAAAAAAAAAAAAAD///////////////////////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///////////////////7//v/9//3//f/9//3//v/+//7//////////////v/+//7//f/9//3//f/9//7//v///////wAAAAAAAAAAAAAAAAAAAAD///////////////7//v/+//7//v/+//7//v/+//////////////////7//v/+//3//f/9//3//f/9//7//v/+//////////////////7//v/9//3//f/9//3//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+/w==');
-  audio.volume = 0.5;
-  audio.play().catch(err => console.log('Error playing sound'));
+  if (reactionButton) {
+    reactionButton.classList.toggle('reacted');
+  } else {
+    console.error('Reaction button not found');
+  }
 }
 
 // Handle window resize
@@ -1477,19 +1485,18 @@ function handleResize() {
 
 // Discord link
 function contactEmail() {
-  window.open('https://discord.gg/pathetikz', '_blank');
+  window.open('https://discord.gg/Hb5ccPY3XV', '_blank');
 }
 
 // Update suggestions based on conversation context
 function updateSuggestions() {
-  // This is a placeholder - implement context-aware suggestions
   const suggestions = [
     'Tell me more about that',
     'Can you explain further?',
     'What are your thoughts on this?',
     'How can I help you with that?'
   ];
-  
+
   const suggestionsContainer = document.querySelector('.chat-suggestions');
   if (suggestionsContainer) {
     suggestionsContainer.innerHTML = suggestions
@@ -1526,17 +1533,17 @@ function showAboutModal() {
       modal.remove();
     }
   });
-  
+
   document.body.appendChild(modal);
 }
 
 // Convert speech to text (placeholder function)
 async function convertSpeechToText(audioBlob) {
   try {
-    // This is a placeholder - implement with your preferred speech-to-text service
+    // Placeholder - implement with your preferred speech-to-text service
     const formData = new FormData();
     formData.append('audio', audioBlob);
-    
+
     // Example API call - replace with actual speech-to-text service
     // const response = await fetch('your-speech-to-text-api', {
     //   method: 'POST',
@@ -1544,9 +1551,8 @@ async function convertSpeechToText(audioBlob) {
     // });
     // const data = await response.json();
     // return data.text;
-    
-    // For now, return null to indicate speech-to-text is not implemented
-    return null;
+
+    return null;  // Return null for now to indicate speech-to-text is not implemented
   } catch (error) {
     console.error('Speech to text conversion failed:', error);
     showNotification('Speech to text conversion failed');
@@ -1582,6 +1588,45 @@ window.addEventListener('blur', () => {
     }
   }
 });
+
+function checkAndStoreApiKey() {
+  const storedApiKey = localStorage.getItem('openRouterApiKey');
+  if (!storedApiKey) {
+    const modal = document.createElement('div');
+    modal.className = 'modal-overlay';
+    modal.innerHTML = `
+      <div class="modal-window">
+        <div class="modal-header">
+          <span class="modal-title">Openrouter API key required!</span>
+        </div>
+        <div class="modal-content">
+          <p>To use PatheticAI, an API key from Openrouter is required. To get this, go to 
+            <a href="https://openrouter.ai/settings/keys" target="_blank" style="color: white;">https://openrouter.ai/settings/keys</a>, an account is required. Enter your key here:</p>
+          <input type="text" id="apiKeyInput" placeholder="Your API Key Here" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 15px; color: white;">
+          <br><br>
+          <button onclick="saveApiKey()" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 15px; color: white; cursor: pointer;">Start up</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+    return false;
+  }
+  return true;
+}
+
+function saveApiKey() {
+  const apiKey = document.getElementById('apiKeyInput').value.trim();
+  if (apiKey && apiKey.startsWith('sk-or-')) {
+    localStorage.setItem('openRouterApiKey', apiKey);
+    document.querySelector('.modal-overlay').remove();
+    showNotification('Booting...');
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
+  } else {
+    showNotification('API key not suitable for PatheticAI...');
+  }
+}
 
 // Handle offline/online events
 window.addEventListener('offline', () => {
@@ -1657,11 +1702,36 @@ function addCustomTheme(name, theme) {
 //   primaryColor: '#00ff00',
 //   // ... add all required theme properties
 // });
+
 let deferredPrompt;
+
+// Listen for the 'beforeinstallprompt' event, which is fired when the app is eligible for installation
 window.addEventListener('beforeinstallprompt', (e) => {
+  // Prevent the default prompt from showing up
   e.preventDefault();
+
+  // Save the event so you can trigger it later
   deferredPrompt = e;
-  // Show your custom "Add to Home Screen" button here
+
+  // Optionally, display your custom "Add to Home Screen" button
+  const addBtn = document.querySelector('#add-to-home-screen-btn');
+  if (addBtn) {
+    addBtn.style.display = 'block'; // Show the button
+    addBtn.addEventListener('click', () => {
+      // Show the default install prompt when the user clicks the button
+      deferredPrompt.prompt();
+
+      // Wait for the user's response to the prompt
+      deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+          console.log('User accepted the install prompt');
+        } else {
+          console.log('User dismissed the install prompt');
+        }
+        deferredPrompt = null; // Reset the deferred prompt
+      });
+    });
+  }
 });
 
 document.getElementById('installButton').addEventListener('click', () => {
