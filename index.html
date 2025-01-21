@@ -848,9 +848,71 @@ Key characteristics:
 - Provides clear, concise responses
 - Adapts communication style to user needs
 - Offers helpful suggestions and insights
-- Maintains context awareness
-Please always respond in ${STATE.currentLanguage}.`
+- Maintains context awareness`
 };
+
+// Initialize app when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+  initializeApp();
+});
+
+function initializeApp() {
+  loadSavedState();
+  initializeUI();
+  setupEventListeners();
+  showWelcomeMessage();
+  if (!checkAndStoreApiKey()) {
+    disableInput();
+  }
+}
+
+function loadSavedState() {
+  try {
+    // Load saved messages
+    const savedMessages = localStorage.getItem(CONFIG.STORAGE_KEYS.MESSAGES);
+    if (savedMessages) {
+      STATE.messageHistory = JSON.parse(savedMessages);
+      // Validate loaded messages
+      STATE.messageHistory = STATE.messageHistory.filter(msg => 
+        msg && msg.role && msg.content && msg.timestamp
+      );
+    }
+
+    // Load settings
+    const savedSettings = localStorage.getItem(CONFIG.STORAGE_KEYS.SETTINGS);
+    if (savedSettings) {
+      const parsedSettings = JSON.parse(savedSettings);
+      STATE.settings = { ...STATE.settings, ...parsedSettings };
+    }
+
+    // Load theme
+    const savedTheme = localStorage.getItem(CONFIG.STORAGE_KEYS.THEME);
+    if (savedTheme) {
+      STATE.theme = savedTheme;
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    }
+
+    // Load language
+    const savedLanguage = localStorage.getItem(CONFIG.STORAGE_KEYS.LANGUAGE);
+    if (savedLanguage) {
+      STATE.currentLanguage = savedLanguage;
+    }
+  } catch (error) {
+    console.error('Error loading saved state:', error);
+    STATE.messageHistory = [];
+    saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, []);
+  }
+}
+
+function saveToLocalStorage(key, value) {
+  try {
+    localStorage.setItem(key, typeof value === 'string' ? value : JSON.stringify(value));
+    return true;
+  } catch (error) {
+    console.error('Local storage error:', error);
+    return false;
+  }
+}
 
 function formatTimestamp(date) {
   return new Intl.DateTimeFormat('default', {
@@ -861,16 +923,6 @@ function formatTimestamp(date) {
     month: 'short',
     day: 'numeric'
   }).format(date);
-}
-
-function saveToLocalStorage(key, value) {
-  try {
-    localStorage.setItem(key, JSON.stringify(value));
-    return true;
-  } catch (error) {
-    console.error('Local storage error:', error);
-    return false;
-  }
 }
 
 async function copyToClipboard(text) {
@@ -890,15 +942,16 @@ function createMessageElement(message, isUser, timestamp = new Date()) {
 
   const contentDiv = document.createElement('div');
   contentDiv.classList.add('message-content');
+  
   if (!isUser) {
-    const renderedContent = marked.parse(message);
-    contentDiv.innerHTML = renderedContent;
+    contentDiv.innerHTML = marked.parse(message);
     contentDiv.querySelectorAll('pre code').forEach((block) => {
       hljs.highlightElement(block);
     });
   } else {
     contentDiv.textContent = message;
   }
+  
   messageElement.appendChild(contentDiv);
 
   const timestampDiv = document.createElement('div');
@@ -912,7 +965,7 @@ function createMessageElement(message, isUser, timestamp = new Date()) {
   if (isUser) {
     const editButton = document.createElement('button');
     editButton.className = 'action-button';
-    editButton.innerHTML = '<i class = "fas fa-edit"></i>';
+    editButton.innerHTML = '<i class="fas fa-edit"></i>';
     editButton.onclick = () => startEditing(messageId);
     actionsDiv.appendChild(editButton);
   }
@@ -923,91 +976,161 @@ function createMessageElement(message, isUser, timestamp = new Date()) {
   copyButton.onclick = () => copyToClipboard(message);
   actionsDiv.appendChild(copyButton);
 
-  const reactionsDiv = document.createElement('div');
-  reactionsDiv.className = 'message-reactions';
-  ['👍', '👎', '❤️', '🔄'].forEach((reaction) => {
-    const button = document.createElement('button');
-    button.className = 'reaction-button';
-    button.textContent = reaction;
-    button.onclick = () => handleReaction(messageId, reaction);
-    reactionsDiv.appendChild(button);
-  });
-  actionsDiv.appendChild(reactionsDiv);
   messageElement.appendChild(actionsDiv);
-  return {
-    element: messageElement,
-    id: messageId,
+  return { element: messageElement, id: messageId };
+}
+
+async function startEditing(messageId) {
+  if (STATE.isWaitingForResponse) return;
+  
+  const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
+  if (!messageElement) return;
+  
+  const contentDiv = messageElement.querySelector('.message-content');
+  const originalText = contentDiv.textContent;
+  
+  const textarea = document.createElement('textarea');
+  textarea.className = 'edit-input';
+  textarea.value = originalText;
+  
+  contentDiv.replaceWith(textarea);
+  textarea.focus();
+  messageElement.classList.add('edit-mode');
+  STATE.editingMessageId = messageId;
+  
+  const handleEdit = async (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      await finishEditing(messageId, textarea.value.trim());
+    } else if (e.key === 'Escape') {
+      finishEditing(messageId, originalText);
+    }
   };
+  
+  textarea.addEventListener('keydown', handleEdit);
+}
+
+async function finishEditing(messageId, newText) {
+  if (!messageId || !newText || STATE.isWaitingForResponse) return;
+  
+  const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
+  if (!messageElement) return;
+  
+  // Update UI
+  const textarea = messageElement.querySelector('.edit-input');
+  const contentDiv = document.createElement('div');
+  contentDiv.className = 'message-content';
+  contentDiv.textContent = newText;
+  textarea.replaceWith(contentDiv);
+  messageElement.classList.remove('edit-mode');
+  
+  // Find message in history
+  const messageIndex = STATE.messageHistory.findIndex(msg => msg.id === messageId);
+  if (messageIndex === -1) return;
+  
+  // Update message in history
+  STATE.messageHistory[messageIndex].content = newText;
+  
+  // Remove subsequent bot response if it exists
+  const nextIndex = messageIndex + 1;
+  if (nextIndex < STATE.messageHistory.length && STATE.messageHistory[nextIndex].role === 'assistant') {
+    STATE.messageHistory.splice(nextIndex, 1);
+    const nextElement = messageElement.nextElementSibling;
+    if (nextElement) nextElement.remove();
+  }
+  
+  // Get new bot response
+  try {
+    STATE.isWaitingForResponse = true;
+    const response = await sendMessageWithRetry(newText);
+    
+    if (response.text) {
+      const botMessageObj = {
+        role: "assistant",
+        content: response.text,
+        timestamp: Date.now(),
+        replyTo: messageId
+      };
+      
+      STATE.messageHistory.splice(nextIndex, 0, botMessageObj);
+      
+      const { element: botElement } = createMessageElement(response.text, false);
+      messageElement.after(botElement);
+      
+      if (STATE.settings.autoScroll) {
+        botElement.scrollIntoView({ behavior: 'smooth' });
+      }
+      
+      if (STATE.settings.soundEffects) {
+        playMessageSound();
+      }
+    }
+  } catch (error) {
+    showError(`Error updating response: ${error.message}`);
+  } finally {
+    STATE.isWaitingForResponse = false;
+    STATE.editingMessageId = null;
+  }
+  
+  saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, STATE.messageHistory);
 }
 
 async function sendMessage() {
   const textarea = document.getElementById('messageInput');
   const message = textarea.value.trim();
-  const sendButton = document.querySelector('.chat-input-container button');
-  if (!message || STATE.isWaitingForResponse) return;
+  if (!message || STATE.isWaitingForResponse || STATE.editingMessageId) return;
+
   STATE.isWaitingForResponse = true;
-  textarea.disabled = true;
-  sendButton.disabled = true;
+  disableInput();
+
   const timestamp = new Date();
-  const {
-    element: messageElement,
-    id: messageId
-  } = createMessageElement(message, true, timestamp);
+  const { element: messageElement, id: messageId } = createMessageElement(message, true, timestamp);
   document.querySelector('.chat-messages').appendChild(messageElement);
+
   if (STATE.settings.autoScroll) {
-    messageElement.scrollIntoView({
-      behavior: 'smooth'
-    });
+    messageElement.scrollIntoView({ behavior: 'smooth' });
   }
+
   textarea.value = '';
   textarea.style.height = 'auto';
 
-  STATE.messageHistory.push({
+  const messageObj = {
     role: "user",
     content: message,
-    timestamp: timestamp.getTime()
-  });
+    timestamp: timestamp.getTime(),
+    id: messageId
+  };
+  STATE.messageHistory.push(messageObj);
   saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, STATE.messageHistory);
 
-  const loadingElement = createTypingIndicator();
-  document.querySelector('.chat-messages').appendChild(loadingElement);
   try {
     const response = await sendMessageWithRetry(message);
-    loadingElement.remove();
     if (response.text) {
-      STATE.messageHistory.push({
+      const botMessageObj = {
         role: "assistant",
         content: response.text,
-        timestamp: Date.now()
-      });
+        timestamp: Date.now(),
+        replyTo: messageId
+      };
+      STATE.messageHistory.push(botMessageObj);
       saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, STATE.messageHistory);
-      const {
-        element: botElement
-      } = createMessageElement(response.text, false);
+
+      const { element: botElement } = createMessageElement(response.text, false);
       document.querySelector('.chat-messages').appendChild(botElement);
+
       if (STATE.settings.autoScroll) {
-        botElement.scrollIntoView({
-          behavior: 'smooth'
-        });
+        botElement.scrollIntoView({ behavior: 'smooth' });
       }
 
       if (STATE.settings.soundEffects) {
         playMessageSound();
       }
-
-      updateSuggestions();
     }
   } catch (error) {
-    loadingElement.remove();
     showError(`Error: ${error.message}`);
-    const {
-      element: errorElement
-    } = createMessageElement(`Error: ${error.message}`, false);
-    document.querySelector('.chat-messages').appendChild(errorElement);
   } finally {
     STATE.isWaitingForResponse = false;
-    textarea.disabled = false;
-    sendButton.disabled = false;
+    enableInput();
     textarea.focus();
   }
 }
@@ -1029,9 +1152,9 @@ async function sendMessageWithRetry(message, retries = CONFIG.MAX_RETRIES) {
 async function tryMultipleModels(userMessage) {
   const apiKey = getApiKey();
   if (!apiKey) {
-    checkAndStoreApiKey();
     throw new Error("API key not found. Please enter your API key first.");
   }
+  
   for (let modelIndex = 0; modelIndex < MODELS.length; modelIndex++) {
     try {
       const response = await Promise.race([
@@ -1044,7 +1167,9 @@ async function tryMultipleModels(userMessage) {
           body: JSON.stringify({
             "model": MODELS[modelIndex].name,
             "messages": [
-              systemMessage, ...STATE.messageHistory.filter(msg => msg.role === "user" || msg.role === "assistant"), {
+              systemMessage,
+              ...STATE.messageHistory.filter(msg => msg.role === "user" || msg.role === "assistant"),
+              {
                 role: "user",
                 content: `Please respond in ${STATE.currentLanguage}. ${userMessage}`
               }
@@ -1059,6 +1184,7 @@ async function tryMultipleModels(userMessage) {
         }),
         new Promise((_, reject) => setTimeout(() => reject(new Error('Request timeout')), CONFIG.API_TIMEOUT))
       ]);
+      
       if (response.choices && response.choices[0].message.content) {
         return {
           text: response.choices[0].message.content
@@ -1075,32 +1201,156 @@ async function tryMultipleModels(userMessage) {
   throw new Error("All API attempts failed. Please try again later.");
 }
 
+// Speech to text functionality using Web Speech API
 async function toggleVoiceInput() {
-  if (!STATE.voiceRecording) {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        audio: true
-      });
-      STATE.mediaRecorder = new MediaRecorder(stream);
-      STATE.mediaRecorder.ondataavailable = async (event) => {
-        const audioBlob = event.data;
+  const voiceButton = document.querySelector('.voice-input-button');
+  const messageInput = document.getElementById('messageInput');
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
-        const text = await convertSpeechToText(audioBlob);
-        if (text) {
-          document.getElementById('messageInput').value = text;
-          sendMessage();
-        }
+  if (!STATE.voiceRecording) {
+    if (!SpeechRecognition) {
+      showError('Your browser does not support the Web Speech API');
+      return;
+    }
+
+    try {
+      const recognition = new SpeechRecognition();
+      recognition.continuous = false; // Set to true for ongoing transcription
+      recognition.interimResults = true; // Show results as user speaks
+      recognition.lang = 'en-US'; // Change this to the desired language
+
+      STATE.recognition = recognition;
+
+      recognition.onstart = () => {
+        STATE.voiceRecording = true;
+        voiceButton.classList.add('recording');
+        showNotification('Voice recording started');
       };
-      STATE.mediaRecorder.start();
-      STATE.voiceRecording = true;
-      document.querySelector('.voice-input-button').classList.add('recording');
+
+      recognition.onresult = (event) => {
+        let transcript = '';
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          transcript += event.results[i][0].transcript;
+        }
+        messageInput.value = transcript;
+        messageInput.focus();
+      };
+
+      recognition.onerror = (event) => {
+        showError('Speech recognition error');
+        console.error('Speech recognition error:', event.error);
+      };
+
+      recognition.onend = () => {
+        STATE.voiceRecording = false;
+        voiceButton.classList.remove('recording');
+        showNotification('Voice recording stopped');
+      };
+
+      recognition.start();
     } catch (error) {
-      showNotification('Microphone access denied');
+      showError('Microphone access denied');
+      voiceButton.disabled = true;
     }
   } else {
-    STATE.mediaRecorder.stop();
-    STATE.voiceRecording = false;
-    document.querySelector('.voice-input-button').classList.remove('recording');
+    if (STATE.recognition) {
+      STATE.recognition.stop();
+      STATE.voiceRecording = false;
+      voiceButton.classList.remove('recording');
+      showNotification('Voice recording stopped');
+    }
+  }
+}
+
+
+function initializeUI() {
+  initializeTextarea();
+  initializeTheme();
+  if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+    initializeVoiceInput();
+  }
+}
+
+function initializeTextarea() {
+  const textarea = document.getElementById('messageInput');
+  textarea.addEventListener('input', function() {
+    this.style.height = 'auto';
+    this.style.height = Math.min(this.scrollHeight, 200) + 'px';
+  });
+  
+  textarea.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+}
+
+function initializeVoiceInput() {
+  const chatInput = document.querySelector('.chat-input-container');
+  if (chatInput) {
+    const voiceButton = document.createElement('button');
+    voiceButton.className = 'voice-input-button';
+    voiceButton.innerHTML = '<i class="fas fa-microphone"></i>';
+    voiceButton.title = 'Voice Input';
+    voiceButton.onclick = toggleVoiceInput;
+    chatInput.insertBefore(voiceButton, chatInput.lastElementChild);
+  }
+}
+
+function setupEventListeners() {
+  window.addEventListener('focus', handleWindowFocus);
+  window.addEventListener('blur', handleWindowBlur);
+  window.addEventListener('online', () => showNotification('You are back online!'));
+  window.addEventListener('offline', () => showNotification('You are offline. Some features may be unavailable.'));
+  window.addEventListener('beforeunload', handleBeforeUnload);
+  
+  document.querySelector('.container').addEventListener('wheel', handleScroll);
+  document.querySelector('.brand').addEventListener('click', showAboutModal);
+  window.addEventListener('resize', handleResize);
+}
+
+function handleWindowFocus() {
+  if (STATE.settings.notifications) {
+    document.title = 'PatheticAI Enhanced';
+  }
+}
+
+function handleWindowBlur() {
+  if (STATE.settings.notifications) {
+    const unreadMessages = STATE.messageHistory.filter(msg => 
+      msg.role === 'assistant' && msg.timestamp > document.lastModified
+    ).length;
+    if (unreadMessages > 0) {
+      document.title = `(${unreadMessages}) PatheticAI Enhanced`;
+    }
+  }
+}
+
+function handleBeforeUnload(e) {
+  if (STATE.isWaitingForResponse || STATE.editingMessageId) {
+    e.preventDefault();
+    e.returnValue = '';
+  }
+}
+
+function handleScroll(e) {
+  if (STATE.settings.autoScroll) {
+    const container = document.querySelector('.container');
+    const isScrolledToBottom = container.scrollHeight - container.clientHeight <= container.scrollTop + 1;
+    if (!isScrolledToBottom) {
+      STATE.settings.autoScroll = false;
+      showNotification('Auto-scroll disabled');
+      saveToLocalStorage(CONFIG.STORAGE_KEYS.SETTINGS, STATE.settings);
+    }
+  }
+}
+
+function handleResize() {
+  const textarea = document.getElementById('messageInput');
+  if (textarea) {
+    textarea.style.height = 'auto';
+    textarea.style.height = Math.min(textarea.scrollHeight, 200) + 'px';
   }
 }
 
@@ -1155,523 +1405,153 @@ function showSettingsModal() {
       </div>
     </div>
   `;
+  
   modal.addEventListener('click', (e) => {
     if (e.target === modal) {
       modal.remove();
     }
   });
+  
   document.body.appendChild(modal);
 }
 
-      function toggleThemeSelector() {
-        const themeOptions = document.querySelector('.theme-options');
-        themeOptions.classList.toggle('active');
-      }
-
-      function changeTheme(newTheme) {
-        document.documentElement.setAttribute('data-theme', newTheme);
-        STATE.theme = newTheme;
-        saveToLocalStorage(CONFIG.STORAGE_KEYS.THEME, newTheme);
-        const themeOptions = document.querySelector('.theme-options');
-        themeOptions.classList.remove('active'); 
-      }
-
-      function initializeTheme() {
-
-        const savedTheme = loadFromLocalStorage(CONFIG.STORAGE_KEYS.THEME) || 'light'; 
-        document.documentElement.setAttribute('data-theme', savedTheme);
-        STATE.theme = savedTheme; 
-      }
-
-      function loadFromLocalStorage(key) {
-        return localStorage.getItem(key);
-      }
-
-      function saveToLocalStorage(key, value) {
-        localStorage.setItem(key, value);
-      }
-
-      document.addEventListener('DOMContentLoaded', (event) => {
-        initializeTheme(); 
-      });
-      document.addEventListener('DOMContentLoaded', (event) => {
-
-        const themeSelector = document.querySelector('.theme-selector');
-        if (themeSelector) {
-          themeSelector.addEventListener('click', toggleThemeSelector);
-        }
-
-        initializeTheme();
-        initializeTextarea();
-        loadMessageHistory();
-        if (!checkAndStoreApiKey()) {
-          disableInput();
-        }
-
-        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-          initializeVoiceInput();
-        }
-
-        marked.setOptions({
-          breaks: true,
-          gfm: true,
-          highlight: function(code, language) {
-            return hljs.highlight(code, {
-              language
-            }).value;
-          }
-        });
-
-        document.querySelector('.brand').addEventListener('click', showAboutModal);
-        window.addEventListener('resize', handleResize);
-
-        showWelcomeMessage();
-      });
-
-      function loadMessageHistory() {
-        const messages = STATE.messageHistory;
-        const chatMessages = document.querySelector('.chat-messages');
-        chatMessages.innerHTML = '';
-        messages.forEach(message => {
-          const isUser = message.role === 'user';
-          const {
-            element
-          } = createMessageElement(message.content, isUser, new Date(message.timestamp));
-          chatMessages.appendChild(element);
-        });
-      }
-
-      function resetChat() {
-        STATE.messageHistory = [];
-        saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, []);
-        document.querySelector('.chat-messages').innerHTML = '';
-        showNotification('Chat history cleared');
-        showWelcomeMessage();
-      }
-
-      function initializeTextarea() {
-        const textarea = document.getElementById('messageInput');
-        textarea.addEventListener('input', function() {
-          this.style.height = 'auto';
-          this.style.height = Math.min(this.scrollHeight, 200) + 'px';
-        });
-        textarea.addEventListener('keydown', function(e) {
-          if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            sendMessage();
-          }
-        });
-      }
-
-      function disableInput() {
-        const textarea = document.getElementById('messageInput');
-        const sendButton = document.querySelector('.chat-input-container button');
-        textarea.disabled = true;
-        sendButton.disabled = true;
-        textarea.placeholder = 'Please enter API key in settings...';
-      }
-
-      function enableInput() {
-        const textarea = document.getElementById('messageInput');
-        const sendButton = document.querySelector('.chat-input-container button');
-        textarea.disabled = false;
-        sendButton.disabled = false;
-        textarea.placeholder = 'Type your message...';
-      }
-
-      function getApiKey() {
-        return localStorage.getItem(CONFIG.STORAGE_KEYS.API_KEY);
-      }
-
-      function checkAndStoreApiKey() {
-        const apiKey = getApiKey();
-        if (!apiKey) {
-          const key = prompt('Please enter your OpenRouter API key:');
-          if (key) {
-            localStorage.setItem(CONFIG.STORAGE_KEYS.API_KEY, key);
-            enableInput();
-            return true;
-          }
-          return false;
-        }
-        return true;
-      }
-
-      function removeApiKey() {
-        localStorage.removeItem(CONFIG.STORAGE_KEYS.API_KEY);
-        disableInput();
-        showNotification('API key removed');
-      }
-
-function showAboutModal() {
-  const modal = document.createElement('div');
-  modal.classList.add('modal-overlay');
-
-  const modalWindow = document.createElement('div');
-  modalWindow.classList.add('modal-window');
+function showNotification(message, duration = 3000) {
+  if (!STATE.settings.notifications) return;
   
-  const modalHeader = document.createElement('div');
-  modalHeader.classList.add('modal-header');
+  const notification = document.createElement('div');
+  notification.className = 'notification';
+  notification.textContent = message;
+  document.body.appendChild(notification);
   
-  const modalTitle = document.createElement('span');
-  modalTitle.classList.add('modal-title');
-  modalTitle.textContent = 'About PatheticAI';
-
-  const closeButton = document.createElement('button');
-  closeButton.classList.add('close-button');
-  closeButton.textContent = '✖';
-  closeButton.addEventListener('click', () => modal.remove());
-
-  const modalContent = document.createElement('div');
-  modalContent.classList.add('modal-content');
-  
-  modalContent.innerHTML = `
-    <p><strong>PatheticAI:</strong> 1.0 Enhanced</p>
-    <p><strong>API version:</strong> 1.0</p>
-    <p><strong>Contact:</strong> <a href="https://discord.gg/Hb5ccPY3XV">https://discord.gg/Hb5ccPY3XV</a></p>
-    <br>
-    <p><strong>Enhanced Features:</strong></p>
-    <ul>
-      <li>Improved message handling</li>
-      <li>Better code display and copying</li>
-      <li>Theme customization</li>
-      <li>Advanced editing capabilities</li>
-      <li>Persistent chat history</li>
-    </ul>
-  `;
-
-  modalHeader.append(modalTitle, closeButton);
-  modalWindow.append(modalHeader, modalContent);
-  modal.appendChild(modalWindow);
-
-  modal.addEventListener('click', (e) => {
-    if (e.target === modal) {
-      modal.remove();
-    }
-  });
-
-  document.body.appendChild(modal);
+  setTimeout(() => {
+    notification.classList.add('fade-out');
+    setTimeout(() => notification.remove(), 300);
+  }, duration);
 }
 
+function showError(message) {
+  showNotification(message, 5000);
+  console.error(message);
+}
 
-      function createTypingIndicator() {
-        const indicator = document.createElement('div');
-        indicator.className = 'typing-indicator';
-        indicator.innerHTML = `
+function toggleSetting(setting) {
+  STATE.settings[setting] = !STATE.settings[setting];
+  saveToLocalStorage(CONFIG.STORAGE_KEYS.SETTINGS, STATE.settings);
+  showNotification(`${setting} ${STATE.settings[setting] ? 'enabled' : 'disabled'}`);
+  document.querySelector('.modal-overlay').remove();
+  showSettingsModal();
+}
 
-																		<div class="typing-dot"></div>
-																		<div class="typing-dot"></div>
-																		<div class="typing-dot"></div>
-  `;
-        return indicator;
-      }
+function resetChat() {
+  STATE.messageHistory = [];
+  saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, []);
+  document.querySelector('.chat-messages').innerHTML = '';
+  showNotification('Chat history cleared');
+  showWelcomeMessage();
+}
 
-      function showNotification(message, duration = 3000) {
-        if (!STATE.settings.notifications) return;
-        const notification = document.createElement('div');
-        notification.className = 'notification';
-        notification.textContent = message;
-        document.body.appendChild(notification);
-        setTimeout(() => {
-          notification.classList.add('fade-out');
-          setTimeout(() => notification.remove(), 300);
-        }, duration);
-      }
-
-      function showError(message) {
-        showNotification(message, 5000);
-        console.error(message);
-      }
-
-      function toggleSetting(setting) {
-        STATE.settings[setting] = !STATE.settings[setting];
-        saveToLocalStorage(CONFIG.STORAGE_KEYS.SETTINGS, STATE.settings);
-        showNotification(`${setting} ${STATE.settings[setting] ? 'enabled' : 'disabled'}`);
-        document.querySelector('.modal-overlay').remove();
-        showSettingsModal();
-      }
-
-      function changeLanguage() {
-        const languages = ['English', 'Spanish', 'French', 'German', 'Chinese', 'Japanese', 'Korean'];
-        const currentIndex = languages.indexOf(STATE.currentLanguage);
-        STATE.currentLanguage = languages[(currentIndex + 1) % languages.length];
-        localStorage.setItem(CONFIG.STORAGE_KEYS.LANGUAGE, STATE.currentLanguage);
-        showNotification(`Language changed to ${STATE.currentLanguage}`);
-        document.querySelector('.modal-overlay').remove();
-        showSettingsModal();
-      }
-
-      function startEditing(messageId) {
-        const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
-        const contentDiv = messageElement.querySelector('.message-content');
-        const originalText = contentDiv.textContent;
-        const textarea = document.createElement('textarea');
-        textarea.className = 'edit-input';
-        textarea.value = originalText;
-        contentDiv.replaceWith(textarea);
-        textarea.focus();
-        messageElement.classList.add('edit-mode');
-        textarea.addEventListener('keydown', function(e) {
-          if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            finishEditing(messageId, textarea.value);
-          } else if (e.key === 'Escape') {
-            finishEditing(messageId, originalText);
-          }
-        });
-      }
-
-      function finishEditing(messageId, newText) {
-        const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
-        const textarea = messageElement.querySelector('.edit-input');
-        const contentDiv = document.createElement('div');
-        contentDiv.className = 'message-content';
-        contentDiv.textContent = newText;
-        textarea.replaceWith(contentDiv);
-        messageElement.classList.remove('edit-mode');
-
-        const messageIndex = STATE.messageHistory.findIndex(msg => new Date(msg.timestamp).toString() === messageElement.querySelector('.message-timestamp').textContent);
-        if (messageIndex !== -1) {
-          STATE.messageHistory[messageIndex].content = newText;
-          saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, STATE.messageHistory);
-        }
-      }
-
-      function showWelcomeMessage() {
-        const welcomeMessage = "👋 Welcome to PatheticAI Enhanced! I'm here to help you with any questions or tasks you may have. Feel free to start our conversation!";
-        const {
-          element
-        } = createMessageElement(welcomeMessage, false);
-        document.querySelector('.chat-messages').appendChild(element);
-      }
-
-      function toggleFullscreen() {
-        if (!document.fullscreenElement) {
-          document.documentElement.requestFullscreen().catch(err => {
-            showNotification('Error attempting to enable fullscreen');
-          });
-        } else {
-          if (document.exitFullscreen) {
-            document.exitFullscreen();
-          }
-        }
-      }
-
-      function handleReaction(messageId, reaction) {
-
-        const reactionButton = Array.from(document.querySelectorAll(`[data-message-id="${messageId}"] .reaction-button`)).find(button => button.textContent === reaction);
-        if (reactionButton) {
-          reactionButton.classList.toggle('reacted');
-        } else {
-          console.error('Reaction button not found');
-        }
-      }
+function showWelcomeMessage() {
+  const welcomeMessage = "👋 Welcome to PatheticAI Enhanced! I'm here to help you with any questions or tasks you may have. Feel free to start our conversation!";
+  const { element } = createMessageElement(welcomeMessage, false);
+  document.querySelector('.chat-messages').appendChild(element);
+}
 
 function playMessageSound() {
-    if (!STATE.settings.soundEffects) return;
-
-    const audio = new Audio('notification.mp3');
-    audio.volume = 0.5;
-    audio.play().catch(err => console.log('Error playing sound', err));
+  if (!STATE.settings.soundEffects) return;
+  const audio = new Audio('notification.mp3');
+  audio.volume = 0.5;
+  audio.play().catch(err => console.log('Error playing sound', err));
 }
 
-      function handleResize() {
-        const textarea = document.getElementById('messageInput');
-        if (textarea) {
-          textarea.style.height = 'auto';
-          textarea.style.height = Math.min(textarea.scrollHeight, 200) + 'px';
-        }
-      }
+// Theme management
+function toggleThemeSelector() {
+  const themeOptions = document.querySelector('.theme-options');
+  themeOptions.classList.toggle('active');
+}
 
-      function contactEmail() {
-        window.open('https://discord.gg/Hb5ccPY3XV', '_blank');
-      }
+function changeTheme(newTheme) {
+  document.documentElement.setAttribute('data-theme', newTheme);
+  STATE.theme = newTheme;
+  saveToLocalStorage(CONFIG.STORAGE_KEYS.THEME, newTheme);
+  const themeOptions = document.querySelector('.theme-options');
+  themeOptions.classList.remove('active');
+}
 
-      function updateSuggestions() {
-        const suggestions = ['Tell me more about that', 'Can you explain further?', 'What are your thoughts on this?', 'How can I help you with that?'];
-        const suggestionsContainer = document.querySelector('.chat-suggestions');
-        if (suggestionsContainer) {
-          suggestionsContainer.innerHTML = suggestions.map(text => `
-																		<div class="suggestion-chip" onclick="useSuggestion('${text}')">${text}</div>`).join('');
-        }
-      }
+function initializeTheme() {
+  const savedTheme = localStorage.getItem(CONFIG.STORAGE_KEYS.THEME) || 'light';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  STATE.theme = savedTheme;
+}
 
-      function useSuggestion(text) {
-        const textarea = document.getElementById('messageInput');
-        if (textarea) {
-          textarea.value = text;
-          sendMessage();
-        }
-      }
-      async function convertSpeechToText(audioBlob) {
-        try {
-          const formData = new FormData();
-          formData.append('audio', audioBlob);
-          return null;
-        } catch (error) {
-          console.error('Speech to text conversion failed:', error);
-          showNotification('Speech to text conversion failed');
-          return null;
-        }
-      }
-
-      function initializeVoiceInput() {
-        const chatInput = document.querySelector('.chat-input-container');
-        if (chatInput) {
-          const voiceButton = document.createElement('button');
-          voiceButton.className = 'voice-input-button';
-          voiceButton.innerHTML = '<i class="fas fa-microphone"></i>';
-          voiceButton.title = 'Voice Input';
-          voiceButton.onclick = toggleVoiceInput;
-          chatInput.insertBefore(voiceButton, chatInput.lastElementChild);
-        }
-      }
-      window.addEventListener('focus', () => {
-        if (STATE.settings.notifications) {
-          document.title = 'PatheticAI Enhanced';
-        }
-      });
-      window.addEventListener('blur', () => {
-        if (STATE.settings.notifications) {
-          const unreadMessages = STATE.messageHistory.filter(msg => msg.role === 'assistant' && msg.timestamp > document.lastModified).length;
-          if (unreadMessages > 0) {
-            document.title = `(${unreadMessages}) PatheticAI Enhanced`;
-          }
-        }
-      });
+// API key management
+function getApiKey() {
+  return localStorage.getItem(CONFIG.STORAGE_KEYS.API_KEY);
+}
 
 function checkAndStoreApiKey() {
-    const storedApiKey = localStorage.getItem('openRouterApiKey');
-    if (!storedApiKey) {
-        const modal = document.createElement('div');
-        modal.className = 'modal-overlay';
-        modal.innerHTML = `
-            <div class="modal-window">
-                <div class="modal-header">
-                    <span class="modal-title">Openrouter API key required!</span>
-                </div>
-                <div class="modal-content">
-                    <p>To use PatheticAI, an API key from Openrouter is required. To get this, go to 
-                        <a href="https://openrouter.ai/settings/keys" target="_blank" style="color: white;">https://openrouter.ai/settings/keys</a>
-                    </p>
-                    <input type="text" id="apiKeyInput" placeholder="Your API Key Here" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 15px; color: white;">
-                    <br><br>
-                    <button onclick="saveApiKey()" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 15px; color: white; cursor: pointer;">Start up</button>
-                </div>
-            </div>
-        `;
-        document.body.appendChild(modal);
-        return false;
-    }
-    return true;
+  const apiKey = getApiKey();
+  if (!apiKey) {
+    const modal = document.createElement('div');
+    modal.className = 'modal-overlay';
+    modal.innerHTML = `
+      <div class="modal-window">
+        <div class="modal-header">
+          <span class="modal-title">OpenRouter API Key Required</span>
+        </div>
+        <div class="modal-content">
+          <p>To use PatheticAI, an API key from OpenRouter is required. Get it at:
+            <a href="https://openrouter.ai/settings/keys" target="_blank">https://openrouter.ai/settings/keys</a>
+          </p>
+          <input type="text" id="apiKeyInput" placeholder="Your API Key Here">
+          <button onclick="saveApiKey()">Start Chat</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+    return false;
+  }
+  return true;
 }
 
 function saveApiKey() {
-    const apiKey = document.getElementById('apiKeyInput').value;
-    if (apiKey) {
-        localStorage.setItem('openRouterApiKey', apiKey);
-        alert("API Key saved successfully!");
-        window.location.reload();
-    } else {
-        alert("Please enter a valid API key.");
-    }
+  const apiKey = document.getElementById('apiKeyInput').value.trim();
+  if (apiKey && apiKey.startsWith('sk-or-')) {
+    localStorage.setItem(CONFIG.STORAGE_KEYS.API_KEY, apiKey);
+    document.querySelector('.modal-overlay').remove();
+    showNotification('API key saved successfully');
+    enableInput();
+    return true;
+  }
+  showNotification('Invalid API key format');
+  return false;
 }
-      function saveApiKey() {
-        const apiKey = document.getElementById('apiKeyInput').value.trim();
-        if (apiKey && apiKey.startsWith('sk-or-')) {
-          localStorage.setItem('openRouterApiKey', apiKey);
-          document.querySelector('.modal-overlay').remove();
-          showNotification('Booting...');
-          setTimeout(() => {
-            window.location.reload();
-          }, 1000);
-        } else {
-          showNotification('API key not suitable for PatheticAI...');
-        }
-      }
-      window.addEventListener('offline', () => {
-        showNotification('You are offline. Some features may be unavailable.');
-      });
-      window.addEventListener('online', () => {
-        showNotification('You are back online!');
-      });
-      window.addEventListener('beforeunload', (e) => {
-        if (STATE.isWaitingForResponse) {
-          e.preventDefault();
-          e.returnValue = '';
-        }
-      });
-      document.querySelector('.container').addEventListener('wheel', (e) => {
-        if (STATE.settings.autoScroll) {
-          const container = document.querySelector('.container');
-          const isScrolledToBottom = container.scrollHeight - container.clientHeight <= container.scrollTop + 1;
-          if (!isScrolledToBottom) {
-            STATE.settings.autoScroll = false;
-            showNotification('Auto-scroll disabled');
-            saveToLocalStorage(CONFIG.STORAGE_KEYS.SETTINGS, STATE.settings);
-          }
-        }
-      });
 
-      function addCustomTheme(name, theme) {
-        const style = document.createElement('style');
-        style.textContent = `
-    :root[data-theme="${name}"] {
-      --background-gradient: ${theme.backgroundGradient};
-      --overlay-color: ${theme.overlayColor};
-      --background-color: ${theme.backgroundColor};
-      --primary-color: ${theme.primaryColor};
-      --secondary-color: ${theme.secondaryColor};
-      --border-color: ${theme.borderColor};
-      --taskbar-background: ${theme.taskbarBackground};
-      --input-background: ${theme.inputBackground};
-      --button-background: ${theme.buttonBackground};
-      --button-hover-background: ${theme.buttonHoverBackground};
-      --modal-background: ${theme.modalBackground};
-      --message-background: ${theme.messageBackground};
-      --message-user-background: ${theme.messageUserBackground};
-      --code-background: ${theme.codeBackground};
-      --code-text: ${theme.codeText};
-      --notification-background: ${theme.notificationBackground};
-      --notification-text: ${theme.notificationText};
-      --placeholder-color: ${theme.placeholderColor};
-      --chat-input-container-background: ${theme.chatInputContainerBackground};
-    }
-  `;
-        document.head.appendChild(style);
-        const themeSelect = document.getElementById('themeSelect');
-        if (themeSelect) {
-          const option = document.createElement('option');
-          option.value = name;
-          option.textContent = name;
-          themeSelect.appendChild(option);
-        }
-      }
-      let deferredPrompt;
-      window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-        const addBtn = document.querySelector('#add-to-home-screen-btn');
-        if (addBtn) {
-          addBtn.style.display = 'block';
-          addBtn.addEventListener('click', () => {
-            deferredPrompt.prompt();
-            deferredPrompt.userChoice.then((choiceResult) => {
-              console.log(choiceResult.outcome === 'accepted' ? 'User accepted the install prompt' : 'User dismissed the install prompt');
-              deferredPrompt = null;
-            });
-          });
-        }
-      });
-      document.getElementById('installButton').addEventListener('click', () => {
-        if (deferredPrompt) {
-          deferredPrompt.prompt();
-          deferredPrompt.userChoice.then((choiceResult) => {
-            console.log(choiceResult.outcome === 'accepted' ? 'User accepted the A2HS prompt' : 'User dismissed the A2HS prompt');
-            deferredPrompt = null;
-          });
-        }
-      });
+function removeApiKey() {
+  localStorage.removeItem(CONFIG.STORAGE_KEYS.API_KEY);
+  disableInput();
+  showNotification('API key removed');
+}
+
+function disableInput() {
+  const textarea = document.getElementById('messageInput');
+  const sendButton = document.querySelector('.chat-input-container button');
+  textarea.disabled = true;
+  sendButton.disabled = true;
+  textarea.placeholder = 'Please enter API key in settings...';
+}
+
+function enableInput() {
+  const textarea = document.getElementById('messageInput');
+  const sendButton = document.querySelector('.chat-input-container button');
+  textarea.disabled = false;
+  sendButton.disabled = false;
+  textarea.placeholder = 'Type your message...';
+}
+
+// Initialize the application
+window.addEventListener('load', () => {
+  initializeApp();
+});
     </script>
   </body>
 </html>
