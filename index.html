@@ -1475,20 +1475,25 @@ function handleReaction(messageId, reaction) {
     console.error('Reaction button not found');
   }
 }
-
-// Handle window resize
+function playMessageSound() {
+  if (!STATE.settings.soundEffects) return;
+  
+  const audio = new Audio('data:audio/wav;base64,UklGRnQGAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YU8GAACBhYqFbF1fdH+Df4F/gn+Df4N/hICFgYaBhYKGgoaBhYGFgYWAhICDf4J/gX+Af35/fn9+f4CAgoWBhIGGhIeGhIODg4ODgYGAgICAgIGCg4OFg4WDhoOGgoaBhYCEgIOAgrL+//3x/P/0//j//f///v///f7//f/+/v///v7///7////+//7//f/8//z//P/8//3//v8AAAIBAwEEAgUCBQIFAgQBAwECAQEBAQEBAQICAwMEAwUDBgMGAgYCBQIEAQMA////hv6u/8bZJm7ILCC9YROhpWt+jH9JBN+1spBqBUyGCoNEEBSrOBCEKqA4qBJgIkIoK3AwaA7wD74t93vW8GDHzAjGlATUVHpIZAGOAQEBAgIDAgMCBAIEAwUDBQMGAwYDBgMGAgYCBQIEAgMCAQIBAAAAAAD//wAAAQEBAQIBAgEDAQMBAwEDAQMBAgECAQEBAAAAAAD///////7//v/9//3//f/9//3//v/+/////wAAAQECAQMBBAIEAgUCBQIFAgQCBAIDAgICAQIBAQEBAQEBAQECAQIBAwEDAQQCBAIEAgQCAwIDAQIBAQEAAAAA//////7//v/9//3//v/+//////8AAAEBAgEDAQQBBQIFAgYCBgIGAgYCBQIFAgQCAwICAQIBAQEAAAAAAAAAAQEBAQIBAgEDAQQCBAIEAgQCBAIDAgMCAgECAQEBAAAAAP////7//v/+//7//v/+//7//v/+//7//v/+//7//v/9//3//f/9//3//v/+/////wAAAQEBAQIBAgECAQMBAwEDAQMBAwEDAQMBAgECAQIBAQEBAQAAAAAAAAEBAQEBAQIBAgECAQIBAgECAQIBAQEBAQEBAAAAAAAAAAAAAAD///////////////////////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///////////////////7//v/9//3//f/9//3//v/+//7//////////////v/+//7//f/9//3//f/9//7//v///////wAAAAAAAAAAAAAAAAAAAAD///////////////7//v/+//7//v/+//7//v/+//////////////////7//v/+//3//f/9//3//f/9//7//v/+//////////////////7//v/9//3//f/9//3//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+/w==');
+  audio.volume = 0.5;
+  audio.play().catch(err => console.log('Error playing sound'));
+}
 function handleResize() {
   const textarea = document.getElementById('messageInput');
-  textarea.style.height = 'auto';
-  textarea.style.height = Math.min(textarea.scrollHeight, 200) + 'px';
+  if (textarea) {
+    textarea.style.height = 'auto';
+    textarea.style.height = Math.min(textarea.scrollHeight, 200) + 'px';
+  }
 }
 
-// Discord link
 function contactEmail() {
   window.open('https://discord.gg/Hb5ccPY3XV', '_blank');
 }
 
-// Update suggestions based on conversation context
 function updateSuggestions() {
   const suggestions = [
     'Tell me more about that',
@@ -1507,11 +1512,12 @@ function updateSuggestions() {
 
 function useSuggestion(text) {
   const textarea = document.getElementById('messageInput');
-  textarea.value = text;
-  sendMessage();
+  if (textarea) {
+    textarea.value = text;
+    sendMessage();
+  }
 }
 
-// Show about modal
 function showAboutModal() {
   const modal = document.createElement('div');
   modal.className = 'modal-overlay';
@@ -1537,22 +1543,11 @@ function showAboutModal() {
   document.body.appendChild(modal);
 }
 
-// Convert speech to text (placeholder function)
 async function convertSpeechToText(audioBlob) {
   try {
-    // Placeholder - implement with your preferred speech-to-text service
     const formData = new FormData();
     formData.append('audio', audioBlob);
-
-    // Example API call - replace with actual speech-to-text service
-    // const response = await fetch('your-speech-to-text-api', {
-    //   method: 'POST',
-    //   body: formData
-    // });
-    // const data = await response.json();
-    // return data.text;
-
-    return null;  // Return null for now to indicate speech-to-text is not implemented
+    return null;
   } catch (error) {
     console.error('Speech to text conversion failed:', error);
     showNotification('Speech to text conversion failed');
@@ -1560,18 +1555,18 @@ async function convertSpeechToText(audioBlob) {
   }
 }
 
-// Initialize voice input button
 function initializeVoiceInput() {
   const chatInput = document.querySelector('.chat-input-container');
-  const voiceButton = document.createElement('button');
-  voiceButton.className = 'voice-input-button';
-  voiceButton.innerHTML = '<i class="fas fa-microphone"></i>';
-  voiceButton.title = 'Voice Input';
-  voiceButton.onclick = toggleVoiceInput;
-  chatInput.insertBefore(voiceButton, chatInput.lastElementChild);
+  if (chatInput) {
+    const voiceButton = document.createElement('button');
+    voiceButton.className = 'voice-input-button';
+    voiceButton.innerHTML = '<i class="fas fa-microphone"></i>';
+    voiceButton.title = 'Voice Input';
+    voiceButton.onclick = toggleVoiceInput;
+    chatInput.insertBefore(voiceButton, chatInput.lastElementChild);
+  }
 }
 
-// Handle window focus/blur events
 window.addEventListener('focus', () => {
   if (STATE.settings.notifications) {
     document.title = 'PatheticAI Enhanced';
@@ -1613,13 +1608,7 @@ function checkAndStoreApiKey() {
   }
   return true;
 }
-function playMessageSound() {
-  if (!STATE.settings.soundEffects) return;
-  
-  const audio = new Audio('data:audio/wav;base64,UklGRnQGAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YU8GAACBhYqFbF1fdH+Df4F/gn+Df4N/hICFgYaBhYKGgoaBhYGFgYWAhICDf4J/gX+Af35/fn9+f4CAgoWBhIGGhIeGhIODg4ODgYGAgICAgIGCg4OFg4WDhoOGgoaBhYCEgIOAgrL+//3x/P/0//j//f///v///f7//f/+/v///v7///7////+//7//f/8//z//P/8//3//v8AAAIBAwEEAgUCBQIFAgQBAwECAQEBAQEBAQICAwMEAwUDBgMGAgYCBQIEAQMA////hv6u/8bZJm7ILCC9YROhpWt+jH9JBN+1spBqBUyGCoNEEBSrOBCEKqA4qBJgIkIoK3AwaA7wD74t93vW8GDHzAjGlATUVHpIZAGOAQEBAgIDAgMCBAIEAwUDBQMGAwYDBgMGAgYCBQIEAgMCAQIBAAAAAAD//wAAAQEBAQIBAgEDAQMBAwEDAQMBAgECAQEBAAAAAAD///////7//v/9//3//f/9//3//v/+/////wAAAQECAQMBBAIEAgUCBQIFAgQCBAIDAgICAQIBAQEBAQEBAQECAQIBAwEDAQQCBAIEAgQCAwIDAQIBAQEAAAAA//////7//v/9//3//v/+//////8AAAEBAgEDAQQBBQIFAgYCBgIGAgYCBQIFAgQCAwICAQIBAQEAAAAAAAAAAQEBAQIBAgEDAQQCBAIEAgQCBAIDAgMCAgECAQEBAAAAAP////7//v/+//7//v/+//7//v/+//7//v/+//7//v/9//3//f/9//3//v/+/////wAAAQEBAQIBAgECAQMBAwEDAQMBAwEDAQMBAgECAQIBAQEBAQAAAAAAAAEBAQEBAQIBAgECAQIBAgECAQIBAQEBAQEBAAAAAAAAAAAAAAD///////////////////////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///////////////////7//v/9//3//f/9//3//v/+//7//////////////v/+//7//f/9//3//f/9//7//v///////wAAAAAAAAAAAAAAAAAAAAD///////////////7//v/+//7//v/+//7//v/+//////////////////7//v/+//3//f/9//3//f/9//7//v/+//////////////////7//v/9//3//f/9//3//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//3//f/9//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+//7//v/+/w==');
-  audio.volume = 0.5;
-  audio.play().catch(err => console.log('Error playing sound'));
-}
+
 function saveApiKey() {
   const apiKey = document.getElementById('apiKeyInput').value.trim();
   if (apiKey && apiKey.startsWith('sk-or-')) {
@@ -1634,7 +1623,6 @@ function saveApiKey() {
   }
 }
 
-// Handle offline/online events
 window.addEventListener('offline', () => {
   showNotification('You are offline. Some features may be unavailable.');
 });
@@ -1643,7 +1631,6 @@ window.addEventListener('online', () => {
   showNotification('You are back online!');
 });
 
-// Handle beforeunload event
 window.addEventListener('beforeunload', (e) => {
   if (STATE.isWaitingForResponse) {
     e.preventDefault();
@@ -1651,7 +1638,6 @@ window.addEventListener('beforeunload', (e) => {
   }
 });
 
-// Ensure smooth scrolling behavior
 document.querySelector('.container').addEventListener('wheel', (e) => {
   if (STATE.settings.autoScroll) {
     const container = document.querySelector('.container');
@@ -1665,7 +1651,6 @@ document.querySelector('.container').addEventListener('wheel', (e) => {
   }
 });
 
-// Add support for custom themes
 function addCustomTheme(name, theme) {
   const style = document.createElement('style');
   style.textContent = `
@@ -1694,63 +1679,43 @@ function addCustomTheme(name, theme) {
   document.head.appendChild(style);
   
   const themeSelect = document.getElementById('themeSelect');
-  const option = document.createElement('option');
-  option.value = name;
-  option.textContent = name;
-  themeSelect.appendChild(option);
+  if (themeSelect) {
+    const option = document.createElement('option');
+    option.value = name;
+    option.textContent = name;
+    themeSelect.appendChild(option);
+  }
 }
-
-// Example usage of custom theme:
-// addCustomTheme('cyberpunk', {
-//   backgroundGradient: 'linear-gradient(135deg, #ff00ff 0%, #00ffff 100%)',
-//   overlayColor: 'rgba(0, 0, 0, 0.5)',
-//   backgroundColor: '#000000',
-//   primaryColor: '#00ff00',
-//   // ... add all required theme properties
-// });
 
 let deferredPrompt;
 
-// Listen for the 'beforeinstallprompt' event, which is fired when the app is eligible for installation
 window.addEventListener('beforeinstallprompt', (e) => {
-  // Prevent the default prompt from showing up
   e.preventDefault();
-
-  // Save the event so you can trigger it later
   deferredPrompt = e;
 
-  // Optionally, display your custom "Add to Home Screen" button
   const addBtn = document.querySelector('#add-to-home-screen-btn');
   if (addBtn) {
-    addBtn.style.display = 'block'; // Show the button
+    addBtn.style.display = 'block';
     addBtn.addEventListener('click', () => {
-      // Show the default install prompt when the user clicks the button
       deferredPrompt.prompt();
-
-      // Wait for the user's response to the prompt
       deferredPrompt.userChoice.then((choiceResult) => {
-        if (choiceResult.outcome === 'accepted') {
-          console.log('User accepted the install prompt');
-        } else {
-          console.log('User dismissed the install prompt');
-        }
-        deferredPrompt = null; // Reset the deferred prompt
+        console.log(choiceResult.outcome === 'accepted' ? 'User accepted the install prompt' : 'User dismissed the install prompt');
+        deferredPrompt = null;
       });
     });
   }
 });
 
 document.getElementById('installButton').addEventListener('click', () => {
-  deferredPrompt.prompt();
-  deferredPrompt.userChoice.then((choiceResult) => {
-    if (choiceResult.outcome === 'accepted') {
-      console.log('User accepted the A2HS prompt');
-    } else {
-      console.log('User dismissed the A2HS prompt');
-    }
-    deferredPrompt = null;
-  });
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then((choiceResult) => {
+      console.log(choiceResult.outcome === 'accepted' ? 'User accepted the A2HS prompt' : 'User dismissed the A2HS prompt');
+      deferredPrompt = null;
+    });
+  }
 });
+
 
       </script>
   </body>
