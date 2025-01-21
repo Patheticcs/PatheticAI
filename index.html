@@ -929,45 +929,81 @@ function loadSavedState() {
     const savedMessages = localStorage.getItem(CONFIG.STORAGE_KEYS.MESSAGES);
     if (savedMessages) {
       STATE.messageHistory = JSON.parse(savedMessages);
-      // Validate loaded messages by checking for necessary keys
+      
+      // Validate loaded messages
       STATE.messageHistory = STATE.messageHistory.filter(msg => 
         msg && msg.role && msg.content && msg.timestamp
       );
+      
+      // Recreate message elements in the chat
+      const chatMessages = document.querySelector('.chat-messages');
+      chatMessages.innerHTML = ''; // Clear existing messages
+      
+      STATE.messageHistory.forEach(msg => {
+        const isUser = msg.role === 'user';
+        const { element } = createMessageElement(
+          msg.content,
+          isUser,
+          new Date(msg.timestamp)
+        );
+        chatMessages.appendChild(element);
+      });
+    } else {
+      // If no saved messages, show welcome message
+      showWelcomeMessage();
     }
 
-    // Load settings
     const savedSettings = localStorage.getItem(CONFIG.STORAGE_KEYS.SETTINGS);
     if (savedSettings) {
       const parsedSettings = JSON.parse(savedSettings);
       STATE.settings = { ...STATE.settings, ...parsedSettings };
     }
 
-    // Load theme
     const savedTheme = localStorage.getItem(CONFIG.STORAGE_KEYS.THEME);
     if (savedTheme) {
       STATE.theme = savedTheme;
       document.documentElement.setAttribute('data-theme', savedTheme);
     }
 
-    // Load language
     const savedLanguage = localStorage.getItem(CONFIG.STORAGE_KEYS.LANGUAGE);
     if (savedLanguage) {
       STATE.currentLanguage = savedLanguage;
-      // Apply language settings here if applicable (e.g., change UI text)
     }
   } catch (error) {
     console.error('Error loading saved state:', error);
     STATE.messageHistory = [];
     saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, []);
+    showWelcomeMessage();
   }
 }
 
 function saveToLocalStorage(key, value) {
   try {
-    localStorage.setItem(key, typeof value === 'string' ? value : JSON.stringify(value));
+    const serializedValue = typeof value === 'string' ? value : JSON.stringify(value);
+    localStorage.setItem(key, serializedValue);
+    
+    // Verify the save was successful
+    const savedValue = localStorage.getItem(key);
+    if (!savedValue) {
+      throw new Error('Verification failed: Saved value is null');
+    }
     return true;
   } catch (error) {
     console.error('Local storage error:', error);
+    if (error.name === 'QuotaExceededError') {
+      // Handle storage quota exceeded
+      showNotification('Storage limit reached. Some messages may not be saved.');
+      // Attempt to save only the most recent messages
+      if (key === CONFIG.STORAGE_KEYS.MESSAGES && Array.isArray(value)) {
+        const recentMessages = value.slice(-50); // Keep only last 50 messages
+        try {
+          localStorage.setItem(key, JSON.stringify(recentMessages));
+          return true;
+        } catch (e) {
+          console.error('Failed to save recent messages:', e);
+        }
+      }
+    }
     return false;
   }
 }
@@ -1152,21 +1188,20 @@ async function sendMessage() {
   const { element: messageElement, id: messageId } = createMessageElement(message, true, timestamp);
   document.querySelector('.chat-messages').appendChild(messageElement);
 
-  if (STATE.settings.autoScroll) {
-    messageElement.scrollIntoView({ behavior: 'smooth' });
-  }
-
-  textarea.value = '';
-  textarea.style.height = 'auto';
-
   const messageObj = {
     role: "user",
     content: message,
     timestamp: timestamp.getTime(),
     id: messageId
   };
+  
+  // Add message to history and save immediately
   STATE.messageHistory.push(messageObj);
   saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, STATE.messageHistory);
+
+  // Clear and reset textarea
+  textarea.value = '';
+  textarea.style.height = 'auto';
 
   try {
     const response = await sendMessageWithRetry(message);
@@ -1177,6 +1212,8 @@ async function sendMessage() {
         timestamp: Date.now(),
         replyTo: messageId
       };
+      
+      // Add bot response to history and save
       STATE.messageHistory.push(botMessageObj);
       saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, STATE.messageHistory);
 
@@ -1199,6 +1236,7 @@ async function sendMessage() {
     textarea.focus();
   }
 }
+
 
 
 async function sendMessageWithRetry(message, retries = CONFIG.MAX_RETRIES) {
@@ -1575,7 +1613,43 @@ function initializeTheme() {
   document.documentElement.setAttribute('data-theme', savedTheme);
   STATE.theme = savedTheme;
 }
+function showAboutModal() {
+  const modal = document.createElement('div');
+  modal.className = 'modal-overlay';
+  modal.innerHTML = `
+    <div class="modal-window">
+      <div class="modal-header">
+        <span class="modal-title">About PatheticAI</span>
+        <button class="close-button" onclick="this.closest('.modal-overlay').remove()">✖</button>
+      </div>
+      <div class="modal-content">
+        <p><strong>PatheticAI:</strong> 1.0 Enhanced</p>
+        <p><strong>API version:</strong> 1.0</p>
+        <p><strong>Contact:</strong> 
+          <a href="discord.gg/Hb5ccPY3XV">discord.gg/Hb5ccPY3XVm</a>
+        </p>
+        <br>
+        <p><strong>Enhanced Features:</strong></p>
+        <ul>
+          <li>Improved message handling</li>
+          <li>Better code display and copying</li>
+          <li>Theme customization</li>
+          <li>Advanced editing capabilities</li>
+          <li>Persistent chat history</li>
+        </ul>
+      </div>
+    </div>
+  `;
 
+  // Close modal when clicking outside the modal window
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.remove();
+    }
+  });
+
+  document.body.appendChild(modal);
+}
 function checkAndStoreApiKey() {
   const storedApiKey = getApiKey();
   if (!storedApiKey) {
