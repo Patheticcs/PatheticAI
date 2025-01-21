@@ -1076,6 +1076,13 @@ async function finishEditing(messageId, newText) {
   saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, STATE.messageHistory);
 }
 
+document.getElementById('messageInput').addEventListener('keydown', function(event) {
+  if (event.key === 'Enter' && !event.shiftKey) { // Check if Enter is pressed without Shift
+    event.preventDefault(); // Prevent new line
+    sendMessage(); // Call the sendMessage function
+  }
+});
+
 async function sendMessage() {
   const textarea = document.getElementById('messageInput');
   const message = textarea.value.trim();
@@ -1135,6 +1142,7 @@ async function sendMessage() {
     textarea.focus();
   }
 }
+
 
 async function sendMessageWithRetry(message, retries = CONFIG.MAX_RETRIES) {
   try {
@@ -1488,36 +1496,6 @@ function initializeTheme() {
 }
 
 function checkAndStoreApiKey() {
-  const apiKey = getApiKey();
-  if (!apiKey) {
-    showApiKeyModal();
-    return false;
-  }
-  return true;
-}
-
-function getApiKey() {
-  const apiKey = localStorage.getItem('openRouterApiKey'); // Directly retrieve the API key string
-  if (apiKey && apiKey.startsWith('sk-or-')) {
-    return apiKey; // Return the API key if it's valid
-  }
-  return null; // Return null if there's no valid key
-}
-
-function saveApiKey() {
-  const apiKey = document.getElementById('apiKeyInput').value.trim();
-  if (apiKey && apiKey.startsWith('sk-or-')) {
-    localStorage.setItem('openRouterApiKey', apiKey); // Save the plain API key as a string
-    document.querySelector('.modal-overlay').remove();
-    showNotification('API key saved successfully');
-    enableInput();
-    return true;
-  }
-  showNotification('Invalid API key format');
-  return false;
-}
-
-function checkAndStoreApiKey() {
   const storedApiKey = getApiKey();
   if (!storedApiKey) {
     const modal = document.createElement('div');
@@ -1541,11 +1519,11 @@ function checkAndStoreApiKey() {
     
     // Attach event listener to the button after modal is created
     document.getElementById('startupButton').addEventListener('click', saveApiKey);
-
     return false;
   }
   return true;
 }
+
 function saveApiKey() {
   const apiKey = document.getElementById('apiKeyInput').value.trim();
   if (apiKey && apiKey.startsWith('sk-or-')) {
@@ -1560,9 +1538,8 @@ function saveApiKey() {
   }
 }
 
-                                                                                      
 function removeApiKey() { 
-  localStorage.removeItem(CONFIG.STORAGE_KEYS.API_KEY);
+  localStorage.removeItem('openRouterApiKey');
   disableInput();
   showNotification('API key removed');
 }
@@ -1570,8 +1547,8 @@ function removeApiKey() {
 function disableInput() {
   const textarea = document.getElementById('messageInput');
   const sendButton = document.querySelector('.chat-input-container button');
-  textarea.disabled = false;
-  sendButton.disabled = false;
+  textarea.disabled = true;  // Disable input if key is missing
+  sendButton.disabled = true;
   textarea.placeholder = 'Please enter API key in settings...';
 }
 
@@ -1583,29 +1560,15 @@ function enableInput() {
   textarea.placeholder = 'Type your message...';
 }
 
-    function showNotification(message) {
-      const notification = document.createElement('div');
-      notification.className = 'notification';
-      notification.textContent = message;
-      document.body.appendChild(notification);
-      setTimeout(() => {
-        notification.classList.add('fade-out');
-        setTimeout(() => notification.remove(), 300);
-      }, 2000);
-    }
-
-// A simple function to handle UI initialization (can be extended with more logic)
-function initializeUI() {
-  // Initialize UI based on the current state, e.g., set theme and language
-  // You could apply language-specific text and adjust the theme here if needed
-  console.log("UI Initialized with Theme:", STATE.theme);
-  console.log("Current Language:", STATE.currentLanguage);
-}
-
-// Set up event listeners for user interactions (to be implemented further)
-function setupEventListeners() {
-  // Example: Add an event listener for sending a message or changing settings
-  // More functionality can be added here as per requirements
+function showNotification(message) {
+  const notification = document.createElement('div');
+  notification.className = 'notification';
+  notification.textContent = message;
+  document.body.appendChild(notification);
+  setTimeout(() => {
+    notification.classList.add('fade-out');
+    setTimeout(() => notification.remove(), 300);
+  }, 2000);
 }
 
 function showWelcomeMessage() {
@@ -1613,4 +1576,24 @@ function showWelcomeMessage() {
   const { element } = createMessageElement(welcomeMessage, false);
   document.querySelector('.chat-messages').appendChild(element);
 }
+
+function getApiKey() {
+  const apiKey = localStorage.getItem('openRouterApiKey'); // Directly retrieve the API key string
+  if (apiKey && apiKey.startsWith('sk-or-')) {
+    return apiKey; // Return the API key if it's valid
+  }
+  return null; // Return null if there's no valid key
+}
+
+function initializeUI() {
+  // Initialize UI based on the current state, e.g., set theme and language
+  console.log("UI Initialized with Theme:", STATE.theme);
+  console.log("Current Language:", STATE.currentLanguage);
+}
+
+function setupEventListeners() {
+  // Example: Add an event listener for sending a message or changing settings
+  // More functionality can be added here as per requirements
+}
+
         </script>
