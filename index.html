@@ -1082,13 +1082,13 @@ async function toggleVoiceInput() {
     if (isUser) {
      const editButton = document.createElement('button');
      editButton.className = 'action-button';
-     editButton.innerHTML = '  < i class = "fas fa-edit" > < /i>';
+     editButton.innerHTML = '  <i class = "fas fa-edit" ></i>';
      editButton.onclick = () => startEditing(messageId);
      actionsDiv.appendChild(editButton);
     }
     const copyButton = document.createElement('button');
     copyButton.className = 'action-button';
-    copyButton.innerHTML = '  < i class = "fas fa-copy" > < /i>';
+    copyButton.innerHTML = '  <i class = "fas fa-copy" ></i>';
     copyButton.onclick = () => copyToClipboard(message);
     actionsDiv.appendChild(copyButton);
     messageElement.appendChild(actionsDiv);
