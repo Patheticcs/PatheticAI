@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service</title>
+    <style>
+    /* Global Reset and Basic Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Cabinet Grotesk', sans-serif;
+    }
+
+    *::-webkit-scrollbar {
+      display: none;
+    }
+
+    :root {
+      --container-width: min(90%, 800px);
+      --spacing-normal: clamp(16px, 2vw, 20px);
+      --spacing-small: clamp(8px, 1vw, 10px);
+      --border-radius: 30px;
+      --transition: all 0.3s ease;
+    }
+
+    body {
+      background: url('https://wallpapers.com/images/hd/4k-nature-in-ice-wvdjbvbvxn12plp6.jpg') no-repeat center center fixed;
+      background-size: cover;
+      background-attachment: fixed;
+      color: white;
+      font-size: 16px;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .container {
+      position: relative;
+      padding: var(--spacing-normal);
+      width: var(--container-width);
+      max-width: 900px;
+      border-radius: var(--border-radius);
+      backdrop-filter: blur(15px);
+      border: 2px solid var(--border-color);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      color: var(--primary-color);
+      overflow-y: auto;
+      height: 80vh;
+      box-sizing: border-box;
+      z-index: 10;
+    }
+
+    h1,
+    h2 {
+      color: var(--primary-color);
+      margin-bottom: var(--spacing-normal);
+    }
+
+    h1 {
+      font-size: 35px;
+      text-align: center;
+    }
+
+    h2 {
+      font-size: 20px;
+      margin-top: var(--spacing-small);
+    }
+
+    p {
+      margin-bottom: var(--spacing-normal);
+      font-size: 13px;
+      color: var(--primary-color);
+    }
+
+    ul,
+    ol {
+      margin-bottom: var(--spacing-normal);
+      padding-left: 20px;
+      font-size: 16px;
+      color: var(--primary-color);
+    }
+
+    li {
+      margin-bottom: var(--spacing-small);
+    }
+
+    /* Stylish Links */
+    a {
+      color: var(--secondary-color);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    a:hover {
+      color: darkviolet;
+    }
+
+    /* Modal Overlay (if needed) */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 20px;
+      }
+
+      .container {
+        width: 100%;
+        height: auto;
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: 28px;
+      }
+
+      h2 {
+        font-size: 20px;
+      }
+    }
+    </style>
+  </head>
+
+  <body>
+
+    <div class="container">
+      <h1>Terms of Service</h1>
+      <div>
+        <h2>1. Acceptance of Terms</h2>
+        <p>By accessing and using this website, you agree to comply with and be bound by these Terms of Service. If you do not agree with these terms, please do not use our website.</p>
+
+        <h2>2. Use of Services</h2>
+        <p>You are granted a non-exclusive, non-transferable, limited license to access and use the services on this website in accordance with these terms.</p>
+
+        <h2>3. User Responsibilities</h2>
+        <ul>
+          <li>Ensure that all information provided is accurate and up to date.</li>
+          <li>Do not engage in unlawful or prohibited activities while using the website.</li>
+        </ul>
+
+        <h2>4. Privacy Policy</h2>
+        <p>Your privacy is important to us. Please refer to our <a href="#">Privacy Policy</a> for more information on how we collect and use your data.</p>
+
+        <h2>5. Limitation of Liability</h2>
+        <p>We are not liable for any damages arising from the use of this website, including indirect, incidental, or consequential damages.</p>
+
+        <h2>6. Modifications to Terms</h2>
+        <p>We reserve the right to modify or update these Terms of Service at any time. Any changes will be posted on this page, and your continued use of the site will constitute your acceptance of the modified terms.</p>
+
+        <h2>7. Contact Us</h2>
+        <p>If you have any questions regarding these Terms of Service, please contact us at our discord</p>
+      </div>
+    </div>
+
+  </body>
+
+</html>
