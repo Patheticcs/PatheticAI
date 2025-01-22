@@ -895,7 +895,7 @@
 
     function playMessageSound() {
       if (!STATE.settings.soundEffects) return;
-      const audio = new Audio('notification.mp3');
+      const audio = new Audio('audios/notification.mp3');
       audio.volume = 0.5;
       audio.play().catch(err => console.log('Error playing sound', err));
     }
