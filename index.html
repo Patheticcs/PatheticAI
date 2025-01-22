@@ -438,119 +438,6 @@
         outline: none;
       }
 
-      .theme-selector-container {
-        position: relative;
-        display: inline-block;
-        width: 100%;
-      }
-
-      .theme-selector {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: var(--spacing-small) var(--spacing-normal);
-        background-color: var(--button-background);
-        border: 1px solid var(--border-color);
-        cursor: pointer;
-        border-radius: var(--border-radius);
-        transition: background 0.3s ease;
-      }
-
-      .theme-selector i {
-        font-size: 14px;
-      }
-
-      .theme-selector:hover {
-        background-color: var(--button-hover-background);
-      }
-
-      .theme-options {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        width: 100%;
-        display: none;
-        background-color: var(--background-color);
-        border: 1px solid var(--border-color);
-        border-radius: var(--border-radius);
-        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-        z-index: 10;
-      }
-
-      .theme-option {
-        padding: var(--spacing-small);
-        cursor: pointer;
-        font-size: 14px;
-        color: var(--primary-color);
-        transition: background 0.3s ease;
-      }
-
-      .theme-option:hover {
-        background-color: var(--button-hover-background);
-      }
-
-      .theme-options {
-        display: none;
-      }
-
-      .theme-options.active {
-        display: block;
-      }
-
-      .language-selector-container {
-        position: relative;
-        display: inline-block;
-        width: 100%;
-      }
-
-      .language-selector {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: var(--spacing-small) var(--spacing-normal);
-        background-color: var(--button-background);
-        border: 1px solid var(--border-color);
-        cursor: pointer;
-        border-radius: var(--border-radius);
-        transition: background 0.3s ease;
-      }
-
-      .language-selector i {
-        font-size: 14px;
-      }
-
-      .language-selector:hover {
-        background-color: var(--button-hover-background);
-      }
-
-      .language-options {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        width: 100%;
-        display: none;
-        background-color: var(--background-color);
-        border: 1px solid var(--border-color);
-        border-radius: var(--border-radius);
-        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-        z-index: 10;
-      }
-
-      .language-option {
-        padding: var(--spacing-small);
-        cursor: pointer;
-        font-size: 14px;
-        color: var(--primary-color);
-        transition: background 0.3s ease;
-      }
-
-      .language-option:hover {
-        background-color: var(--button-hover-background);
-      }
-
-      .language-options.active {
-        display: block;
-      }
 
       .message-timestamp {
         font-size: 11px;
@@ -627,6 +514,82 @@
         background: rgba(255, 255, 255, 0.2);
         transform: translateY(-1px);
       }
+      
+.selector-container {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+/* Selector (Common for both Personality and Theme dropdowns) */
+.selector {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-small) var(--spacing-normal);
+  background-color: var(--button-background);
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  border-radius: var(--border-radius);
+  transition: background 0.3s ease;
+  width: auto; /* Allow width to adjust based on content */
+}
+
+.selector i {
+  font-size: 14px;
+  transition: transform 0.3s ease;
+}
+
+/* Hover Effects (Common for both) */
+.selector:hover {
+  background-color: var(--button-hover-background);
+}
+
+/* Options (Common for both Personality and Theme dropdowns) */
+.options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  display: none;  /* Hide options initially */
+  background-color: var(--background-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
+/* Individual Option (Common for both) */
+.option {
+  padding: var(--spacing-small);
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--primary-color);
+  transition: background 0.3s ease;
+}
+
+.option:hover {
+  background-color: var(--button-hover-background);
+}
+
+/* Active State for Options (Common for both) */
+.options.active {
+  display: block;  /* Show options when active */
+}
+
+.option-description {
+  display: inline-block; /* Makes the description appear next to the text */
+  margin-left: 10px; /* Adjust space between text and description */
+  white-space: nowrap; /* Prevent wrapping */
+  font-size: 12px; /* Adjust font size for the description */
+  color: var(--secondary-color); /* Adjust color to differentiate it from the selector text */
+}
+
+/* Selector Styles */
+.selector.open i {
+  transform: rotate(180deg); /* Rotate arrow when dropdown is open */
+}
+
 
       @keyframes fadeIn {
         from {
@@ -939,12 +902,15 @@ document.addEventListener('DOMContentLoaded', () => {
 function initializeApp() {
   loadSavedState();
   initializeUI();
+  initializePersonality();
   setupEventListeners();
   showWelcomeMessage();
   if (!checkAndStoreApiKey()) {
     disableInput();
   }
 }
+      
+
 
 function loadSavedState() {
   try {
@@ -1096,7 +1062,40 @@ function createMessageElement(message, isUser, timestamp = new Date()) {
   messageElement.appendChild(actionsDiv);
   return { element: messageElement, id: messageId };
 }
-
+const PERSONALITIES = {
+  Professional: {
+    description: "Clear, helpful, and business-like responses",
+    systemPrompt: "You are a professional AI assistant. Provide clear, concise, and formal responses."
+  },
+  Casual: {
+    description: "Friendly and relaxed conversation style",
+    systemPrompt: "You are a casual and friendly AI assistant. Use informal language and be conversational."
+  },
+  Poetic: {
+    description: "Artistic and metaphorical communication",
+    systemPrompt: "You are a poetic AI assistant. Express ideas with artistic flair and metaphorical language."
+  },
+  Rude: {
+    description: "Sarcastic and slightly impatient",
+    systemPrompt: "You are a sarcastic AI assistant. Be blunt and slightly impatient, but still helpful."
+  },
+  Witty: {
+    description: "Clever and humorous responses",
+    systemPrompt: "You are a witty AI assistant. Use wordplay and clever humor in your responses."
+  },
+  Academic: {
+    description: "Scholarly and detailed explanations",
+    systemPrompt: "You are an academic AI assistant. Provide detailed, well-structured responses with scholarly tone."
+  },
+  Enthusiastic: {
+    description: "High-energy and encouraging",
+    systemPrompt: "You are an enthusiastic AI assistant. Be energetic, positive, and encouraging in all responses."
+  },
+  Zen: {
+    description: "Calm and mindful communication",
+    systemPrompt: "You are a zen-like AI assistant. Provide peaceful, mindful responses with wisdom and tranquility."
+  }
+};
 async function startEditing(messageId) {
   if (STATE.isWaitingForResponse) return;
   
@@ -1198,7 +1197,31 @@ document.getElementById('messageInput').addEventListener('keydown', function(eve
     sendMessage(); // Call the sendMessage function
   }
 });
+function changePersonality(personality) {
+  STATE.personality = personality;
+  // Update the system message with the new personality
+  systemMessage.content = PERSONALITIES[personality].systemPrompt;
+  
+  // Update the description display
+  const descriptionElement = document.querySelector('.personality-description');
+  if (descriptionElement) {
+    descriptionElement.textContent = PERSONALITIES[personality].description;
+  }
+  
+  // Save the personality preference
+  saveToLocalStorage('chatPersonality', personality);
+  
+  showNotification(`Personality changed to ${personality}`);
+}
 
+// Add to initialization
+function initializePersonality() {
+  const savedPersonality = localStorage.getItem('chatPersonality');
+  if (savedPersonality && PERSONALITIES[savedPersonality]) {
+    STATE.personality = savedPersonality;
+    systemMessage.content = PERSONALITIES[savedPersonality].systemPrompt;
+  }
+}
 async function sendMessage() {
   const textarea = document.getElementById('messageInput');
   const message = textarea.value.trim();
@@ -1487,112 +1510,171 @@ function handleResize() {
 function showSettingsModal() {
   const modal = document.createElement('div');
   modal.className = 'modal-overlay';
+
+  // Generate personality options
+  const personalityOptions = Object.keys(PERSONALITIES).map(p => `
+    <div class="option" data-personality="${p}" onclick="changePersonality('${p}')">${p}</div>
+  `).join('');
+
+  // Generate language options
+  const languageOptions = ['English', 'Spanish', 'French', 'German', 'Italian', 'Japanese', 'Chinese', 'Russian', 'Portuguese', 'Korean', 'Hindi', 'Arabic']
+    .map(lang => `
+      <div class="option" data-language="${lang}" onclick="changeLanguage('${lang}')">${lang}</div>
+    `).join('');
+
+  // Generate theme options
+  const themeOptions = `
+    <div class="option" data-theme="light" onclick="changeTheme('light')">Light</div>
+    <div class="option" data-theme="dark" onclick="changeTheme('dark')">Dark</div>
+  `;
+
   modal.innerHTML = `
     <div class="modal-window">
       <div class="modal-header">
         <span class="modal-title">Settings</span>
-        <button class="close-button" aria-label="Close settings" onclick="this.closest('.modal-overlay').remove()">✖</button>
+        <button class="close-button" aria-label="Close settings" onclick="closeModal()">✖</button>
       </div>
-      <div class="modal-content settings-content">
-        <div class="settings-button" onclick="resetChat()">
-          <i class="fa fa-trash"></i>
-          Clear Chat
-        </div>
-        <div class="language-selector-container">
-          <div class="language-selector" onclick="toggleLanguageSelector()">
-            <span>Language: ${STATE.currentLanguage}</span> <!-- Show current language here -->
-            <i class="fa fa-chevron-down"></i>
-          </div>
-          <div class="language-options">
-            <div class="language-option" data-language="English" onclick="changeLanguage('English')">English</div>
-            <div class="language-option" data-language="Spanish" onclick="changeLanguage('Spanish')">Spanish</div>
-            <div class="language-option" data-language="French" onclick="changeLanguage('French')">French</div>
-            <div class="language-option" data-language="German" onclick="changeLanguage('German')">German</div>
-            <div class="language-option" data-language="Italian" onclick="changeLanguage('Italian')">Italian</div>
-            <!-- Add more languages as needed -->
+      <div class="modal-content">
+        <!-- Clear Chat Section -->
+        <div class="settings-section">
+          <div class="settings-button" onclick="resetChat()">
+            <i class="fa fa-trash"></i> Clear Chat
           </div>
         </div>
-        <div class="settings-button" onclick="toggleSetting('notifications')">
-          <i class="fas fa-bell"></i>
-          Notifications: ${STATE.settings.notifications ? 'On' : 'Off'}
-        </div>
-        <div class="settings-button" onclick="toggleSetting('soundEffects')">
-          <i class="fas fa-volume-up"></i>
-          Sound Effects: ${STATE.settings.soundEffects ? 'On' : 'Off'}
-        </div>
-        <div class="settings-button" onclick="toggleSetting('autoScroll')">
-          <i class="fas fa-scroll"></i>
-          Auto Scroll: ${STATE.settings.autoScroll ? 'On' : 'Off'}
-        </div>
-        <div class="settings-button" onclick="removeApiKey()">
-          <i class="fas fa-key"></i>
-          Remove API Key
-        </div>
-        <div class="theme-selector-container">
-          <div class="theme-selector" onclick="toggleThemeSelector()">
-            <span>Select Theme</span>
-            <i class="fa fa-chevron-down"></i>
+
+        <!-- Personality Selector Section -->
+        <div class="settings-section">
+          <div class="selector-container">
+            <div class="selector" id="personalitySelector" onclick="togglePersonalitySelector()">
+              <span>Personality: ${PERSONALITIES[STATE.personality]?.name || 'Select Personality'}</span>
+              <i class="fa fa-chevron-down"></i>
+            </div>
+            <div class="options" id="personalityOptions" style="display:none;">
+              ${personalityOptions}
+            </div>
+            <div id="personalityDescription" class="option-description">
+              ${PERSONALITIES[STATE.personality]?.description || 'Select a personality to view the description.'}
+            </div>
           </div>
-          <div class="theme-options">
-            <div class="theme-option" data-theme="light" onclick="changeTheme('light')">Light</div>
-            <div class="theme-option" data-theme="dark" onclick="changeTheme('dark')">Dark</div>
+        </div>
+
+        <!-- Language Selector Section -->
+        <div class="settings-section">
+          <div class="selector-container">
+            <div class="selector" id="languageSelector" onclick="toggleLanguageSelector()">
+              <span>Language: ${STATE.currentLanguage}</span>
+              <i class="fa fa-chevron-down"></i>
+            </div>
+            <div class="options" id="languageOptions" style="display:none;">
+              ${languageOptions}
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="settings-button" onclick="toggleSetting('notifications')">
+            <i class="fas fa-bell"></i> Notifications: ${STATE.settings.notifications ? 'On' : 'Off'}
+          </div>
+          <div class="settings-button" onclick="toggleSetting('soundEffects')">
+            <i class="fas fa-volume-up"></i> Sound Effects: ${STATE.settings.soundEffects ? 'On' : 'Off'}
+          </div>
+          <div class="settings-button" onclick="toggleSetting('autoScroll')">
+            <i class="fas fa-scroll"></i> Auto Scroll: ${STATE.settings.autoScroll ? 'On' : 'Off'}
+          </div>
+          <div class="settings-button" onclick="removeApiKey()">
+            <i class="fas fa-key"></i> Remove API Key
+          </div>
+        </div>
+
+        <!-- Theme Selector Section -->
+        <div class="settings-section">
+          <div class="selector-container">
+            <div class="selector" id="themeSelector" onclick="toggleThemeSelector()">
+              <span>Select Theme</span>
+              <i class="fa fa-chevron-down"></i>
+            </div>
+            <div class="options" id="themeOptions">
+              ${themeOptions}
+            </div>
           </div>
         </div>
       </div>
     </div>
   `;
-  
+
   modal.addEventListener('click', (e) => {
     if (e.target === modal) {
-      modal.remove();
+      closeModal();
     }
   });
-  
+
   document.body.appendChild(modal);
 }
 
+function closeModal() {
+  document.querySelector('.modal-overlay').remove();
+}
+
+function togglePersonalitySelector() {
+  const options = document.getElementById('personalityOptions');
+  options.style.display = options.style.display === 'none' || options.style.display === '' ? 'block' : 'none';
+}
+
 function toggleLanguageSelector() {
-  const languageOptions = document.querySelector('.language-options');
-  languageOptions.classList.toggle('active');
+  const options = document.getElementById('languageOptions');
+  options.style.display = options.style.display === 'none' || options.style.display === '' ? 'block' : 'none';
+}
+
+function toggleThemeSelector() {
+  const themeOptions = document.getElementById('themeOptions');
+  themeOptions.style.display = themeOptions.style.display === 'none' || themeOptions.style.display === '' ? 'block' : 'none';
+}
+
+function changePersonality(personality) {
+  STATE.personality = personality;
+  const personalityDescription = document.getElementById('personalityDescription');
+  const personalitySelector = document.getElementById('personalitySelector').querySelector('span');
+
+  // Update the personality description and selector button
+  personalityDescription.textContent = PERSONALITIES[personality]?.description || 'Select a personality to view the description.';
+  personalitySelector.textContent = `Personality: ${PERSONALITIES[personality]?.name || 'Select Personality'}`;
+
+  saveToLocalStorage(CONFIG.STORAGE_KEYS.PERSONALITY, personality);
+  showNotification(`Personality changed to ${PERSONALITIES[personality]?.name || 'unknown'}`);
 }
 
 function changeLanguage(language) {
-  // Update the state with the new language
   STATE.currentLanguage = language;
-  
-  // Update the language selector button text to show "Language: (language)"
-  const languageSelector = document.querySelector('.language-selector span');
+  const languageSelector = document.getElementById('languageSelector').querySelector('span');
   languageSelector.textContent = `Language: ${language}`;
-  
-  // Optionally, add logic to handle switching text/content for the selected language
+
+  showNotification(`Language changed to ${language}`);
 }
 
+function changeTheme(theme) {
+  STATE.theme = theme;
+  document.documentElement.setAttribute('data-theme', theme);
+  saveToLocalStorage(CONFIG.STORAGE_KEYS.THEME, theme);
 
+  // Update the Theme selector button
+  const themeSelector = document.getElementById('themeSelector').querySelector('span');
+  themeSelector.textContent = `Theme: ${theme}`;
+  document.getElementById('themeOptions').style.display = 'none';
 
-function showNotification(message, duration = 3000) {
-  if (!STATE.settings.notifications) return;
-  
-  const notification = document.createElement('div');
-  notification.className = 'notification';
-  notification.textContent = message;
-  document.body.appendChild(notification);
-  
-  setTimeout(() => {
-    notification.classList.add('fade-out');
-    setTimeout(() => notification.remove(), 300);
-  }, duration);
-}
-
-function showError(message) {
-  showNotification(message, 5000);
-  console.error(message);
+  showNotification(`Theme changed to ${theme}`);
 }
 
 function toggleSetting(setting) {
   STATE.settings[setting] = !STATE.settings[setting];
   saveToLocalStorage(CONFIG.STORAGE_KEYS.SETTINGS, STATE.settings);
+
+  const settingButton = document.querySelector(`[onclick="toggleSetting('${setting}')"]`);
+  if (settingButton) {
+    settingButton.textContent = `${setting.charAt(0).toUpperCase() + setting.slice(1)}: ${STATE.settings[setting] ? 'On' : 'Off'}`;
+  }
+
   showNotification(`${setting} ${STATE.settings[setting] ? 'enabled' : 'disabled'}`);
-  document.querySelector('.modal-overlay').remove();
+  closeModal();
   showSettingsModal();
 }
 
@@ -1617,25 +1699,12 @@ function playMessageSound() {
   audio.play().catch(err => console.log('Error playing sound', err));
 }
 
-// Theme management
-function toggleThemeSelector() {
-  const themeOptions = document.querySelector('.theme-options');
-  themeOptions.classList.toggle('active');
-}
-
-function changeTheme(newTheme) {
-  document.documentElement.setAttribute('data-theme', newTheme);
-  STATE.theme = newTheme;
-  saveToLocalStorage(CONFIG.STORAGE_KEYS.THEME, newTheme);
-  const themeOptions = document.querySelector('.theme-options');
-  themeOptions.classList.remove('active');
-}
-
 function initializeTheme() {
   const savedTheme = localStorage.getItem(CONFIG.STORAGE_KEYS.THEME) || 'light';
   document.documentElement.setAttribute('data-theme', savedTheme);
   STATE.theme = savedTheme;
 }
+
 function showAboutModal() {
   const modal = document.createElement('div');
   modal.className = 'modal-overlay';
@@ -1773,5 +1842,4 @@ function setupEventListeners() {
   // Example: Add an event listener for sending a message or changing settings
   // More functionality can be added here as per requirements
 }
-
         </script>
