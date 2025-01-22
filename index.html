@@ -1213,56 +1213,33 @@ async function startEditing(messageId) {
   const contentDiv = messageElement.querySelector('.message-content');
   const originalText = contentDiv.textContent;
   
-  // Create edit container
-  const editContainer = document.createElement('div');
-  editContainer.className = 'edit-container';
-  
   // Create textarea with original content
   const textarea = document.createElement('textarea');
   textarea.className = 'edit-input';
   textarea.value = originalText;
+  contentDiv.replaceWith(textarea);
   
-  // Create control buttons
-  const controls = document.createElement('div');
-  controls.className = 'edit-controls';
-  
-  const saveButton = document.createElement('button');
-  saveButton.className = 'edit-button';
-  saveButton.textContent = 'Save';
-  saveButton.onclick = () => finishEditing(messageId, textarea.value.trim());
-  
-  const cancelButton = document.createElement('button');
-  cancelButton.className = 'edit-button cancel';
-  cancelButton.textContent = 'Cancel';
-  cancelButton.onclick = () => cancelEditing(messageId);
-  
-  controls.appendChild(saveButton);
-  controls.appendChild(cancelButton);
-  
-  editContainer.appendChild(textarea);
-  editContainer.appendChild(controls);
-  
-  contentDiv.replaceWith(editContainer);
+  // Find the index of the message being edited
+  const messageIndex = STATE.messageHistory.findIndex(msg => msg.id === messageId);
   
   // Store editing state
   STATE.editingState = {
     messageId,
     originalText,
-    messageIndex: STATE.messageHistory.findIndex(msg => msg.id === messageId),
-    subsequentMessages: STATE.messageHistory.slice(STATE.messageHistory.findIndex(msg => msg.id === messageId) + 1)
+    messageIndex,
+    subsequentMessages: STATE.messageHistory.slice(messageIndex + 1)
   };
   
   textarea.focus();
   messageElement.classList.add('edit-mode');
   STATE.editingMessageId = messageId;
   
-  // Add keyboard shortcuts
+  // Handle edit completion or cancellation
   textarea.addEventListener('keydown', async (e) => {
-    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+    if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       await finishEditing(messageId, textarea.value.trim());
     } else if (e.key === 'Escape') {
-      e.preventDefault();
       cancelEditing(messageId);
     }
   });
@@ -1274,28 +1251,17 @@ function cancelEditing(messageId) {
   const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
   if (!messageElement) return;
   
-  const editContainer = messageElement.querySelector('.edit-container');
+  const textarea = messageElement.querySelector('.edit-input');
   const contentDiv = document.createElement('div');
   contentDiv.className = 'message-content';
   contentDiv.textContent = STATE.editingState.originalText;
-  editContainer.replaceWith(contentDiv);
+  textarea.replaceWith(contentDiv);
   
   messageElement.classList.remove('edit-mode');
   STATE.editingMessageId = null;
   STATE.editingState = null;
 }
-function createTypingIndicator() {
-  const typingElement = document.createElement('div');
-  typingElement.className = 'chat-message bot typing-indicator';
-  typingElement.innerHTML = `
-    <div class="typing-dots">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-  `;
-  return typingElement;
-}
+
 async function finishEditing(messageId, newText) {
   if (!messageId || !newText || STATE.isWaitingForResponse || !STATE.editingState) return;
   
@@ -1308,32 +1274,33 @@ async function finishEditing(messageId, newText) {
     return;
   }
   
+  const textarea = messageElement.querySelector('.edit-input');
+  const contentDiv = document.createElement('div');
+  contentDiv.className = 'message-content';
+  contentDiv.textContent = newText;
+  textarea.replaceWith(contentDiv);
+  messageElement.classList.remove('edit-mode');
+  
+  // Update message history
+  const { messageIndex } = STATE.editingState;
+  
+  // Remove subsequent messages from UI
+  let nextElement = messageElement.nextElementSibling;
+  while (nextElement) {
+    const temp = nextElement.nextElementSibling;
+    nextElement.remove();
+    nextElement = temp;
+  }
+  
+  // Update the edited message
+  STATE.messageHistory[messageIndex].content = newText;
+  // Remove subsequent messages from history
+  STATE.messageHistory = STATE.messageHistory.slice(0, messageIndex + 1);
+  
   try {
     // Show typing indicator
     const typingIndicator = createTypingIndicator();
-    const chatMessages = document.querySelector('.chat-messages');
-    chatMessages.appendChild(typingIndicator);
-    
-    // Remove edit UI
-    const editContainer = messageElement.querySelector('.edit-container');
-    const contentDiv = document.createElement('div');
-    contentDiv.className = 'message-content';
-    contentDiv.textContent = newText;
-    editContainer.replaceWith(contentDiv);
-    messageElement.classList.remove('edit-mode');
-    
-    // Update message in history
-    const { messageIndex } = STATE.editingState;
-    STATE.messageHistory[messageIndex].content = newText;
-    
-    // Remove subsequent messages
-    STATE.messageHistory = STATE.messageHistory.slice(0, messageIndex + 1);
-    let nextElement = messageElement.nextElementSibling;
-    while (nextElement) {
-      const temp = nextElement.nextElementSibling;
-      nextElement.remove();
-      nextElement = temp;
-    }
+    document.querySelector('.chat-messages').appendChild(typingIndicator);
     
     // Get new response
     STATE.isWaitingForResponse = true;
@@ -1351,10 +1318,10 @@ async function finishEditing(messageId, newText) {
         replyTo: messageId
       };
       
-      // Add bot response
+      // Add new bot message to history and UI
       STATE.messageHistory.push(botMessageObj);
       const { element: botElement } = createMessageElement(response.text, false);
-      chatMessages.appendChild(botElement);
+      document.querySelector('.chat-messages').appendChild(botElement);
       
       if (STATE.settings.autoScroll) {
         botElement.scrollIntoView({ behavior: 'smooth' });
@@ -1964,89 +1931,38 @@ function createTypingIndicator() {
   return typingElement;
 }
 
-const styles = document.createElement('style');
-styles.textContent = `
+// Add CSS for typing indicator
+const typingIndicatorStyles = `
 .typing-indicator {
-  opacity: 0.8;
-  padding: 12px;
-  border-radius: 8px;
+  opacity: 0.7;
   margin: 10px 0;
-  background: var(--message-bg);
 }
 
 .typing-dots {
   display: flex;
-  gap: 5px;
+  gap: 4px;
   padding: 8px;
   justify-content: flex-start;
-  align-items: center;
 }
 
 .typing-dots span {
   width: 8px;
   height: 8px;
-  background: var(--text-color);
+  background: currentColor;
   border-radius: 50%;
-  display: inline-block;
-  animation: bounce 1.4s infinite ease-in-out both;
+  animation: typing-dot 1.4s infinite ease-in-out;
+  opacity: 0.6;
 }
 
-.typing-dots span:nth-child(1) { animation-delay: -0.32s; }
-.typing-dots span:nth-child(2) { animation-delay: -0.16s; }
+.typing-dots span:nth-child(1) { animation-delay: 0s; }
+.typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+.typing-dots span:nth-child(3) { animation-delay: 0.4s; }
 
-@keyframes bounce {
-  0%, 80%, 100% { transform: scale(0); }
-  40% { transform: scale(1); }
-}
-
-.edit-input {
-  width: 100%;
-  min-height: 60px;
-  padding: 8px 12px;
-  border: 2px solid var(--accent-color);
-  border-radius: 8px;
-  background: var(--bg-color);
-  color: var(--text-color);
-  font-family: inherit;
-  font-size: inherit;
-  resize: vertical;
-  margin: 4px 0;
-}
-
-.edit-mode {
-  position: relative;
-  background: var(--bg-color-secondary);
-  padding: 8px;
-  border-radius: 8px;
-}
-
-.edit-controls {
-  display: flex;
-  gap: 8px;
-  margin-top: 8px;
-}
-
-.edit-button {
-  padding: 4px 12px;
-  border-radius: 4px;
-  border: none;
-  background: var(--accent-color);
-  color: var(--bg-color);
-  cursor: pointer;
-  transition: opacity 0.2s;
-}
-
-.edit-button:hover {
-  opacity: 0.9;
-}
-
-.edit-button.cancel {
-  background: var(--error-color);
+@keyframes typing-dot {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.6; }
+  30% { transform: translateY(-4px); opacity: 1; }
 }
 `;
-
-document.head.appendChild(styles);
-
     function showWelcomeMessage() {
       const welcomeMessage = "👋 Welcome to PatheticAI Enhanced! I'm here to help you with any questions or tasks you may have. Feel free to start our conversation!";
       const {
