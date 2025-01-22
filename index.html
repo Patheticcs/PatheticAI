@@ -305,6 +305,17 @@
       }
     }
 
+function formatTimestamp(date) {
+  return new Intl.DateTimeFormat('default', {
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  }).format(date);
+}
+
 async function copyToClipboard(text) {
   try {
     await navigator.clipboard.writeText(text);
@@ -322,61 +333,52 @@ function createMessageElement(message, isUser, timestamp = new Date()) {
 
   const contentDiv = document.createElement('div');
   contentDiv.classList.add('message-content');
-
+  
   if (!isUser) {
-    // Parse the message as markdown and highlight code
+    // Enhanced code block handling
     contentDiv.innerHTML = marked.parse(message, {
-      highlight: (code, language) => language ? hljs.highlight(code, { language }).value : hljs.highlightAuto(code).value,
+      highlight: function(code, language) {
+        if (language) {
+          return hljs.highlight(code, { language }).value;
+        }
+        return hljs.highlightAuto(code).value;
+      }
     });
 
-    // Add copy buttons to all code blocks
+    // Add copy buttons to code blocks
     contentDiv.querySelectorAll('pre code').forEach((block) => {
       const wrapper = document.createElement('div');
       wrapper.className = 'code-block-wrapper';
-
-      const copyButton = createCopyButton(block);
+      
+      const copyButton = document.createElement('button');
+      copyButton.className = 'code-copy-button';
+      copyButton.innerHTML = '<i class="fas fa-copy"></i>';
+      copyButton.onclick = (e) => {
+        e.stopPropagation();
+        navigator.clipboard.writeText(block.textContent)
+          .then(() => {
+            copyButton.innerHTML = '<i class="fas fa-check"></i>';
+            setTimeout(() => {
+              copyButton.innerHTML = '<i class="fas fa-copy"></i>';
+            }, 2000);
+          });
+      };
+      
+      block.parentNode.insertBefore(wrapper, block);
       wrapper.appendChild(block);
       wrapper.appendChild(copyButton);
-      block.parentNode.insertBefore(wrapper, block);
     });
   } else {
     contentDiv.textContent = message;
   }
-
+  
   messageElement.appendChild(contentDiv);
-  messageElement.appendChild(createTimestampDiv(timestamp));
-  messageElement.appendChild(createActionsDiv(message, isUser, messageId));
 
-  return { element: messageElement, id: messageId };
-}
-
-function createCopyButton(block) {
-  const button = document.createElement('button');
-  button.className = 'code-copy-button';
-  button.innerHTML = '<i class="fas fa-copy"></i>';
-  button.onclick = async (e) => {
-    e.stopPropagation();
-    await navigator.clipboard.writeText(block.textContent);
-    updateCopyButton(button);
-  };
-  return button;
-}
-
-function updateCopyButton(button) {
-  button.innerHTML = '<i class="fas fa-check"></i>';
-  setTimeout(() => {
-    button.innerHTML = '<i class="fas fa-copy"></i>';
-  }, 2000);
-}
-
-function createTimestampDiv(timestamp) {
   const timestampDiv = document.createElement('div');
   timestampDiv.className = 'message-timestamp';
   timestampDiv.textContent = formatTimestamp(timestamp);
-  return timestampDiv;
-}
+  messageElement.appendChild(timestampDiv);
 
-function createActionsDiv(message, isUser, messageId) {
   const actionsDiv = document.createElement('div');
   actionsDiv.className = 'message-actions';
 
@@ -394,9 +396,9 @@ function createActionsDiv(message, isUser, messageId) {
   copyButton.onclick = () => copyToClipboard(message);
   actionsDiv.appendChild(copyButton);
 
-  return actionsDiv;
+  messageElement.appendChild(actionsDiv);
+  return { element: messageElement, id: messageId };
 }
-
 
     const PERSONALITIES = {
       Professional: {
