@@ -305,26 +305,6 @@
       }
     }
 
-function formatTimestamp(date) {
-  return new Intl.DateTimeFormat('default', {
-    hour: 'numeric',
-    minute: 'numeric',
-    second: 'numeric',
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric'
-  }).format(date);
-}
-
-async function copyToClipboard(text) {
-  try {
-    await navigator.clipboard.writeText(text);
-    showNotification('Copied to clipboard');
-  } catch (err) {
-    showNotification('Failed to copy to clipboard');
-  }
-}
-
 async function copyToClipboard(text) {
   try {
     await navigator.clipboard.writeText(text);
@@ -344,18 +324,19 @@ function createMessageElement(message, isUser, timestamp = new Date()) {
   contentDiv.classList.add('message-content');
 
   if (!isUser) {
-
+    // Parse the message as markdown and highlight code
     contentDiv.innerHTML = marked.parse(message, {
       highlight: (code, language) => language ? hljs.highlight(code, { language }).value : hljs.highlightAuto(code).value,
     });
 
+    // Add copy buttons to all code blocks
     contentDiv.querySelectorAll('pre code').forEach((block) => {
       const wrapper = document.createElement('div');
       wrapper.className = 'code-block-wrapper';
 
       const copyButton = createCopyButton(block);
+      wrapper.appendChild(block);
       wrapper.appendChild(copyButton);
-      wrapper.appendChild(block);  
       block.parentNode.insertBefore(wrapper, block);
     });
   } else {
@@ -378,12 +359,6 @@ function createCopyButton(block) {
     await navigator.clipboard.writeText(block.textContent);
     updateCopyButton(button);
   };
-
-  button.style.position = 'absolute';
-  button.style.top = '8px';
-  button.style.right = '8px';
-  button.style.zIndex = '1'; 
-
   return button;
 }
 
@@ -421,6 +396,7 @@ function createActionsDiv(message, isUser, messageId) {
 
   return actionsDiv;
 }
+
 
     const PERSONALITIES = {
       Professional: {
