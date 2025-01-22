@@ -1227,57 +1227,69 @@ function createMessageElement(message, isUser, timestamp = new Date()) {
       };
       textarea.addEventListener('keydown', handleEdit);
     }
-    async function finishEditing(messageId, newText) {
-      if (!messageId || !newText || STATE.isWaitingForResponse) return;
-      const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
-      if (!messageElement) return;
-      const textarea = messageElement.querySelector('.edit-input');
-      const contentDiv = document.createElement('div');
-      contentDiv.className = 'message-content';
-      contentDiv.textContent = newText;
-      textarea.replaceWith(contentDiv);
-      messageElement.classList.remove('edit-mode');
-      const messageIndex = STATE.messageHistory.findIndex(msg => msg.id === messageId);
-      if (messageIndex === -1) return;
-      STATE.messageHistory[messageIndex].content = newText;
-      const nextIndex = messageIndex + 1;
-      if (nextIndex < STATE.messageHistory.length && STATE.messageHistory[nextIndex].role === 'assistant') {
-        STATE.messageHistory.splice(nextIndex, 1);
-        const nextElement = messageElement.nextElementSibling;
-        if (nextElement) nextElement.remove();
+async function finishEditing(messageId, newText) {
+  if (!messageId || !newText || STATE.isWaitingForResponse) return;
+  const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
+  if (!messageElement) return;
+  const textarea = messageElement.querySelector('.edit-input');
+  const contentDiv = document.createElement('div');
+  contentDiv.className = 'message-content';
+  contentDiv.textContent = newText;
+  textarea.replaceWith(contentDiv);
+  messageElement.classList.remove('edit-mode');
+  
+  // Update message history with the new content
+  const messageIndex = STATE.messageHistory.findIndex(msg => msg.id === messageId);
+  if (messageIndex === -1) return;
+  STATE.messageHistory[messageIndex].content = newText;
+
+  // Remove the assistant's next message if present (since it's a reply to the old message)
+  const nextIndex = messageIndex + 1;
+  if (nextIndex < STATE.messageHistory.length && STATE.messageHistory[nextIndex].role === 'assistant') {
+    STATE.messageHistory.splice(nextIndex, 1);
+    const nextElement = messageElement.nextElementSibling;
+    if (nextElement) nextElement.remove();
+  }
+
+  try {
+    // Handle bot response
+    STATE.isWaitingForResponse = true;
+    const response = await sendMessageWithRetry(newText);
+    if (response.text) {
+      // Create a new assistant message based on the updated text
+      const botMessageObj = {
+        role: "assistant",
+        content: response.text,
+        timestamp: Date.now(),
+        replyTo: messageId
+      };
+      STATE.messageHistory.splice(nextIndex, 0, botMessageObj);
+
+      // Create and append the new bot message to the DOM
+      const { element: botElement } = createMessageElement(response.text, false);
+      messageElement.after(botElement);
+
+      // Scroll to the new bot message if required
+      if (STATE.settings.autoScroll) {
+        botElement.scrollIntoView({ behavior: 'smooth' });
       }
-      try {
-        STATE.isWaitingForResponse = true;
-        const response = await sendMessageWithRetry(newText);
-        if (response.text) {
-          const botMessageObj = {
-            role: "assistant",
-            content: response.text,
-            timestamp: Date.now(),
-            replyTo: messageId
-          };
-          STATE.messageHistory.splice(nextIndex, 0, botMessageObj);
-          const {
-            element: botElement
-          } = createMessageElement(response.text, false);
-          messageElement.after(botElement);
-          if (STATE.settings.autoScroll) {
-            botElement.scrollIntoView({
-              behavior: 'smooth'
-            });
-          }
-          if (STATE.settings.soundEffects) {
-            playMessageSound();
-          }
-        }
-      } catch (error) {
-        showError(`Error updating response: ${error.message}`);
-      } finally {
-        STATE.isWaitingForResponse = false;
-        STATE.editingMessageId = null;
+
+      // Play sound effects if enabled
+      if (STATE.settings.soundEffects) {
+        playMessageSound();
       }
-      saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, STATE.messageHistory);
     }
+  } catch (error) {
+    showError(`Error updating response: ${error.message}`);
+  } finally {
+    STATE.isWaitingForResponse = false;
+    STATE.editingMessageId = null;
+  }
+
+  // Save updated message history to local storage
+  saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, STATE.messageHistory);
+}
+
     document.getElementById('messageInput').addEventListener('keydown', function(event) {
       if (event.key === 'Enter' && !event.shiftKey) {
         event.preventDefault();
