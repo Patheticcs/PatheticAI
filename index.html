@@ -947,6 +947,9 @@
     </div>
     <div class="chat-input-container">
       <textarea id="messageInput" placeholder="Type your message..." rows="1" maxlength="2000"></textarea>
+    <button class="voice-input-button" id="voiceButton">
+      <i class="fas fa-microphone"></i>
+    </button>
       <button onclick="sendMessage()" title="Send Message">
         <i class="fas fa-paper-plane"></i>
         <span>‎ ‎ ‎ Send</span>
@@ -1066,63 +1069,7 @@
         }
         initializeVoiceInput();
       }
-      async function toggleVoiceInput() {
-        const voiceButton = document.querySelector('.voice-input-button');
-        const messageInput = document.getElementById('messageInput');
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        if (!STATE.voiceRecording) {
-          if (!SpeechRecognition) {
-            showError('Your browser does not support the Web Speech API');
-            return;
-          }
-          try {
-            const recognition = new SpeechRecognition();
-            recognition.continuous = false;
-            recognition.interimResults = true;
-            recognition.lang = 'en-US';
-            STATE.recognition = recognition;
-            recognition.onstart = () => {
-              STATE.voiceRecording = true;
-              voiceButton.classList.add('recording');
-              showNotification('Voice recording started');
-            };
-            recognition.onresult = (event) => {
-              let transcript = '';
-              let interimTranscript = '';
-              for (let i = event.resultIndex; i < event.results.length; i++) {
-                const result = event.results[i];
-                if (result.isFinal) {
-                  transcript += result[0].transcript;
-                } else {
-                  interimTranscript += result[0].transcript;
-                }
-              }
-              messageInput.value = transcript || interimTranscript;
-              messageInput.focus();
-            };
-            recognition.onerror = (event) => {
-              showError('Speech recognition error');
-              console.error('Speech recognition error:', event.error);
-            };
-            recognition.onend = () => {
-              STATE.voiceRecording = false;
-              voiceButton.classList.remove('recording');
-              showNotification('Voice recording stopped');
-            };
-            recognition.start();
-          } catch (error) {
-            showError('Microphone access denied');
-            voiceButton.disabled = true;
-          }
-        } else {
-          if (STATE.recognition) {
-            STATE.recognition.stop();
-            STATE.voiceRecording = false;
-            voiceButton.classList.remove('recording');
-            showNotification('Voice recording stopped');
-          }
-        }
-      }
+
 
       function loadSavedState() {
         try {
@@ -1409,29 +1356,6 @@
         }
       });
 
-      function changePersonality(personality) {
-        if (!PERSONALITIES[personality]) {
-          console.error('Invalid personality selected');
-          return;
-        }
-        STATE.personality = PERSONALITIES[personality];
-        systemMessage.content = STATE.personality.systemPrompt;
-        const personalityDescription = document.getElementById('personalityDescription');
-        const personalitySelector = document.getElementById('personalitySelector').querySelector('span');
-        personalityDescription.textContent = STATE.personality.description;
-        personalitySelector.textContent = `Personality: ${personality}`;
-        saveToLocalStorage(CONFIG.STORAGE_KEYS.PERSONALITY, personality);
-        document.getElementById('personalityOptions').style.display = 'none';
-        showNotification(`Personality changed to ${personality}`);
-      }
-
-      function initializePersonality() {
-        const savedPersonalityName = localStorage.getItem(CONFIG.STORAGE_KEYS.PERSONALITY) || 'Professional';
-        if (PERSONALITIES[savedPersonalityName]) {
-          STATE.personality = PERSONALITIES[savedPersonalityName];
-          systemMessage.content = STATE.personality.systemPrompt;
-        }
-      }
       async function sendMessage() {
         const textarea = document.getElementById('messageInput');
         const message = textarea.value.trim();
@@ -1546,75 +1470,58 @@
         }
         throw new Error("All API attempts failed. Please try again later.");
       }
-      async function toggleVoiceInput() {
-        const voiceButton = document.querySelector('.voice-input-button');
-        const messageInput = document.getElementById('messageInput');
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        if (!STATE.voiceRecording) {
-          if (!SpeechRecognition) {
-            showError('Your browser does not support the Web Speech API');
-            return;
-          }
-          try {
-            const recognition = new SpeechRecognition();
-            recognition.continuous = false;
-            recognition.interimResults = true;
-            recognition.lang = 'en-US';
-            STATE.recognition = recognition;
-            recognition.onstart = () => {
-              STATE.voiceRecording = true;
-              voiceButton.classList.add('recording');
-              showNotification('Voice recording started');
-            };
-            recognition.onresult = (event) => {
-              let transcript = '';
-              let interimTranscript = '';
-              for (let i = event.resultIndex; i < event.results.length; i++) {
-                const result = event.results[i];
-                if (result.isFinal) {
-                  transcript += result[0].transcript;
-                } else {
-                  interimTranscript += result[0].transcript;
-                }
-              }
-              messageInput.value = transcript || interimTranscript;
-              messageInput.focus();
-            };
-            recognition.onerror = (event) => {
-              showError('Speech recognition error');
-              console.error('Speech recognition error:', event.error);
-            };
-            recognition.onend = () => {
-              STATE.voiceRecording = false;
-              voiceButton.classList.remove('recording');
-              showNotification('Voice recording stopped');
-            };
-            recognition.start();
-          } catch (error) {
-            showError('Microphone access denied');
-            voiceButton.disabled = true;
-          }
-        } else {
-          if (STATE.recognition) {
-            STATE.recognition.stop();
-            STATE.voiceRecording = false;
-            voiceButton.classList.remove('recording');
-            showNotification('Voice recording stopped');
-          }
+    const voiceButton = document.getElementById('voiceButton');
+    const messageInput = document.getElementById('messageInput');
+    const notification = document.getElementById('notification');
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    let recognition;
+
+    voiceButton.addEventListener('click', () => {
+      if (!recognition) {
+        if (!SpeechRecognition) {
+          alert('Your browser does not support the Web Speech API');
+          return;
         }
+
+        recognition = new SpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = true;
+        recognition.lang = 'en-US';
+
+        recognition.onstart = () => {
+          voiceButton.classList.add('recording');
+          showNotification('Voice recording started');
+        };
+
+        recognition.onresult = (event) => {
+          let transcript = '';
+          for (let i = event.resultIndex; i < event.results.length; i++) {
+            const result = event.results[i];
+            if (result.isFinal) {
+              transcript += result[0].transcript;
+            }
+          }
+          messageInput.value = transcript;
+        };
+
+        recognition.onerror = (event) => {
+          alert('Speech recognition error');
+          console.error('Speech recognition error:', event.error);
+        };
+
+        recognition.onend = () => {
+          voiceButton.classList.remove('recording');
+          showNotification('Voice recording stopped');
+        };
       }
 
-      function initializeVoiceInput() {
-        const chatInput = document.querySelector('.chat-input-container');
-        if (chatInput) {
-          const voiceButton = document.createElement('button');
-          voiceButton.className = 'voice-input-button';
-          voiceButton.innerHTML = ' <i class = "fas fa-microphone" > </i>';
-          voiceButton.title = 'Voice Input';
-          voiceButton.onclick = toggleVoiceInput;
-          chatInput.insertBefore(voiceButton, chatInput.lastElementChild);
-        }
+      if (recognition && voiceButton.classList.contains('recording')) {
+        recognition.stop();
+      } else {
+        recognition.start();
       }
+    });
 
 
       function setupEventListeners() {
@@ -1670,130 +1577,88 @@
         }
       }
 
-      function showSettingsModal() {
-        const modal = document.createElement('div');
-        modal.className = 'modal-overlay';
-        const personalityOptions = Object.keys(PERSONALITIES).map(p => `
-            
-    
-																									<div class="option" data-personality="${p}" onclick="changePersonality('${p}')">${p}</div>
-        `).join('');
-        const languageOptions = ['English', 'Spanish', 'French', 'German', 'Italian', 'Japanese', 'Chinese', 'Russian', 'Portuguese', 'Korean', 'Hindi', 'Arabic', 'Turkish', 'Dutch', 'Swedish', 'Greek', 'Polish', 'Vietnamese', 'Thai', 'Indonesian', 'Hebrew', 'Finnish', 'Czech', 'Hungarian'].map(lang => `
-            
-    
-																									<div class="option" data-language="${lang}" onclick="changeLanguage('${lang}')">${lang}</div>
-        `).join('');
-        const themeOptions = `
-            
-<div class="option" data-theme="light" onclick="changeTheme('light')">Light</div>
-<div class="option" data-theme="dark" onclick="changeTheme('dark')">Dark</div>
-<div class="option" data-theme="solarized-dark" onclick="changeTheme('solarized-dark')">Solarized-Dark</div>
-<div class="option" data-theme="solarized-light" onclick="changeTheme('solarized-light')">Solarized-Light</div>
-<div class="option" data-theme="pastel" onclick="changeTheme('pastel')">Pastel</div>
-<div class="option" data-theme="forest" onclick="changeTheme('forest')">Forest</div>
-<div class="option" data-theme="ocean" onclick="changeTheme('ocean')">Ocean</div>
-<div class="option" data-theme="neon" onclick="changeTheme('neon')">Neon</div>
-
-        `;
-        modal.innerHTML = `
-            
-    
-																									<div class="modal-window">
-																										<div class="modal-header">
-																											<span class="modal-title">Settings</span>
-																											<button class="close-button" aria-label="Close settings" onclick="closeModal()">✖</button>
-																										</div>
-																										<div class="modal-content">
-																											<div class="settings-section">
-																												<div class="settings-button" onclick="resetChat()">
-																													<i class="fa fa-trash"></i> Clear Chat
-    
-    
-																												</div>
-																											</div>
-																											<div class="settings-section">
-																												<div class="selector-container">
-																													<div class="selector" id="personalitySelector" onclick="togglePersonalitySelector()">
-																														<span>
-																															<i class="fa-solid fa-face-smile"></i>‎ ‎ Personality: ${PERSONALITIES[STATE.personality]?.name || 'Select Personality'}
-    
-																														</span>
-																														<i class="fa fa-chevron-down"></i>
-																													</div>
-																													<div class="options" id="personalityOptions" style="display:none;">
-    ${personalityOptions}
-    </div>
-																												</div>
-																											</div>
-																											<div class="settings-section">
-																												<div class="selector-container">
-																													<div class="selector" id="languageSelector" onclick="toggleLanguageSelector()">
-																														<span>
-																															<i class="fa-solid fa-language"></i>‎ ‎ Language: ${STATE.currentLanguage}
-    
-																														</span>
-																														<i class="fa fa-chevron-down"></i>
-																													</div>
-																													<div class="options" id="languageOptions" style="display:none;">
-                                ${languageOptions}
-                            </div>
-																												</div>
-																											</div>
-																											<div class="settings-section">
-																												<div class="selector-container">
-																													<div class="selector" id="themeSelector" onclick="toggleThemeSelector()">
-																														<span>
-																															<i class="fa-solid fa-palette"></i>‎ ‎ Select Theme
-    
-																														</span>
-																														<i class="fa fa-chevron-down"></i>
-																													</div>
-																													<div class="options" id="themeOptions">
-                                ${themeOptions}
-                            </div>
-																												</div>
-																											</div>
-																											<div class="settings-section">
-																												<div class="settings-button" onclick="toggleSetting('notifications')">
-																													<i class="fas fa-bell"></i> Notifications: ${STATE.settings.notifications ? 'On' : 'Off'}
-                        
-    																												
-																												</div>
-																												<div class="settings-button" onclick="toggleSetting('soundEffects')">
-																													<i class="fas fa-volume-up"></i> Sound Effects: ${STATE.settings.soundEffects ? 'On' : 'Off'}
-                        
-    
-																												</div>
-																												<div class="settings-button" onclick="toggleSetting('autoScroll')">
-																													<i class="fas fa-scroll"></i> Auto Scroll: ${STATE.settings.autoScroll ? 'On' : 'Off'}
-                        
-    
-																												</div>
-																												<div class="settings-button" onclick="removeApiKey()">
-																													<i class="fas fa-key"></i> Remove API Key
-                        
-    
-																												</div>
-																											</div>
-																										</div>
-																									</div>
-        `;
-        modal.addEventListener('click', (e) => {
-          if (e.target === modal) {
+function showSettingsModal() {
+    const modal = document.createElement('div');
+    modal.className = 'modal-overlay';
+    const languageOptions = ['English', 'Spanish', 'French', 'German', 'Italian', 'Japanese', 'Chinese', 'Russian', 'Portuguese', 'Korean', 'Hindi', 'Arabic', 'Turkish', 'Dutch', 'Swedish', 'Greek', 'Polish', 'Vietnamese', 'Thai', 'Indonesian', 'Hebrew', 'Finnish', 'Czech', 'Hungarian'].map(lang => `
+        <div class="option" data-language="${lang}" onclick="changeLanguage('${lang}')">${lang}</div>
+    `).join('');
+    const themeOptions = `
+        <div class="option" data-theme="light" onclick="changeTheme('light')">Light</div>
+        <div class="option" data-theme="dark" onclick="changeTheme('dark')">Dark</div>
+        <div class="option" data-theme="solarized-dark" onclick="changeTheme('solarized-dark')">Solarized-Dark</div>
+        <div class="option" data-theme="solarized-light" onclick="changeTheme('solarized-light')">Solarized-Light</div>
+        <div class="option" data-theme="pastel" onclick="changeTheme('pastel')">Pastel</div>
+        <div class="option" data-theme="forest" onclick="changeTheme('forest')">Forest</div>
+        <div class="option" data-theme="ocean" onclick="changeTheme('ocean')">Ocean</div>
+        <div class="option" data-theme="neon" onclick="changeTheme('neon')">Neon</div>
+    `;
+    modal.innerHTML = `
+        <div class="modal-window">
+            <div class="modal-header">
+                <span class="modal-title">Settings</span>
+                <button class="close-button" aria-label="Close settings" onclick="closeModal()">✖</button>
+            </div>
+            <div class="modal-content">
+                <div class="settings-section">
+                    <div class="settings-button" onclick="resetChat()">
+                        <i class="fa fa-trash"></i> Clear Chat
+                    </div>
+                </div>
+                <div class="settings-section">
+                    <div class="selector-container">
+                        <div class="selector" id="languageSelector" onclick="toggleLanguageSelector()">
+                            <span>
+                                <i class="fa-solid fa-language"></i>‎ ‎ Language: ${STATE.currentLanguage}
+                            </span>
+                            <i class="fa fa-chevron-down"></i>
+                        </div>
+                        <div class="options" id="languageOptions" style="display:none;">
+                            ${languageOptions}
+                        </div>
+                    </div>
+                </div>
+                <div class="settings-section">
+                    <div class="selector-container">
+                        <div class="selector" id="themeSelector" onclick="toggleThemeSelector()">
+                            <span>
+                                <i class="fa-solid fa-palette"></i>‎ ‎ Select Theme
+                            </span>
+                            <i class="fa fa-chevron-down"></i>
+                        </div>
+                        <div class="options" id="themeOptions">
+                            ${themeOptions}
+                        </div>
+                    </div>
+                </div>
+                <div class="settings-section">
+                    <div class="settings-button" onclick="toggleSetting('notifications')">
+                        <i class="fas fa-bell"></i> Notifications: ${STATE.settings.notifications ? 'On' : 'Off'}
+                    </div>
+                    <div class="settings-button" onclick="toggleSetting('soundEffects')">
+                        <i class="fas fa-volume-up"></i> Sound Effects: ${STATE.settings.soundEffects ? 'On' : 'Off'}
+                    </div>
+                    <div class="settings-button" onclick="toggleSetting('autoScroll')">
+                        <i class="fas fa-scroll"></i> Auto Scroll: ${STATE.settings.autoScroll ? 'On' : 'Off'}
+                    </div>
+                    <div class="settings-button" onclick="removeApiKey()">
+                        <i class="fas fa-key"></i> Remove API Key
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
             closeModal();
-          }
-        });
-        document.body.appendChild(modal);
-      }
+        }
+    });
+    document.body.appendChild(modal);
+}
 
-      function closeModal() {
-        document.querySelector('.modal-overlay').remove();
-      }
-
-      function togglePersonalitySelector() {
-        const options = document.getElementById('personalityOptions');
-        options.style.display = options.style.display === 'none' || options.style.display === '' ? 'block' : 'none';
-      }
+function closeModal() {
+    document.querySelector('.modal-overlay').remove();
+}
 
       function toggleLanguageSelector() {
         const options = document.getElementById('languageOptions');
@@ -1803,16 +1668,6 @@
       function toggleThemeSelector() {
         const themeOptions = document.getElementById('themeOptions');
         themeOptions.style.display = themeOptions.style.display === 'none' || themeOptions.style.display === '' ? 'block' : 'none';
-      }
-
-      function changePersonality(personality) {
-        STATE.personality = personality;
-        const personalityDescription = document.getElementById('personalityDescription');
-        const personalitySelector = document.getElementById('personalitySelector').querySelector('span');
-        personalityDescription.textContent = PERSONALITIES[personality]?.description || 'Select a personality to view the description.';
-        personalitySelector.textContent = `Personality: ${PERSONALITIES[personality]?.name || 'Select Personality'}`;
-        saveToLocalStorage(CONFIG.STORAGE_KEYS.PERSONALITY, personality);
-        showNotification(`Personality changed to ${PERSONALITIES[personality]?.name || 'unknown'}`);
       }
 
       function changeLanguage(language) {
