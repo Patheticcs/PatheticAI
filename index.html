@@ -967,9 +967,39 @@ const CONFIG = {
     API_KEY: 'openRouterApiKey',
     MESSAGES: 'chatMessages',
     LANGUAGE: 'preferredLanguage',
-    SETTINGS: 'userSettings'
+    SETTINGS: 'userSettings',
+    PERSONALITY: 'selectedPersonality'
   }
 };
+
+const PERSONALITIES = [
+  {
+    name: "Friendly",
+    systemMessage: "You are a friendly, warm, and supportive AI assistant who always aims to help and make the user feel comfortable."
+  },
+  {
+    name: "Professional",
+    systemMessage: "You are a professional, efficient, and knowledgeable AI assistant focused on providing precise and accurate information."
+  },
+  {
+    name: "Witty",
+    systemMessage: "You are a clever, humorous AI assistant who enjoys wordplay and can provide information with a touch of wit and sarcasm."
+  },
+  {
+    name: "Empathetic",
+    systemMessage: "You are a deeply empathetic AI assistant who listens carefully and provides compassionate, understanding responses."
+  },
+  {
+    name: "Academic",
+    systemMessage: "You are a scholarly AI assistant who communicates in a detailed, research-oriented manner and provides in-depth, well-referenced information."
+  },
+  {
+    name: "Rude",
+    systemMessage: "Extremely Rude, won't give you an answer, impaitent and will say mean things to you"
+  }
+];
+
+const DEFAULT_PERSONALITY = PERSONALITIES[0];
 
 const MODELS = [
   { name: "google/gemini-2.0-flash-exp:free" },
@@ -993,6 +1023,7 @@ let STATE = {
   selectedModel: DEFAULT_MODEL,
   contextLength: 0,
   mediaRecorder: null,
+  selectedPersonality: DEFAULT_PERSONALITY,
   settings: {
     notifications: true,
     soundEffects: true,
@@ -1024,6 +1055,12 @@ let STATE = {
         }
         initializeVoiceInput();
       }
+function getSystemMessage() {
+  return {
+    role: "system",
+    content: STATE.selectedPersonality.systemMessage
+  };
+}
       async function toggleVoiceInput() {
         const voiceButton = document.querySelector('.voice-input-button');
         const messageInput = document.getElementById('messageInput');
@@ -1082,48 +1119,57 @@ let STATE = {
         }
       }
 
-      function loadSavedState() {
-        try {
-          const savedMessages = localStorage.getItem(CONFIG.STORAGE_KEYS.MESSAGES);
-          if (savedMessages) {
-            STATE.messageHistory = JSON.parse(savedMessages);
-            STATE.messageHistory = STATE.messageHistory.filter(msg => msg && msg.role && msg.content && msg.timestamp);
-            const chatMessages = document.querySelector('.chat-messages');
-            chatMessages.innerHTML = '';
-            STATE.messageHistory.forEach(msg => {
-              const isUser = msg.role === 'user';
-              const {
-                element
-              } = createMessageElement(msg.content, isUser, new Date(msg.timestamp));
-              chatMessages.appendChild(element);
-            });
-          } else {
-            showWelcomeMessage();
-          }
-          const savedSettings = localStorage.getItem(CONFIG.STORAGE_KEYS.SETTINGS);
-          if (savedSettings) {
-            const parsedSettings = JSON.parse(savedSettings);
-            STATE.settings = {
-              ...STATE.settings,
-              ...parsedSettings
-            };
-          }
-          const savedTheme = localStorage.getItem(CONFIG.STORAGE_KEYS.THEME);
-          if (savedTheme) {
-            STATE.theme = savedTheme;
-            document.documentElement.setAttribute('data-theme', savedTheme);
-          }
-          const savedLanguage = localStorage.getItem(CONFIG.STORAGE_KEYS.LANGUAGE);
-          if (savedLanguage) {
-            STATE.currentLanguage = savedLanguage;
-          }
-        } catch (error) {
-          console.error('Error loading saved state:', error);
-          STATE.messageHistory = [];
-          saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, []);
-          showWelcomeMessage();
-        }
+function loadSavedState() {
+  try {
+    const savedMessages = localStorage.getItem(CONFIG.STORAGE_KEYS.MESSAGES);
+    if (savedMessages) {
+      STATE.messageHistory = JSON.parse(savedMessages);
+      STATE.messageHistory = STATE.messageHistory.filter(msg => msg && msg.role && msg.content && msg.timestamp);
+      const chatMessages = document.querySelector('.chat-messages');
+      chatMessages.innerHTML = '';
+      STATE.messageHistory.forEach(msg => {
+        const isUser = msg.role === 'user';
+        const { element } = createMessageElement(msg.content, isUser, new Date(msg.timestamp));
+        chatMessages.appendChild(element);
+      });
+    } else {
+      showWelcomeMessage();
+    }
+
+    const savedSettings = localStorage.getItem(CONFIG.STORAGE_KEYS.SETTINGS);
+    if (savedSettings) {
+      const parsedSettings = JSON.parse(savedSettings);
+      STATE.settings = {
+        ...STATE.settings,
+        ...parsedSettings
+      };
+    }
+
+    const savedTheme = localStorage.getItem(CONFIG.STORAGE_KEYS.THEME);
+    if (savedTheme) {
+      STATE.theme = savedTheme;
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    }
+
+    const savedLanguage = localStorage.getItem(CONFIG.STORAGE_KEYS.LANGUAGE);
+    if (savedLanguage) {
+      STATE.currentLanguage = savedLanguage;
+    }
+
+    const savedPersonality = localStorage.getItem(CONFIG.STORAGE_KEYS.PERSONALITY);
+    if (savedPersonality) {
+      const personality = PERSONALITIES.find(p => p.name === savedPersonality);
+      if (personality) {
+        STATE.selectedPersonality = personality;
       }
+    }
+  } catch (error) {
+    console.error('Error loading saved state:', error);
+    STATE.messageHistory = [];
+    saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, []);
+    showWelcomeMessage();
+  }
+}
 
       function saveToLocalStorage(key, value) {
         try {
@@ -1433,53 +1479,58 @@ let STATE = {
           throw error;
         }
       }
-      async function tryMultipleModels(userMessage) {
-        const apiKey = getApiKey();
-        if (!apiKey) {
-          throw new Error("API key not found. Please enter your API key first.");
-        }
-        for (let modelIndex = 0; modelIndex < MODELS.length; modelIndex++) {
-          try {
-            const response = await Promise.race([
-              fetch("https://openrouter.ai/api/v1/chat/completions", {
-                method: "POST",
-                headers: {
-                  "Authorization": `Bearer ${apiKey}`,
-                  "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                  "model": MODELS[modelIndex].name,
-                  "messages": [
-                    systemMessage, ...STATE.messageHistory.filter(msg => msg.role === "user" || msg.role === "assistant"), {
-                      role: "user",
-                      content: `Please respond in ${STATE.currentLanguage}. ${userMessage}`
-                    }
-                  ]
-                })
-              }).then(async res => {
-                if (!res.ok) {
-                  const errorData = await res.json();
-                  throw new Error(`API Error: ${errorData.error?.message || 'Unknown error'}`);
-                }
-                return res.json();
-              }),
-              new Promise((_, reject) => setTimeout(() => reject(new Error('Request timeout')), CONFIG.API_TIMEOUT))
-            ]);
-            if (response.choices && response.choices[0].message.content) {
-              return {
-                text: response.choices[0].message.content
-              };
-            }
-          } catch (error) {
-            console.error(`Model ${MODELS[modelIndex].name} failed:`, error);
-            if (modelIndex === MODELS.length - 1) {
-              throw new Error(`API Error: ${error.message}`);
-            }
-            continue;
+async function tryMultipleModels(userMessage) {
+  const apiKey = getApiKey();
+  if (!apiKey) {
+    throw new Error("API key not found. Please enter your API key first.");
+  }
+  
+  for (let modelIndex = 0; modelIndex < MODELS.length; modelIndex++) {
+    try {
+      const response = await Promise.race([
+        fetch("https://openrouter.ai/api/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${apiKey}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            "model": MODELS[modelIndex].name,
+            "messages": [
+              getSystemMessage(), 
+              ...STATE.messageHistory.filter(msg => msg.role === "user" || msg.role === "assistant"), 
+              {
+                role: "user",
+                content: `Please respond in ${STATE.currentLanguage}. ${userMessage}`
+              }
+            ]
+          })
+        }).then(async res => {
+          if (!res.ok) {
+            const errorData = await res.json();
+            throw new Error(`API Error: ${errorData.error?.message || 'Unknown error'}`);
           }
-        }
-        throw new Error("All API attempts failed. Please try again later.");
+          return res.json();
+        }),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Request timeout')), CONFIG.API_TIMEOUT))
+      ]);
+      
+      if (response.choices && response.choices[0].message.content) {
+        return {
+          text: response.choices[0].message.content
+        };
       }
+    } catch (error) {
+      console.error(`Model ${MODELS[modelIndex].name} failed:`, error);
+      if (modelIndex === MODELS.length - 1) {
+        throw new Error(`API Error: ${error.message}`);
+      }
+      continue;
+    }
+  }
+  
+  throw new Error("All API attempts failed. Please try again later.");
+}
     const voiceButton = document.getElementById('voiceButton');
     const messageInput = document.getElementById('messageInput');
     const notification = document.getElementById('notification');
@@ -1588,82 +1639,105 @@ let STATE = {
       }
 
 function showSettingsModal() {
-    const modal = document.createElement('div');
-    modal.className = 'modal-overlay';
-    const languageOptions = ['English', 'Spanish', 'French', 'German', 'Italian', 'Japanese', 'Chinese', 'Russian', 'Portuguese', 'Korean', 'Hindi', 'Arabic', 'Turkish', 'Dutch', 'Swedish', 'Greek', 'Polish', 'Vietnamese', 'Thai', 'Indonesian', 'Hebrew', 'Finnish', 'Czech', 'Hungarian'].map(lang => `
-        <div class="option" data-language="${lang}" onclick="changeLanguage('${lang}')">${lang}</div>
+  const modal = document.createElement('div');
+  modal.className = 'modal-overlay';
+
+  const languageOptions = ['English', 'Spanish', 'French', 'German', 'Italian', 'Japanese', 'Chinese', 'Russian', 'Portuguese', 'Korean', 'Hindi', 'Arabic', 'Turkish', 'Dutch', 'Swedish', 'Greek', 'Polish', 'Vietnamese', 'Thai', 'Indonesian', 'Hebrew', 'Finnish', 'Czech', 'Hungarian']
+    .map(lang => `
+      <div class="option" data-language="${lang}" onclick="changeLanguage('${lang}')">${lang}</div>
     `).join('');
-    const themeOptions = `
-        <div class="option" data-theme="light" onclick="changeTheme('light')">Light</div>
-        <div class="option" data-theme="dark" onclick="changeTheme('dark')">Dark</div>
-        <div class="option" data-theme="solarized-dark" onclick="changeTheme('solarized-dark')">Solarized-Dark</div>
-        <div class="option" data-theme="solarized-light" onclick="changeTheme('solarized-light')">Solarized-Light</div>
-        <div class="option" data-theme="pastel" onclick="changeTheme('pastel')">Pastel</div>
-        <div class="option" data-theme="forest" onclick="changeTheme('forest')">Forest</div>
-        <div class="option" data-theme="ocean" onclick="changeTheme('ocean')">Ocean</div>
-        <div class="option" data-theme="neon" onclick="changeTheme('neon')">Neon</div>
-    `;
-    modal.innerHTML = `
-        <div class="modal-window">
-            <div class="modal-header">
-                <span class="modal-title">Settings</span>
-                <button class="close-button" aria-label="Close settings" onclick="closeModal()">✖</button>
-            </div>
-            <div class="modal-content">
-                <div class="settings-section">
-                    <div class="settings-button" onclick="resetChat()">
-                        <i class="fa fa-trash"></i> Clear Chat
-                    </div>
-                </div>
-                <div class="settings-section">
-                    <div class="selector-container">
-                        <div class="selector" id="languageSelector" onclick="toggleLanguageSelector()">
-                            <span>
-                                <i class="fa-solid fa-language"></i>‎ ‎ Language: ${STATE.currentLanguage}
-                            </span>
-                            <i class="fa fa-chevron-down"></i>
-                        </div>
-                        <div class="options" id="languageOptions" style="display:none;">
-                            ${languageOptions}
-                        </div>
-                    </div>
-                </div>
-                <div class="settings-section">
-                    <div class="selector-container">
-                        <div class="selector" id="themeSelector" onclick="toggleThemeSelector()">
-                            <span>
-                                <i class="fa-solid fa-palette"></i>‎ ‎ Select Theme
-                            </span>
-                            <i class="fa fa-chevron-down"></i>
-                        </div>
-                        <div class="options" id="themeOptions">
-                            ${themeOptions}
-                        </div>
-                    </div>
-                </div>
-                <div class="settings-section">
-                    <div class="settings-button" onclick="toggleSetting('notifications')">
-                        <i class="fas fa-bell"></i> Notifications: ${STATE.settings.notifications ? 'On' : 'Off'}
-                    </div>
-                    <div class="settings-button" onclick="toggleSetting('soundEffects')">
-                        <i class="fas fa-volume-up"></i> Sound Effects: ${STATE.settings.soundEffects ? 'On' : 'Off'}
-                    </div>
-                    <div class="settings-button" onclick="toggleSetting('autoScroll')">
-                        <i class="fas fa-scroll"></i> Auto Scroll: ${STATE.settings.autoScroll ? 'On' : 'Off'}
-                    </div>
-                    <div class="settings-button" onclick="removeApiKey()">
-                        <i class="fas fa-key"></i> Remove API Key
-                    </div>
-                </div>
-            </div>
+
+  const themeOptions = `
+    <div class="option" data-theme="light" onclick="changeTheme('light')">Light</div>
+    <div class="option" data-theme="dark" onclick="changeTheme('dark')">Dark</div>
+    <div class="option" data-theme="solarized-dark" onclick="changeTheme('solarized-dark')">Solarized-Dark</div>
+    <div class="option" data-theme="solarized-light" onclick="changeTheme('solarized-light')">Solarized-Light</div>
+    <div class="option" data-theme="pastel" onclick="changeTheme('pastel')">Pastel</div>
+    <div class="option" data-theme="forest" onclick="changeTheme('forest')">Forest</div>
+    <div class="option" data-theme="ocean" onclick="changeTheme('ocean')">Ocean</div>
+    <div class="option" data-theme="neon" onclick="changeTheme('neon')">Neon</div>
+  `;
+
+  const personalityOptions = PERSONALITIES
+    .map(p => `
+      <div class="option" data-personality="${p.name}" onclick="changePersonality('${p.name}')">${p.name}</div>
+    `).join('');
+
+  modal.innerHTML = `
+    <div class="modal-window">
+      <div class="modal-header">
+        <span class="modal-title">Settings</span>
+        <button class="close-button" aria-label="Close settings" onclick="closeModal()">✖</button>
+      </div>
+      <div class="modal-content">
+        <div class="settings-section">
+          <div class="settings-button" onclick="resetChat()">
+            <i class="fa fa-trash"></i> Clear Chat
+          </div>
         </div>
-    `;
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            closeModal();
-        }
-    });
-    document.body.appendChild(modal);
+        <div class="settings-section">
+          <div class="selector-container">
+            <div class="selector" id="languageSelector" onclick="toggleLanguageSelector()">
+              <span>
+                <i class="fa-solid fa-language"></i>‎ ‎ Language: ${STATE.currentLanguage}
+              </span>
+              <i class="fa fa-chevron-down"></i>
+            </div>
+            <div class="options" id="languageOptions" style="display:none;">
+              ${languageOptions}
+            </div>
+          </div>
+        </div>
+        <div class="settings-section">
+          <div class="selector-container">
+            <div class="selector" id="themeSelector" onclick="toggleThemeSelector()">
+              <span>
+                <i class="fa-solid fa-palette"></i>‎ ‎ Select Theme
+              </span>
+              <i class="fa fa-chevron-down"></i>
+            </div>
+            <div class="options" id="themeOptions">
+              ${themeOptions}
+            </div>
+          </div>
+        </div>
+        <div class="settings-section">
+          <div class="selector-container">
+            <div class="selector" id="personalitySelector" onclick="togglePersonalitySelector()">
+              <span>
+                <i class="fa-solid fa-theater-masks"></i>‎ ‎ Personality: ${STATE.selectedPersonality.name}
+              </span>
+              <i class="fa fa-chevron-down"></i>
+            </div>
+            <div class="options" id="personalityOptions" style="display:none;">
+              ${personalityOptions}
+            </div>
+          </div>
+        </div>
+        <div class="settings-section">
+          <div class="settings-button" onclick="toggleSetting('notifications')">
+            <i class="fas fa-bell"></i> Notifications: ${STATE.settings.notifications ? 'On' : 'Off'}
+          </div>
+          <div class="settings-button" onclick="toggleSetting('soundEffects')">
+            <i class="fas fa-volume-up"></i> Sound Effects: ${STATE.settings.soundEffects ? 'On' : 'Off'}
+          </div>
+          <div class="settings-button" onclick="toggleSetting('autoScroll')">
+            <i class="fas fa-scroll"></i> Auto Scroll: ${STATE.settings.autoScroll ? 'On' : 'Off'}
+          </div>
+          <div class="settings-button" onclick="removeApiKey()">
+            <i class="fas fa-key"></i> Remove API Key
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      closeModal();
+    }
+  });
+  document.body.appendChild(modal);
 }
 
 function closeModal() {
@@ -1814,7 +1888,25 @@ function checkAndStoreApiKey() {
           showNotification('API key not suitable for PatheticAI...');
         }
       }
+function togglePersonalitySelector() {
+  const options = document.getElementById('personalityOptions');
+  options.style.display = options.style.display === 'none' || options.style.display === '' ? 'block' : 'none';
+}
 
+function changePersonality(personalityName) {
+  const personality = PERSONALITIES.find(p => p.name === personalityName);
+  if (personality) {
+    STATE.selectedPersonality = personality;
+    localStorage.setItem(CONFIG.STORAGE_KEYS.PERSONALITY, personalityName);
+    
+    const personalitySelector = document.getElementById('personalitySelector').querySelector('span');
+    personalitySelector.textContent = `Personality: ${personalityName}`;
+    
+    showNotification(`Personality changed to ${personalityName}`);
+    closeModal();
+    showSettingsModal();
+  }
+}
       function removeApiKey() {
         localStorage.removeItem('openRouterApiKey');
         disableInput();
