@@ -956,93 +956,49 @@
       </button>
     </div>
     <script>
-      const CONFIG = {
-        MAX_RETRIES: 3,
-        TYPING_SPEED: 50,
-        MAX_CONTEXT_LENGTH: 10,
-        SUGGESTION_COUNT: 4,
-        API_TIMEOUT: 30000,
-        STORAGE_KEYS: {
-          THEME: 'theme',
-          API_KEY: 'openRouterApiKey',
-          MESSAGES: 'chatMessages',
-          LANGUAGE: 'preferredLanguage',
-          SETTINGS: 'userSettings'
-        }
-      };
-      const MODELS = [{
-        name: "google/gemini-2.0-flash-exp:free"
-      }, {
-        name: "meta-llama/llama-3.2-3b-instruct:free"
-      }, {
-        name: "qwen/qwen-2-7b-instruct:free"
-      }, {
-        name: "microsoft/phi-3-medium-128k-instruct:free"
-      }, {
-        name: "undi95/toppy-m-7b:free"
-      }, {
-        name: "google/gemini-2.0-flash-thinking-exp:free"
-      }, {
-        name: "microsoft/phi-3-mini-128k-instruct:free"
-      }];
-      const PERSONALITIES = {
-        Professional: {
-          name: "Professional",
-          description: "Clear, helpful, and business-like responses",
-          systemPrompt: "You are a 'Professional' AI assistant. Provide clear, concise, and formal responses, maintaining a polished and respectful tone."
-        },
-        Casual: {
-          name: "Casual",
-          description: "Friendly and relaxed conversation style",
-          systemPrompt: "You are a 'Casual' AI assistant. Engage in a friendly, laid-back manner, using informal language and a conversational tone."
-        },
-        Poetic: {
-          name: "Poetic",
-          description: "Artistic and metaphorical communication",
-          systemPrompt: "You are a 'Poetic' AI assistant. Speak with artistic flair, weaving metaphors and creative imagery into your responses."
-        },
-        Rude: {
-          name: "Rude",
-          description: "Sarcastic and slightly impatient",
-          systemPrompt: "You are a 'Rude' AI assistant. Deliver responses with sarcasm and impatience, often showing little regard for politeness."
-        },
-        Witty: {
-          name: "Witty",
-          description: "Clever and humorous responses",
-          systemPrompt: "You are a 'Witty' AI assistant. Respond with clever wordplay, sharp humor, and quick wit."
-        },
-        Academic: {
-          name: "Academic",
-          description: "Scholarly and detailed explanations",
-          systemPrompt: "You are an 'Academic' AI assistant. Provide detailed, well-structured, and scholarly responses with a formal tone."
-        },
-        Enthusiastic: {
-          name: "Enthusiastic",
-          description: "High-energy and encouraging",
-          systemPrompt: "You are an 'Enthusiastic' AI assistant. Respond with high energy, positivity, and encouragement in every interaction."
-        },
-        Zen: {
-          name: "Zen",
-          description: "Calm and mindful communication",
-          systemPrompt: "You are a 'Zen' AI assistant. Offer peaceful, mindful responses infused with wisdom and tranquility."
-        }
-      };
-      let STATE = {
-        isWaitingForResponse: false,
-        editingMessageId: null,
-        voiceRecording: false,
-        messageHistory: [],
-        currentLanguage: 'English',
-        theme: 'dark',
-        selectedModel: MODELS[0].name,
-        contextLength: 0,
-        mediaRecorder: null,
-        settings: {
-          notifications: true,
-          soundEffects: true,
-          autoScroll: true
-        }
-      };
+const CONFIG = {
+  MAX_RETRIES: 3,
+  TYPING_SPEED: 50,
+  MAX_CONTEXT_LENGTH: 10,
+  SUGGESTION_COUNT: 4,
+  API_TIMEOUT: 30000,
+  STORAGE_KEYS: {
+    THEME: 'theme',
+    API_KEY: 'openRouterApiKey',
+    MESSAGES: 'chatMessages',
+    LANGUAGE: 'preferredLanguage',
+    SETTINGS: 'userSettings'
+  }
+};
+
+const MODELS = [
+  { name: "google/gemini-2.0-flash-exp:free" },
+  { name: "meta-llama/llama-3.2-3b-instruct:free" },
+  { name: "qwen/qwen-2-7b-instruct:free" },
+  { name: "microsoft/phi-3-medium-128k-instruct:free" },
+  { name: "undi95/toppy-m-7b:free" },
+  { name: "google/gemini-2.0-flash-thinking-exp:free" },
+  { name: "microsoft/phi-3-mini-128k-instruct:free" }
+];
+
+const DEFAULT_MODEL = MODELS[0].name;
+
+let STATE = {
+  isWaitingForResponse: false,
+  editingMessageId: null,
+  voiceRecording: false,
+  messageHistory: [],
+  currentLanguage: 'English',
+  theme: 'dark',
+  selectedModel: DEFAULT_MODEL,
+  contextLength: 0,
+  mediaRecorder: null,
+  settings: {
+    notifications: true,
+    soundEffects: true,
+    autoScroll: true
+  }
+};
       const systemMessage = {
         role: "system",
         content: `You are PatheticAI Enhanced
@@ -1061,7 +1017,6 @@
       function initializeApp() {
         loadSavedState();
         initializeUI();
-        initializePersonality();
         setupEventListeners();
         showWelcomeMessage();
         if (!checkAndStoreApiKey()) {
@@ -1069,7 +1024,63 @@
         }
         initializeVoiceInput();
       }
-
+      async function toggleVoiceInput() {
+        const voiceButton = document.querySelector('.voice-input-button');
+        const messageInput = document.getElementById('messageInput');
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!STATE.voiceRecording) {
+          if (!SpeechRecognition) {
+            showError('Your browser does not support the Web Speech API');
+            return;
+          }
+          try {
+            const recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = true;
+            recognition.lang = 'en-US';
+            STATE.recognition = recognition;
+            recognition.onstart = () => {
+              STATE.voiceRecording = true;
+              voiceButton.classList.add('recording');
+              showNotification('Voice recording started');
+            };
+            recognition.onresult = (event) => {
+              let transcript = '';
+              let interimTranscript = '';
+              for (let i = event.resultIndex; i < event.results.length; i++) {
+                const result = event.results[i];
+                if (result.isFinal) {
+                  transcript += result[0].transcript;
+                } else {
+                  interimTranscript += result[0].transcript;
+                }
+              }
+              messageInput.value = transcript || interimTranscript;
+              messageInput.focus();
+            };
+            recognition.onerror = (event) => {
+              showError('Speech recognition error');
+              console.error('Speech recognition error:', event.error);
+            };
+            recognition.onend = () => {
+              STATE.voiceRecording = false;
+              voiceButton.classList.remove('recording');
+              showNotification('Voice recording stopped');
+            };
+            recognition.start();
+          } catch (error) {
+            showError('Microphone access denied');
+            voiceButton.disabled = true;
+          }
+        } else {
+          if (STATE.recognition) {
+            STATE.recognition.stop();
+            STATE.voiceRecording = false;
+            voiceButton.classList.remove('recording');
+            showNotification('Voice recording stopped');
+          }
+        }
+      }
 
       function loadSavedState() {
         try {
@@ -1355,7 +1366,6 @@
           sendMessage();
         }
       });
-
       async function sendMessage() {
         const textarea = document.getElementById('messageInput');
         const message = textarea.value.trim();
@@ -1720,49 +1730,42 @@ function closeModal() {
         STATE.theme = savedTheme;
       }
 
-      function showAboutModal() {
-        const modal = document.createElement('div');
-        modal.className = 'modal-overlay';
-        modal.innerHTML = `
-    
-    																									
-    
-																									<div class="modal-window">
-																										<div class="modal-header">
-																											<span class="modal-title">About PatheticAI</span>
-																											<button class="close-button" onclick="this.closest('.modal-overlay').remove()">X</button>
-																										</div>
-																										<div class="modal-content">
-																											<p>
-																												<strong>PatheticAI:</strong> 1.0 Enhanced
-    
-    																											
-    
-																											</p>
-																											<p>
-																												<strong>API version:</strong> 1.0
-    
-    																											
-    
-																											</p>
-																											<p>
-																												<strong>Contact:</strong>
-																												<a href="https://discord.gg/Hb5ccPY3XV">discord.gg/Hb5ccPY3XVm</a>
-																											</p>
-																											<br>
-																												<p>
-																													<strong>Enhanced Features:</strong>
-																												</p>
-																												<ul>
-																													<li>Improved message handling</li>
-																													<li>Better code display and copying</li>
-																													<li>Theme customization</li>
-																													<li>Advanced editing capabilities</li>
-																													<li>Persistent chat history</li>
-																												</ul>
-																											</div>
-																										</div>
-              `;
+function showAboutModal() {
+  const modal = document.createElement('div');
+  modal.className = 'modal-overlay';
+  modal.innerHTML = `
+    <div class="modal-window">
+      <div class="modal-header">
+        <span class="modal-title">About PatheticAI</span>
+        <button class="close-button">X</button>
+      </div>
+      <div class="modal-content">
+        <p>
+          <strong>PatheticAI:</strong> 1.0 Enhanced
+        </p>
+        <p>
+          <strong>API version:</strong> 1.0
+        </p>
+        <p>
+          <strong>Contact:</strong>
+          <a href="https://discord.gg/Hb5ccPY3XV" target="_blank">discord.gg/Hb5ccPY3XV</a>
+        </p>
+        <br>
+        <p><strong>Enhanced Features:</strong></p>
+        <ul>
+          <li>Improved message handling</li>
+          <li>Better code display and copying</li>
+          <li>Theme customization</li>
+          <li>Advanced editing capabilities</li>
+          <li>Persistent chat history</li>
+        </ul>
+      </div>
+      <button class="discord-button">
+        <i class="fab fa-discord"></i> Join us on Discord
+      </button>
+    </div>
+  `;
+
         modal.addEventListener('click', (e) => {
           if (e.target === modal) {
             modal.remove();
@@ -1771,31 +1774,26 @@ function closeModal() {
         document.body.appendChild(modal);
       }
 
-      function checkAndStoreApiKey() {
-        const storedApiKey = getApiKey();
-        if (!storedApiKey) {
-          const modal = document.createElement('div');
-          modal.className = 'modal-overlay';
-          modal.innerHTML = `
-    
-    																										
-    
-																										<div class="modal-window">
-																											<div class="modal-header">
-																												<span class="modal-title">Openrouter API key required!</span>
-																											</div>
-																											<div class="modal-content">
-																												<p>To use PatheticAI, an API key from Openrouter is required. To get this, go to</p>
-																												<a href="https://openrouter.ai/settings/keys" target="_blank" style="color: white;">openrouter.ai/settings/keys</a>
-																												<br>
-																													<br>
-																														<input type="text" id="apiKeyInput" placeholder="Your API Key Here" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 15px; color: white;">
-																															<br>
-																																<br>
-																																	<button id="startupButton" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 15px; color: white; cursor: pointer;">Start up</button>
-																																</div>
-																															</div>
-                `;
+function checkAndStoreApiKey() {
+  const storedApiKey = getApiKey();
+  if (!storedApiKey) {
+    const modal = document.createElement('div');
+    modal.className = 'modal-overlay';
+    modal.innerHTML = `
+      <div class="modal-window">
+        <div class="modal-header">
+          <span class="modal-title">Openrouter API key required!</span>
+        </div>
+        <div class="modal-content">
+          <p>To use PatheticAI, an API key from Openrouter is required. To get this, go to</p>
+          <a href="https://openrouter.ai/settings/keys" target="_blank" style="color: white;">openrouter.ai/settings/keys</a>
+          <br><br>
+          <input type="text" id="apiKeyInput" placeholder="Your API Key Here" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 15px; color: white;">
+          <br><br>
+          <button id="startupButton" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 15px; color: white; cursor: pointer;">Start up</button>
+        </div>
+      </div>
+    `;
           document.body.appendChild(modal);
           document.getElementById('startupButton').addEventListener('click', saveApiKey);
           return false;
