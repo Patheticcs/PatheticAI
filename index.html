@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="default">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -27,10 +27,6 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <style>
-      body {
-        font-family: 'Cabinet Grotesk', sans-serif;
-      }
-
       * {
         margin: 0;
         padding: 0;
@@ -78,7 +74,7 @@
         --background-color: #000000;
         --primary-color: #ffffff;
         --secondary-color: #9c00d5;
-        --border-color: rgba(255, 255, 255, 0.03);
+        --border-color: rgba(255, 255, 255, 0.3);
         --taskbar-background: rgba(0, 0, 0, 0.5);
         --input-background: rgba(0, 0, 0, 0.6);
         --button-background: rgba(255, 255, 255, 0.02);
@@ -94,14 +90,134 @@
         --chat-input-container-background: rgba(0, 0, 0, 0.4);
         --border-button-color: rgba(255, 255, 255, 0.1);
       }
+      
+:root[data-theme="solarized-light"] {
+  --background-color: #fdf6e3;
+  --primary-color: #657b83;
+  --secondary-color: #b58900;
+  --border-color: rgba(0, 0, 0, 0.1);
+  --taskbar-background: rgba(253, 246, 227, 0.8);
+  --input-background: rgba(253, 246, 227, 0.9);
+  --button-background: rgba(0, 0, 0, 0.05);
+  --button-hover-background: rgba(0, 0, 0, 0.1);
+  --modal-background: rgba(253, 246, 227, 0.8);
+  --message-background: rgba(253, 246, 227, 0.7);
+  --message-user-background: rgba(253, 246, 227, 0.6);
+  --code-background: #eee8d5;
+  --code-text: #657b83;
+  --notification-background: rgba(253, 246, 227, 0.8);
+  --notification-text: #657b83;
+  --placeholder-color: rgba(0, 0, 0, 0.3);
+  --chat-input-container-background: rgba(253, 246, 227, 0.7);
+  --border-button-color: rgba(0, 0, 0, 0.2);
+}
 
-      :root[data-theme="default"] {
-        --border-color: rgba(255, 255, 255, 0.3);
-        --background-color: #000000;
-      }
+:root[data-theme="solarized-dark"] {
+  --background-color: #002b36;
+  --primary-color: #839496;
+  --secondary-color: #268bd2;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --taskbar-background: rgba(0, 43, 54, 0.8);
+  --input-background: rgba(0, 43, 54, 0.9);
+  --button-background: rgba(255, 255, 255, 0.05);
+  --button-hover-background: rgba(255, 255, 255, 0.1);
+  --modal-background: rgba(0, 43, 54, 0.8);
+  --message-background: rgba(0, 43, 54, 0.7);
+  --message-user-background: rgba(0, 43, 54, 0.6);
+  --code-background: #073642;
+  --code-text: #839496;
+  --notification-background: rgba(0, 43, 54, 0.8);
+  --notification-text: #839496;
+  --placeholder-color: rgba(255, 255, 255, 0.3);
+  --chat-input-container-background: rgba(0, 43, 54, 0.7);
+  --border-button-color: rgba(255, 255, 255, 0.2);
+}
+
+:root[data-theme="pastel"] {
+  --background-color: #f7e9dc;
+  --primary-color: #6d597a;
+  --secondary-color: #355070;
+  --border-color: rgba(0, 0, 0, 0.05);
+  --taskbar-background: rgba(247, 233, 220, 0.8);
+  --input-background: rgba(247, 233, 220, 0.9);
+  --button-background: rgba(109, 89, 122, 0.1);
+  --button-hover-background: rgba(109, 89, 122, 0.2);
+  --modal-background: rgba(247, 233, 220, 0.8);
+  --message-background: rgba(247, 233, 220, 0.7);
+  --message-user-background: rgba(247, 233, 220, 0.6);
+  --code-background: #d4c4dd;
+  --code-text: #6d597a;
+  --notification-background: rgba(247, 233, 220, 0.8);
+  --notification-text: #6d597a;
+  --placeholder-color: rgba(0, 0, 0, 0.2);
+  --chat-input-container-background: rgba(247, 233, 220, 0.7);
+  --border-button-color: rgba(0, 0, 0, 0.1);
+}
+
+:root[data-theme="forest"] {
+  --background-color: #2e422d;
+  --primary-color: #d4e157;
+  --secondary-color: #8bc34a;
+  --border-color: rgba(0, 0, 0, 0.1);
+  --taskbar-background: rgba(46, 66, 45, 0.8);
+  --input-background: rgba(46, 66, 45, 0.9);
+  --button-background: rgba(212, 225, 87, 0.1);
+  --button-hover-background: rgba(212, 225, 87, 0.2);
+  --modal-background: rgba(46, 66, 45, 0.8);
+  --message-background: rgba(46, 66, 45, 0.7);
+  --message-user-background: rgba(46, 66, 45, 0.6);
+  --code-background: #3b5230;
+  --code-text: #d4e157;
+  --notification-background: rgba(46, 66, 45, 0.8);
+  --notification-text: #d4e157;
+  --placeholder-color: rgba(0, 0, 0, 0.2);
+  --chat-input-container-background: rgba(46, 66, 45, 0.7);
+  --border-button-color: rgba(0, 0, 0, 0.1);
+}
+:root[data-theme="ocean"] {
+  --background-color: #00334e;
+  --primary-color: #00bcd4;
+  --secondary-color: #0097a7;
+  --border-color: rgba(0, 0, 0, 0.1);
+  --taskbar-background: rgba(0, 51, 78, 0.8);
+  --input-background: rgba(0, 51, 78, 0.9);
+  --button-background: rgba(0, 188, 212, 0.1);
+  --button-hover-background: rgba(0, 188, 212, 0.2);
+  --modal-background: rgba(0, 51, 78, 0.8);
+  --message-background: rgba(0, 51, 78, 0.7);
+  --message-user-background: rgba(0, 51, 78, 0.6);
+  --code-background: #004d63;
+  --code-text: #00bcd4;
+  --notification-background: rgba(0, 51, 78, 0.8);
+  --notification-text: #00bcd4;
+  --placeholder-color: rgba(0, 0, 0, 0.2);
+  --chat-input-container-background: rgba(0, 51, 78, 0.7);
+  --border-button-color: rgba(0, 0, 0, 0.1);
+}
+:root[data-theme="neon"] {
+  --background-color: #1a1a1d;
+  --primary-color: #ff6f61;
+  --secondary-color: #f4ff61;
+  --border-color: rgba(255, 255, 255, 0.2);
+  --taskbar-background: rgba(26, 26, 29, 0.9);
+  --input-background: rgba(26, 26, 29, 1);
+  --button-background: rgba(255, 111, 97, 0.2);
+  --button-hover-background: rgba(255, 111, 97, 0.4);
+  --modal-background: rgba(26, 26, 29, 0.8);
+  --message-background: rgba(26, 26, 29, 0.7);
+  --message-user-background: rgba(26, 26, 29, 0.6);
+  --code-background: #212121;
+  --code-text: #ff6f61;
+  --notification-background: rgba(26, 26, 29, 0.8);
+  --notification-text: #ff6f61;
+  --placeholder-color: rgba(255, 255, 255, 0.3);
+  --chat-input-container-background: rgba(26, 26, 29, 0.7);
+  --border-button-color: rgba(255, 255, 255, 0.4);
+}
 
       body {
-        background: url('https://wallpapers.com/images/hd/4k-nature-in-ice-wvdjbvbvxn12plp6.jpg') no-repeat center center fixed;
+        background-color: var(--background-color);
+        font-family: 'Cabinet Grotesk', sans-serif;
         background-size: cover;
         background-attachment: fixed;
         color: white;
@@ -680,26 +796,59 @@
           min-width: 44px;
           padding: 10px 20px;
         }
-      }
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4); 
+  backdrop-filter: blur(3px); 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  animation: fadeIn 0.2s ease; 
+}
 
-      @media print {
+.modal-window {
+  background: var(--modal-background);
+  backdrop-filter: blur(8px); 
+  border: 1px solid var(--border-color);
+  border-radius: 10px; 
+  width: 90%; 
+  max-width: 400px; 
+  max-height: 80vh; 
+  padding: 15px; 
+  color: var(--primary-color);
+  animation: slideUp 0.2s ease; 
+  display: flex;
+  flex-direction: column;
+}
 
-        .chat-input-container,
-        .taskbar {
-          display: none !important;
-        }
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px; 
+  color: var(--primary-color);
+}
 
-        .container {
-          position: static;
-          transform: none;
-          overflow: visible;
-          height: auto;
-        }
+.modal-title {
+  font-size: 18px; 
+  font-weight: 700;
+  color: var(--primary-color);
+}
 
-        .chat-message {
-          break-inside: avoid;
-          page-break-inside: avoid;
-        }
+.modal-content {
+  flex-grow: 1;
+  overflow-y: auto;
+  line-height: 1.4; 
+  font-size: 14px; 
+  color: var(--primary-color);
+}
+
+.modal-content p {
+  margin: 4px 0; 
+}
+
       }
 
       @media (max-width: 480px) {
@@ -1536,10 +1685,15 @@
         `).join('');
         const themeOptions = `
             
-    
-																									<div class="option" data-theme="light" onclick="changeTheme('light')">Light</div>
-																									<div class="option" data-theme="dark" onclick="changeTheme('dark')">Dark</div>
-																									<div class="option" data-theme="default" onclick="changeTheme('default')">Default</div>
+<div class="option" data-theme="light" onclick="changeTheme('light')">Light</div>
+<div class="option" data-theme="dark" onclick="changeTheme('dark')">Dark</div>
+<div class="option" data-theme="solarized-dark" onclick="changeTheme('solarized-dark')">Solarized-Dark</div>
+<div class="option" data-theme="solarized-light" onclick="changeTheme('solarized-light')">Solarized-Light</div>
+<div class="option" data-theme="pastel" onclick="changeTheme('pastel')">Pastel</div>
+<div class="option" data-theme="forest" onclick="changeTheme('forest')">Forest</div>
+<div class="option" data-theme="ocean" onclick="changeTheme('ocean')">Ocean</div>
+<div class="option" data-theme="neon" onclick="changeTheme('neon')">Neon</div>
+
         `;
         modal.innerHTML = `
             
