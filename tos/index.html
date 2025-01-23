@@ -1,183 +1,169 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Terms of Service</title>
+    <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@700,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
+    <meta name="description" content="PatheticAI's Terms of Service">
+    <meta property="og:description" content="PatheticAI's Terms of Service">
+    <meta property="og:title" content="PatheticAI Terms of Service">
+    <meta property="og:image" content="/icon.png">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="PatheticAI">
+    <meta property="og:locale" content="en_US">
+    <link rel="icon" href="/icon.png" type="image/png">
     <style>
-    /* Global Reset and Basic Styles */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Cabinet Grotesk', sans-serif;
-    }
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+        }
 
-    *::-webkit-scrollbar {
-      display: none;
-    }
+        .hero {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            text-align: center;
+        }
 
-    :root {
-      --container-width: min(90%, 800px);
-      --spacing-normal: clamp(16px, 2vw, 20px);
-      --spacing-small: clamp(8px, 1vw, 10px);
-      --border-radius: 30px;
-      --transition: all 0.3s ease;
-    }
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            background: #000;
+        }
 
-    body {
-      background: url('https://wallpapers.com/images/hd/4k-nature-in-ice-wvdjbvbvxn12plp6.jpg') no-repeat center center fixed;
-      background-size: cover;
-      background-attachment: fixed;
-      color: white;
-      font-size: 16px;
-      line-height: 1.6;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-      position: relative;
-    }
+        .hero-content {
+            z-index: 1;
+            padding: 20px;
+            max-width: 800px;
+        }
 
-    .container {
-      position: relative;
-      padding: var(--spacing-normal);
-      width: var(--container-width);
-      max-width: 900px;
-      border-radius: var(--border-radius);
-      backdrop-filter: blur(15px);
-      border: 2px solid var(--border-color);
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      color: var(--primary-color);
-      overflow-y: auto;
-      height: 80vh;
-      box-sizing: border-box;
-      z-index: 10;
-    }
+        h1 {
+            font-size: 3em;
+            margin-bottom: 50px;
+        }
 
-    h1,
-    h2 {
-      color: var(--primary-color);
-      margin-bottom: var(--spacing-normal);
-    }
+        h2 {
+            font-size: 1em;
+            margin-top: 40px;
+            margin-bottom: 10px;
+        }
 
-    h1 {
-      font-size: 35px;
-      text-align: center;
-    }
+        p {
+            font-size: 14px;
+            line-height: 1.5;
+            max-width: 800px;
+            margin: 10px auto;
+        }
 
-    h2 {
-      font-size: 20px;
-      margin-top: var(--spacing-small);
-    }
+        .tos-list {
+            text-align: left;
+            margin-top: 20px;
+        }
 
-    p {
-      margin-bottom: var(--spacing-normal);
-      font-size: 13px;
-      color: var(--primary-color);
-    }
-
-    ul,
-    ol {
-      margin-bottom: var(--spacing-normal);
-      padding-left: 20px;
-      font-size: 16px;
-      color: var(--primary-color);
-    }
-
-    li {
-      margin-bottom: var(--spacing-small);
-    }
-
-    /* Stylish Links */
-    a {
-      color: var(--secondary-color);
-      text-decoration: none;
-      transition: color 0.3s ease;
-    }
-
-    a:hover {
-      color: darkviolet;
-    }
-
-    /* Modal Overlay (if needed) */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(5px);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 2000;
-      animation: fadeIn 0.3s ease;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-      }
-
-      to {
-        opacity: 1;
-      }
-    }
-
-    @media (max-width: 768px) {
-      body {
-        padding: 20px;
-      }
-
-      .container {
-        width: 100%;
-        height: auto;
-        padding: 20px;
-      }
-
-      h1 {
-        font-size: 28px;
-      }
-
-      h2 {
-        font-size: 20px;
-      }
-    }
+        .tos-list li {
+            margin: 10px 0;
+        }
     </style>
   </head>
-
   <body>
+    <div class="hero">
+        <div id="particles-js"></div>
+        <div class="hero-content">
+            <h1>Terms of Service</h1>
+            <p>Welcome to PatheticAI. By using our service, you agree to the following terms and conditions. Please read them carefully.</p>
+            <div class="tos-list">
+                <h2>1. Acceptance of Terms</h2>
+                <p>By accessing or using PatheticAI, you agree to comply with these Terms of Service. If you do not agree, you may not use the service.</p>
 
-    <div class="container">
-      <h1>Terms of Service</h1>
-      <div>
-        <h2>1. Acceptance of Terms</h2>
-        <p>By accessing and using this website, you agree to comply with and be bound by these Terms of Service. If you do not agree with these terms, please do not use our website.</p>
+                <h2>2. Changes to the Terms</h2>
+                <p>We may update our Terms of Service from time to time. It is your responsibility to review the changes.</p>
 
-        <h2>2. Use of Services</h2>
-        <p>You are granted a non-exclusive, non-transferable, limited license to access and use the services on this website in accordance with these terms.</p>
+                <h2>3. User Responsibilities</h2>
+                <p>As a user of PatheticAI, you agree to use the service responsibly and not for any illegal activities.</p>
 
-        <h2>3. User Responsibilities</h2>
-        <ul>
-          <li>Ensure that all information provided is accurate and up to date.</li>
-          <li>Do not engage in unlawful or prohibited activities while using the website.</li>
-        </ul>
+                <h2>4. Privacy</h2>
+                <p>We are committed to protecting your privacy. Please review our Privacy Policy to understand how your data is handled.</p>
 
-        <h2>4. Privacy Policy</h2>
-        <p>Your privacy is important to us. Please refer to our <a href="#">Privacy Policy</a> for more information on how we collect and use your data.</p>
+                <h2>5. Limitation of Liability</h2>
+                <p>PatheticAI will not be responsible for any damages or losses that arise from the use or inability to use our service.</p>
 
-        <h2>5. Limitation of Liability</h2>
-        <p>We are not liable for any damages arising from the use of this website, including indirect, incidental, or consequential damages.</p>
+                <h2>6. Termination</h2>
+                <p>We reserve the right to terminate or suspend your access to PatheticAI at any time for any reason.</p>
 
-        <h2>6. Modifications to Terms</h2>
-        <p>We reserve the right to modify or update these Terms of Service at any time. Any changes will be posted on this page, and your continued use of the site will constitute your acceptance of the modified terms.</p>
-
-        <h2>7. Contact Us</h2>
-        <p>If you have any questions regarding these Terms of Service, please contact us at our discord</p>
-      </div>
+                <h2>7. Contact Us</h2>
+                <p>If you have any questions or concerns about these Terms of Service, please contact us at <a href="mailto:contact@patheticai.com">contact@patheticai.com</a>.</p>
+            </div>
+        </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        particlesJS("particles-js", {
+          "particles": {
+            "number": {
+              "value": 80,
+              "density": {
+                "enable": true,
+                "value_area": 800
+              }
+            },
+            "color": {
+              "value": "#ffffff"
+            },
+            "shape": {
+              "type": "circle",
+              "stroke": {
+                "width": 0,
+                "color": "#040404"
+              }
+            },
+            "opacity": {
+              "value": 0.5,
+              "random": true
+            },
+            "size": {
+              "value": 1.5,
+              "random": true
+            },
+            "move": {
+              "direction": "top",
+              "out_mode": "out",
+              "speed": 0.5,
+              "random": true
+            },
+            "line_linked": {
+              "enable": false
+            }
+          },
+          "interactivity": {
+            "detect_on": "canvas",
+            "events": {
+              "onhover": {
+                "enable": false,
+                "mode": "grab"
+              },
+              "onclick": {
+                "enable": false,
+                "mode": "push"
+              },
+              "resize": false
+            }
+          },
+          "retina_detect": true
+        });
+    </script>
   </body>
-
 </html>
