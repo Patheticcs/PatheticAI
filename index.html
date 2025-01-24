@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="default">
   <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -25,7 +25,6 @@
 <meta name="apple-mobile-web-app-title" content="PatheticAI">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="mobile-web-app-capable" content="yes">
-
     <style>
       * {
         margin: 0;
@@ -47,6 +46,12 @@
         --border-radius: 30px;
         --border-radius-small: 15px;
         --transition: all 0.3s ease;
+      }
+
+      :root[data-theme="default"] {
+        --background-color: black;
+        --border-color: rgba(255, 255, 255, 0.3);
+        --border-button-color: rgba(255, 255, 255, 0.1);
       }
 
       :root[data-theme="light"] {
@@ -90,7 +95,7 @@
         --chat-input-container-background: rgba(0, 0, 0, 0.4);
         --border-button-color: rgba(255, 255, 255, 0.1);
       }
-      
+
 :root[data-theme="solarized-light"] {
   --background-color: #fdf6e3;
   --primary-color: #657b83;
@@ -381,6 +386,8 @@
         border-radius: var(--border-radius-small);
         resize: none;
         min-height: 40px;
+        top: 100px;
+
       }
 
       .chat-input-container input::placeholder {
@@ -822,13 +829,16 @@
   display: flex;
   flex-direction: column;
 }
-
+discord-button {
+ margin-top: 200px;     
+}
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px; 
   color: var(--primary-color);
+
 }
 
 .modal-title {
@@ -932,8 +942,7 @@
       </div>
       <div class="taskbar-right">
         <button onclick="showSettingsModal()" title="Settings">
-          <i class="fas fa-cog"></i>
-        </button>
+         <i class="fa-solid fa-bars"></i>        </button>
         <button onclick="showAboutModal()" title="Join Discord">
           <i class="fa fa-user-group"></i>
         </button>
@@ -969,18 +978,7 @@ const CONFIG = {
     LANGUAGE: 'preferredLanguage',
     SETTINGS: 'userSettings',
     PERSONALITY: 'selectedPersonality'
-  },
-  IMAGE_GENERATION_MODELS: [
-    { 
-      name: "stability-ai/stable-diffusion-xl-base-1.0", 
-      endpoint: "https://openrouter.ai/api/v1/images/generations" 
-    },
-    {
-      name: "runwayml/stable-diffusion-v1-5",
-      endpoint: "https://openrouter.ai/api/v1/images/generations"
-    }
-  ],
-  IMAGE_GENERATION_TIMEOUT: 60000
+  }
 };
 
 const PERSONALITIES = [
@@ -1044,7 +1042,7 @@ let STATE = {
       const systemMessage = {
         role: "system",
         content: `You are PatheticAI Enhanced
-    
+
             Key characteristics:
             - Friendly and empathetic AI assistant
             - Provides clear, concise responses
@@ -1247,106 +1245,71 @@ function loadSavedState() {
         }
       }
 
-function createMessageElement(message, isUser, timestamp = new Date()) {
-  const messageId = Date.now().toString();
-  
-  // Handle image message type
-  if (!isUser && message.type === "image") {
-    const imageElement = document.createElement('div');
-    imageElement.classList.add('chat-message', 'bot', 'image-message');
-    
-    const contentDiv = document.createElement('div');
-    contentDiv.classList.add('message-content');
-    
-    const image = document.createElement('img');
-    image.src = message.imageUrl;
-    image.alt = `Generated image for: ${message.content}`;
-    image.style.maxWidth = '100%';
-    image.style.borderRadius = '10px';
-    
-    const promptText = document.createElement('div');
-    promptText.textContent = `🖼️ ${message.content}`;
-    promptText.style.fontSize = '0.8em';
-    promptText.style.opacity = '0.7';
-    promptText.style.marginTop = '5px';
-    
-    contentDiv.appendChild(image);
-    contentDiv.appendChild(promptText);
-    imageElement.appendChild(contentDiv);
-    
-    return { element: imageElement, id: messageId };
-  }
-
-  const messageElement = document.createElement('div');
-  messageElement.classList.add('chat-message', isUser ? 'user' : 'bot');
-  messageElement.dataset.messageId = messageId;
-  
-  const contentDiv = document.createElement('div');
-  contentDiv.classList.add('message-content');
-  
-  if (!isUser) {
-    contentDiv.innerHTML = marked.parse(message, {
-      highlight: function(code, language) {
-        if (language) {
-          return hljs.highlight(code, { language }).value;
+      function createMessageElement(message, isUser, timestamp = new Date()) {
+        const messageId = Date.now().toString();
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('chat-message', isUser ? 'user' : 'bot');
+        messageElement.dataset.messageId = messageId;
+        const contentDiv = document.createElement('div');
+        contentDiv.classList.add('message-content');
+        if (!isUser) {
+          contentDiv.innerHTML = marked.parse(message, {
+            highlight: function(code, language) {
+              if (language) {
+                return hljs.highlight(code, {
+                  language
+                }).value;
+              }
+              return hljs.highlightAuto(code).value;
+            }
+          });
+          contentDiv.querySelectorAll('pre code').forEach((block) => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'code-block-wrapper';
+            const copyButton = document.createElement('button');
+            copyButton.className = 'code-copy-button';
+            copyButton.innerHTML = ' <i class = "fas fa-copy" ></i>';
+            copyButton.onclick = (e) => {
+              e.stopPropagation();
+              navigator.clipboard.writeText(block.textContent).then(() => {
+                copyButton.innerHTML = ' <i class = "fas fa-check" ></i>';
+                setTimeout(() => {
+                  copyButton.innerHTML = ' <i class = "fas fa-copy" ></i>';
+                }, 2000);
+              });
+            };
+            block.parentNode.insertBefore(wrapper, block);
+            wrapper.appendChild(block);
+            wrapper.appendChild(copyButton);
+          });
+        } else {
+          contentDiv.textContent = message;
         }
-        return hljs.highlightAuto(code).value;
+        messageElement.appendChild(contentDiv);
+        const timestampDiv = document.createElement('div');
+        timestampDiv.className = 'message-timestamp';
+        timestampDiv.textContent = formatTimestamp(timestamp);
+        messageElement.appendChild(timestampDiv);
+        const actionsDiv = document.createElement('div');
+        actionsDiv.className = 'message-actions';
+        if (isUser) {
+          const editButton = document.createElement('button');
+          editButton.className = 'action-button';
+          editButton.innerHTML = '  <i class = "fa-regular fa-edit" > </i>';
+          editButton.onclick = () => startEditing(messageId);
+          actionsDiv.appendChild(editButton);
+        }
+        const copyButton = document.createElement('button');
+        copyButton.className = 'action-button';
+        copyButton.innerHTML = '  <i class = "fa-regular fa-copy" > </i>';
+        copyButton.onclick = () => copyToClipboard(message);
+        actionsDiv.appendChild(copyButton);
+        messageElement.appendChild(actionsDiv);
+        return {
+          element: messageElement,
+          id: messageId
+        };
       }
-    });
-    
-    contentDiv.querySelectorAll('pre code').forEach((block) => {
-      const wrapper = document.createElement('div');
-      wrapper.className = 'code-block-wrapper';
-      
-      const copyButton = document.createElement('button');
-      copyButton.className = 'code-copy-button';
-      copyButton.innerHTML = ' <i class="fas fa-copy"></i>';
-      copyButton.onclick = (e) => {
-        e.stopPropagation();
-        navigator.clipboard.writeText(block.textContent).then(() => {
-          copyButton.innerHTML = ' <i class="fas fa-check"></i>';
-          setTimeout(() => {
-            copyButton.innerHTML = ' <i class="fas fa-copy"></i>';
-          }, 2000);
-        });
-      };
-      
-      block.parentNode.insertBefore(wrapper, block);
-      wrapper.appendChild(block);
-      wrapper.appendChild(copyButton);
-    });
-  } else {
-    contentDiv.textContent = message;
-  }
-  
-  messageElement.appendChild(contentDiv);
-  
-  const timestampDiv = document.createElement('div');
-  timestampDiv.className = 'message-timestamp';
-  timestampDiv.textContent = formatTimestamp(timestamp);
-  messageElement.appendChild(timestampDiv);
-  
-  const actionsDiv = document.createElement('div');
-  actionsDiv.className = 'message-actions';
-  
-  if (isUser) {
-    const editButton = document.createElement('button');
-    editButton.className = 'action-button';
-    editButton.innerHTML = '  <i class="fa-regular fa-edit"></i>';
-    editButton.onclick = () => startEditing(messageId);
-    actionsDiv.appendChild(editButton);
-  }
-  
-  const copyButton = document.createElement('button');
-  copyButton.className = 'action-button';
-  copyButton.innerHTML = '  <i class="fa-regular fa-copy"></i>';
-  copyButton.onclick = () => copyToClipboard(message);
-  actionsDiv.appendChild(copyButton);
-  
-  messageElement.appendChild(actionsDiv);
-  
-  return { element: messageElement, id: messageId };
-}
       async function startEditing(messageId) {
         if (STATE.isWaitingForResponse) return;
         const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
@@ -1458,186 +1421,79 @@ function createMessageElement(message, isUser, timestamp = new Date()) {
           sendMessage();
         }
       });
-async function sendMessage() {
-  const textarea = document.getElementById('messageInput');
-  const message = textarea.value.trim();
-  
-  if (!message || STATE.isWaitingForResponse || STATE.editingMessageId) return;
-  
-  // Detect image generation command
-  const isImageGeneration = message.toLowerCase().startsWith('/image');
-  const processedMessage = isImageGeneration 
-    ? message.substring(6).trim() 
-    : message;
-  
-  if (isImageGeneration && !processedMessage) {
-    showNotification("Please provide a description after /image");
-    return;
-  }
-  
-  STATE.isWaitingForResponse = true;
-  disableInput();
-  
-  const timestamp = new Date();
-  const { element: messageElement, id: messageId } = createMessageElement(
-    isImageGeneration ? `🖼️ Image Generation: ${processedMessage}` : message, 
-    true, 
-    timestamp
-  );
-  
-  document.querySelector('.chat-messages').appendChild(messageElement);
-  
-  const messageObj = {
-    role: "user",
-    content: message,
-    timestamp: timestamp.getTime(),
-    id: messageId,
-    type: isImageGeneration ? "image_request" : "text"
-  };
-  
-  STATE.messageHistory.push(messageObj);
-  saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, STATE.messageHistory);
-  
-  textarea.value = '';
-  textarea.style.height = 'auto';
-  
-  try {
-    const response = await sendMessageWithRetry(processedMessage, isImageGeneration);
-    
-    if (response.type === "image") {
-      const imageMessageObj = {
-        role: "assistant",
-        content: `Generated Image for: ${processedMessage}`,
-        imageUrl: response.url,
-        timestamp: Date.now(),
-        replyTo: messageId,
-        type: "image"
-      };
-      
-      STATE.messageHistory.push(imageMessageObj);
-      saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, STATE.messageHistory);
-      
-      const imageElement = createImageMessageElement(response.url, processedMessage);
-      document.querySelector('.chat-messages').appendChild(imageElement);
-    } else if (response.text) {
-      const botMessageObj = {
-        role: "assistant",
-        content: response.text,
-        timestamp: Date.now(),
-        replyTo: messageId
-      };
-      
-      STATE.messageHistory.push(botMessageObj);
-      saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, STATE.messageHistory);
-      
-      const { element: botElement } = createMessageElement(response.text, false);
-      document.querySelector('.chat-messages').appendChild(botElement);
-    }
-    
-    if (STATE.settings.autoScroll) {
-      document.querySelector('.chat-messages').lastChild.scrollIntoView({ behavior: 'smooth' });
-    }
-    
-    if (STATE.settings.soundEffects) {
-      playMessageSound();
-    }
-  } catch (error) {
-    showError(`Image Generation Error: ${error.message}`);
-  } finally {
-    STATE.isWaitingForResponse = false;
-    enableInput();
-    textarea.focus();
-  }
-}
-async function sendMessageWithRetry(message, isImageGeneration = false, retries = CONFIG.MAX_RETRIES) {
-  try {
-    const response = await tryMultipleModels(message, isImageGeneration);
-    return response;
-  } catch (error) {
-    if (retries > 0) {
-      showNotification(`Retrying... (${retries} attempts left)`);
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      return sendMessageWithRetry(message, isImageGeneration, retries - 1);
-    }
-    throw error;
-  }
-}
-async function tryMultipleModels(userMessage, isImageGeneration = false) {
+      async function sendMessage() {
+        const textarea = document.getElementById('messageInput');
+        const message = textarea.value.trim();
+        if (!message || STATE.isWaitingForResponse || STATE.editingMessageId) return;
+        STATE.isWaitingForResponse = true;
+        disableInput();
+        const timestamp = new Date();
+        const {
+          element: messageElement,
+          id: messageId
+        } = createMessageElement(message, true, timestamp);
+        document.querySelector('.chat-messages').appendChild(messageElement);
+        const messageObj = {
+          role: "user",
+          content: message,
+          timestamp: timestamp.getTime(),
+          id: messageId
+        };
+        STATE.messageHistory.push(messageObj);
+        saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, STATE.messageHistory);
+        textarea.value = '';
+        textarea.style.height = 'auto';
+        try {
+          const response = await sendMessageWithRetry(message);
+          if (response.text) {
+            const botMessageObj = {
+              role: "assistant",
+              content: response.text,
+              timestamp: Date.now(),
+              replyTo: messageId
+            };
+            STATE.messageHistory.push(botMessageObj);
+            saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, STATE.messageHistory);
+            const {
+              element: botElement
+            } = createMessageElement(response.text, false);
+            document.querySelector('.chat-messages').appendChild(botElement);
+            if (STATE.settings.autoScroll) {
+              botElement.scrollIntoView({
+                behavior: 'smooth'
+              });
+            }
+            if (STATE.settings.soundEffects) {
+              playMessageSound();
+            }
+          }
+        } catch (error) {
+          showError(`Error: ${error.message}`);
+        } finally {
+          STATE.isWaitingForResponse = false;
+          enableInput();
+          textarea.focus();
+        }
+      }
+      async function sendMessageWithRetry(message, retries = CONFIG.MAX_RETRIES) {
+        try {
+          const response = await tryMultipleModels(message);
+          return response;
+        } catch (error) {
+          if (retries > 0) {
+            showNotification(`Retrying... (${retries} attempts left)`);
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            return sendMessageWithRetry(message, retries - 1);
+          }
+          throw error;
+        }
+      }
+async function tryMultipleModels(userMessage) {
   const apiKey = getApiKey();
   if (!apiKey) {
     throw new Error("API key not found. Please enter your API key first.");
   }
-  
-  if (isImageGeneration) {
-    for (let modelIndex = 0; modelIndex < CONFIG.IMAGE_GENERATION_MODELS.length; modelIndex++) {
-      try {
-        const model = CONFIG.IMAGE_GENERATION_MODELS[modelIndex];
-        const response = await Promise.race([
-          fetch(model.endpoint, {
-            method: "POST",
-            headers: {
-              "Authorization": `Bearer ${apiKey}`,
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              "model": model.name,
-              "prompt": userMessage,
-              "width": 1024,
-              "height": 1024,
-              "steps": 50,
-              "cfg_scale": 7,
-              "samples": 1
-            })
-          }).then(async res => {
-            if (!res.ok) {
-              const errorText = await res.text();
-              throw new Error(`API Error: ${errorText}`);
-            }
-            return res.json();
-          }),
-          new Promise((_, reject) => 
-            setTimeout(() => reject(new Error('Image generation timeout')), 
-            CONFIG.IMAGE_GENERATION_TIMEOUT)
-          )
-        ]);
 
-        // Debugging log
-        console.log("Image Generation Response:", response);
-
-        // Check for image URL in multiple possible response formats
-        if (response.data && response.data[0]?.url) {
-          return {
-            type: "image",
-            url: response.data[0].url
-          };
-        } else if (response.generations && response.generations[0]?.url) {
-          return {
-            type: "image", 
-            url: response.generations[0].url
-          };
-        } else {
-          console.error("Unexpected image generation response format:", response);
-          throw new Error("No image URL found in response");
-        }
-      } catch (error) {
-        console.error(`Image generation with ${model.name} failed:`, error);
-        
-        // Detailed error logging
-        if (error.response) {
-          console.error("Response details:", await error.response.text());
-        }
-        
-        // If it's the last model, throw a comprehensive error
-        if (modelIndex === CONFIG.IMAGE_GENERATION_MODELS.length - 1) {
-          throw new Error(`Image generation failed: ${error.message}`);
-        }
-        
-        continue;
-      }
-    }
-    
-    throw new Error("No image generation model succeeded");
-  }
   for (let modelIndex = 0; modelIndex < MODELS.length; modelIndex++) {
     try {
       const response = await Promise.race([
@@ -1667,7 +1523,7 @@ async function tryMultipleModels(userMessage, isImageGeneration = false) {
         }),
         new Promise((_, reject) => setTimeout(() => reject(new Error('Request timeout')), CONFIG.API_TIMEOUT))
       ]);
-      
+
       if (response.choices && response.choices[0].message.content) {
         return {
           text: response.choices[0].message.content
@@ -1681,10 +1537,9 @@ async function tryMultipleModels(userMessage, isImageGeneration = false) {
       continue;
     }
   }
-  
+
   throw new Error("All API attempts failed. Please try again later.");
 }
-
     const voiceButton = document.getElementById('voiceButton');
     const messageInput = document.getElementById('messageInput');
     const notification = document.getElementById('notification');
@@ -1737,7 +1592,6 @@ async function tryMultipleModels(userMessage, isImageGeneration = false) {
         recognition.start();
       }
     });
-
 
       function setupEventListeners() {
         window.addEventListener('focus', handleWindowFocus);
@@ -1802,6 +1656,7 @@ function showSettingsModal() {
     `).join('');
 
   const themeOptions = `
+    <div class="option" data-theme="default" onclick="changeTheme('default')">Default</div>
     <div class="option" data-theme="light" onclick="changeTheme('light')">Light</div>
     <div class="option" data-theme="dark" onclick="changeTheme('dark')">Dark</div>
     <div class="option" data-theme="solarized-dark" onclick="changeTheme('solarized-dark')">Solarized-Dark</div>
@@ -1908,22 +1763,35 @@ function closeModal() {
         themeOptions.style.display = themeOptions.style.display === 'none' || themeOptions.style.display === '' ? 'block' : 'none';
       }
 
-      function changeLanguage(language) {
-        STATE.currentLanguage = language;
-        const languageSelector = document.getElementById('languageSelector').querySelector('span');
-        languageSelector.textContent = `Language: ${language}`;
-        showNotification(`Language changed to ${language}`);
-      }
+function changeLanguage(language) {
+  STATE.currentLanguage = language;
 
-      function changeTheme(theme) {
-        STATE.theme = theme;
-        document.documentElement.setAttribute('data-theme', theme);
-        saveToLocalStorage(CONFIG.STORAGE_KEYS.THEME, theme);
-        const themeSelector = document.getElementById('themeSelector').querySelector('span');
-        themeSelector.textContent = `Theme: ${theme}`;
-        document.getElementById('themeOptions').style.display = 'none';
-        showNotification(`Theme changed to ${theme}`);
-      }
+  const languageSelector = document.getElementById('languageSelector');
+
+  const languageSpan = languageSelector.querySelector('span');
+
+  languageSpan.innerHTML = `<i class="fa-solid fa-language"></i> Language: ${language}`;  
+
+  showNotification(`Language changed to ${language}`);
+}
+
+function changeTheme(theme) {
+  STATE.theme = theme;
+
+  document.documentElement.setAttribute('data-theme', theme);
+
+  saveToLocalStorage(CONFIG.STORAGE_KEYS.THEME, theme);
+
+  const themeSelector = document.getElementById('themeSelector');
+
+  const themeSpan = themeSelector.querySelector('span');
+
+  themeSpan.innerHTML = `<i class="fa-solid fa-palette"></i> Select Theme: ${theme}`;  
+
+  document.getElementById('themeOptions').style.display = 'none';
+
+  showNotification(`Theme changed to ${theme}`);
+}
 
       function toggleSetting(setting) {
         STATE.settings[setting] = !STATE.settings[setting];
@@ -1974,10 +1842,6 @@ function showAboutModal() {
         <p>
           <strong>API version:</strong> 1.0
         </p>
-        <p>
-          <strong>Contact:</strong>
-          <a href="https://discord.gg/Hb5ccPY3XV" target="_blank">discord.gg/Hb5ccPY3XV</a>
-        </p>
         <br>
         <p><strong>Enhanced Features:</strong></p>
         <ul>
@@ -1989,7 +1853,14 @@ function showAboutModal() {
         </ul>
       </div>
       <button class="discord-button">
-        <i class="fab fa-discord"></i> Join us on Discord
+<a href="https://discord.gg/Hb5ccPY3XV" 
+   target="_blank" 
+   rel="noopener noreferrer" 
+   aria-label="Join us on Discord" 
+   style="color: inherit; text-decoration: none;">
+  <i class="fab fa-discord" aria-hidden="true"></i> Join us on Discord
+</a>
+
       </button>
     </div>
   `;
@@ -2052,10 +1923,10 @@ function changePersonality(personalityName) {
   if (personality) {
     STATE.selectedPersonality = personality;
     localStorage.setItem(CONFIG.STORAGE_KEYS.PERSONALITY, personalityName);
-    
+
     const personalitySelector = document.getElementById('personalitySelector').querySelector('span');
     personalitySelector.textContent = `Personality: ${personalityName}`;
-    
+
     showNotification(`Personality changed to ${personalityName}`);
     closeModal();
     showSettingsModal();
@@ -2099,9 +1970,7 @@ function changePersonality(personalityName) {
         const typingElement = document.createElement('div');
         typingElement.className = 'chat-message bot typing-indicator';
         typingElement.innerHTML = `
-    
-    																																
-    
+
 																															<div class="message-content">
 																																<div class="typing-dots">
 																																	<span></span>
@@ -2117,14 +1986,14 @@ function changePersonality(personalityName) {
       opacity: 0.7;
       margin: 10px 0;
     }
-    
+
     .typing-dots {
       display: flex;
       gap: 4px;
       padding: 8px;
       justify-content: flex-start;
     }
-    
+
     .typing-dots span {
       width: 8px;
       height: 8px;
@@ -2133,11 +2002,11 @@ function changePersonality(personalityName) {
       animation: typing-dot 1.4s infinite ease-in-out;
       opacity: 0.6;
     }
-    
+
     .typing-dots span:nth-child(1) { animation-delay: 0s; }
     .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
     .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
-    
+
     @keyframes typing-dot {
       0%, 60%, 100% { transform: translateY(0); opacity: 0.6; }
       30% { transform: translateY(-4px); opacity: 1; }
@@ -2177,4 +2046,4 @@ function changePersonality(personalityName) {
           console.log('Service Worker registration failed:', error);
         });
       }
-</script>
+    </script>
