@@ -1879,27 +1879,32 @@ function checkAndStoreApiKey() {
     const modal = document.createElement('div');
     modal.className = 'modal-overlay';
     modal.innerHTML = `
-      <div class="modal-window">
+      <div class="modal-window" style="text-align: center; max-width: 1000px; margin: 0 auto;">
         <div class="modal-header">
           <span class="modal-title">Openrouter API key required!</span>
         </div>
         <div class="modal-content">
           <p>To use PatheticAI, an API key from Openrouter is required. To get this, go to</p>
-          <a href="https://openrouter.ai/settings/keys" target="_blank" style="color: white;">openrouter.ai/settings/keys</a>
+          <a href="https://openrouter.ai/settings/keys" target="_blank" style="color: white; display: inline-block;">openrouter.ai/settings/keys</a>
           <br><br>
-          <input type="text" id="apiKeyInput" placeholder="Your API Key Here" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 15px; color: white;">
+          <input type="text" id="apiKeyInput" placeholder="Your API Key Here" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 15px; color: white; text-align: center;">
           <br><br>
-          <button id="startupButton" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 15px; color: white; cursor: pointer;">Start up</button>
+          <button id="startupButton" style="width: 80%; padding: 15px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 15px; color: white; cursor: pointer; font-size: 16px;">Start up</button>
+          <br><br>
+          <button id="skipButton" style="width: 50%; padding: 12px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 15px; color: white; cursor: pointer; font-size: 14px;">Preview [ Not Reccomendded ]</button>
+          <p style="color: white; margin-top: 10px;">Some features are disabled in test mode preview.</p>
         </div>
       </div>
     `;
-          document.body.appendChild(modal);
-          document.getElementById('startupButton').addEventListener('click', saveApiKey);
-          return false;
-        }
-        return true;
-      }
-
+    document.body.appendChild(modal);
+    document.getElementById('startupButton').addEventListener('click', saveApiKey);
+    document.getElementById('skipButton').addEventListener('click', function() {
+      window.location.href = '/preview-mode';
+    });
+    return false;
+  }
+  return true;
+}
       function saveApiKey() {
         const apiKey = document.getElementById('apiKeyInput').value.trim();
         if (apiKey && apiKey.startsWith('sk-or-')) {
