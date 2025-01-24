@@ -1,33 +1,34 @@
 <!DOCTYPE html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>PatheticAI Enhanced</title>
-<link rel="manifest" href="/manifest.json">
-<link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@700,400&display=swap" rel="stylesheet">
-<link rel="icon" href="/images/icon.png" type="image/png">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/github-dark.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.0.2/marked.min.js"></script>
-<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/github-dark.min.css" as="style">
-<meta name="description" content="PatheticAI - Advanced AI chatbot with enhanced features for seamless conversations and task automation">
-<meta name="keywords" content="AI, chatbot, machine learning, conversation, automation">
-<meta name="robots" content="index, follow">
-<meta property="og:title" content="PatheticAI Enhanced">
-<meta property="og:description" content="Advanced AI chatbot with enhanced features for seamless conversations and task automation">
-<meta property="og:image" content="/images/icon.png">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="PatheticAI">
-<meta name="theme-color" content="#ffffff">
-<link rel="apple-touch-icon" href="/images/icon.png">
-<meta name="apple-mobile-web-app-title" content="PatheticAI">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="mobile-web-app-capable" content="yes">
-<style>
-  body {
-    font-family: 'Cabinet Grotesk', sans-serif;
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>PatheticAI Enhanced</title>
+  <link rel="manifest" href="/manifest.json">
+  <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@700,400&display=swap" rel="stylesheet">
+  <link rel="icon" href="/images/icon.png" type="image/png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/github-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.0.2/marked.min.js"></script>
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/github-dark.min.css" as="style">
+  <meta name="description" content="PatheticAI - Advanced AI chatbot with enhanced features for seamless conversations and task automation">
+  <meta name="keywords" content="AI, chatbot, machine learning, conversation, automation">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="PatheticAI Enhanced">
+  <meta property="og:description" content="Advanced AI chatbot with enhanced features for seamless conversations and task automation">
+  <meta property="og:image" content="/images/icon.png">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="PatheticAI">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="apple-touch-icon" href="/images/icon.png">
+  <meta name="apple-mobile-web-app-title" content="PatheticAI">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="mobile-web-app-capable" content="yes">
+  <style>
+    body {
+      font-family: 'Cabinet Grotesk', sans-serif;
+    }
+
     * {
       margin: 0;
       padding: 0;
@@ -82,7 +83,6 @@
       touch-action: none;
       -webkit-overflow-scrolling: none;
       overscroll-behavior: none;
-
     }
 
     .container {
@@ -354,6 +354,82 @@
       z-index: 2000;
     }
 
+    .selector {
+      background: var(--button-background);
+      border: 1px solid var(--border-color);
+      padding: 15px;
+      border-radius: 15px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 20px;
+      margin-bottom: 20px;
+
+    }
+
+    .selector i {
+      font-size: 14px;
+      transition: transform 0.3s ease;
+    }
+
+    .selector:hover {
+      background-color: var(--button-hover-background);
+      transform: translateX(5px);
+    }
+
+    .options {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      display: none;
+      background-color: var(--background-color);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius);
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+      z-index: 10;
+      overflow-y: visible;
+
+    }
+
+    .option {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--spacing-small) var(--spacing-normal);
+      background-color: var(--button-background);
+      cursor: pointer;
+      border-radius: 15px;
+      transition: background 0.3s ease;
+      width: auto;
+      margin-top: 20px;
+      margin-bottom: 20px;
+      transition: transform 0.3s ease;
+      overflow-y: visible;
+
+    }
+
+    .option:hover {
+      background-color: var(--button-hover-background);
+    }
+
+    .options.active {
+      display: block;
+    }
+
+    .option-description {
+      display: inline-block;
+      margin-left: 10px;
+      white-space: nowrap;
+      font-size: 12px;
+      color: var(--secondary-color);
+    }
+
+    .selector.open i {
+      transform: rotate(180deg);
+    }
     .notification.fade-out {
       animation: fadeOut 0.3s ease;
     }
@@ -505,82 +581,8 @@
       position: relative;
       display: inline-block;
       width: 100%;
-    }
+      overflow-y: visible;
 
-    .selector {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: var(--spacing-small) var(--spacing-normal);
-      background-color: var(--button-background);
-      border: 1px solid var(--border-color);
-      cursor: pointer;
-      border-radius: var(--border-radius);
-      transition: background 0.3s ease;
-      width: auto;
-      margin-top: 20px;
-      margin-bottom: 20px;
-      transition: transform 0.3s ease;
-    }
-
-    .selector i {
-      font-size: 14px;
-      transition: transform 0.3s ease;
-    }
-
-    .selector:hover {
-      background-color: var(--button-hover-background);
-      transform: translateX(5px);
-
-    }
-
-    .options {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      width: 100%;
-      display: none;
-      background-color: var(--background-color);
-      border: 1px solid var(--border-color);
-      border-radius: var(--border-radius);
-      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-      z-index: 10;
-    }
-
-    .option {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: var(--spacing-small) var(--spacing-normal);
-      background-color: var(--button-background);
-      border: 1px solid var(--border-color);
-      cursor: pointer;
-      border-radius: var(--border-radius);
-      transition: background 0.3s ease;
-      width: auto;
-      margin-top: 20px;
-      margin-bottom: 20px;
-      transition: transform 0.3s ease;
-    }
-
-    .option:hover {
-      background-color: var(--button-hover-background);
-    }
-
-    .options.active {
-      display: block;
-    }
-
-    .option-description {
-      display: inline-block;
-      margin-left: 10px;
-      white-space: nowrap;
-      font-size: 12px;
-      color: var(--secondary-color);
-    }
-
-    .selector.open i {
-      transform: rotate(180deg);
     }
 
     @keyframes fadeIn {
@@ -790,53 +792,48 @@
       background: rgba(255, 255, 255, 0.1);
       transform: none;
     }
-</style>
-  </head>
-  <body>
-    <div class="taskbar">
-      <div class="taskbar-left">
-        <span class="brand">PatheticAI</span>
-        <span class="preview-tag">Preview Mode</span>
-      </div>
-      <div class="taskbar-right">
-        <button onclick="showSettingsModal()" title="Settings">
-         <i class="fa-solid fa-bars"></i>        </button>
-        <button onclick="contactEmail()" title="Join Discord">
-          <i class="fa-brands fa-discord"></i>
-        </button>
-      </div>
+  </style>
+</head>
+<body>
+  <div class="taskbar">
+    <div class="taskbar-left">
+      <span class="brand">PatheticAI</span>
+      <span class="preview-tag">Preview Mode</span>
     </div>
-    <div class="container">
-      <div class="chat-messages"></div>
-    </div>
-    <div class="chat-input-container">
-      <textarea id="messageInput" placeholder="Type your message..." rows="1" maxlength="2000"></textarea>
-      <button onclick="sendMessage()" title="Send Message">
-        <i class="fas fa-paper-plane"></i>
-        <span>‎ ‎ ‎ Send</span>
+    <div class="taskbar-right">
+      <button onclick="showSettingsModal()" title="Settings">
+        <i class="fa-solid fa-bars"></i>
       </button>
     </div>
-    <script>
-let messageHistory = [];
-let currentLanguage = localStorage.getItem('currentLanguage') || 'English';
-
-const API_KEYS = [
-    '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',
-    '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',
-    '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'
-];
-
-const models = [
-    { name: "google/gemini-2.0-flash-exp:free" },
-    { name: "meta-llama/llama-3.2-3b-instruct:free" },
-    { name: "qwen/qwen-2-7b-instruct:free" },
-    { name: "microsoft/phi-3-medium-128k-instruct:free" },
-    { name: "undi95/toppy-m-7b:free" }
-];
-
-let systemMessage = {
-    role: "system",
-    content: `You are PatheticAI
+  </div>
+  <div class="container">
+    <div class="chat-messages"></div>
+  </div>
+  <div class="chat-input-container">
+    <textarea id="messageInput" placeholder="Type your message..." rows="1" maxlength="2000"></textarea>
+    <button onclick="sendMessage()" title="Send Message">
+      <i class="fas fa-paper-plane"></i>
+      <span>‎ ‎ ‎ Send</span>
+    </button>
+  </div>
+  <script>
+    let messageHistory = [];
+    let currentLanguage = localStorage.getItem('currentLanguage') || 'English';
+    const API_KEYS = ['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', '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', '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'];
+    const models = [{
+      name: "google/gemini-2.0-flash-exp:free"
+    }, {
+      name: "meta-llama/llama-3.2-3b-instruct:free"
+    }, {
+      name: "qwen/qwen-2-7b-instruct:free"
+    }, {
+      name: "microsoft/phi-3-medium-128k-instruct:free"
+    }, {
+      name: "undi95/toppy-m-7b:free"
+    }];
+    let systemMessage = {
+      role: "system",
+      content: `You are PatheticAI
 
         Key characteristics:
         - Friendly and empathetic AI assistant
@@ -844,218 +841,211 @@ let systemMessage = {
         - Adapts communication style to user needs
         - Offers helpful suggestions and insights
         - Maintains context awareness`
-};
+    };
 
-function getRandomApiKey() {
-    const randomIndex = Math.floor(Math.random() * API_KEYS.length);
-    return API_KEYS[randomIndex];
-}
-
-async function sendMessage() {
-    const input = document.getElementById('messageInput');
-    const message = input.value.trim();
-
-    if (!message) return;
-
-    addMessage(message, true);
-    input.value = '';
-
-    const loadingContainer = document.createElement('div');
-    loadingContainer.classList.add('chat-message', 'bot', 'typing');
-    loadingContainer.textContent = 'Typing...';
-    document.querySelector('.chat-messages').appendChild(loadingContainer);
-    loadingContainer.scrollIntoView({ behavior: 'smooth' });
-
-    try {
+    function getRandomApiKey() {
+      const randomIndex = Math.floor(Math.random() * API_KEYS.length);
+      return API_KEYS[randomIndex];
+    }
+    async function sendMessage() {
+      const input = document.getElementById('messageInput');
+      const message = input.value.trim();
+      if (!message) return;
+      addMessage(message, true);
+      input.value = '';
+      const loadingContainer = document.createElement('div');
+      loadingContainer.classList.add('chat-message', 'bot', 'typing');
+      loadingContainer.textContent = 'Typing...';
+      document.querySelector('.chat-messages').appendChild(loadingContainer);
+      loadingContainer.scrollIntoView({
+        behavior: 'smooth'
+      });
+      try {
         const response = await tryMultipleModels(message);
         loadingContainer.remove();
-        
         if (response.text) {
-            messageHistory.push({ role: "assistant", content: response.text });
-            addMessage(response.text, false);
+          messageHistory.push({
+            role: "assistant",
+            content: response.text
+          });
+          addMessage(response.text, false);
         }
-    } catch (error) {
+      } catch (error) {
         loadingContainer?.remove();
         showError(error.message);
+      }
     }
-}
-
-async function tryMultipleModels(userMessage) {
-    const timeout = 20000;
-    const usedApiKeys = new Set();
-
-    while (usedApiKeys.size < API_KEYS.length) {
+    async function tryMultipleModels(userMessage) {
+      const timeout = 20000;
+      const usedApiKeys = new Set();
+      while (usedApiKeys.size < API_KEYS.length) {
         const apiKey = getRandomApiKey();
         if (usedApiKeys.has(apiKey)) continue;
         usedApiKeys.add(apiKey);
-
         for (let modelIndex = 0; modelIndex < models.length; modelIndex++) {
-            try {
-                const response = await Promise.race([ 
-                    fetch("https://openrouter.ai/api/v1/chat/completions", {
-                        method: "POST",
-                        headers: {
-                            "Authorization": `Bearer ${apiKey}`,
-                            "Content-Type": "application/json",
-                            "HTTP-Referer": "https://pathetic-ai.vercel.app",
-                            "X-Title": "PatheticAI"
-                        },
-                        body: JSON.stringify({
-                            "model": models[modelIndex].name,
-                            "messages": [
-                                systemMessage,
-                                { role: "user", content: `Please respond in ${currentLanguage}. ${userMessage}` }
-                            ]
-                        })
-                    }).then(res => res.json()),
-                    new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), timeout))
-                ]);
-
-                if (response.choices && response.choices[0].message.content) {
-                    return { text: response.choices[0].message.content };
-                }
-            } catch (error) {
-                console.warn(`API key ${apiKey} with model ${models[modelIndex].name} failed:`, error.message);
-                continue;
+          try {
+            const response = await Promise.race([
+              fetch("https://openrouter.ai/api/v1/chat/completions", {
+                method: "POST",
+                headers: {
+                  "Authorization": `Bearer ${apiKey}`,
+                  "Content-Type": "application/json",
+                  "HTTP-Referer": "https://pathetic-ai.vercel.app",
+                  "X-Title": "PatheticAI"
+                },
+                body: JSON.stringify({
+                  "model": models[modelIndex].name,
+                  "messages": [
+                    systemMessage, {
+                      role: "user",
+                      content: `Please respond in ${currentLanguage}. ${userMessage}`
+                    }
+                  ]
+                })
+              }).then(res => res.json()),
+              new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), timeout))
+            ]);
+            if (response.choices && response.choices[0].message.content) {
+              return {
+                text: response.choices[0].message.content
+              };
             }
+          } catch (error) {
+            console.warn(`API key ${apiKey} with model ${models[modelIndex].name} failed:`, error.message);
+            continue;
+          }
         }
+      }
+      throw new Error("All API attempts failed. Please try again later.");
     }
 
-    throw new Error("All API attempts failed. Please try again later.");
-}
+    function addMessage(message, isUser) {
+      const messageElement = document.createElement('div');
+      messageElement.classList.add('chat-message', isUser ? 'user' : 'bot');
+      messageElement.textContent = message;
+      document.querySelector('.chat-messages').appendChild(messageElement);
+      messageElement.scrollIntoView({
+        behavior: 'smooth'
+      });
+    }
 
-function addMessage(message, isUser) {
-    const messageElement = document.createElement('div');
-    messageElement.classList.add('chat-message', isUser ? 'user' : 'bot');
-    messageElement.textContent = message;
-    document.querySelector('.chat-messages').appendChild(messageElement);
-    messageElement.scrollIntoView({ behavior: 'smooth' });
-}
-
-function showWelcomeModal() {
-    const modal = document.createElement('div');
-    modal.className = 'modal-overlay';
-    modal.innerHTML = `
-        <div class="modal-window">
-            <div class="modal-header">
-                <span class="modal-title">Welcome to PatheticAI</span>
-            </div>
-            <div class="modal-content">
-                <p>You're Currently In Preview Mode</p>
-                <p>Created by PatheticAI</p>
-            </div>
-        </div>
+    function showWelcomeModal() {
+      const modal = document.createElement('div');
+      modal.className = 'modal-overlay';
+      modal.innerHTML = `
+        
+																							<div class="modal-window">
+																								<div class="modal-header">
+																									<span class="modal-title">Welcome to PatheticAI</span>
+																								</div>
+																								<div class="modal-content">
+																									<p>You're Currently In Preview Mode</p>
+																									<p>Created by PatheticAI</p>
+																								</div>
+																							</div>
     `;
-
-    modal.addEventListener('click', (e) => {
+      modal.addEventListener('click', (e) => {
         if (e.target === modal) {
-            modal.remove();
+          modal.remove();
         }
-    });
+      });
+      document.body.appendChild(modal);
+    }
 
-    document.body.appendChild(modal);
-}
-
-function showSettingsModal() {
-    const modal = document.createElement('div');
-    modal.className = 'modal-overlay';
-
-    const languageOptions = ['English', 'Spanish', 'French', 'German', 'Italian', 'Japanese', 'Chinese', 'Russian', 'Portuguese', 'Korean', 'Hindi', 'Arabic', 'Turkish', 'Dutch', 'Swedish', 'Greek', 'Polish', 'Vietnamese', 'Thai', 'Indonesian', 'Hebrew', 'Finnish', 'Czech', 'Hungarian']
-        .map(lang => `
-            <div class="option" data-language="${lang}" onclick="changeLanguage('${lang}')">${lang}</div>
+    function showSettingsModal() {
+      const modal = document.createElement('div');
+      modal.className = 'modal-overlay';
+      const languageOptions = ['English', 'Spanish', 'French', 'German', 'Italian', 'Japanese', 'Chinese', 'Russian', 'Portuguese', 'Korean', 'Hindi', 'Arabic', 'Turkish', 'Dutch', 'Swedish', 'Greek', 'Polish', 'Vietnamese', 'Thai', 'Indonesian', 'Hebrew', 'Finnish', 'Czech', 'Hungarian'].map(lang => `
+            
+																							<div class="option" data-language="${lang}" onclick="changeLanguage('${lang}')">${lang}</div>
         `).join('');
-
-    modal.innerHTML = `
-    <div class="modal-window">
-      <div class="modal-header">
-        <span class="modal-title">Settings</span>
-        <button class="close-button" aria-label="Close settings" onclick="closeModal()">✖</button>
-      </div>
-      <div class="modal-content">
-        <div class="settings-section">
-          <div class="settings-button" onclick="resetChat()">
-            <i class="fa fa-trash"></i> Clear Chat
-          </div>
-        </div>
-        <div class="settings-section">
-          <div class="selector-container">
-            <div class="selector" id="languageSelector" onclick="toggleLanguageSelector()">
-              <span>
-                <i class="fa-solid fa-language"></i>‎ ‎ Language: <span id="currentLanguageText">${currentLanguage}</span>
-              </span>
-              <i class="fa fa-chevron-down"></i>
-            </div>
-            <div class="options" id="languageOptions" style="display:none;">
+      modal.innerHTML = `
+    
+																							<div class="modal-window">
+																								<div class="modal-header">
+																									<span class="modal-title">Settings</span>
+																									<button class="close-button" aria-label="Close settings" onclick="closeModal()">✖</button>
+																								</div>
+																								<div class="modal-content">
+																									<div class="settings-section">
+																										<div class="settings-button" onclick="resetChat()">
+																											<i class="fa fa-trash"></i> Clear Chat
+          
+																										</div>
+																									</div>
+																									<div class="settings-section">
+																										<div class="selector-container">
+																											<div class="selector" id="languageSelector" onclick="toggleLanguageSelector()">
+																												<span>
+																													<i class="fa-solid fa-language"></i>‎ ‎ Language: 
+																													<span id="currentLanguageText">${currentLanguage}</span>
+																												</span>
+																												<i class="fa fa-chevron-down"></i>
+																											</div>
+																											<div class="options" id="languageOptions" style="display:none;">
               ${languageOptions}
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
+																										</div>
+																									</div>
+																								</div>
+																							</div>
     `;
-
-    modal.addEventListener('click', (e) => {
+      modal.addEventListener('click', (e) => {
         if (e.target === modal) {
-            closeModal();
+          closeModal();
         }
-    });
+      });
+      document.body.appendChild(modal);
+    }
 
-    document.body.appendChild(modal);
-}
+    function closeModal() {
+      document.querySelector('.modal-overlay').remove();
+    }
 
-function closeModal() {
-    document.querySelector('.modal-overlay').remove();
-}
+    function resetChat() {
+      document.querySelector('.chat-messages').innerHTML = '';
+      messageHistory = [];
+      showNotification('Chat reset successful');
+    }
 
-function resetChat() {
-    document.querySelector('.chat-messages').innerHTML = '';
-    messageHistory = [];
-    showNotification('Chat reset successful');
-}
-
-function changeLanguage(newLanguage) {
-    if (newLanguage && newLanguage.trim() !== '') {
+    function changeLanguage(newLanguage) {
+      if (newLanguage && newLanguage.trim() !== '') {
         currentLanguage = newLanguage.trim();
         systemMessage.content = ``;
-        localStorage.setItem('currentLanguage', currentLanguage); // Save to localStorage
+        localStorage.setItem('currentLanguage', currentLanguage);
         showNotification(`Language changed to: ${currentLanguage}`);
         document.getElementById('currentLanguageText').textContent = currentLanguage;
+      }
     }
-}
 
+    function toggleLanguageSelector() {
+      const optionsContainer = document.getElementById('languageOptions');
+      const isCurrentlyVisible = optionsContainer.style.display === 'block';
+      optionsContainer.style.display = isCurrentlyVisible ? 'none' : 'block';
+    }
 
-function toggleLanguageSelector() {
-    const optionsContainer = document.getElementById('languageOptions');
-    const isCurrentlyVisible = optionsContainer.style.display === 'block';
-    optionsContainer.style.display = isCurrentlyVisible ? 'none' : 'block';
-}
-
-function showNotification(message) {
-    const notification = document.createElement('div');
-    notification.className = 'notification';
-    notification.textContent = message;
-    document.body.appendChild(notification);
-
-    setTimeout(() => {
+    function showNotification(message) {
+      const notification = document.createElement('div');
+      notification.className = 'notification';
+      notification.textContent = message;
+      document.body.appendChild(notification);
+      setTimeout(() => {
         notification.classList.add('fade-out');
         setTimeout(() => notification.remove(), 300);
-    }, 2000);
-}
-
-// Event Listeners
+      }, 2000);
+    }
 document.addEventListener('DOMContentLoaded', () => {
-    showWelcomeModal();
-    showNotification('PatheticAI V0.9');
-    document.querySelector('.brand').addEventListener('click', () => showAboutModal());
-
-    const inputField = document.querySelector('.chat-input-container input');
-    inputField.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            sendMessage();
-        }
-    });
+  showWelcomeModal();
+  showNotification('PatheticAI V0.9');
+  document.querySelector('.brand').addEventListener('click', () => showAboutModal());
+  
+  const inputField = document.querySelector('.chat-input-container input');
+  inputField.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+      sendMessage();
+    }
+  });
 });
-
-    </script>
+  </script>
 </body>
 </html>
