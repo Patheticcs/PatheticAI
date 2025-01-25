@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="Dark">
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -38,44 +38,62 @@
 			*::-webkit-scrollbar {
 				display: none;
 			}
-
 			:root {
---background-image: url("https://wallpapershome.com/images/pages/pic_h/26430.jpg");
---container-width: min(90%, 800px);
---spacing-normal: clamp(16px, 2vw, 20px);
---spacing-small: clamp(8px, 1vw, 10px);
---border-radius: 30px;
---border-radius-small: 15px;
---transition: all 0.3s ease;
---primary-color: #ffffff;
---secondary-color: #9c00d5;
---border-color: rgba(255, 255, 255, 0.03);
---taskbar-background: rgba(0, 0, 0, 0.2);
---input-background: rgba(0, 0, 0, 0.6);
---button-background: rgba(255, 255, 255, 0.02);
---button-hover-background: rgba(255, 255, 255, 0.1);
---modal-background: rgba(0, 0, 0, 0.3);
---message-background: rgba(0, 0, 0, 0.2);
---message-user-background: rgba(0, 0, 0, 0.4);
+				--container-width: min(90%, 800px);
+				--spacing-normal: clamp(16px, 2vw, 20px);
+				--spacing-small: clamp(8px, 1vw, 10px);
+				--border-radius: 30px;
+				--border-radius-small: 15px;
+				--transition: all 0.3s ease;
 			}
 
-			body {
-				background-image: var(--background-image);
-				font-family: 'Cabinet Grotesk', sans-serif;
-				background-size: cover;
-				background-attachment: fixed;
-				color: var(--primary-color);
-				min-height: 100vh;
-				display: flex;
-				flex-direction: column;
-				overflow: hidden;
-				position: fixed;
-				width: 100%;
-				height: 100%;
-				touch-action: none;
-				-webkit-overflow-scrolling: none;
-				overscroll-behavior: none;
-			}
+:root[data-theme="Light"] {
+    --background-image: url("https://wallpapershome.com/images/pages/pic_h/26430.jpg");
+    --background-color: #ffffff; 
+    --primary-color: #333333; 
+    --secondary-color: #6200ea; 
+    --border-color: rgba(0, 0, 0, 0.1); 
+    --taskbar-background: rgba(255, 255, 255, 0.4); 
+    --input-background: rgba(255, 255, 255, 0.5); 
+    --button-background: rgba(255, 255, 255, 0.3); 
+    --button-hover-background: rgba(255, 255, 255, 0.2); 
+    --modal-background: rgba(255, 255, 255, 0.6); 
+    --message-background: rgba(255, 255, 255, 0.5); 
+    --message-user-background: rgba(245, 245, 245, 0.6); 
+}
+
+:root[data-theme="Dark"] {
+    --background-image: url("https://wallpapershome.com/images/pages/pic_h/26430.jpg");
+    --background-color: #000000;
+    --primary-color: #ffffff;
+    --secondary-color: #9c00d5;
+    --border-color: rgba(255, 255, 255, 0.03);
+    --taskbar-background: rgba(0, 0, 0, 0.5);
+    --input-background: rgba(0, 0, 0, 0.6);
+    --button-background: rgba(255, 255, 255, 0.02);
+    --button-hover-background: rgba(255, 255, 255, 0.05);
+    --modal-background: rgba(0, 0, 0, 0.6);
+    --message-background: rgba(0, 0, 0, 0.5);
+    --message-user-background: rgba(0, 0, 0, 0.4);
+}
+
+body {
+    background-image: var(--background-image);
+    font-family: 'Cabinet Grotesk', sans-serif;
+    background-size: cover;
+    background-attachment: fixed;
+    color: var(--primary-color);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    touch-action: none;
+    -webkit-overflow-scrolling: none;
+    overscroll-behavior: none;
+}
 
 			.container {
 				position: fixed;
@@ -159,7 +177,55 @@
 				height: 100%;
 				overflow-y: auto;
 			}
+			.chat-input-container {
+				position: fixed;
+				bottom: var(--spacing-normal);
+				left: 50%;
+				transform: translateX(-50%);
+				width: var(--container-width);
+				max-width: var(--container-max-width);
+				display: flex;
+				gap: 10px;
+				background: var(--chat-input-container-background);
+				backdrop-filter: blur(10px);
+				padding: var(--spacing-normal);
+				border-radius: 30px;
+				border: 1px solid var(--border-color);
+				color: var(--primary-color);
+			}
 
+			.chat-input-container textarea {
+				flex: 1;
+				background: transparent;
+				border: none;
+				outline: none;
+				color: var(--color);
+				font-size: 16px;
+				padding: 10px;
+				border-radius: 10px;
+				resize: none;
+				min-height: 40px;
+				color: var(--primary-color);
+			}
+
+			.chat-input-container input::placeholder {
+				color: var(--color);
+			}
+
+			.chat-input-container button {
+				background: rgba(255, 255, 255, 0.1);
+				border: 1px solid var(--border-button-color);
+				color: var(--color);
+				padding: 8px 20px;
+				border-radius: 30px;
+				cursor: pointer;
+				transition: all 0.3s ease;
+			}
+
+			.chat-input-container button:hover {
+				background: rgba(255, 255, 255, 0.2);
+				transform: translateY(-1px);
+			}
 			.chat-message {
 				padding: var(--spacing-normal);
 				border-radius: var(--border-radius-small);
@@ -182,38 +248,6 @@
 				background: var(--message-background);
 				align-self: flex-start;
 				border-bottom-left-radius: 5px;
-			}
-
-			.chat-input-container {
-				position: fixed;
-				bottom: var(--spacing-normal);
-				left: 50%;
-				transform: translateX(-50%);
-				width: var(--container-width);
-				display: flex;
-				gap: var(--spacing-small);
-				background: var(--taskbar-background);
-				backdrop-filter: blur(10px);
-				padding: var(--spacing-normal);
-				border-radius: var(--border-radius);
-				border: 1px solid var(--border-color);
-			}
-
-			.chat-input-container textarea {
-				flex: 1;
-				background: var(--input-background);
-				border: none;
-				outline: none;
-				color: var(--primary-color);
-				font-size: 16px;
-				padding: var(--spacing-small);
-				border-radius: var(--border-radius-small);
-				resize: none;
-				min-height: 40px;
-			}
-
-			.chat-input-container input::placeholder {
-				color: rgba(255, 255, 255, 0.5);
 			}
 
 			button {
@@ -380,166 +414,6 @@
 				border-radius: 12px;
 				cursor: pointer;
 				font-size: 12px;
-			}
-
-			.edit-mode {
-				border: var(--border-color);
-			}
-
-			.edit-input {
-				width: 100%;
-				background: transparent;
-				border: none;
-				color: var(--primary-color);
-				font-family: inherit;
-				font-size: inherit;
-				padding: 0;
-				margin: 0;
-				resize: none;
-				outline: none;
-			}
-
-			.message-timestamp {
-				font-size: 11px;
-				opacity: 0.7;
-				margin-top: 5px;
-			}
-
-			.container {
-				position: fixed;
-				top: calc(80px + var(--spacing-normal));
-				bottom: calc(80px + var(--spacing-normal));
-				left: 50%;
-				transform: translateX(-50%);
-				width: var(--container-width);
-				max-width: var(--container-max-width);
-				overflow-y: auto;
-				padding-right: 15px;
-			}
-
-			.chat-messages {
-				display: flex;
-				flex-direction: column;
-				gap: 15px;
-				padding: 20px;
-				padding-bottom: 40px;
-				height: 100%;
-				overflow-y: auto;
-			}
-
-			.chat-input-container {
-				position: fixed;
-				bottom: var(--spacing-normal);
-				left: 50%;
-				transform: translateX(-50%);
-				width: var(--container-width);
-				max-width: var(--container-max-width);
-				display: flex;
-				gap: 10px;
-				background: var(--chat-input-container-background);
-				backdrop-filter: blur(10px);
-				padding: var(--spacing-normal);
-				border-radius: 30px;
-				border: 1px solid var(--border-color);
-				color: var(--primary-color);
-			}
-
-			.chat-input-container textarea {
-				flex: 1;
-				background: transparent;
-				border: none;
-				outline: none;
-				color: var(--color);
-				font-size: 16px;
-				padding: 10px;
-				border-radius: 10px;
-				resize: none;
-				min-height: 40px;
-				color: var(--primary-color);
-			}
-
-			.chat-input-container input::placeholder {
-				color: var(--color);
-			}
-
-			.chat-input-container button {
-				background: rgba(255, 255, 255, 0.1);
-				border: 1px solid var(--border-button-color);
-				color: var(--color);
-				padding: 8px 20px;
-				border-radius: 30px;
-				cursor: pointer;
-				transition: all 0.3s ease;
-			}
-
-			.chat-input-container button:hover {
-				background: rgba(255, 255, 255, 0.2);
-				transform: translateY(-1px);
-			}
-
-			.selector-container {
-				position: relative;
-				display: inline-block;
-				width: 100%;
-			}
-
-			.selector {
-				background: var(--button-background);
-				border: 1px solid var(--border-color);
-				padding: 15px;
-				border-radius: 15px;
-				cursor: pointer;
-				transition: all 0.3s ease;
-				display: flex;
-				align-items: center;
-				gap: 10px;
-				margin-top: 10px;
-				margin-bottom: 10px;
-			}
-
-			.selector i {
-				font-size: 14px;
-				transition: transform 0.3s ease;
-			}
-
-			.selector:hover {
-				background: var(--button-hover-background);
-				transform: translateX(5px);
-			}
-
-			.options {
-				position: absolute;
-				top: calc(100% + 5px);
-				left: 0;
-				width: 100%;
-				display: none;
-				background-color: var(--background-color);
-				border: 1px solid var(--border-color);
-				border-radius: 10px;
-				box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-				z-index: 10;
-			}
-
-			.option {
-				padding: var(--spacing-small);
-				cursor: pointer;
-				font-size: 14px;
-				color: var(--primary-color);
-				transition: background-color 0.3s ease, transform 0.2s ease;
-				transform: translateX(5px);
-			}
-
-			.option:hover {
-				background-color: var(--button-hover-background);
-				transform: translateX(10px);
-			}
-
-			.options.active {
-				display: block;
-			}
-
-			.selector.open i {
-				transform: rotate(180deg);
 			}
 
 			@keyframes fadeIn {
@@ -719,6 +593,71 @@
 					font-size: 13px;
 					padding: 10px 20px;
 				}
+			}
+			.selector-container {
+				position: relative;
+				display: inline-block;
+				width: 100%;
+			}
+
+			.selector {
+				background: var(--button-background);
+				border: 1px solid var(--border-color);
+				padding: 15px;
+				border-radius: 15px;
+				cursor: pointer;
+				transition: all 0.3s ease;
+				display: flex;
+				align-items: center;
+				gap: 10px;
+				margin-top: 10px;
+				margin-bottom: 10px;
+			}
+
+			.selector i {
+				font-size: 14px;
+				transition: transform 0.3s ease;
+			}
+
+			.selector:hover {
+				background: var(--button-hover-background);
+				transform: translateX(5px);
+			}
+
+			.options {
+				position: absolute;
+				top: calc(100% + 5px);
+				left: 0;
+				width: 100%;
+				display: none;
+				border: 1px solid var(--border-color);
+				border-radius: 10px;
+				box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+				z-index: 10;
+                background-color: var(--background-color);
+
+			}
+
+			.option {
+				padding: var(--spacing-small);
+				cursor: pointer;
+				font-size: 14px;
+				color: var(--primary-color);
+				transition: background-color 0.3s ease, transform 0.2s ease;
+				transform: translateX(5px);
+			}
+
+			.option:hover {
+				background-color: var(--button-hover-background);
+				transform: translateX(10px);
+			}
+
+			.options.active {
+				display: block;
+			}
+
+			.selector.open i {
+				transform: rotate(180deg);
 			}
 
 			@media (max-height: 600px) and (orientation: landscape) {
@@ -1214,14 +1153,14 @@ async function sendMessage() {
     const textarea = document.getElementById('messageInput');
     const message = textarea.value.trim();
     if (!message || STATE.isWaitingForResponse || STATE.editingMessageId) return;
-    
+
     STATE.isWaitingForResponse = true;
     disableInput();
-    
+
     const timestamp = new Date();
     const { element: messageElement, id: messageId } = createMessageElement(message, true, timestamp);
     document.querySelector('.chat-messages').appendChild(messageElement);
-    
+
     const messageObj = {
         role: "user",
         content: message,
@@ -1230,13 +1169,13 @@ async function sendMessage() {
     };
     STATE.messageHistory.push(messageObj);
     saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, STATE.messageHistory);
-    
+
     textarea.value = '';
     textarea.style.height = 'auto';
-    
+
     try {
         const response = await sendMessageWithRetry(message);
-        
+
         if (response.text) {
             const botMessageObj = {
                 role: "assistant",
@@ -1246,14 +1185,14 @@ async function sendMessage() {
             };
             STATE.messageHistory.push(botMessageObj);
             saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, STATE.messageHistory);
-            
+
             const { element: botElement } = createMessageElement(response.text, false);
             document.querySelector('.chat-messages').appendChild(botElement);
-            
+
             if (STATE.settings.autoScroll) {
                 botElement.scrollIntoView({ behavior: 'smooth' });
             }
-            
+
             if (STATE.settings.soundEffects) {
                 playMessageSound();
             }
@@ -1268,23 +1207,21 @@ async function sendMessage() {
 }
 async function sendMessageWithRetry(message, retries = CONFIG.MAX_RETRIES) {
     try {
-        // Create and append typing indicator before sending message
         const typingIndicator = createTypingIndicator();
         document.querySelector('.chat-messages').appendChild(typingIndicator);
-        
+
         const response = await tryMultipleModels(message);
-        
-        // Remove typing indicator after response
+
         typingIndicator.remove();
-        
+
         return response;
     } catch (error) {
-        // Remove typing indicator in case of error
+
         const existingTypingIndicator = document.querySelector('.typing-indicator');
         if (existingTypingIndicator) {
             existingTypingIndicator.remove();
         }
-        
+
         if (retries > 0) {
             showNotification(`Retrying... (${retries} attempts left)`);
             await new Promise(resolve => setTimeout(resolve, 1000));
@@ -1442,26 +1379,20 @@ async function sendMessageWithRetry(message, retries = CONFIG.MAX_RETRIES) {
 				const modal = document.createElement('div');
 				modal.className = 'modal-overlay';
 				const languageOptions = ['English', 'Spanish', 'French', 'German', 'Italian', 'Japanese', 'Chinese', 'Russian', 'Portuguese', 'Korean', 'Hindi', 'Arabic', 'Turkish', 'Dutch', 'Swedish', 'Greek', 'Polish', 'Vietnamese', 'Thai', 'Indonesian', 'Hebrew', 'Finnish', 'Czech', 'Hungarian'].map(lang => `
-      
+
 																								<div class="option" data-language="${lang}" onclick="changeLanguage('${lang}')">${lang}</div>
     `).join('');
 				const themeOptions = `
-    
-																								<div class="option" data-theme="light" onclick="changeTheme('light')">Light</div>
-																								<div class="option" data-theme="dark" onclick="changeTheme('dark')">Dark</div>
-																								<div class="option" data-theme="solarized-dark" onclick="changeTheme('solarized-dark')">Solarized-Dark</div>
-																								<div class="option" data-theme="solarized-light" onclick="changeTheme('solarized-light')">Solarized-Light</div>
-																								<div class="option" data-theme="pastel" onclick="changeTheme('pastel')">Pastel</div>
-																								<div class="option" data-theme="forest" onclick="changeTheme('forest')">Forest</div>
-																								<div class="option" data-theme="ocean" onclick="changeTheme('ocean')">Ocean</div>
-																								<div class="option" data-theme="neon" onclick="changeTheme('neon')">Neon</div>
+
+																								<div class="option" data-theme="light" onclick="changeTheme('Dark')">Dark</div>
+																								<div class="option" data-theme="dark" onclick="changeTheme('Light')">Light</div>
   `;
 				const personalityOptions = PERSONALITIES.map(p => `
-      
+
 																								<div class="option" data-personality="${p.name}" onclick="changePersonality('${p.name}')">${p.name}</div>
     `).join('');
 				modal.innerHTML = `
-    
+
 																								<div class="modal-window">
 																									<div class="modal-header">
 																										<span class="modal-title">Settings</span>
@@ -1471,7 +1402,7 @@ async function sendMessageWithRetry(message, retries = CONFIG.MAX_RETRIES) {
 																										<div class="settings-section">
 																											<div class="settings-button" onclick="resetChat()">
 																												<i class="fa fa-trash"></i> Clear Chat
-          
+
 																											</div>
 																										</div>
 																										<div class="settings-section">
@@ -1479,7 +1410,7 @@ async function sendMessageWithRetry(message, retries = CONFIG.MAX_RETRIES) {
 																												<div class="selector" id="languageSelector" onclick="toggleLanguageSelector()">
 																													<span>
 																														<i class="fa-solid fa-language"></i>‎ ‎ Language: ${STATE.currentLanguage}
-              
+
 																													</span>
 																													<i class="fa fa-chevron-down"></i>
 																												</div>
@@ -1492,7 +1423,7 @@ async function sendMessageWithRetry(message, retries = CONFIG.MAX_RETRIES) {
 																												<div class="selector" id="personalitySelector" onclick="togglePersonalitySelector()">
 																													<span>
 																														<i class="fa-solid fa-theater-masks"></i>‎ ‎ Personality: ${STATE.selectedPersonality.name}
-              
+
 																													</span>
 																													<i class="fa fa-chevron-down"></i>
 																												</div>
@@ -1502,21 +1433,34 @@ async function sendMessageWithRetry(message, retries = CONFIG.MAX_RETRIES) {
 																											</div>
 																										</div>
 																										<div class="settings-section">
+																											<div class="selector-container">
+																												<div class="selector" id="themeSelector" onclick="toggleThemeSelector()">
+																													<span>
+																														<i class="fa-solid fa-palette"></i>‎ ‎ Select Theme
+
+																													</span>
+																													<i class="fa fa-chevron-down"></i>
+																												</div>
+																												<div class="options" id="themeOptions">
+              ${themeOptions}
+																											</div>
+																										</div>
+																										<div class="settings-section">
 																											<div class="settings-button" onclick="toggleSetting('notifications')">
 																												<i class="fas fa-bell"></i> Notifications: ${STATE.settings.notifications ? 'On' : 'Off'}
-          
+
 																											</div>
 																											<div class="settings-button" onclick="toggleSetting('soundEffects')">
 																												<i class="fas fa-volume-up"></i> Sound Effects: ${STATE.settings.soundEffects ? 'On' : 'Off'}
-          
+
 																											</div>
 																											<div class="settings-button" onclick="toggleSetting('autoScroll')">
 																												<i class="fas fa-scroll"></i> Auto Scroll: ${STATE.settings.autoScroll ? 'On' : 'Off'}
-          
+
 																											</div>
 																											<div class="settings-button" onclick="removeApiKey()">
 																												<i class="fas fa-key"></i> Remove API Key
-          
+
 																											</div>
 																										</div>
 																									</div>
@@ -1638,7 +1582,6 @@ function showAboutModal() {
     document.body.appendChild(modal);
 }
 
-
 function checkAndStoreApiKey() {
     const storedApiKey = getApiKey();
     if (!storedApiKey) {
@@ -1750,7 +1693,6 @@ function removeApiKey() {
 				typingElement.className = 'chat-message bot typing-indicator';
 				typingElement.innerHTML = `
 
-																															
 																																<div class="message-content">
 																																	<div class="typing-dots">
 																																		<span></span>
