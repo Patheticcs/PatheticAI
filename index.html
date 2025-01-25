@@ -1385,39 +1385,29 @@ async function sendMessageWithRetry(message, retries = CONFIG.MAX_RETRIES) {
     try {
         // Create and append typing indicator before sending message
         const typingIndicator = createTypingIndicator();
-        const chatMessages = document.querySelector('.chat-messages');
-        chatMessages.appendChild(typingIndicator);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-
-        // Attempt to send message and get response
+        document.querySelector('.chat-messages').appendChild(typingIndicator);
+        
         const response = await tryMultipleModels(message);
         
-        // Remove typing indicator after successful response
+        // Remove typing indicator after response
         typingIndicator.remove();
         
         return response;
     } catch (error) {
-        // Remove typing indicator if an error occurs
+        // Remove typing indicator in case of error
         const existingTypingIndicator = document.querySelector('.typing-indicator');
         if (existingTypingIndicator) {
             existingTypingIndicator.remove();
         }
         
-        // Retry mechanism
         if (retries > 0) {
-            // Show notification about retry attempt
             showNotification(`Retrying... (${retries} attempts left)`);
-            
-            // Wait a second before retrying
             await new Promise(resolve => setTimeout(resolve, 1000));
-            
-            // Recursive retry with decreased retry count
             return sendMessageWithRetry(message, retries - 1);
         }
-        
-        // Throw error if all retry attempts are exhausted
         throw error;
     }
+}
 			async function tryMultipleModels(userMessage) {
 				const apiKey = getApiKey();
 				if (!apiKey) {
