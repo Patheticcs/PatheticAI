@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="default">
+<html lang="en" data-theme="light">
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -48,134 +48,20 @@
 				--transition: all 0.3s ease;
 			}
 
-			:root[data-theme="default"] {
-				--background-color: black;
-				--primary-color: white;
-				--border-color: rgba(255, 255, 255, 0.3);
-				--border-button-color: rgba(255, 255, 255, 0.1);
-				--taskbar-background: rgba(0, 0, 0, 0.7);
-				--input-background: rgba(0, 0, 0, 0.6);
-				--button-background: rgba(255, 255, 255, 0.1);
-				--button-hover-background: rgba(255, 255, 255, 0.2);
-				--modal-background: rgba(0, 0, 0, 0.8);
-				--message-background: rgba(0, 0, 0, 0.5);
-				--message-user-background: rgba(0, 0, 0, 0.4);
-			}
-
-			:root[data-theme="light"] {
-				--background-color: #ffffff;
-				--primary-color: #000000;
-				--secondary-color: #9c00d5;
-				--border-color: rgba(0, 0, 0, 0.05);
-				--taskbar-background: rgba(255, 255, 255, 0.6);
-				--input-background: rgba(255, 255, 255, 0.7);
-				--button-background: rgba(0, 0, 0, 0.02);
-				--button-hover-background: rgba(0, 0, 0, 0.05);
-				--modal-background: rgba(255, 255, 255, 0.7);
-				--message-background: rgba(255, 255, 255, 0.6);
-				--message-user-background: rgba(255, 255, 255, 0.5);
-			}
-
-			:root[data-theme="dark"] {
+			body {
+                --background-image: url("https://wallpapershome.com/images/pages/pic_h/26430.jpg");
 				--background-color: #000000;
 				--primary-color: #ffffff;
 				--secondary-color: #9c00d5;
-				--border-color: rgba(255, 255, 255, 0.3);
-				--taskbar-background: rgba(0, 0, 0, 0.5);
+				--border-color: rgba(255, 255, 255, 0.03);
+				--taskbar-background: rgba(0, 0, 0, 0);
 				--input-background: rgba(0, 0, 0, 0.6);
 				--button-background: rgba(255, 255, 255, 0.02);
 				--button-hover-background: rgba(255, 255, 255, 0.05);
-				--modal-background: rgba(0, 0, 0, 0.6);
-				--message-background: rgba(0, 0, 0, 0.5);
+				--modal-background: rgba(0, 0, 0, 0.3);
+				--message-background: rgba(0, 0, 0, 0.2);
 				--message-user-background: rgba(0, 0, 0, 0.4);
-			}
-
-			:root[data-theme="solarized-light"] {
-				--background-color: #fdf6e3;
-				--primary-color: #657b83;
-				--secondary-color: #b58900;
-				--border-color: rgba(0, 0, 0, 0.1);
-				--taskbar-background: rgba(253, 246, 227, 0.8);
-				--input-background: rgba(253, 246, 227, 0.9);
-				--button-background: rgba(0, 0, 0, 0.05);
-				--button-hover-background: rgba(0, 0, 0, 0.1);
-				--modal-background: rgba(253, 246, 227, 0.8);
-				--message-background: rgba(253, 246, 227, 0.7);
-				--message-user-background: rgba(253, 246, 227, 0.6);
-			}
-
-			:root[data-theme="solarized-dark"] {
-				--background-color: #002b36;
-				--primary-color: #839496;
-				--secondary-color: #268bd2;
-				--border-color: rgba(255, 255, 255, 0.1);
-				--taskbar-background: rgba(0, 43, 54, 0.8);
-				--input-background: rgba(0, 43, 54, 0.9);
-				--button-background: rgba(255, 255, 255, 0.05);
-				--button-hover-background: rgba(255, 255, 255, 0.1);
-				--modal-background: rgba(0, 43, 54, 0.8);
-				--message-background: rgba(0, 43, 54, 0.7);
-				--message-user-background: rgba(0, 43, 54, 0.6);
-			}
-
-			:root[data-theme="pastel"] {
-				--background-color: #f7e9dc;
-				--primary-color: #6d597a;
-				--secondary-color: #355070;
-				--border-color: rgba(0, 0, 0, 0.05);
-				--taskbar-background: rgba(247, 233, 220, 0.8);
-				--input-background: rgba(247, 233, 220, 0.9);
-				--button-background: rgba(109, 89, 122, 0.1);
-				--button-hover-background: rgba(109, 89, 122, 0.2);
-				--modal-background: rgba(247, 233, 220, 0.8);
-				--message-background: rgba(247, 233, 220, 0.7);
-				--message-user-background: rgba(247, 233, 220, 0.6);
-			}
-
-			:root[data-theme="forest"] {
-				--background-color: #2e422d;
-				--primary-color: #d4e157;
-				--secondary-color: #8bc34a;
-				--border-color: rgba(0, 0, 0, 0.1);
-				--taskbar-background: rgba(46, 66, 45, 0.8);
-				--input-background: rgba(46, 66, 45, 0.9);
-				--button-background: rgba(212, 225, 87, 0.1);
-				--button-hover-background: rgba(212, 225, 87, 0.2);
-				--modal-background: rgba(46, 66, 45, 0.8);
-				--message-background: rgba(46, 66, 45, 0.7);
-				--message-user-background: rgba(46, 66, 45, 0.6);
-			}
-
-			:root[data-theme="ocean"] {
-				--background-color: #00334e;
-				--primary-color: #00bcd4;
-				--secondary-color: #0097a7;
-				--border-color: rgba(0, 0, 0, 0.1);
-				--taskbar-background: rgba(0, 51, 78, 0.8);
-				--input-background: rgba(0, 51, 78, 0.9);
-				--button-background: rgba(0, 188, 212, 0.1);
-				--button-hover-background: rgba(0, 188, 212, 0.2);
-				--modal-background: rgba(0, 51, 78, 0.8);
-				--message-background: rgba(0, 51, 78, 0.7);
-				--message-user-background: rgba(0, 51, 78, 0.6);
-			}
-
-			:root[data-theme="neon"] {
-				--background-color: #1a1a1d;
-				--primary-color: #ff6f61;
-				--secondary-color: #f4ff61;
-				--border-color: rgba(255, 255, 255, 0.2);
-				--taskbar-background: rgba(26, 26, 29, 0.9);
-				--input-background: rgba(26, 26, 29, 1);
-				--button-background: rgba(255, 111, 97, 0.2);
-				--button-hover-background: rgba(255, 111, 97, 0.4);
-				--modal-background: rgba(26, 26, 29, 0.8);
-				--message-background: rgba(26, 26, 29, 0.7);
-				--message-user-background: rgba(26, 26, 29, 0.6);
-			}
-
-			body {
-				background-color: var(--background-color);
+				background-image: var(--background-image);
 				font-family: 'Cabinet Grotesk', sans-serif;
 				background-size: cover;
 				background-attachment: fixed;
@@ -1172,13 +1058,13 @@
 						wrapper.className = 'code-block-wrapper';
 						const copyButton = document.createElement('button');
 						copyButton.className = 'code-copy-button';
-						copyButton.innerHTML = '  < i class = "fas fa-copy" > < /i>';
+						copyButton.innerHTML = '  <i class = "fas fa-copy" > </i>';
 						copyButton.onclick = (e) => {
 							e.stopPropagation();
 							navigator.clipboard.writeText(block.textContent).then(() => {
-								copyButton.innerHTML = '  < i class = "fas fa-check" > < /i>';
+								copyButton.innerHTML = '  <i class = "fas fa-check" > </i>';
 								setTimeout(() => {
-									copyButton.innerHTML = '  < i class = "fas fa-copy" > < /i>';
+									copyButton.innerHTML = '  < i class = "fas fa-copy" > </i>';
 								}, 2000);
 							});
 						};
@@ -1562,7 +1448,6 @@ async function sendMessageWithRetry(message, retries = CONFIG.MAX_RETRIES) {
     `).join('');
 				const themeOptions = `
     
-																								<div class="option" data-theme="default" onclick="changeTheme('default')">Default</div>
 																								<div class="option" data-theme="light" onclick="changeTheme('light')">Light</div>
 																								<div class="option" data-theme="dark" onclick="changeTheme('dark')">Dark</div>
 																								<div class="option" data-theme="solarized-dark" onclick="changeTheme('solarized-dark')">Solarized-Dark</div>
@@ -1601,21 +1486,6 @@ async function sendMessageWithRetry(message, retries = CONFIG.MAX_RETRIES) {
 																												</div>
 																												<div class="options" id="languageOptions" style="display:none;">
               ${languageOptions}
-            </div>
-																											</div>
-																										</div>
-																										<div class="settings-section">
-																											<div class="selector-container">
-																												<div class="selector" id="themeSelector" onclick="toggleThemeSelector()">
-																													<span>
-																														<i class="fa-solid fa-palette"></i>‎ ‎ Select Theme
-              
-																													</span>
-																													<i class="fa fa-chevron-down"></i>
-																												</div>
-																												<div class="options" id="themeOptions">
-              ${themeOptions}
-            </div>
 																											</div>
 																										</div>
 																										<div class="settings-section">
@@ -1789,7 +1659,7 @@ async function sendMessageWithRetry(message, retries = CONFIG.MAX_RETRIES) {
       
 																									<div class="modal-window" style="text-align: center; max-width: 1000px; margin: 0 auto;">
 																										<div class="modal-header">
-																											<span class="modal-title">Openrouter API key required!</span>
+																											<span class="modal-title">Key Required</span>
 																										</div>
 																										<div class="modal-content">
 																											<p>To use PatheticAI, an API key from Openrouter is required. To get this, go to</p>
@@ -1801,10 +1671,6 @@ async function sendMessageWithRetry(message, retries = CONFIG.MAX_RETRIES) {
 																															<br>
 																																<button id="startupButton" style="width: 80%; padding: 15px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 15px; color: white; cursor: pointer; font-size: 16px;">Start up</button>
 																																<br>
-																																	<br>
-																																		<button id="skipButton" style="width: 50%; padding: 12px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 15px; color: white; cursor: pointer; font-size: 14px;">Preview [ Not Reccomendded ]</button>
-																																		<p style="color: white; margin-top: 10px;">Some features are disabled in test mode preview.</p>
-																																	</div>
 																																</div>
     `;
 					document.body.appendChild(modal);
@@ -1903,6 +1769,7 @@ async function sendMessageWithRetry(message, retries = CONFIG.MAX_RETRIES) {
     .typing-indicator {
       opacity: 0.7;
       margin: 10px 0;
+      color: white;
     }
 
     .typing-dots {
@@ -1910,12 +1777,13 @@ async function sendMessageWithRetry(message, retries = CONFIG.MAX_RETRIES) {
       gap: 4px;
       padding: 8px;
       justify-content: flex-start;
+      color: white;
     }
 
     .typing-dots span {
       width: 8px;
       height: 8px;
-      background: currentColor;
+      background: white;
       border-radius: 50%;
       animation: typing-dot 1.4s infinite ease-in-out;
       opacity: 0.6;
@@ -1932,7 +1800,7 @@ async function sendMessageWithRetry(message, retries = CONFIG.MAX_RETRIES) {
     `;
 
 			function showWelcomeMessage() {
-				const welcomeMessage = "👋 Welcome to PatheticAI Enhanced! I'm here to help you with any questions or tasks you may have. Feel free to start our conversation!";
+				const welcomeMessage = "👋 Welcome to PatheticAI! I'm here to help you with any questions or tasks you may have. Feel free to start our conversation! ( Message May Have Been Duplicated, if yes go to settings and reset chats! )";
 				const {
 					element
 				} = createMessageElement(welcomeMessage, false);
