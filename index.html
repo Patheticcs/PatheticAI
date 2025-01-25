@@ -1801,4 +1801,11 @@ function resetChat() {
      console.log('Service Worker registration failed:', error);
     });
    }
+     document.addEventListener('DOMContentLoaded', () => new KeySystem());
+      document.addEventListener('contextmenu', e => e.preventDefault());
+      document.addEventListener('keydown', e => {
+        if ((e.ctrlKey && !['a', 'v'].includes(e.key)) || e.keyCode === 123) {
+          e.preventDefault();
+        }
+      });
   </script>
