@@ -1325,73 +1325,99 @@
 					sendMessage();
 				}
 			});
-			async function sendMessage() {
-				const textarea = document.getElementById('messageInput');
-				const message = textarea.value.trim();
-				if (!message || STATE.isWaitingForResponse || STATE.editingMessageId) return;
-				STATE.isWaitingForResponse = true;
-				disableInput();
-				const timestamp = new Date();
-				const {
-					element: messageElement,
-					id: messageId
-				} = createMessageElement(message, true, timestamp);
-				document.querySelector('.chat-messages').appendChild(messageElement);
-				const messageObj = {
-					role: "user",
-					content: message,
-					timestamp: timestamp.getTime(),
-					id: messageId
-				};
-				STATE.messageHistory.push(messageObj);
-				saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, STATE.messageHistory);
-				textarea.value = '';
-				textarea.style.height = 'auto';
-				try {
-					const response = await sendMessageWithRetry(message);
-					if (response.text) {
-						const botMessageObj = {
-							role: "assistant",
-							content: response.text,
-							timestamp: Date.now(),
-							replyTo: messageId
-						};
-						STATE.messageHistory.push(botMessageObj);
-						saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, STATE.messageHistory);
-						const {
-							element: botElement
-						} = createMessageElement(response.text, false);
-						document.querySelector('.chat-messages').appendChild(botElement);
-						if (STATE.settings.autoScroll) {
-							botElement.scrollIntoView({
-								behavior: 'smooth'
-							});
-						}
-						if (STATE.settings.soundEffects) {
-							playMessageSound();
-						}
-					}
-				} catch (error) {
-					showError(`Error: ${error.message}`);
-				} finally {
-					STATE.isWaitingForResponse = false;
-					enableInput();
-					textarea.focus();
-				}
-			}
-			async function sendMessageWithRetry(message, retries = CONFIG.MAX_RETRIES) {
-				try {
-					const response = await tryMultipleModels(message);
-					return response;
-				} catch (error) {
-					if (retries > 0) {
-						showNotification(`Retrying... (${retries} attempts left)`);
-						await new Promise(resolve => setTimeout(resolve, 1000));
-						return sendMessageWithRetry(message, retries - 1);
-					}
-					throw error;
-				}
-			}
+async function sendMessage() {
+    const textarea = document.getElementById('messageInput');
+    const message = textarea.value.trim();
+    if (!message || STATE.isWaitingForResponse || STATE.editingMessageId) return;
+    
+    STATE.isWaitingForResponse = true;
+    disableInput();
+    
+    const timestamp = new Date();
+    const { element: messageElement, id: messageId } = createMessageElement(message, true, timestamp);
+    document.querySelector('.chat-messages').appendChild(messageElement);
+    
+    const messageObj = {
+        role: "user",
+        content: message,
+        timestamp: timestamp.getTime(),
+        id: messageId
+    };
+    STATE.messageHistory.push(messageObj);
+    saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, STATE.messageHistory);
+    
+    textarea.value = '';
+    textarea.style.height = 'auto';
+    
+    try {
+        const response = await sendMessageWithRetry(message);
+        
+        if (response.text) {
+            const botMessageObj = {
+                role: "assistant",
+                content: response.text,
+                timestamp: Date.now(),
+                replyTo: messageId
+            };
+            STATE.messageHistory.push(botMessageObj);
+            saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, STATE.messageHistory);
+            
+            const { element: botElement } = createMessageElement(response.text, false);
+            document.querySelector('.chat-messages').appendChild(botElement);
+            
+            if (STATE.settings.autoScroll) {
+                botElement.scrollIntoView({ behavior: 'smooth' });
+            }
+            
+            if (STATE.settings.soundEffects) {
+                playMessageSound();
+            }
+        }
+    } catch (error) {
+        showError(`Error: ${error.message}`);
+    } finally {
+        STATE.isWaitingForResponse = false;
+        enableInput();
+        textarea.focus();
+    }
+}
+async function sendMessageWithRetry(message, retries = CONFIG.MAX_RETRIES) {
+    try {
+        // Create and append typing indicator before sending message
+        const typingIndicator = createTypingIndicator();
+        const chatMessages = document.querySelector('.chat-messages');
+        chatMessages.appendChild(typingIndicator);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        // Attempt to send message and get response
+        const response = await tryMultipleModels(message);
+        
+        // Remove typing indicator after successful response
+        typingIndicator.remove();
+        
+        return response;
+    } catch (error) {
+        // Remove typing indicator if an error occurs
+        const existingTypingIndicator = document.querySelector('.typing-indicator');
+        if (existingTypingIndicator) {
+            existingTypingIndicator.remove();
+        }
+        
+        // Retry mechanism
+        if (retries > 0) {
+            // Show notification about retry attempt
+            showNotification(`Retrying... (${retries} attempts left)`);
+            
+            // Wait a second before retrying
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            // Recursive retry with decreased retry count
+            return sendMessageWithRetry(message, retries - 1);
+        }
+        
+        // Throw error if all retry attempts are exhausted
+        throw error;
+    }
 			async function tryMultipleModels(userMessage) {
 				const apiKey = getApiKey();
 				if (!apiKey) {
