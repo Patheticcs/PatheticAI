@@ -40,27 +40,26 @@
 			}
 
 			:root {
-				--container-width: min(90%, 800px);
-				--spacing-normal: clamp(16px, 2vw, 20px);
-				--spacing-small: clamp(8px, 1vw, 10px);
-				--border-radius: 30px;
-				--border-radius-small: 15px;
-				--transition: all 0.3s ease;
+--background-image: url("https://wallpapershome.com/images/pages/pic_h/26430.jpg");
+--container-width: min(90%, 800px);
+--spacing-normal: clamp(16px, 2vw, 20px);
+--spacing-small: clamp(8px, 1vw, 10px);
+--border-radius: 30px;
+--border-radius-small: 15px;
+--transition: all 0.3s ease;
+--primary-color: #ffffff;
+--secondary-color: #9c00d5;
+--border-color: rgba(255, 255, 255, 0.03);
+--taskbar-background: rgba(0, 0, 0, 0.2);
+--input-background: rgba(0, 0, 0, 0.6);
+--button-background: rgba(255, 255, 255, 0.02);
+--button-hover-background: rgba(255, 255, 255, 0.1);
+--modal-background: rgba(0, 0, 0, 0.3);
+--message-background: rgba(0, 0, 0, 0.2);
+--message-user-background: rgba(0, 0, 0, 0.4);
 			}
 
 			body {
-                --background-image: url("https://wallpapershome.com/images/pages/pic_h/26430.jpg");
-				--background-color: #000000;
-				--primary-color: #ffffff;
-				--secondary-color: #9c00d5;
-				--border-color: rgba(255, 255, 255, 0.03);
-				--taskbar-background: rgba(0, 0, 0, 0);
-				--input-background: rgba(0, 0, 0, 0.6);
-				--button-background: rgba(255, 255, 255, 0.02);
-				--button-hover-background: rgba(255, 255, 255, 0.05);
-				--modal-background: rgba(0, 0, 0, 0.3);
-				--message-background: rgba(0, 0, 0, 0.2);
-				--message-user-background: rgba(0, 0, 0, 0.4);
 				background-image: var(--background-image);
 				font-family: 'Cabinet Grotesk', sans-serif;
 				background-size: cover;
@@ -747,7 +746,7 @@
 		<div class="taskbar">
 			<div class="taskbar-left">
 				<span class="brand">PatheticAI</span>
-				<span class="preview-tag">Enhanced Edition</span>
+				<span class="preview-tag">Version 1.5</span>
 			</div>
 			<div class="taskbar-right">
 				<button onclick="showSettingsModal()" title="Settings">
@@ -1599,89 +1598,85 @@ async function sendMessageWithRetry(message, retries = CONFIG.MAX_RETRIES) {
 				STATE.theme = savedTheme;
 			}
 
-			function showAboutModal() {
-				const modal = document.createElement('div');
-				modal.className = 'modal-overlay';
-				modal.innerHTML = `
-    
-																								<div class="modal-window">
-																									<div class="modal-header">
-																										<span class="modal-title">About PatheticAI</span>
-																										<button class="close-button">X</button>
-																									</div>
-																									<div class="modal-content">
-																										<p>
-																											<strong>PatheticAI:</strong> 1.0 Enhanced
-        
-																										</p>
-																										<p>
-																											<strong>API version:</strong> 1.0
-        
-																										</p>
-																										<br>
-																											<p>
-																												<strong>Enhanced Features:</strong>
-																											</p>
-																											<ul>
-																												<li>Improved message handling</li>
-																												<li>Better code display and copying</li>
-																												<li>Theme customization</li>
-																												<li>Advanced editing capabilities</li>
-																												<li>Persistent chat history</li>
-																											</ul>
-																										</div>
-																										<button class="discord-button">
-																											<a href="https://discord.gg/Hb5ccPY3XV" 
-   target="_blank" 
-   rel="noopener noreferrer" 
-   aria-label="Join us on Discord" 
-   style="color: inherit; text-decoration: none;">
-																												<i class="fab fa-discord" aria-hidden="true"></i> Join us on Discord
-
-																											</a>
-																										</button>
-																									</div>
-  `;
-				modal.addEventListener('click', (e) => {
-					if (e.target === modal) {
-						modal.remove();
-					}
-				});
-				document.body.appendChild(modal);
-			}
-
-			function checkAndStoreApiKey() {
-				const storedApiKey = getApiKey();
-				if (!storedApiKey) {
-					const modal = document.createElement('div');
-					modal.className = 'modal-overlay';
-					modal.innerHTML = `
-      
-																									<div class="modal-window" style="text-align: center; max-width: 1000px; margin: 0 auto;">
-																										<div class="modal-header">
-																											<span class="modal-title">Key Required</span>
-																										</div>
-																										<div class="modal-content">
-																											<p>To use PatheticAI, an API key from Openrouter is required. To get this, go to</p>
-																											<a href="https://openrouter.ai/settings/keys" target="_blank" style="color: white; display: inline-block;">openrouter.ai/settings/keys</a>
-																											<br>
-																												<br>
-																													<input type="text" id="apiKeyInput" placeholder="Your API Key Here" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 15px; color: white; text-align: center;">
-																														<br>
-																															<br>
-																																<button id="startupButton" style="width: 80%; padding: 15px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 15px; color: white; cursor: pointer; font-size: 16px;">Start up</button>
-																																<br>
-																																</div>
+function showAboutModal() {
+    const modal = document.createElement('div');
+    modal.className = 'modal-overlay';
+    modal.innerHTML = `
+        <div class="modal-window">
+            <div class="modal-header">
+                <span class="modal-title">About PatheticAI</span>
+                <button class="close-button">X</button>
+            </div>
+            <div class="modal-content">
+                <p>
+                    <strong>PatheticAI:</strong> 1.5
+                </p>
+                <br>
+                <p>
+                    <strong>Enhanced Features:</strong>
+                </p>
+                <ul>
+                    <li>Improved message handling</li>
+                    <li>Better code display and copying</li>
+                    <li>Advanced editing capabilities</li>
+                    <li>Added Voice Input</li>
+                    <li>More Settings</li>
+                </ul>
+            </div>
+            <button class="discord-button">
+                <a href="https://discord.gg/Hb5ccPY3XV" target="_blank" rel="noopener noreferrer" aria-label="Join us on Discord" style="color: inherit; text-decoration: none;">
+                    <i class="fab fa-discord" aria-hidden="true"></i> Join us on Discord
+                </a>
+            </button>
+        </div>
     `;
-					document.body.appendChild(modal);
-					document.getElementById('startupButton').addEventListener('click', saveApiKey);
-					document.getElementById('skipButton').addEventListener('click', function() {
-						window.location.href = '/preview-mode';
-					});
-					return false;
-				}
-				return true;
-			}
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal || e.target.classList.contains('close-button')) {
+            modal.remove();
+        }
+    });
+    document.body.appendChild(modal);
+}
+
+
+function checkAndStoreApiKey() {
+    const storedApiKey = getApiKey();
+    if (!storedApiKey) {
+        const modal = document.createElement('div');
+        modal.className = 'modal-overlay';
+        modal.innerHTML = `
+            <div class="modal-window" style="text-align: center; max-width: 1000px; margin: 0 auto;">
+                <div class="modal-header">
+                    <span class="modal-title">Key Required</span>
+                </div>
+                <div class="modal-content">
+                    <p>To use PatheticAI, an API key from Openrouter is required. To get this, go to</p>
+                    <a href="https://openrouter.ai/settings/keys" target="_blank" style="color: white; display: inline-block;">openrouter.ai/settings/keys</a>
+                    <br><br>
+                    <input type="text" id="apiKeyInput" placeholder="Your API Key Here" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 15px; color: white; text-align: center;">
+                    <br><br>
+                    <button id="startupButton" style="width: 50%; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 25px; color: white; cursor: pointer; font-size: 16px;">
+                        Start up
+                    </button>
+                    <br><br><button id="helpButton" style="width: auto; padding: 10px 20px; background: rgba(255, 255, 255, 0.1);  border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 25px;  color: white; cursor: pointer; font-size: 16px;">Help</button>
+
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+
+        document.getElementById('startupButton').addEventListener('click', function() {
+            saveApiKey();
+        });
+
+        document.getElementById('helpButton').addEventListener('click', function() {
+            window.location.href = '/help';
+        });
+
+        return false;
+    }
+    return true;
+}
 
 			function saveApiKey() {
 				const apiKey = document.getElementById('apiKeyInput').value.trim();
@@ -1715,11 +1710,12 @@ async function sendMessageWithRetry(message, retries = CONFIG.MAX_RETRIES) {
 				}
 			}
 
-			function removeApiKey() {
-				localStorage.removeItem('openRouterApiKey');
-				disableInput();
-				showNotification('API key removed');
-			}
+function removeApiKey() {
+    localStorage.removeItem('openRouterApiKey');
+    disableInput();
+    showNotification('API key removed');
+    location.reload();
+}
 
 			function disableInput() {
 				const textarea = document.getElementById('messageInput');
