@@ -63,6 +63,7 @@
     --message-background: rgba(255, 255, 255, 0.5);
     --message-user-background: rgba(245, 245, 245, 0.6);
     --chat-input-container-background: rgba(255, 255, 255, 0.5);
+    --notification-background-color: rgba(255, 255, 255, 0.5);
    }
 
    :root[data-theme="Dark"] {
@@ -80,6 +81,7 @@
     --message-background: rgba(0, 0, 0, 0.5);
     --message-user-background: rgba(0, 0, 0, 0.4);
     --chat-input-container-background: rgba(0, 0, 0, 0.5);
+    --notification-background-color: rgba(0, 0, 0, 0.5);
    }
 
    body {
@@ -234,21 +236,22 @@
    }
 
    .chat-message {
-    padding: var(--spacing-normal);
-    border-radius: var(--border-radius-small);
-    max-width: 85%;
-    white-space: pre-wrap;
-    font-size: clamp(14px, 3vw, 16px);
-    backdrop-filter: blur(10px);
-    border: 1px solid var(--border-color);
-    transition: var(--transition);
-    color: var(--primary-color);
+            padding: var(--spacing-normal);
+            border-radius: 20px;
+            max-width: 85%;
+            white-space: pre-wrap;
+            line-height: 1.5;
+            font-size: clamp(14px, 3vw, 16px);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: messageAppear 0.3s ease;
    }
 
    .chat-message.user {
     background: var(--message-user-background);
-    align-self: flex-end;
-    border-bottom-right-radius: 5px;
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
    }
 
    .chat-message.bot {
@@ -360,7 +363,7 @@
     bottom: 100px;
     left: 50%;
     transform: translateX(-50%);
-    background: var(--background-color);
+    background: var(--notification-background-color);
     color: var(--primary-color);
     padding: 12px 25px;
     border-radius: 30px;
@@ -1535,14 +1538,6 @@
     showSettingsModal();
    }
 
-   function resetChat() {
-    STATE.messageHistory = [];
-    saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, []);
-    document.querySelector('.chat-messages').innerHTML = '';
-    showNotification('Chat history cleared');
-    showWelcomeMessage();
-   }
-
    function playMessageSound() {
     if (!STATE.settings.soundEffects) return;
     const audio = new Audio('audios/notification.mp3');
@@ -1756,14 +1751,40 @@
     }
     `;
 
-   function showWelcomeMessage() {
-    const welcomeMessage = "👋 Welcome to PatheticAI! I'm here to help you with any questions or tasks you may have. Feel free to start our conversation! ( Message May Have Been Duplicated, if yes go to settings and reset chats! )";
-    const {
-     element
-    } = createMessageElement(welcomeMessage, false);
-    document.querySelector('.chat-messages').appendChild(element);
-   }
+function showWelcomeMessage() {
+    // Check if a welcome message already exists
+    const existingMessages = document.querySelector('.chat-messages');
+    const existingWelcomeMessage = Array.from(existingMessages.children).find(message =>
+        message.classList.contains('bot') && message.textContent.includes("Welcome to PatheticAI")
+    );
+    
+    if (existingWelcomeMessage) return;
 
+    const welcomeMessage = `👋 Welcome to PatheticAI! I'm here to help you with any questions or tasks you may have. Feel free to start our conversation!`;
+    const { element } = createMessageElement(welcomeMessage, false);
+    const resetLink = element.querySelector('.reset-chat-link');
+    
+    if (resetLink) {
+        resetLink.addEventListener('click', resetChat);
+    }
+    
+    existingMessages.appendChild(element);
+}
+
+
+function resetChat() {
+    // Clear message history
+    STATE.messageHistory = [];
+    saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, []);
+    
+    // Clear chat messages
+    const chatMessages = document.querySelector('.chat-messages');
+    chatMessages.innerHTML = '';
+    
+    // Show welcome message only once
+    showNotification('Chat history cleared');
+    showWelcomeMessage();
+}
    function getApiKey() {
     const apiKey = localStorage.getItem('openRouterApiKey');
     if (apiKey && apiKey.startsWith('sk-or-')) {
