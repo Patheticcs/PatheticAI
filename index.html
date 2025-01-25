@@ -50,25 +50,30 @@
 
    :root[data-theme="Light"] {
     --color: rgba(0, 0, 0, 1);
-    --background-image: url("https://wallpapershome.com/images/pages/pic_h/26430.jpg");
+    --background-image: url("/images/light%20background.png");
     --background-color: #ffffff;
-    --primary-color: #1c1c1c;
-    --secondary-color: #6200ea;
-    --border-color: rgba(0, 0, 0, 0.03);
-    --taskbar-background: rgba(255, 255, 255, 0.4);
-    --input-background: rgba(255, 255, 255, 0.5);
-    --button-background: rgba(255, 255, 255, 0.3);
-    --button-hover-background: rgba(255, 255, 255, 0.2);
-    --modal-background: rgba(255, 255, 255, 0.6);
-    --message-background: rgba(255, 255, 255, 0.5);
-    --message-user-background: rgba(245, 245, 245, 0.6);
+    --primary-color: #000000;
+    --secondary-color: #9c00d5;
+    --border-color: rgba(0, 0, 0, 0.05);
+    --taskbar-background: rgba(255, 255, 255, 0.6);
+    --input-background: rgba(255, 255, 255, 0.7);
+    --button-background: rgba(0, 0, 0, 0.02);
+    --button-hover-background: rgba(0, 0, 0, 0.05);
+    --modal-background: rgba(255, 255, 255, 0.7);
+    --message-background: rgba(255, 255, 255, 0.6);
+    --message-user-background: rgba(255, 255, 255, 0.5);
+    --code-background: rgba(0, 0, 0, 0.02);
+    --code-text: #000000;
+    --notification-background: rgba(255, 255, 255, 0.6);
+    --notification-text: #000000;
+    --placeholder-color: rgba(0, 0, 0, 0.2);
     --chat-input-container-background: rgba(255, 255, 255, 0.5);
-    --notification-background-color: rgba(255, 255, 255, 0.5);
+    --border-button-color: rgba(0, 0, 0, 0.1);
    }
 
    :root[data-theme="Dark"] {
     --color: rgba(255, 255, 255, 1);
-    --background-image: url("https://wallpapershome.com/images/pages/pic_h/26430.jpg");
+    --background-image: url("/images/dark%20background.png");
     --background-color: #000000;
     --primary-color: #ffffff;
     --secondary-color: #9c00d5;
@@ -757,6 +762,7 @@
     name: "Rude",
     systemMessage: "Extremely Rude, won't give you an answer, impaitent and will say mean things to you"
    }];
+
    const DEFAULT_PERSONALITY = PERSONALITIES[0];
    const MODELS = [{
     name: "google/gemini-2.0-flash-exp:free"
@@ -773,6 +779,7 @@
    }, {
     name: "microsoft/phi-3-mini-128k-instruct:free"
    }];
+
    const DEFAULT_MODEL = MODELS[0].name;
    let STATE = {
     isWaitingForResponse: false,
