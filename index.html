@@ -25,6 +25,11 @@
   <meta name="apple-mobile-web-app-title" content="PatheticAI">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="mobile-web-app-capable" content="yes">
+  <link rel="preload" href="/images/light%20background.png" as="image">
+  <link rel="preload" href="/images/dark%20background.png" as="image">
+<link rel="stylesheet" href="styles.css" media="print" onload="this.media='all';">
+<noscript><link rel="stylesheet" href="styles.css"></noscript>
+
   <style>
    * {
     margin: 0;
@@ -48,7 +53,7 @@
     --transition: all 0.3s ease;
    }
 
-   :root[data-theme="Light"] {
+:root[data-theme="Light"] {
     --color: rgba(0, 0, 0, 1);
     --background-image: url("/images/light%20background.png");
     --background-color: #ffffff;
@@ -69,9 +74,9 @@
     --placeholder-color: rgba(0, 0, 0, 0.2);
     --chat-input-container-background: rgba(255, 255, 255, 0.5);
     --border-button-color: rgba(0, 0, 0, 0.1);
-   }
+}
 
-   :root[data-theme="Dark"] {
+:root[data-theme="Dark"] {
     --color: rgba(255, 255, 255, 1);
     --background-image: url("/images/dark%20background.png");
     --background-color: #000000;
@@ -87,9 +92,9 @@
     --message-user-background: rgba(0, 0, 0, 0.4);
     --chat-input-container-background: rgba(0, 0, 0, 0.5);
     --notification-background-color: rgba(0, 0, 0, 0.5);
-   }
+}
 
-   body {
+body {
     background-color: var(--background-color);
     background-image: var(--background-image);
     font-family: 'Cabinet Grotesk', sans-serif;
@@ -106,7 +111,7 @@
     touch-action: none;
     -webkit-overflow-scrolling: none;
     overscroll-behavior: none;
-   }
+}
 
    .container {
     position: fixed;
@@ -1808,5 +1813,18 @@ function resetChat() {
         if ((e.ctrlKey && !['a', 'v'].includes(e.key)) || e.keyCode === 123) {
           e.preventDefault();
         }
+document.addEventListener("DOMContentLoaded", () => {
+  const theme = localStorage.getItem("theme") || "Light";
+  document.documentElement.setAttribute("data-theme", theme);
+
+  const oppositeThemeImage =
+    theme === "Light"
+      ? "/images/dark%20background.png"
+      : "/images/light%20background.png";
+
+  const img = new Image();
+  img.src = oppositeThemeImage;
+});
+
       });
   </script>
