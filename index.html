@@ -892,6 +892,64 @@
           }
         }
       }
+      const voiceButton = document.getElementById('voiceButton');
+      const messageInput = document.getElementById('messageInput');
+      const notification = document.getElementById('notification');
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      let recognition;
+
+      function initializeVoiceInput() {
+        if (!SpeechRecognition) {
+          alert('Your browser does not support the Web Speech API');
+          return null;
+        }
+        const recognitionInstance = new SpeechRecognition();
+        recognitionInstance.continuous = false;
+        recognitionInstance.interimResults = true;
+        recognitionInstance.lang = 'en-US';
+        recognitionInstance.onstart = () => {
+          voiceButton.classList.add('recording');
+          showNotification('Voice recording started');
+        };
+        recognitionInstance.onresult = (event) => {
+          let transcript = '';
+          for (let i = event.resultIndex; i < event.results.length; i++) {
+            const result = event.results[i];
+            if (result.isFinal) {
+              transcript += result[0].transcript;
+            }
+          }
+          messageInput.value = transcript;
+        };
+        recognitionInstance.onerror = (event) => {
+          alert('Speech recognition error');
+          console.error('Speech recognition error:', event.error);
+        };
+        recognitionInstance.onend = () => {
+          voiceButton.classList.remove('recording');
+          showNotification('Voice recording stopped');
+        };
+        return recognitionInstance;
+      }
+      voiceButton.addEventListener('click', () => {
+        if (!recognition) {
+          recognition = initializeVoiceInput();
+          if (!recognition) return;
+        }
+        if (voiceButton.classList.contains('recording')) {
+          recognition.stop();
+        } else {
+          recognition.start();
+        }
+      });
+
+      function showNotification(message) {
+        notification.innerText = message;
+        notification.style.display = 'block';
+        setTimeout(() => {
+          notification.style.display = 'none';
+        }, 3000);
+      }
 
       function loadSavedState() {
         try {
@@ -1018,13 +1076,13 @@
             wrapper.className = 'code-block-wrapper';
             const copyButton = document.createElement('button');
             copyButton.className = 'code-copy-button';
-            copyButton.innerHTML = '    <i class = "fas fa-copy" > </i>';
+            copyButton.innerHTML = '     <i class = "fas fa-copy" > </i>';
             copyButton.onclick = (e) => {
               e.stopPropagation();
               navigator.clipboard.writeText(block.textContent).then(() => {
-                copyButton.innerHTML = '    <i class = "fas fa-check" > </i>';
+                copyButton.innerHTML = '     <i class = "fas fa-check" > </i>';
                 setTimeout(() => {
-                  copyButton.innerHTML = '   <i class = "fas fa-copy" > </i>';
+                  copyButton.innerHTML = '    <i class = "fas fa-copy" > </i>';
                 }, 2000);
               });
             };
@@ -1045,13 +1103,13 @@
         if (isUser) {
           const editButton = document.createElement('button');
           editButton.className = 'action-button';
-          editButton.innerHTML = '     <i class = "fa-regular fa-edit" > </i>';
+          editButton.innerHTML = '      <i class = "fa-regular fa-edit" > </i>';
           editButton.onclick = () => startEditing(messageId);
           actionsDiv.appendChild(editButton);
         }
         const copyButton = document.createElement('button');
         copyButton.className = 'action-button';
-        copyButton.innerHTML = '     <i class = "fa-regular fa-copy" > </i>';
+        copyButton.innerHTML = '      <i class = "fa-regular fa-copy" > </i>';
         copyButton.onclick = () => copyToClipboard(message);
         actionsDiv.appendChild(copyButton);
         messageElement.appendChild(actionsDiv);
@@ -1292,50 +1350,6 @@
         }
         throw new Error("All API attempts failed. Please try again later.");
       }
-      const voiceButton = document.getElementById('voiceButton');
-      const messageInput = document.getElementById('messageInput');
-      const notification = document.getElementById('notification');
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      let recognition;
-      voiceButton.addEventListener('click', () => {
-        if (!recognition) {
-          if (!SpeechRecognition) {
-            alert('Your browser does not support the Web Speech API');
-            return;
-          }
-          recognition = new SpeechRecognition();
-          recognition.continuous = false;
-          recognition.interimResults = true;
-          recognition.lang = 'en-US';
-          recognition.onstart = () => {
-            voiceButton.classList.add('recording');
-            showNotification('Voice recording started');
-          };
-          recognition.onresult = (event) => {
-            let transcript = '';
-            for (let i = event.resultIndex; i < event.results.length; i++) {
-              const result = event.results[i];
-              if (result.isFinal) {
-                transcript += result[0].transcript;
-              }
-            }
-            messageInput.value = transcript;
-          };
-          recognition.onerror = (event) => {
-            alert('Speech recognition error');
-            console.error('Speech recognition error:', event.error);
-          };
-          recognition.onend = () => {
-            voiceButton.classList.remove('recording');
-            showNotification('Voice recording stopped');
-          };
-        }
-        if (recognition && voiceButton.classList.contains('recording')) {
-          recognition.stop();
-        } else {
-          recognition.start();
-        }
-      });
 
       function setupEventListeners() {
         window.addEventListener('focus', handleWindowFocus);
@@ -1395,23 +1409,23 @@
         modal.className = 'modal-overlay';
         const languageOptions = ['English', 'Spanish', 'French', 'German', 'Italian', 'Japanese', 'Chinese', 'Russian', 'Portuguese', 'Korean', 'Hindi', 'Arabic', 'Turkish', 'Dutch', 'Swedish', 'Greek', 'Polish', 'Vietnamese', 'Thai', 'Indonesian', 'Hebrew', 'Finnish', 'Czech', 'Hungarian'].map(lang => `
 
-																							
+																												
 																												<div class="option" data-language="${lang}" onclick="changeLanguage('${lang}')">${lang}</div>
     `).join('');
         const themeOptions = `
 
-																							
+																												
 																												<div class="option" data-theme="light" onclick="changeTheme('Dark')">Dark</div>
 																												<div class="option" data-theme="dark" onclick="changeTheme('Light')">Light</div>
   `;
         const personalityOptions = PERSONALITIES.map(p => `
 
-																							
+																												
 																												<div class="option" data-personality="${p.name}" onclick="changePersonality('${p.name}')">${p.name}</div>
     `).join('');
         modal.innerHTML = `
 
-																							
+																												
 																												<div class="modal-window">
 																													<div class="modal-header">
 																														<span class="modal-title">Settings</span>
@@ -1422,7 +1436,7 @@
 																															<div class="settings-button" onclick="resetChat()">
 																																<i class="fa fa-trash"></i> Clear Chat
 
-																										
+																															
 																															</div>
 																														</div>
 																														<div class="settings-section">
@@ -1431,7 +1445,7 @@
 																																	<span>
 																																		<i class="fa-solid fa-language"></i>‎ ‎ Language: ${STATE.currentLanguage}
 
-																												
+																																	
 																																	</span>
 																																	<i class="fa fa-chevron-down"></i>
 																																</div>
@@ -1445,7 +1459,7 @@
 																																		<span>
 																																			<i class="fa-solid fa-theater-masks"></i>‎ ‎ Personality: ${STATE.selectedPersonality.name}
 
-																													
+																																		
 																																		</span>
 																																		<i class="fa fa-chevron-down"></i>
 																																	</div>
@@ -1460,7 +1474,7 @@
 																																		<span>
 																																			<i class="fa-solid fa-palette"></i>‎ ‎ Select Theme
 
-																													
+																																		
 																																		</span>
 																																		<i class="fa fa-chevron-down"></i>
 																																	</div>
@@ -1472,22 +1486,22 @@
 																																	<div class="settings-button" onclick="toggleSetting('notifications')">
 																																		<i class="fas fa-bell"></i> Notifications: ${STATE.settings.notifications ? 'On' : 'Off'}
 
-																												
+																																	
 																																	</div>
 																																	<div class="settings-button" onclick="toggleSetting('soundEffects')">
 																																		<i class="fas fa-volume-up"></i> Sound Effects: ${STATE.settings.soundEffects ? 'On' : 'Off'}
 
-																												
+																																	
 																																	</div>
 																																	<div class="settings-button" onclick="toggleSetting('autoScroll')">
 																																		<i class="fas fa-scroll"></i> Auto Scroll: ${STATE.settings.autoScroll ? 'On' : 'Off'}
 
-																												
+																																	
 																																	</div>
 																																	<div class="settings-button" onclick="removeApiKey()">
 																																		<i class="fas fa-key"></i> Remove API Key
 
-																												
+																																	
 																																	</div>
 																																</div>
 																															</div>
@@ -1521,7 +1535,7 @@
         const languageSpan = languageSelector.querySelector('span');
         languageSpan.innerHTML = `
 
-																									
+																														
 																														<i class="fa-solid fa-language"></i> Language: ${language}`;
         showNotification(`Language changed to ${language}`);
       }
@@ -1534,7 +1548,7 @@
         const themeSpan = themeSelector.querySelector('span');
         themeSpan.innerHTML = `
 
-																									
+																														
 																														<i class="fa-solid fa-palette"></i> Select Theme: ${theme}`;
         document.getElementById('themeOptions').style.display = 'none';
         showNotification(`Theme changed to ${theme}`);
@@ -1570,7 +1584,7 @@
         modal.className = 'modal-overlay';
         modal.innerHTML = `
 
-																									
+																														
 																														<div class="modal-window">
 																															<div class="modal-header">
 																																<span class="modal-title">About PatheticAI</span>
@@ -1580,7 +1594,7 @@
 																																<p>
 																																	<strong>PatheticAI:</strong> 1.5
 
-																											
+																																
 																																</p>
 																																<br>
 																																	<p>
@@ -1598,7 +1612,7 @@
 																																	<a href="https://discord.gg/Hb5ccPY3XV" target="_blank" rel="noopener noreferrer" aria-label="Join us on Discord" style="color: inherit; text-decoration: none;">
 																																		<i class="fab fa-discord" aria-hidden="true"></i> Join us on Discord
 
-																												
+																																	
 																																	</a>
 																																</button>
 																															</div>
@@ -1618,7 +1632,7 @@
           modal.className = 'modal-overlay';
           modal.innerHTML = `
 
-																										
+																															
 																															<div class="modal-window" style="text-align: center; max-width: 1000px; margin: 0 auto;">
 																																<div class="modal-header">
 																																	<span class="modal-title">Key Required</span>
@@ -1724,7 +1738,7 @@
         typingElement.className = 'chat-message bot typing-indicator';
         typingElement.innerHTML = `
 
-																																	
+																																						
 																																						<div class="message-content">
 																																							<div class="typing-dots">
 																																								<span></span>
