@@ -1813,44 +1813,46 @@
           console.log('Service Worker registration failed:', error);
         });
       }
-      document.addEventListener('contextmenu', e => e.preventDefault());
-      document.addEventListener('keydown', e => {
-        if ((e.ctrlKey && !['a', 'v'].includes(e.key)) || e.keyCode === 123) {
-          e.preventDefault();
-        }
-        document.addEventListener("DOMContentLoaded", () => {
-          const theme = localStorage.getItem("theme") || "Light";
-          document.documentElement.setAttribute("data-theme", theme);
-          const oppositeThemeImage = theme === "Light" ? "/images/dark%20background.png" : "/images/light%20background.png";
-          const img = new Image();
-          img.src = oppositeThemeImage;
-        });
-    (function() {
-      function blockDevTools() {
-        alert("DevTools is not allowed!");
-        window.close();
-      }
+document.addEventListener('DOMContentLoaded', () => {
 
-      const threshold = 160;
-      setInterval(() => {
-        const widthExceeded = window.outerWidth - window.innerWidth > threshold;
-        const heightExceeded = window.outerHeight - window.innerHeight > threshold;
-        if (widthExceeded || heightExceeded) {
-          blockDevTools();
-        }
-      }, 100);
+  const theme = localStorage.getItem("theme") || "Light";
+  document.documentElement.setAttribute("data-theme", theme);
 
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && ['I', 'J', 'C'].includes(e.key))) {
-          e.preventDefault();
-          blockDevTools();
-        }
-      });
+  const oppositeThemeImage = theme === "Light" ? "/images/dark%20background.png" : "/images/light%20background.png";
+  const img = new Image();
+  img.src = oppositeThemeImage;
 
-      document.addEventListener('contextmenu', (e) => {
-        e.preventDefault();
-        blockDevTools();
-      });
-    })();
-      });
+  document.addEventListener('contextmenu', (e) => e.preventDefault());
+
+  document.addEventListener('keydown', (e) => {
+
+    if (
+      (e.ctrlKey && !['a', 'v'].includes(e.key.toLowerCase())) || 
+      e.key === 'F12' ||                                         
+      (e.ctrlKey && e.shiftKey && ['i', 'j', 'c'].includes(e.key.toLowerCase())) 
+    ) {
+      e.preventDefault();
+      blockDevTools();
+    }
+  });
+
+  const threshold = 160;
+  setInterval(() => {
+    const widthExceeded = window.outerWidth - window.innerWidth > threshold;
+    const heightExceeded = window.outerHeight - window.innerHeight > threshold;
+    if (widthExceeded || heightExceeded) {
+      blockDevTools();
+    }
+  }, 100);
+
+  function blockDevTools() {
+    alert("DevTools is not allowed!");
+    try {
+      window.close(); 
+    } catch (error) {
+      console.warn("Window could not be closed programmatically.", error);
+    }
+  }
+});
+
     </script>
