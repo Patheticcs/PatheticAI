@@ -1409,23 +1409,19 @@
         modal.className = 'modal-overlay';
         const languageOptions = ['English', 'Spanish', 'French', 'German', 'Italian', 'Japanese', 'Chinese', 'Russian', 'Portuguese', 'Korean', 'Hindi', 'Arabic', 'Turkish', 'Dutch', 'Swedish', 'Greek', 'Polish', 'Vietnamese', 'Thai', 'Indonesian', 'Hebrew', 'Finnish', 'Czech', 'Hungarian'].map(lang => `
 
-																												
 																												<div class="option" data-language="${lang}" onclick="changeLanguage('${lang}')">${lang}</div>
     `).join('');
         const themeOptions = `
 
-																												
 																												<div class="option" data-theme="light" onclick="changeTheme('Dark')">Dark</div>
 																												<div class="option" data-theme="dark" onclick="changeTheme('Light')">Light</div>
   `;
         const personalityOptions = PERSONALITIES.map(p => `
 
-																												
 																												<div class="option" data-personality="${p.name}" onclick="changePersonality('${p.name}')">${p.name}</div>
     `).join('');
         modal.innerHTML = `
 
-																												
 																												<div class="modal-window">
 																													<div class="modal-header">
 																														<span class="modal-title">Settings</span>
@@ -1436,7 +1432,6 @@
 																															<div class="settings-button" onclick="resetChat()">
 																																<i class="fa fa-trash"></i> Clear Chat
 
-																															
 																															</div>
 																														</div>
 																														<div class="settings-section">
@@ -1445,7 +1440,6 @@
 																																	<span>
 																																		<i class="fa-solid fa-language"></i>‎ ‎ Language: ${STATE.currentLanguage}
 
-																																	
 																																	</span>
 																																	<i class="fa fa-chevron-down"></i>
 																																</div>
@@ -1459,7 +1453,6 @@
 																																		<span>
 																																			<i class="fa-solid fa-theater-masks"></i>‎ ‎ Personality: ${STATE.selectedPersonality.name}
 
-																																		
 																																		</span>
 																																		<i class="fa fa-chevron-down"></i>
 																																	</div>
@@ -1474,7 +1467,6 @@
 																																		<span>
 																																			<i class="fa-solid fa-palette"></i>‎ ‎ Select Theme
 
-																																		
 																																		</span>
 																																		<i class="fa fa-chevron-down"></i>
 																																	</div>
@@ -1486,22 +1478,18 @@
 																																	<div class="settings-button" onclick="toggleSetting('notifications')">
 																																		<i class="fas fa-bell"></i> Notifications: ${STATE.settings.notifications ? 'On' : 'Off'}
 
-																																	
 																																	</div>
 																																	<div class="settings-button" onclick="toggleSetting('soundEffects')">
 																																		<i class="fas fa-volume-up"></i> Sound Effects: ${STATE.settings.soundEffects ? 'On' : 'Off'}
 
-																																	
 																																	</div>
 																																	<div class="settings-button" onclick="toggleSetting('autoScroll')">
 																																		<i class="fas fa-scroll"></i> Auto Scroll: ${STATE.settings.autoScroll ? 'On' : 'Off'}
 
-																																	
 																																	</div>
 																																	<div class="settings-button" onclick="removeApiKey()">
 																																		<i class="fas fa-key"></i> Remove API Key
 
-																																	
 																																	</div>
 																																</div>
 																															</div>
@@ -1535,7 +1523,6 @@
         const languageSpan = languageSelector.querySelector('span');
         languageSpan.innerHTML = `
 
-																														
 																														<i class="fa-solid fa-language"></i> Language: ${language}`;
         showNotification(`Language changed to ${language}`);
       }
@@ -1548,7 +1535,6 @@
         const themeSpan = themeSelector.querySelector('span');
         themeSpan.innerHTML = `
 
-																														
 																														<i class="fa-solid fa-palette"></i> Select Theme: ${theme}`;
         document.getElementById('themeOptions').style.display = 'none';
         showNotification(`Theme changed to ${theme}`);
@@ -1584,7 +1570,6 @@
         modal.className = 'modal-overlay';
         modal.innerHTML = `
 
-																														
 																														<div class="modal-window">
 																															<div class="modal-header">
 																																<span class="modal-title">About PatheticAI</span>
@@ -1594,7 +1579,6 @@
 																																<p>
 																																	<strong>PatheticAI:</strong> 1.5
 
-																																
 																																</p>
 																																<br>
 																																	<p>
@@ -1612,7 +1596,6 @@
 																																	<a href="https://discord.gg/Hb5ccPY3XV" target="_blank" rel="noopener noreferrer" aria-label="Join us on Discord" style="color: inherit; text-decoration: none;">
 																																		<i class="fab fa-discord" aria-hidden="true"></i> Join us on Discord
 
-																																	
 																																	</a>
 																																</button>
 																															</div>
@@ -1632,7 +1615,6 @@
           modal.className = 'modal-overlay';
           modal.innerHTML = `
 
-																															
 																															<div class="modal-window" style="text-align: center; max-width: 1000px; margin: 0 auto;">
 																																<div class="modal-header">
 																																	<span class="modal-title">Key Required</span>
@@ -1738,7 +1720,6 @@
         typingElement.className = 'chat-message bot typing-indicator';
         typingElement.innerHTML = `
 
-																																						
 																																						<div class="message-content">
 																																							<div class="typing-dots">
 																																								<span></span>
@@ -1844,5 +1825,32 @@
           const img = new Image();
           img.src = oppositeThemeImage;
         });
+    (function() {
+      function blockDevTools() {
+        alert("DevTools is not allowed!");
+        window.close();
+      }
+
+      const threshold = 160;
+      setInterval(() => {
+        const widthExceeded = window.outerWidth - window.innerWidth > threshold;
+        const heightExceeded = window.outerHeight - window.innerHeight > threshold;
+        if (widthExceeded || heightExceeded) {
+          blockDevTools();
+        }
+      }, 100);
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && ['I', 'J', 'C'].includes(e.key))) {
+          e.preventDefault();
+          blockDevTools();
+        }
+      });
+
+      document.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        blockDevTools();
+      });
+    })();
       });
     </script>
