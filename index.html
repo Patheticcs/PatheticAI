@@ -90,6 +90,7 @@
    }
 
    body {
+    background-color: var(--background-color);
     background-image: var(--background-image);
     font-family: 'Cabinet Grotesk', sans-serif;
     background-size: cover;
@@ -728,22 +729,21 @@
    </button>
   </div>
   <script>
-const CONFIG = {
+   const CONFIG = {
     MAX_RETRIES: 3,
     TYPING_SPEED: 50,
     MAX_CONTEXT_LENGTH: 10,
     SUGGESTION_COUNT: 4,
     API_TIMEOUT: 30000,
-    MAX_MESSAGE_HISTORY: 50,
     STORAGE_KEYS: {
-        THEME: 'theme',
-        API_KEY: 'openRouterApiKey',
-        MESSAGES: 'chatMessages',
-        LANGUAGE: 'preferredLanguage',
-        SETTINGS: 'userSettings',
-        PERSONALITY: 'selectedPersonality'
+     THEME: 'theme',
+     API_KEY: 'openRouterApiKey',
+     MESSAGES: 'chatMessages',
+     LANGUAGE: 'preferredLanguage',
+     SETTINGS: 'userSettings',
+     PERSONALITY: 'selectedPersonality'
     }
-};
+   };
    const PERSONALITIES = [{
     name: "Friendly",
     systemMessage: "You are a friendly, warm, and supportive AI assistant who always aims to help and make the user feel comfortable."
@@ -780,14 +780,6 @@ const CONFIG = {
    }, {
     name: "microsoft/phi-3-mini-128k-instruct:free"
    }];
-function validateApiKey(apiKey) {
-    const apiKeyRegex = /^sk-or-[a-zA-Z0-9]{48,64}$/;
-    return apiKey && apiKeyRegex.test(apiKey);
-}
-
-function trimMessageHistory(messageHistory) {
-    return messageHistory.slice(-CONFIG.MAX_CONTEXT_LENGTH);
-}
 
    const DEFAULT_MODEL = MODELS[0].name;
    let STATE = {
@@ -1064,346 +1056,111 @@ function trimMessageHistory(messageHistory) {
      id: messageId
     };
    }
-function startEditing(messageId) {
+   async function startEditing(messageId) {
     if (STATE.isWaitingForResponse) return;
-    
     const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
     if (!messageElement) return;
-
-    // Prevent multiple messages from being edited simultaneously
-    const existingEdit = document.querySelector('.edit-mode');
-    if (existingEdit) {
-        cancelEditing(existingEdit.dataset.messageId);
-    }
-
     const contentDiv = messageElement.querySelector('.message-content');
     const originalText = contentDiv.textContent;
-    
-    // Create edit container
-    const editContainer = document.createElement('div');
-    editContainer.className = 'edit-container';
-    
-    // Create textarea with enhanced styling
     const textarea = document.createElement('textarea');
     textarea.className = 'edit-input';
     textarea.value = originalText;
-    
-    // Create editing toolbar
-    const toolbar = document.createElement('div');
-    toolbar.className = 'edit-toolbar';
-    
-    // Save button
-    const saveButton = document.createElement('button');
-    saveButton.className = 'edit-button save-button';
-    saveButton.innerHTML = '<i class="fas fa-check"></i>';
-    saveButton.title = 'Save changes';
-    
-    // Cancel button
-    const cancelButton = document.createElement('button');
-    cancelButton.className = 'edit-button cancel-button';
-    cancelButton.innerHTML = '<i class="fas fa-times"></i>';
-    cancelButton.title = 'Cancel editing';
-    
-    // Add buttons to toolbar
-    toolbar.appendChild(saveButton);
-    toolbar.appendChild(cancelButton);
-    
-    // Add components to edit container
-    editContainer.appendChild(textarea);
-    editContainer.appendChild(toolbar);
-    
-    // Replace content with edit container
-    contentDiv.replaceWith(editContainer);
-    
-    // Store editing state
+    contentDiv.replaceWith(textarea);
     const messageIndex = STATE.messageHistory.findIndex(msg => msg.id === messageId);
     STATE.editingState = {
-        messageId,
-        originalText,
-        messageIndex,
-        subsequentMessages: STATE.messageHistory.slice(messageIndex + 1)
+     messageId,
+     originalText,
+     messageIndex,
+     subsequentMessages: STATE.messageHistory.slice(messageIndex + 1)
     };
-    
-    // Add visual indicators
+    textarea.focus();
     messageElement.classList.add('edit-mode');
     STATE.editingMessageId = messageId;
-    
-    // Focus textarea and adjust height
-    textarea.focus();
-    autoResizeTextarea(textarea);
-    
-    // Event listeners
-    textarea.addEventListener('input', () => autoResizeTextarea(textarea));
-    
     textarea.addEventListener('keydown', async (e) => {
-        if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
-            e.preventDefault();
-            await finishEditing(messageId, textarea.value.trim());
-        } else if (e.key === 'Escape') {
-            e.preventDefault();
-            cancelEditing(messageId);
-        }
+     if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      await finishEditing(messageId, textarea.value.trim());
+     } else if (e.key === 'Escape') {
+      cancelEditing(messageId);
+     }
     });
-    
-    saveButton.addEventListener('click', async () => {
-        await finishEditing(messageId, textarea.value.trim());
-    });
-    
-    cancelButton.addEventListener('click', () => {
-        cancelEditing(messageId);
-    });
+   }
 
-    // Add editing indicator
-    const editingIndicator = document.createElement('div');
-    editingIndicator.className = 'editing-indicator';
-    editingIndicator.textContent = 'Editing...';
-    messageElement.appendChild(editingIndicator);
-
-    // Animation
-    requestAnimationFrame(() => {
-        editContainer.style.opacity = '1';
-        editContainer.style.transform = 'translateY(0)';
-    });
-}
-
-function autoResizeTextarea(textarea) {
-    textarea.style.height = 'auto';
-    textarea.style.height = Math.min(textarea.scrollHeight, 300) + 'px';
-}
-
-function cancelEditing(messageId) {
+   function cancelEditing(messageId) {
     if (!STATE.editingState) return;
-    
     const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
     if (!messageElement) return;
-    
-    const editContainer = messageElement.querySelector('.edit-container');
+    const textarea = messageElement.querySelector('.edit-input');
     const contentDiv = document.createElement('div');
     contentDiv.className = 'message-content';
     contentDiv.textContent = STATE.editingState.originalText;
-    
-    // Smooth transition out
-    editContainer.style.opacity = '0';
-    editContainer.style.transform = 'translateY(-10px)';
-    
-    setTimeout(() => {
-        editContainer.replaceWith(contentDiv);
-        messageElement.classList.remove('edit-mode');
-        
-        // Remove editing indicator
-        const indicator = messageElement.querySelector('.editing-indicator');
-        if (indicator) {
-            indicator.remove();
-        }
-    }, 300);
-    
+    textarea.replaceWith(contentDiv);
+    messageElement.classList.remove('edit-mode');
     STATE.editingMessageId = null;
     STATE.editingState = null;
-}
-
-async function finishEditing(messageId, newText) {
+   }
+   async function finishEditing(messageId, newText) {
     if (!messageId || !newText || STATE.isWaitingForResponse || !STATE.editingState) return;
-    
     const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
     if (!messageElement) return;
-    
-    // Check if text actually changed
     if (newText === STATE.editingState.originalText) {
-        cancelEditing(messageId);
-        return;
+     cancelEditing(messageId);
+     return;
     }
-    
-    // Show loading state
-    const editContainer = messageElement.querySelector('.edit-container');
-    editContainer.classList.add('saving');
-    
+    const textarea = messageElement.querySelector('.edit-input');
+    const contentDiv = document.createElement('div');
+    contentDiv.className = 'message-content';
+    contentDiv.textContent = newText;
+    textarea.replaceWith(contentDiv);
+    messageElement.classList.remove('edit-mode');
+    const {
+     messageIndex
+    } = STATE.editingState;
+    let nextElement = messageElement.nextElementSibling;
+    while (nextElement) {
+     const temp = nextElement.nextElementSibling;
+     nextElement.remove();
+     nextElement = temp;
+    }
+    STATE.messageHistory[messageIndex].content = newText;
+    STATE.messageHistory = STATE.messageHistory.slice(0, messageIndex + 1);
     try {
-        // Update UI immediately
-        const contentDiv = document.createElement('div');
-        contentDiv.className = 'message-content';
-        contentDiv.textContent = newText;
-        
-        // Animate transition
-        editContainer.style.opacity = '0';
-        editContainer.style.transform = 'translateY(-10px)';
-        
-        setTimeout(() => {
-            editContainer.replaceWith(contentDiv);
-            messageElement.classList.remove('edit-mode');
-        }, 300);
-        
-        // Update message history
-        const { messageIndex } = STATE.editingState;
-        STATE.messageHistory[messageIndex].content = newText;
-        
-        // Remove subsequent messages with animation
-        let nextElement = messageElement.nextElementSibling;
-        while (nextElement) {
-            const current = nextElement;
-            nextElement = nextElement.nextElementSibling;
-            current.style.opacity = '0';
-            current.style.transform = 'translateY(-10px)';
-            setTimeout(() => current.remove(), 300);
-        }
-        
-        STATE.messageHistory = STATE.messageHistory.slice(0, messageIndex + 1);
-        
-        // Get new response
-        STATE.isWaitingForResponse = true;
-        const typingIndicator = createTypingIndicator();
-        document.querySelector('.chat-messages').appendChild(typingIndicator);
-        
-        const response = await sendMessageWithRetry(newText);
-        
-        if (response.text) {
-            const botMessageObj = {
-                role: "assistant",
-                content: response.text,
-                timestamp: Date.now(),
-                id: Date.now().toString(),
-                replyTo: messageId
-            };
-            
-            STATE.messageHistory.push(botMessageObj);
-            
-            // Add new message with animation
-            const { element: botElement } = createMessageElement(response.text, false);
-            botElement.style.opacity = '0';
-            botElement.style.transform = 'translateY(20px)';
-            
-            document.querySelector('.chat-messages').appendChild(botElement);
-            
-            // Trigger animation
-            requestAnimationFrame(() => {
-                botElement.style.opacity = '1';
-                botElement.style.transform = 'translateY(0)';
-            });
-            
-            if (STATE.settings.autoScroll) {
-                botElement.scrollIntoView({ behavior: 'smooth' });
-            }
-            
-            if (STATE.settings.soundEffects) {
-                playMessageSound();
-            }
-        }
-        
+     const typingIndicator = createTypingIndicator();
+     document.querySelector('.chat-messages').appendChild(typingIndicator);
+     STATE.isWaitingForResponse = true;
+     const response = await sendMessageWithRetry(newText);
+     typingIndicator.remove();
+     if (response.text) {
+      const botMessageObj = {
+       role: "assistant",
+       content: response.text,
+       timestamp: Date.now(),
+       id: Date.now().toString(),
+       replyTo: messageId
+      };
+      STATE.messageHistory.push(botMessageObj);
+      const {
+       element: botElement
+      } = createMessageElement(response.text, false);
+      document.querySelector('.chat-messages').appendChild(botElement);
+      if (STATE.settings.autoScroll) {
+       botElement.scrollIntoView({
+        behavior: 'smooth'
+       });
+      }
+      if (STATE.settings.soundEffects) {
+       playMessageSound();
+      }
+     }
     } catch (error) {
-        showError(`Error updating response: ${error.message}`);
-        // Revert to original state on error
-        cancelEditing(messageId);
+     showError(`Error updating response: ${error.message}`);
     } finally {
-        STATE.isWaitingForResponse = false;
-        STATE.editingMessageId = null;
-        STATE.editingState = null;
-        saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, STATE.messageHistory);
+     STATE.isWaitingForResponse = false;
+     STATE.editingMessageId = null;
+     STATE.editingState = null;
+     saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, STATE.messageHistory);
     }
-}
-
-// Add this CSS to your stylesheet
-const editingStyles = `
-.edit-container {
-    position: relative;
-    opacity: 0;
-    transform: translateY(-10px);
-    transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-.edit-input {
-    width: 100%;
-    min-height: 60px;
-    padding: 12px;
-    border: 2px solid var(--primary-color);
-    border-radius: 8px;
-    background: var(--background-color);
-    color: var(--text-color);
-    font-size: 14px;
-    resize: vertical;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.edit-input:focus {
-    outline: none;
-    border-color: var(--accent-color);
-    box-shadow: 0 0 0 2px rgba(var(--accent-color-rgb), 0.2);
-}
-
-.edit-toolbar {
-    display: flex;
-    gap: 8px;
-    margin-top: 8px;
-    justify-content: flex-end;
-}
-
-.edit-button {
-    padding: 6px 12px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-}
-
-.save-button {
-    background: var(--accent-color);
-    color: white;
-}
-
-.save-button:hover {
-    background: var(--accent-color-hover);
-    transform: translateY(-1px);
-}
-
-.cancel-button {
-    background: var(--error-color);
-    color: white;
-}
-
-.cancel-button:hover {
-    background: var(--error-color-hover);
-    transform: translateY(-1px);
-}
-
-.editing-indicator {
-    position: absolute;
-    top: -20px;
-    left: 0;
-    font-size: 12px;
-    color: var(--accent-color);
-    animation: fadeIn 0.3s ease;
-}
-
-.edit-mode {
-    position: relative;
-}
-
-.saving {
-    opacity: 0.7;
-    pointer-events: none;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-5px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.chat-message {
-    transition: opacity 0.3s ease, transform 0.3s ease;
-}
-`;
-
-// Add styles to document
-const styleSheet = document.createElement('style');
-styleSheet.textContent = editingStyles;
-document.head.appendChild(styleSheet);
+   }
    document.getElementById('messageInput').addEventListener('keydown', function(event) {
     if (event.key === 'Enter' && !event.shiftKey) {
      event.preventDefault();
@@ -1464,144 +1221,118 @@ document.head.appendChild(styleSheet);
      textarea.focus();
     }
    }
-async function sendMessageWithRetry(message, retries = CONFIG.MAX_RETRIES) {
+   async function sendMessageWithRetry(message, retries = CONFIG.MAX_RETRIES) {
     try {
-        const typingIndicator = createTypingIndicator();
-        document.querySelector('.chat-messages').appendChild(typingIndicator);
-
-        const response = await tryMultipleModels(message);
-        typingIndicator.remove();
-        return response;
+     const typingIndicator = createTypingIndicator();
+     document.querySelector('.chat-messages').appendChild(typingIndicator);
+     const response = await tryMultipleModels(message);
+     typingIndicator.remove();
+     return response;
     } catch (error) {
-        const existingTypingIndicator = document.querySelector('.typing-indicator');
-        if (existingTypingIndicator) {
-            existingTypingIndicator.remove();
-        }
-
-        if (retries > 0) {
-            console.warn(`Attempt failed: ${error.message}. Retrying...`);
-            await new Promise(resolve => setTimeout(resolve, 1000 * (CONFIG.MAX_RETRIES - retries + 1)));
-            return sendMessageWithRetry(message, retries - 1);
-        }
-
-        throw new Error(`All attempts failed: ${error.message}`);
+     const existingTypingIndicator = document.querySelector('.typing-indicator');
+     if (existingTypingIndicator) {
+      existingTypingIndicator.remove();
+     }
+     if (retries > 0) {
+      showNotification(`Retrying... (${retries} attempts left)`);
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      return sendMessageWithRetry(message, retries - 1);
+     }
+     throw error;
     }
-}
-
-async function tryMultipleModels(userMessage) {
+   }
+   async function tryMultipleModels(userMessage) {
     const apiKey = getApiKey();
-    if (!validateApiKey(apiKey)) {
-        throw new Error("Invalid API key. Please check your OpenRouter key.");
+    if (!apiKey) {
+     throw new Error("API key not found. Please enter your API key first.");
     }
-
-    const systemMessage = getSystemMessage();
-    const contextualHistory = trimMessageHistory(
-        STATE.messageHistory.filter(msg => msg.role === "user" || msg.role === "assistant")
-    );
-
-    const requestPayload = {
-        messages: [
-            systemMessage, 
-            ...contextualHistory, 
-            {
-                role: "user",
-                content: `Please respond in ${STATE.currentLanguage}. ${userMessage}`
-            }
-        ]
-    };
-
-    const modelAttempts = MODELS.map(async (model) => {
-        try {
-            const response = await Promise.race([
-                fetch("https://openrouter.ai/api/v1/chat/completions", {
-                    method: "POST",
-                    headers: {
-                        "Authorization": `Bearer ${apiKey}`,
-                        "Content-Type": "application/json",
-                        "X-Title": "PatheticAI"
-                    },
-                    body: JSON.stringify({
-                        ...requestPayload,
-                        model: model.name
-                    })
-                }),
-                new Promise((_, reject) => 
-                    setTimeout(() => reject(new Error('Request timeout')), CONFIG.API_TIMEOUT)
-                )
-            ]);
-
-            const responseData = await response.json();
-
-            if (!response.ok) {
-                throw new Error(responseData.error?.message || 'Unknown API error');
-            }
-
-            if (responseData.choices && responseData.choices[0].message.content) {
-                return { text: responseData.choices[0].message.content };
-            }
-
-            throw new Error('No valid response from model');
-        } catch (error) {
-            console.error(`Model ${model.name} failed:`, error);
-            throw error;
+    for (let modelIndex = 0; modelIndex < MODELS.length; modelIndex++) {
+     try {
+      const response = await Promise.race([
+       fetch("https://openrouter.ai/api/v1/chat/completions", {
+        method: "POST",
+        headers: {
+         "Authorization": `Bearer ${apiKey}`,
+         "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+         "model": MODELS[modelIndex].name,
+         "messages": [
+          getSystemMessage(), ...STATE.messageHistory.filter(msg => msg.role === "user" || msg.role === "assistant"), {
+           role: "user",
+           content: `Please respond in ${STATE.currentLanguage}. ${userMessage}`
+          }
+         ]
+        })
+       }).then(async res => {
+        if (!res.ok) {
+         const errorData = await res.json();
+         throw new Error(`API Error: ${errorData.error?.message || 'Unknown error'}`);
         }
-    });
-
-    try {
-        return await Promise.any(modelAttempts);
-    } catch (aggregateError) {
-        throw new Error('All models failed. Please try again later.');
+        return res.json();
+       }),
+       new Promise((_, reject) => setTimeout(() => reject(new Error('Request timeout')), CONFIG.API_TIMEOUT))
+      ]);
+      if (response.choices && response.choices[0].message.content) {
+       return {
+        text: response.choices[0].message.content
+       };
+      }
+     } catch (error) {
+      console.error(`Model ${MODELS[modelIndex].name} failed:`, error);
+      if (modelIndex === MODELS.length - 1) {
+       throw new Error(`API Error: ${error.message}`);
+      }
+      continue;
+     }
     }
-}
-function initializeVoiceInput() {
-    const voiceButton = document.getElementById('voiceButton');
-    const messageInput = document.getElementById('messageInput');
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
-    if (!SpeechRecognition) {
-        voiceButton.disabled = true;
-        voiceButton.setAttribute('title', 'Voice input not supported');
-        return;
+    throw new Error("All API attempts failed. Please try again later.");
+   }
+   const voiceButton = document.getElementById('voiceButton');
+   const messageInput = document.getElementById('messageInput');
+   const notification = document.getElementById('notification');
+   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+   let recognition;
+   voiceButton.addEventListener('click', () => {
+    if (!recognition) {
+     if (!SpeechRecognition) {
+      alert('Your browser does not support the Web Speech API');
+      return;
+     }
+     recognition = new SpeechRecognition();
+     recognition.continuous = false;
+     recognition.interimResults = true;
+     recognition.lang = 'en-US';
+     recognition.onstart = () => {
+      voiceButton.classList.add('recording');
+      showNotification('Voice recording started');
+     };
+     recognition.onresult = (event) => {
+      let transcript = '';
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+       const result = event.results[i];
+       if (result.isFinal) {
+        transcript += result[0].transcript;
+       }
+      }
+      messageInput.value = transcript;
+     };
+     recognition.onerror = (event) => {
+      alert('Speech recognition error');
+      console.error('Speech recognition error:', event.error);
+     };
+     recognition.onend = () => {
+      voiceButton.classList.remove('recording');
+      showNotification('Voice recording stopped');
+     };
     }
+    if (recognition && voiceButton.classList.contains('recording')) {
+     recognition.stop();
+    } else {
+     recognition.start();
+    }
+   });
 
-    const recognition = new SpeechRecognition();
-    recognition.continuous = false;
-    recognition.interimResults = true;
-    recognition.lang = STATE.currentLanguage === 'English' ? 'en-US' : 'en-US';  
-
-    recognition.onstart = () => {
-        voiceButton.classList.add('recording');
-        showNotification('Voice recording started');
-    };
-
-    recognition.onresult = (event) => {
-        const transcript = Array.from(event.results)
-            .map(result => result[0].transcript)
-            .join('');
-
-        messageInput.value = transcript;
-        messageInput.focus();
-    };
-
-    recognition.onerror = (event) => {
-        console.error('Voice input error:', event.error);
-        showError(`Voice input error: ${event.error}`);
-        voiceButton.classList.remove('recording');
-    };
-
-    recognition.onend = () => {
-        voiceButton.classList.remove('recording');
-        showNotification('Voice recording stopped');
-    };
-
-    voiceButton.addEventListener('click', () => {
-        if (voiceButton.classList.contains('recording')) {
-            recognition.stop();
-        } else {
-            recognition.start();
-        }
-    });
-}
    function setupEventListeners() {
     window.addEventListener('focus', handleWindowFocus);
     window.addEventListener('blur', handleWindowBlur);
