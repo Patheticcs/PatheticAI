@@ -768,9 +768,8 @@
         systemMessage: "You are a scholarly AI assistant who communicates in a detailed, research-oriented manner and provides in-depth, well-referenced information."
       }, {
         name: "Rude",
-        systemMessage: "Extremely Rude, won't give you an answer, impaitent and will say mean things to you"
+        systemMessage: "You are an impatient AI assistant with a direct and unfiltered communication style."
       }];
-      const DEFAULT_PERSONALITY = PERSONALITIES[0];
       const MODELS = [{
         name: "google/gemini-2.0-flash-exp:free"
       }, {
@@ -786,6 +785,7 @@
       }, {
         name: "microsoft/phi-3-mini-128k-instruct:free"
       }];
+      const DEFAULT_PERSONALITY = PERSONALITIES[0];
       const DEFAULT_MODEL = MODELS[0].name;
       let STATE = {
         isWaitingForResponse: false,
@@ -802,21 +802,24 @@
           notifications: true,
           soundEffects: true,
           autoScroll: true
-        }
+        },
+        recognition: null,
+        editingState: null
       };
       const systemMessage = {
         role: "system",
         content: `You are PatheticAI Enhanced
 
-            Key characteristics:
-            - Friendly and empathetic AI assistant
-            - Provides clear, concise responses
-            - Adapts communication style to user needs
-            - Offers helpful suggestions and insights
-            - Maintains context awareness`
+    Key characteristics:
+    - Friendly and empathetic AI assistant
+    - Provides clear, concise responses
+    - Adapts communication style to user needs
+    - Offers helpful suggestions and insights
+    - Maintains context awareness`
       };
       document.addEventListener('DOMContentLoaded', () => {
         initializeApp();
+        setupSecurityFeatures();
       });
 
       function initializeApp() {
@@ -1026,14 +1029,6 @@
           day: 'numeric'
         }).format(date);
       }
-      async function copyToClipboard(text) {
-        try {
-          await navigator.clipboard.writeText(text);
-          showNotification('Copied to clipboard');
-        } catch (err) {
-          showNotification('Failed to copy to clipboard');
-        }
-      }
 
       function formatTimestamp(date) {
         return new Intl.DateTimeFormat('default', {
@@ -1044,6 +1039,14 @@
           month: 'short',
           day: 'numeric'
         }).format(date);
+      }
+      async function copyToClipboard(text) {
+        try {
+          await navigator.clipboard.writeText(text);
+          showNotification('Copied to clipboard');
+        } catch (err) {
+          showNotification('Failed to copy to clipboard');
+        }
       }
       async function copyToClipboard(text) {
         try {
@@ -1077,13 +1080,13 @@
             wrapper.className = 'code-block-wrapper';
             const copyButton = document.createElement('button');
             copyButton.className = 'code-copy-button';
-            copyButton.innerHTML = '     <i class = "fas fa-copy" > </i>';
+            copyButton.innerHTML = ' <i class = "fas fa-copy" > </i>';
             copyButton.onclick = (e) => {
               e.stopPropagation();
               navigator.clipboard.writeText(block.textContent).then(() => {
-                copyButton.innerHTML = '     <i class = "fas fa-check" > </i>';
+                copyButton.innerHTML = ' <i class = "fas fa-check" > </i>';
                 setTimeout(() => {
-                  copyButton.innerHTML = '    <i class = "fas fa-copy" > </i>';
+                  copyButton.innerHTML = ' <i class = "fas fa-copy" > </i>';
                 }, 2000);
               });
             };
@@ -1104,13 +1107,13 @@
         if (isUser) {
           const editButton = document.createElement('button');
           editButton.className = 'action-button';
-          editButton.innerHTML = '      <i class = "fa-regular fa-edit" > </i>';
+          editButton.innerHTML = ' <i class = "fa-regular fa-edit" > </i>';
           editButton.onclick = () => startEditing(messageId);
           actionsDiv.appendChild(editButton);
         }
         const copyButton = document.createElement('button');
         copyButton.className = 'action-button';
-        copyButton.innerHTML = '      <i class = "fa-regular fa-copy" > </i>';
+        copyButton.innerHTML = ' <i class = "fa-regular fa-copy" > </i>';
         copyButton.onclick = () => copyToClipboard(message);
         actionsDiv.appendChild(copyButton);
         messageElement.appendChild(actionsDiv);
@@ -1236,29 +1239,29 @@
         if (!message || STATE.isWaitingForResponse || STATE.editingMessageId) return;
         STATE.isWaitingForResponse = true;
         disableInput();
-        const timestamp = new Date();
-        const {
-          element: messageElement,
-          id: messageId
-        } = createMessageElement(message, true, timestamp);
-        document.querySelector('.chat-messages').appendChild(messageElement);
-        const messageObj = {
-          role: "user",
-          content: message,
-          timestamp: timestamp.getTime(),
-          id: messageId
-        };
-        STATE.messageHistory.push(messageObj);
-        saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, STATE.messageHistory);
-        textarea.value = '';
-        textarea.style.height = 'auto';
         try {
+          const {
+            element: messageElement,
+            id: messageId
+          } = createMessageElement(message, true, new Date());
+          document.querySelector('.chat-messages').appendChild(messageElement);
+          const messageObj = {
+            role: "user",
+            content: message,
+            timestamp: Date.now(),
+            id: messageId
+          };
+          STATE.messageHistory.push(messageObj);
+          saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, STATE.messageHistory);
+          textarea.value = '';
+          textarea.style.height = 'auto';
           const response = await sendMessageWithRetry(message);
           if (response.text) {
             const botMessageObj = {
               role: "assistant",
               content: response.text,
               timestamp: Date.now(),
+              id: Date.now().toString(),
               replyTo: messageId
             };
             STATE.messageHistory.push(botMessageObj);
@@ -1410,19 +1413,23 @@
         modal.className = 'modal-overlay';
         const languageOptions = ['English', 'Spanish', 'French', 'German', 'Italian', 'Japanese', 'Chinese', 'Russian', 'Portuguese', 'Korean', 'Hindi', 'Arabic', 'Turkish', 'Dutch', 'Swedish', 'Greek', 'Polish', 'Vietnamese', 'Thai', 'Indonesian', 'Hebrew', 'Finnish', 'Czech', 'Hungarian'].map(lang => `
 
+																												
 																												<div class="option" data-language="${lang}" onclick="changeLanguage('${lang}')">${lang}</div>
     `).join('');
         const themeOptions = `
 
+																												
 																												<div class="option" data-theme="light" onclick="changeTheme('Dark')">Dark</div>
 																												<div class="option" data-theme="dark" onclick="changeTheme('Light')">Light</div>
   `;
         const personalityOptions = PERSONALITIES.map(p => `
 
+																												
 																												<div class="option" data-personality="${p.name}" onclick="changePersonality('${p.name}')">${p.name}</div>
     `).join('');
         modal.innerHTML = `
 
+																												
 																												<div class="modal-window">
 																													<div class="modal-header">
 																														<span class="modal-title">Settings</span>
@@ -1433,6 +1440,7 @@
 																															<div class="settings-button" onclick="resetChat()">
 																																<i class="fa fa-trash"></i> Clear Chat
 
+																															
 																															</div>
 																														</div>
 																														<div class="settings-section">
@@ -1441,6 +1449,7 @@
 																																	<span>
 																																		<i class="fa-solid fa-language"></i>‎ ‎ Language: ${STATE.currentLanguage}
 
+																																	
 																																	</span>
 																																	<i class="fa fa-chevron-down"></i>
 																																</div>
@@ -1454,6 +1463,7 @@
 																																		<span>
 																																			<i class="fa-solid fa-theater-masks"></i>‎ ‎ Personality: ${STATE.selectedPersonality.name}
 
+																																		
 																																		</span>
 																																		<i class="fa fa-chevron-down"></i>
 																																	</div>
@@ -1468,6 +1478,7 @@
 																																		<span>
 																																			<i class="fa-solid fa-palette"></i>‎ ‎ Select Theme
 
+																																		
 																																		</span>
 																																		<i class="fa fa-chevron-down"></i>
 																																	</div>
@@ -1479,18 +1490,22 @@
 																																	<div class="settings-button" onclick="toggleSetting('notifications')">
 																																		<i class="fas fa-bell"></i> Notifications: ${STATE.settings.notifications ? 'On' : 'Off'}
 
+																																	
 																																	</div>
 																																	<div class="settings-button" onclick="toggleSetting('soundEffects')">
 																																		<i class="fas fa-volume-up"></i> Sound Effects: ${STATE.settings.soundEffects ? 'On' : 'Off'}
 
+																																	
 																																	</div>
 																																	<div class="settings-button" onclick="toggleSetting('autoScroll')">
 																																		<i class="fas fa-scroll"></i> Auto Scroll: ${STATE.settings.autoScroll ? 'On' : 'Off'}
 
+																																	
 																																	</div>
 																																	<div class="settings-button" onclick="removeApiKey()">
 																																		<i class="fas fa-key"></i> Remove API Key
 
+																																	
 																																	</div>
 																																</div>
 																															</div>
@@ -1524,6 +1539,7 @@
         const languageSpan = languageSelector.querySelector('span');
         languageSpan.innerHTML = `
 
+																														
 																														<i class="fa-solid fa-language"></i> Language: ${language}`;
         showNotification(`Language changed to ${language}`);
       }
@@ -1536,6 +1552,7 @@
         const themeSpan = themeSelector.querySelector('span');
         themeSpan.innerHTML = `
 
+																														
 																														<i class="fa-solid fa-palette"></i> Select Theme: ${theme}`;
         document.getElementById('themeOptions').style.display = 'none';
         showNotification(`Theme changed to ${theme}`);
@@ -1571,6 +1588,7 @@
         modal.className = 'modal-overlay';
         modal.innerHTML = `
 
+																														
 																														<div class="modal-window">
 																															<div class="modal-header">
 																																<span class="modal-title">About PatheticAI</span>
@@ -1580,6 +1598,7 @@
 																																<p>
 																																	<strong>PatheticAI:</strong> 1.5
 
+																																
 																																</p>
 																																<br>
 																																	<p>
@@ -1597,6 +1616,7 @@
 																																	<a href="https://discord.gg/Hb5ccPY3XV" target="_blank" rel="noopener noreferrer" aria-label="Join us on Discord" style="color: inherit; text-decoration: none;">
 																																		<i class="fab fa-discord" aria-hidden="true"></i> Join us on Discord
 
+																																	
 																																	</a>
 																																</button>
 																															</div>
@@ -1616,6 +1636,7 @@
           modal.className = 'modal-overlay';
           modal.innerHTML = `
 
+																															
 																															<div class="modal-window" style="text-align: center; max-width: 1000px; margin: 0 auto;">
 																																<div class="modal-header">
 																																	<span class="modal-title">Key Required</span>
@@ -1721,6 +1742,7 @@
         typingElement.className = 'chat-message bot typing-indicator';
         typingElement.innerHTML = `
 
+																																						
 																																						<div class="message-content">
 																																							<div class="typing-dots">
 																																								<span></span>
@@ -1814,13 +1836,11 @@
           console.log('Service Worker registration failed:', error);
         });
       }
-document.addEventListener('DOMContentLoaded', () => {
-
-  const theme = localStorage.getItem("theme") || "Light";
-  document.documentElement.setAttribute("data-theme", theme);
-
-  const oppositeThemeImage = theme === "Light" ? "/images/dark%20background.png" : "/images/light%20background.png";
-  const img = new Image();
-  img.src = oppositeThemeImage;
-});
+      document.addEventListener('DOMContentLoaded', () => {
+        const theme = localStorage.getItem("theme") || "Light";
+        document.documentElement.setAttribute("data-theme", theme);
+        const oppositeThemeImage = theme === "Light" ? "/images/dark%20background.png" : "/images/light%20background.png";
+        const img = new Image();
+        img.src = oppositeThemeImage;
+      });
     </script>
