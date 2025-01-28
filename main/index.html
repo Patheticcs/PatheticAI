@@ -1822,43 +1822,4 @@ document.addEventListener('DOMContentLoaded', () => {
   const img = new Image();
   img.src = oppositeThemeImage;
 
-document.addEventListener('contextmenu', (e) => e.preventDefault());
-
-document.addEventListener('keydown', (e) => {
-  // Block specific key combinations for desktop only
-  if (
-    (e.ctrlKey && e.shiftKey && ['i', 'j', 'c'].includes(e.key.toLowerCase())) || // Ctrl+Shift+I/J/C
-    e.key === 'F12' // F12
-  ) {
-    e.preventDefault();
-    blockDevTools();
-  }
-});
-
-// Properly detect DevTools
-const threshold = 150; // Adjust for mobile window issues
-const isMobile = /Mobi|Android/i.test(navigator.userAgent);
-
-function detectDevTools() {
-  const widthExceeded = window.outerWidth - window.innerWidth > threshold;
-  const heightExceeded = window.outerHeight - window.innerHeight > threshold;
-
-  // Check explicitly for desktop scenarios
-  if (!isMobile && (widthExceeded || heightExceeded)) {
-    blockDevTools();
-  }
-}
-
-setInterval(detectDevTools, 100);
-
-function blockDevTools() {
-  alert("DevTools is not allowed!");
-  try {
-    window.close(); // Attempt to close the window
-  } catch (error) {
-    console.warn("Window could not be closed programmatically.", error);
-  }
-}
-});
-
     </script>
