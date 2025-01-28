@@ -1656,7 +1656,7 @@
                                     id="apiKeyInput" 
                                     placeholder="Enter your API key (sk-or-v1-...)" 
                                     style="width: 100%; 
-                                    padding: 10px; 
+                                    padding: 15px; 
                                     background: var(--button-background);
                                     border: var(--border-color);
                                     border-radius: 15px; 
@@ -1665,7 +1665,7 @@
                             </div>
                             <button onclick="saveApiKey()" 
                                 style="width: 100%; 
-                                padding: 10px; 
+                                padding: 25px; 
                                 margin-bottom: 10px;
                                     background: var(--button-background);
                                 border: var(--border-color);
@@ -1675,6 +1675,10 @@
                                 transition: all 0.3s ease;">
                                 Enter
                             </button>
+                            <div class="settings-button" onclick="window.open('https://openrouter.ai/settings/keys', '_blank')">
+                                <i class="fas fa-key"></i>
+                                Get Key
+                            </div>
                             <div class="settings-button" onclick="window.open('/help', '_blank')">
                                 <i class="fas fa-book"></i>
                                 Help
