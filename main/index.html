@@ -1,37 +1,45 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="Dark">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>PatheticAI Enhanced</title>
-    <link rel="manifest" href="/manifest.json">
-    <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@700,400&display=swap" rel="stylesheet">
-    <link rel="icon" href="/images/icon.png" type="image/png">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/github-dark.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.0.2/marked.min.js"></script>
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/github-dark.min.css" as="style">
-    <meta name="description" content="PatheticAI - Advanced AI chatbot with enhanced features for seamless conversations and task automation">
-    <meta name="keywords" content="AI, chatbot, machine learning, conversation, automation">
-    <meta name="robots" content="index, follow">
-    <meta property="og:title" content="PatheticAI Enhanced">
-    <meta property="og:description" content="Advanced AI chatbot with enhanced features for seamless conversations and task automation">
-    <meta property="og:image" content="/images/icon.png">
-    <meta property="og:type" content="website">
-    <meta property="og:site_name" content="PatheticAI">
-    <meta name="theme-color" content="#ffffff">
-    <link rel="apple-touch-icon" href="/images/icon.png">
-    <meta name="apple-mobile-web-app-title" content="PatheticAI">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="mobile-web-app-capable" content="yes">
-    <link rel="preload" href="/images/light%20background.png" as="image">
-    <link rel="preload" href="/images/dark%20background.png" as="image">
-    <link rel="stylesheet" href="styles.css" media="print" onload="this.media='all';">
-    <script src="/main/security.js"></script>
-    <noscript>
-      <link rel="stylesheet" href="styles.css">
-    </noscript>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>PatheticAI Enhanced</title>
+
+<!-- Preload critical assets -->
+<link rel="preload" href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@700,400&display=swap" as="style">
+<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style">
+<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/github-dark.min.css" as="style">
+<link rel="preload" href="/images/icon.png" as="image">
+<link rel="preload" href="/images/light%20background.png" as="image">
+<link rel="preload" href="/images/dark%20background.png" as="image">
+
+<!-- Favicons and Meta Tags -->
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/images/icon.png" type="image/png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/github-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.0.2/marked.min.js"></script>
+
+<!-- Meta description and social media sharing -->
+<meta name="description" content="PatheticAI - Advanced AI chatbot with enhanced features for seamless conversations and task automation">
+<meta name="keywords" content="AI, chatbot, machine learning, conversation, automation">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="PatheticAI Enhanced">
+<meta property="og:description" content="Advanced AI chatbot with enhanced features for seamless conversations and task automation">
+<meta property="og:image" content="/images/icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PatheticAI">
+<meta name="theme-color" content="#ffffff">
+
+<!-- Apple specific meta tags -->
+<link rel="apple-touch-icon" href="/images/icon.png">
+<meta name="apple-mobile-web-app-title" content="PatheticAI">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+
+<!-- Inline JS for security -->
+<script src="/main/security.js"></script>
     <style>
       * {
         margin: 0;
@@ -350,6 +358,7 @@
       .settings-button {
         background: var(--button-background);
         border: 1px solid var(--border-color);
+        color: var(--color);
         padding: 15px;
         border-radius: 15px;
         cursor: pointer;
@@ -1635,29 +1644,44 @@
           const modal = document.createElement('div');
           modal.className = 'modal-overlay';
           modal.innerHTML = `
-
-																															
-																															<div class="modal-window" style="text-align: center; max-width: 1000px; margin: 0 auto;">
-																																<div class="modal-header">
-																																	<span class="modal-title">Key Required</span>
-																																</div>
-																																<div class="modal-content">
-																																	<p>To use PatheticAI, an API key from Openrouter is required. To get this, go to</p>
-																																	<a href="https://openrouter.ai/settings/keys" target="_blank" style="color: white; display: inline-block;">openrouter.ai/settings/keys</a>
-																																	<br>
-																																		<br>
-																																			<input type="text" id="apiKeyInput" placeholder="Your API Key Here" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 15px; color: white; text-align: center;">
-																																				<br>
-																																					<br>
-																																						<button id="startupButton" style="width: 50%; padding: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 25px; color: white; cursor: pointer; font-size: 16px;">
-                        Start up
-                    </button>
-																																						<br>
-																																							<br>
-																																								<button id="helpButton" style="width: auto; padding: 10px 20px; background: rgba(255, 255, 255, 0.1);  border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 25px;  color: white; cursor: pointer; font-size: 16px;">Help</button>
-																																							</div>
-																																						</div>
-        `;
+                    <div class="modal-window">
+                        <div class="modal-header">
+                            <span class="modal-title">API Key Required</span>
+                        </div>
+                        <div class="modal-content">
+                            <p>To use PatheticAI, you need an API key from OpenRouter.</p>
+                            <br>
+                            <div style="margin: 20px 0;">
+                                <input type="text" 
+                                    id="apiKeyInput" 
+                                    placeholder="Enter your API key (sk-or-v1-...)" 
+                                    style="width: 100%; 
+                                    padding: 10px; 
+                                    background: var(--button-background);
+                                    border: var(--border-color);
+                                    border-radius: 15px; 
+                                    color: var(--color); 
+                                    font-size: 14px;">
+                            </div>
+                            <button onclick="saveApiKey()" 
+                                style="width: 100%; 
+                                padding: 10px; 
+                                margin-bottom: 10px;
+                                    background: var(--button-background);
+                                border: var(--border-color);
+                                border-radius: 15px; 
+                                color: var(--color); 
+                                cursor: pointer;
+                                transition: all 0.3s ease;">
+                                Enter
+                            </button>
+                            <div class="settings-button" onclick="window.open('https://dub.sh/syberai/documentation', '_blank')">
+                                <i class="fas fa-book"></i>
+                                Help
+                            </div>
+                        </div>
+                    </div>
+                `;
           document.body.appendChild(modal);
           document.getElementById('startupButton').addEventListener('click', function() {
             saveApiKey();
