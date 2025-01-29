@@ -1656,8 +1656,8 @@
   `;
 
       function closeModal() {
-        modal.classList.add('fade-out'); 
-        setTimeout(() => modal.remove(), 300); 
+        modal.classList.add('fade-out');
+        setTimeout(() => modal.remove(), 300);
       }
 
       modal.addEventListener('click', (e) => {
@@ -1853,7 +1853,7 @@
 
     @keyframes typing-dot {
       0%, 60%, 100% { transform: translateY(0); opacity: 0.6; }
-      30% { transform: translateY(-4px); opacity: 1; }
+      30% { transform: translateY(-4px); opacity: 1; } 
     }
     `;
 
@@ -1881,12 +1881,84 @@
       showWelcomeMessage();
     }
 
+    document.addEventListener('DOMContentLoaded', function() {
+      checkAndStoreApiKey();
+    });
+
     function getApiKey() {
       const apiKey = localStorage.getItem('openRouterApiKey');
-      if (apiKey && apiKey.startsWith('sk-or-')) {
-        return apiKey;
+      return apiKey && apiKey.startsWith('sk-or-') ? apiKey : null;
+    }
+
+    function checkAndStoreApiKey() {
+      if (!getApiKey()) {
+        showApiKeyModal();
       }
-      return null;
+    }
+
+    function showApiKeyModal() {
+      if (document.querySelector('.modal-overlay')) return;
+
+      const modal = document.createElement('div');
+      modal.className = 'modal-overlay';
+      modal.innerHTML = `
+    <div class="modal-window">
+      <div class="modal-header">
+        <span class="modal-title">API Key Required</span>
+      </div>
+      <div class="modal-content">
+        <p>To use PatheticAI, you need an API key from OpenRouter.</p>
+        <div style="margin: 20px 0;">
+          <input type="text" 
+            id="apiKeyInput" 
+            placeholder="Enter your API key (sk-or-v1-...)" 
+            style="width: 100%; padding: 15px; background: var(--button-background); 
+            border: var(--border-color); border-radius: 15px; color: var(--color); font-size: 14px;">
+        </div>
+        <button id="saveApiKeyButton" 
+          style="width: 100%; padding: 15px; margin-bottom: 10px; background: var(--button-background); 
+          border: var(--border-color); border-radius: 15px; color: var(--color); cursor: pointer; transition: all 0.3s ease;">
+          Enter
+        </button>
+        <div id="getKeyButton" class="settings-button">
+          <i class="fas fa-key"></i> Get Key
+        </div>
+        <div id="helpButton" class="settings-button">
+          <i class="fas fa-book"></i> Help
+        </div>
+      </div>
+    </div>
+  `;
+
+      document.body.appendChild(modal);
+
+      document.getElementById('saveApiKeyButton').addEventListener('click', saveApiKey);
+      document.getElementById('getKeyButton').addEventListener('click', () => {
+        window.open('https://openrouter.ai/settings/keys', '_blank');
+      });
+      document.getElementById('helpButton').addEventListener('click', () => {
+        window.open('/help', '_blank');
+      });
+    }
+
+    function saveApiKey() {
+      const apiKey = document.getElementById('apiKeyInput').value.trim();
+
+      if (!apiKey) {
+        showNotification('Please enter an API key.');
+        return;
+      }
+
+      if (apiKey.startsWith('sk-or-')) {
+        localStorage.setItem('openRouterApiKey', apiKey);
+        document.querySelector('.modal-overlay').remove();
+        showNotification('Booting...');
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      } else {
+        showNotification('API key not suitable for PatheticAI...');
+      }
     }
 
     function initializeUI() {
@@ -1913,94 +1985,87 @@
       const img = new Image();
       img.src = oppositeThemeImage;
     });
-const AudioManager = {
-  sounds: {
-    hover: new Audio('https://pathetic-ai.pages.dev/audios/recieve.mp3'),
-    send: new Audio('https://pathetic-ai.pages.dev/audios/notification.mp3'),
-    receive: new Audio('https://pathetic-ai.pages.dev/audios/notification.mp3'),
-    click: new Audio('https://pathetic-ai.pages.dev/audios/click.mp3'),
-    notification: new Audio('https://pathetic-ai.pages.dev/audios/notification.mp3')
-  },
+    const AudioManager = {
+      sounds: {
+        hover: new Audio('https://pathetic-ai.pages.dev/audios/recieve.mp3'),
+        send: new Audio('https://pathetic-ai.pages.dev/audios/notification.mp3'),
+        receive: new Audio('https://pathetic-ai.pages.dev/audios/notification.mp3'),
+        click: new Audio('https://pathetic-ai.pages.dev/audios/click.mp3'),
+        notification: new Audio('https://pathetic-ai.pages.dev/audios/notification.mp3')
+      },
 
-  init() {
-    Object.values(this.sounds).forEach(audio => {
-      audio.load();
-      audio.volume = 0.5; // Set default volume
-    });
-
-    // Add hover sound to all buttons
-    document.querySelectorAll('button, .settings-button, .selector, .option').forEach(button => {
-      button.addEventListener('mouseenter', () => this.playSound('hover'));
-    });
-
-    // Add click sounds to interactive elements
-    document.querySelectorAll('button, .settings-button, .selector, .option').forEach(button => {
-      button.addEventListener('click', () => this.playSound('click'));
-    });
-
-    // Observe DOM changes to add sound to new buttons
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        mutation.addedNodes.forEach((node) => {
-          if (node.nodeType === 1) { // Element node
-            node.querySelectorAll('button, .settings-button, .selector, .option').forEach(button => {
-              button.addEventListener('mouseenter', () => this.playSound('hover'));
-              button.addEventListener('click', () => this.playSound('click'));
-            });
-          }
+      init() {
+        Object.values(this.sounds).forEach(audio => {
+          audio.load();
+          audio.volume = 0.5;
         });
-      });
-    });
 
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true
-    });
+        document.querySelectorAll('button, .settings-button, .selector, .option').forEach(button => {
+          button.addEventListener('mouseenter', () => this.playSound('hover'));
+        });
 
-    // Override existing message handling to add sounds
-    const originalSendMessage = window.sendMessage;
-    window.sendMessage = async function() {
-      AudioManager.playSound('send');
-      return originalSendMessage.apply(this, arguments);
-    };
+        document.querySelectorAll('button, .settings-button, .selector, .option').forEach(button => {
+          button.addEventListener('click', () => this.playSound('click'));
+        });
 
-    // Add sound to message creation
-    const originalCreateMessageElement = window.createMessageElement;
-    window.createMessageElement = function(message, isUser, timestamp) {
-      if (!isUser) {
-        AudioManager.playSound('receive');
+        const observer = new MutationObserver((mutations) => {
+          mutations.forEach((mutation) => {
+            mutation.addedNodes.forEach((node) => {
+              if (node.nodeType === 1) {
+                node.querySelectorAll('button, .settings-button, .selector, .option').forEach(button => {
+                  button.addEventListener('mouseenter', () => this.playSound('hover'));
+                  button.addEventListener('click', () => this.playSound('click'));
+                });
+              }
+            });
+          });
+        });
+
+        observer.observe(document.body, {
+          childList: true,
+          subtree: true
+        });
+
+        const originalSendMessage = window.sendMessage;
+        window.sendMessage = async function() {
+          AudioManager.playSound('send');
+          return originalSendMessage.apply(this, arguments);
+        };
+
+        const originalCreateMessageElement = window.createMessageElement;
+        window.createMessageElement = function(message, isUser, timestamp) {
+          if (!isUser) {
+            AudioManager.playSound('receive');
+          }
+          return originalCreateMessageElement(message, isUser, timestamp);
+        };
+
+        const originalShowNotification = window.showNotification;
+        window.showNotification = function(message) {
+          AudioManager.playSound('notification');
+          return originalShowNotification(message);
+        };
+      },
+
+      playSound(soundName) {
+        if (!STATE.settings.soundEffects) return;
+
+        const sound = this.sounds[soundName];
+        if (sound) {
+
+          sound.currentTime = 0;
+          sound.play().catch(err => console.log('Error playing sound:', err));
+        }
+      },
+
+      setVolume(volume) {
+        Object.values(this.sounds).forEach(audio => {
+          audio.volume = Math.max(0, Math.min(1, volume));
+        });
       }
-      return originalCreateMessageElement(message, isUser, timestamp);
     };
 
-    // Add sound to notifications
-    const originalShowNotification = window.showNotification;
-    window.showNotification = function(message) {
-      AudioManager.playSound('notification');
-      return originalShowNotification(message);
-    };
-  },
-
-  playSound(soundName) {
-    if (!STATE.settings.soundEffects) return;
-    
-    const sound = this.sounds[soundName];
-    if (sound) {
-      // Reset and play
-      sound.currentTime = 0;
-      sound.play().catch(err => console.log('Error playing sound:', err));
-    }
-  },
-
-  setVolume(volume) {
-    Object.values(this.sounds).forEach(audio => {
-      audio.volume = Math.max(0, Math.min(1, volume));
+    document.addEventListener('DOMContentLoaded', () => {
+      AudioManager.init();
     });
-  }
-};
-
-// Initialize audio system when document is ready
-document.addEventListener('DOMContentLoaded', () => {
-  AudioManager.init();
-});
     </script>
