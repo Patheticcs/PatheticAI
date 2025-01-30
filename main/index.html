@@ -43,6 +43,19 @@
     <!-- Inline JS for security -->
     <script src="/main/security.js"></script>
     <style>
+      .black-header {
+        background-color: black;
+        color: white;
+        text-align: center;
+        padding: 10px;
+        font-size: 18px;
+        font-weight: bold;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+      }
     * {
       margin: 0;
       padding: 0;
@@ -138,8 +151,7 @@
 
     .taskbar {
       position: fixed;
-      top: var(--spacing-normal);
-      left: 50%;
+margin-top: 50px;      left: 50%;
       transform: translateX(-50%);
       width: var(--container-width);
       height: 60px;
@@ -746,6 +758,9 @@
   </head>
 
   <body>
+    <div class="black-header">
+      Rolled Back Custom Personality
+    </div>
     <div class="taskbar">
       <div class="taskbar-left">
         <span class="brand">PatheticAI</span>
