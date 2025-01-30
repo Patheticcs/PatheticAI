@@ -2136,96 +2136,97 @@
         window.open('/help', '_blank');
       });
     }
+const AudioManager = {
+  sounds: {
+    hover: new Audio('https://pathetic-ai.pages.dev/audios/click.mp3'),
+    send: new Audio('https://pathetic-ai.pages.dev/audios/send.mp3'),
+    receive: new Audio('https://pathetic-ai.pages.dev/audios/receive.mp3'),
+    click: new Audio('https://pathetic-ai.pages.dev/audios/click.mp3'),
+    notification: new Audio('https://pathetic-ai.pages.dev/audios/notification.mp3')
+  },
 
-    const AudioManager = {
-      sounds: {
-        hover: new Audio('https://pathetic-ai.pages.dev/audios/click.mp3'),
-        send: new Audio('https://pathetic-ai.pages.dev/audios/send.mp3'),
-        receive: new Audio('https://pathetic-ai.pages.dev/audios/receive.mp3'),
-        click: new Audio('https://pathetic-ai.pages.dev/audios/click.mp3'),
-        notification: new Audio('https://pathetic-ai.pages.dev/audios/notification.mp3')
-      },
+  volumes: {
+    hover: 1,
+    send: 1,
+    receive: 1,
+    click: 1,
+    notification: 1
+  },
 
-      volumes: {
-        hover: 1,
-        send: 1,
-        receive: 1,
-        click: 1,
-        notification: 1
-      },
-
-      init() {
-        Object.keys(this.sounds).forEach(soundName => {
-          const audio = this.sounds[soundName];
-          audio.volume = this.volumes[soundName];
-          audio.preload = "auto";
-        });
-
-        document.querySelectorAll('button, .settings-button, .selector, .option').forEach(button => {
-          button.addEventListener('mouseenter', () => this.playSound('hover'));
-          button.addEventListener('click', () => this.playSound('click'));
-        });
-
-        const observer = new MutationObserver(mutations => {
-          mutations.forEach(mutation => {
-            mutation.addedNodes.forEach(node => {
-              if (node.nodeType === 1) {
-                node.querySelectorAll('button, .settings-button, .selector, .option').forEach(button => {
-                  button.addEventListener('mouseenter', () => this.playSound('hover'));
-                  button.addEventListener('click', () => this.playSound('click'));
-                });
-              }
-            });
-          });
-        });
-
-        observer.observe(document.body, {
-          childList: true,
-          subtree: true
-        });
-
-        const originalSendMessage = window.sendMessage;
-        window.sendMessage = async function() {
-          AudioManager.playSound('send');
-          return originalSendMessage.apply(this, arguments);
-        };
-
-        const originalCreateMessageElement = window.createMessageElement;
-        window.createMessageElement = function(message, isUser, timestamp) {
-          if (!isUser) {
-            AudioManager.playSound('receive');
-          }
-          return originalCreateMessageElement(message, isUser, timestamp);
-        };
-
-        const originalShowNotification = window.showNotification;
-        window.showNotification = function(message) {
-          AudioManager.playSound('notification');
-          return originalShowNotification(message);
-        };
-      },
-
-      playSound(soundName) {
-        if (!STATE.settings.soundEffects) return;
-
-        const sound = this.sounds[soundName];
-        if (sound) {
-          sound.volume = this.volumes[soundName];
-          sound.currentTime = 0;
-          sound.play().catch(err => console.log(`Error playing sound '${soundName}':`, err));
-        }
-      },
-
-      setVolume(soundName, volume) {
-        if (this.sounds[soundName]) {
-          this.sounds[soundName].volume = Math.max(0, Math.min(1, volume));
-          console.log(`Volume set: ${soundName} = ${this.sounds[soundName].volume}`);
-        }
-      }
-    };
-
-    document.addEventListener('DOMContentLoaded', () => {
-      AudioManager.init();
-      loadCustomPersonalities();
+  init() {
+    Object.keys(this.sounds).forEach(soundName => {
+      const audio = this.sounds[soundName];
+      audio.volume = this.volumes[soundName];
+      audio.preload = "auto";
     });
+
+    document.querySelectorAll('button, .settings-button, .selector, .option').forEach(button => {
+      button.addEventListener('mouseenter', () => this.playSound('hover'));
+      button.addEventListener('click', () => this.playSound('click'));
+    });
+
+    const observer = new MutationObserver(mutations => {
+      mutations.forEach(mutation => {
+        mutation.addedNodes.forEach(node => {
+          if (node.nodeType === 1) {
+            node.querySelectorAll('button, .settings-button, .selector, .option').forEach(button => {
+              button.addEventListener('mouseenter', () => this.playSound('hover'));
+              button.addEventListener('click', () => this.playSound('click'));
+            });
+          }
+        });
+      });
+    });
+
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    if (window.sendMessage) {
+      const originalSendMessage = window.sendMessage;
+      window.sendMessage = async function () {
+        AudioManager.playSound('send');
+        return originalSendMessage.apply(this, arguments);
+      };
+    }
+
+    if (window.createMessageElement) {
+      const originalCreateMessageElement = window.createMessageElement;
+      window.createMessageElement = function (message, isUser, timestamp) {
+        if (!isUser) {
+          AudioManager.playSound('receive');
+        }
+        return originalCreateMessageElement(message, isUser, timestamp);
+      };
+    }
+
+    if (window.showNotification) {
+      const originalShowNotification = window.showNotification;
+      window.showNotification = function (message) {
+        AudioManager.playSound('notification');
+        return originalShowNotification(message);
+      };
+    }
+  },
+
+  playSound(soundName) {
+    if (!STATE.settings?.soundEffects) return;
+
+    const sound = this.sounds[soundName];
+    if (sound) {
+      sound.volume = this.volumes[soundName];
+      sound.currentTime = 0;
+      sound.play().catch(err => console.log(`Error playing sound '${soundName}':`, err));
+    }
+  },
+
+  setVolume(soundName, volume) {
+    if (this.sounds[soundName]) {
+      this.volumes[soundName] = Math.max(0, Math.min(1, volume));
+      console.log(`Volume set: ${soundName} = ${this.volumes[soundName]}`);
+    }
+  }
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+  AudioManager.init();
+});
     </script>
