@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="Dark">
-
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>PatheticAI Enhanced</title>
-
     <!-- Preload critical assets -->
     <link rel="preload" href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@700,400&display=swap" as="style">
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style">
@@ -13,7 +11,6 @@
     <link rel="preload" href="/images/icon.png" as="image">
     <link rel="preload" href="/images/light%20background.png" as="image">
     <link rel="preload" href="/images/dark%20background.png" as="image">
-
     <!-- Favicons and Meta Tags -->
     <link rel="manifest" href="/manifest.json">
     <link rel="icon" href="/images/icon.png" type="image/png">
@@ -21,7 +18,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/github-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.0.2/marked.min.js"></script>
-
     <!-- Meta description and social media sharing -->
     <meta name="description" content="PatheticAI - Advanced AI chatbot with enhanced features for seamless conversations and task automation">
     <meta name="keywords" content="AI, chatbot, machine learning, conversation, automation">
@@ -32,582 +28,305 @@
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="PatheticAI">
     <meta name="theme-color" content="#ffffff">
-
     <!-- Apple specific meta tags -->
     <link rel="apple-touch-icon" href="/images/icon.png">
     <meta name="apple-mobile-web-app-title" content="PatheticAI">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="mobile-web-app-capable" content="yes">
-
     <!-- Inline JS for security -->
     <script src="/main/security.js"></script>
     <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Cabinet Grotesk', sans-serif;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-    }
-
-    *::-webkit-scrollbar {
-      display: none;
-    }
-
-    :root {
-      --container-width: min(90%, 800px);
-      --spacing-normal: clamp(16px, 2vw, 20px);
-      --spacing-small: clamp(8px, 1vw, 10px);
-      --border-radius: 30px;
-      --border-radius-small: 15px;
-      --transition: all 0.3s ease;
-    }
-
-    :root[data-theme="Light"] {
-      --color: rgba(0, 0, 0, 1);
-      --background-image: url("https://pathetic-ai.pages.dev//images/light%20background.png");
-      --background-color: #ffffff;
-      --primary-color: #000000;
-      --secondary-color: #000000;
-      --border-color: rgba(0, 0, 0, 0.05);
-      --taskbar-background: rgba(255, 255, 255, 0.6);
-      --input-background: rgba(255, 255, 255, 0.7);
-      --button-background: rgba(0, 0, 0, 0.02);
-      --button-hover-background: rgba(0, 0, 0, 0.05);
-      --modal-background: rgba(255, 255, 255, 0.7);
-      --message-background: rgba(255, 255, 255, 0.6);
-      --message-user-background: rgba(255, 255, 255, 0.5);
-      --code-background: rgba(0, 0, 0, 0.02);
-      --code-text: #000000;
-      --notification-background: rgba(255, 255, 255, 0.6);
-      --notification-text: #000000;
-      --placeholder-color: rgba(0, 0, 0, 0.2);
-      --chat-input-container-background: rgba(255, 255, 255, 0.5);
-      --border-button-color: rgba(0, 0, 0, 0.1);
-    }
-
-    :root[data-theme="Dark"] {
-      --color: rgba(255, 255, 255, 1);
-      --background-image: url("https://pathetic-ai.pages.dev//images/dark%20background.png");
-      --background-color: #000000;
-      --primary-color: #ffffff;
-      --secondary-color: #ffffff;
-      --border-color: rgba(255, 255, 255, 0.03);
-      --taskbar-background: rgba(0, 0, 0, 0.5);
-      --input-background: rgba(0, 0, 0, 0.6);
-      --button-background: rgba(255, 255, 255, 0.02);
-      --button-hover-background: rgba(255, 255, 255, 0.05);
-      --modal-background: rgba(0, 0, 0, 0.6);
-      --message-background: rgba(0, 0, 0, 0.5);
-      --message-user-background: rgba(0, 0, 0, 0.4);
-      --chat-input-container-background: rgba(0, 0, 0, 0.5);
-      --notification-background-color: rgba(0, 0, 0, 0.5);
-    }
-
-    body {
-      background-color: var(--background-color);
-      background-image: var(--background-image);
-      font-family: 'Cabinet Grotesk', sans-serif;
-      background-size: cover;
-      background-attachment: fixed;
-      color: var(--primary-color);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      position: fixed;
-      width: 100%;
-      height: 100%;
-      touch-action: none;
-      -webkit-overflow-scrolling: none;
-      overscroll-behavior: none;
-    }
-
-    .container {
-      position: fixed;
-      top: calc(60px + var(--spacing-normal) * 2);
-      bottom: calc(60px + var(--spacing-normal) * 2);
-      left: 50%;
-      transform: translateX(-50%);
-      width: var(--container-width);
-      overflow-y: auto;
-      padding-right: var(--spacing-small);
-    }
-
-    .taskbar {
-      position: fixed;
-      top: var(--spacing-normal);
-      left: 50%;
-      transform: translateX(-50%);
-      width: var(--container-width);
-      height: 60px;
-      background: var(--taskbar-background);
-      backdrop-filter: blur(10px);
-      border: 1px solid var(--border-color);
-      border-radius: var(--border-radius);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0 var(--spacing-normal);
-      z-index: 1000;
-      overflow-x: visible;
-    }
-
-    .taskbar-left {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .brand {
-      font-size: 20px;
-      font-weight: 700;
-      cursor: pointer;
-      color: var(--primary-color);
-      transition: opacity 0.3s ease;
-    }
-
-    .brand:hover {
-      opacity: 0.8;
-    }
-
-    .preview-tag {
-      font-size: 14px;
-      color: var(--primary-color);
-      opacity: 0.7;
-    }
-
-    .taskbar button,
-    .chat-input-container button,
-    .theme-selector button {
-      background: var(--button-background);
-      border: 1px solid var(--border-color);
-      color: var(--primary-color);
-      padding: 8px 15px;
-      border-radius: 30px;
-      cursor: pointer;
-      margin-left: 10px;
-      transition: all 0.3s ease;
-    }
-
-    .taskbar button:hover,
-    .chat-input-container button:hover,
-    .theme-selector button:hover {
-      background: var(--button-hover-background);
-      transform: translateY(-1px);
-    }
-
-    .chat-messages {
-      display: flex;
-      flex-direction: column;
-      gap: var(--spacing-normal);
-      padding: var(--spacing-normal);
-      height: 100%;
-      overflow-y: auto;
-    }
-
-    .chat-input-container {
-      position: fixed;
-      bottom: var(--spacing-normal);
-      left: 50%;
-      transform: translateX(-50%);
-      width: var(--container-width);
-      max-width: var(--container-max-width);
-      display: flex;
-      gap: 10px;
-      background: var(--chat-input-container-background);
-      backdrop-filter: blur(10px);
-      padding: var(--spacing-normal);
-      border-radius: 30px;
-      border: 1px solid var(--border-color);
-      color: var(--primary-color);
-    }
-
-    .chat-input-container textarea {
-      flex: 1;
-      background: transparent;
-      border: none;
-      outline: none;
-      color: var(--color);
-      font-size: 16px;
-      padding: 10px;
-      border-radius: 10px;
-      resize: none;
-      min-height: 40px;
-      color: var(--primary-color);
-    }
-
-    .chat-input-container input::placeholder {
-      color: var(--color);
-    }
-
-    .chat-input-container button {
-      background: var(--button-background);
-      border: 1px solid var(--border-color);
-      color: var(--color);
-      padding: 8px 20px;
-      border-radius: 30px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .chat-input-container button:hover {
-      background: rgba(255, 255, 255, 0.2);
-      transform: translateY(-1px);
-    }
-
-    .chat-message {
-      padding: var(--spacing-normal);
-      border-radius: 20px;
-      max-width: 85%;
-      white-space: pre-wrap;
-      line-height: 1.5;
-      font-size: clamp(14px, 3vw, 16px);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      animation: messageAppear 0.3s ease;
-    }
-
-    .chat-message.user {
-      background: var(--message-user-background);
-      align-self: flex-end;
-      border-bottom-right-radius: 5px;
-    }
-
-    .chat-message.bot {
-      background: var(--message-background);
-      align-self: flex-start;
-      border-bottom-left-radius: 5px;
-    }
-
-    button {
-      background: var(--button-background);
-      border: 1px solid var(--border-color);
-      color: var(--primary-color);
-      padding: 8px 15px;
-      border-radius: var(--border-radius);
-      cursor: pointer;
-      transition: var(--transition);
-    }
-
-    button:hover {
-      background: var(--button-hover-background);
-      transform: translateY(-1px);
-    }
-
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(5px);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 2000;
-      animation: fadeIn 0.3s ease;
-    }
-
-    .modal-window {
-      background: var(--modal-background);
-      backdrop-filter: blur(10px);
-      border: 1px solid var(--border-color);
-      border-radius: var(--border-radius);
-      width: var(--container-width);
-      max-height: 90vh;
-      padding: var(--spacing-normal);
-      color: var(--primary-color);
-      animation: slideUp 0.3s ease;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-      color: var(--primary-color);
-    }
-
-    .modal-title {
-      font-size: 24px;
-      font-weight: 700;
-      color: var(--primary-color);
-    }
-
-    .modal-content {
-      flex-grow: 1;
-      overflow-y: auto;
-      line-height: 1.6;
-      font-size: 16px;
-      color: var(--primary-color);
-    }
-
-    .modal-content p {
-      margin: 5px 0;
-    }
-
-    .settings-content {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      color: var(--primary-color);
-    }
-
-    .settings-button {
-      background: var(--button-background);
-      border: 1px solid var(--border-color);
-      color: var(--color);
-      padding: 15px;
-      border-radius: 15px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-top: 15px;
-      margin-bottom: 15px;
-    }
-
-    .settings-button:hover {
-      background: var(--button-hover-background);
-      transform: translateX(5px);
-    }
-
-    .settings-button i {
-      width: 20px;
-      text-align: center;
-    }
-
-    .notification {
-      position: fixed;
-      bottom: 100px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--notification-background-color);
-      color: var(--primary-color);
-      padding: 12px 25px;
-      border-radius: 30px;
-      backdrop-filter: blur(10px);
-      animation: slideUp 0.3s ease;
-      z-index: 2000;
-    }
-
-    .notification.fade-out {
-      animation: fadeOut 0.3s ease;
-    }
-
-    .code-block {
-      background: rgba(0, 0, 0, 0.6);
-      border-radius: 10px;
-      padding: 15px;
-      margin: 10px 0;
-      position: relative;
-    }
-
-    .code-block pre {
-      margin: 0;
-      white-space: pre-wrap;
-      font-family: 'Fira Code', monospace;
-      color: #e0e0e0;
-    }
-
-    .copy-button {
-      position: absolute;
-      top: 5px;
-      right: 5px;
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid var(--border-color);
-      color: white;
-      padding: 5px 10px;
-      border-radius: 15px;
-      cursor: pointer;
-      font-size: 12px;
-    }
-
-    .message-actions {
-      display: flex;
-      gap: 5px;
-      margin-top: 5px;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-
-    .chat-message:hover .message-actions {
-      opacity: 1;
-    }
-
-    .action-button {
-      background: var(--button-background);
-      border: var(--border);
-      color: var(--primary-color);
-      padding: 3px 8px;
-      border-radius: 12px;
-      cursor: pointer;
-      font-size: 12px;
-    }
-
-    .custom-personality-form {
-      margin-top: 15px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      padding: 15px;
-      background: var(--button-background);
-      border: 1px solid var(--border-color);
-      border-radius: var(--border-radius-small);
-    }
-
-    .custom-personality-input,
-    .custom-personality-textarea {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      background: transparent
-      color: var(--color);
-      font-family: inherit;
-      transition: var(--transition);
-    }
-
-    .custom-personality-input:focus,
-    .custom-personality-textarea:focus {
-      outline: none;
-      border-color: var(--secondary-color);
-    }
-
-    .custom-personality-textarea {
-      min-height: 100px;
-      resize: vertical;
-    }
-
-    .custom-personality-button {
-      background: var(--button-background);
-      color: var(--color);
-      border: none;
-      padding: 10px 20px;
-      border-radius: var(--border-radius-small);
-      cursor: pointer;
-      transition: var(--transition);
-    }
-
-    .custom-personality-button:hover {
-      opacity: 0.9;
-      transform: translateY(-2px);
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Cabinet Grotesk', sans-serif;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
       }
 
-      to {
-        opacity: 1;
-      }
-    }
-
-    @keyframes slideUp {
-      from {
-        transform: translateY(20px);
-        opacity: 0;
+      *::-webkit-scrollbar {
+        display: none;
       }
 
-      to {
-        transform: translateY(0);
-        opacity: 1;
-      }
-    }
-
-    @keyframes messageAppear {
-      from {
-        transform: translateY(10px);
-        opacity: 0;
-      }
-
-      to {
-        transform: translateY(0);
-        opacity: 1;
-      }
-    }
-
-    @keyframes fadeOut {
-      to {
-        opacity: 0;
-        transform: translate(-50%, 20px);
-      }
-    }
-
-    @media (max-width: 768px) {
       :root {
-        --container-width: 95%;
-        --spacing-normal: clamp(12px, 3vw, 15px);
-        --spacing-small: clamp(6px, 2vw, 8px);
-        --border-radius: 20px;
-        --border-radius-small: 12px;
+        --container-width: min(90%, 800px);
+        --spacing-normal: clamp(16px, 2vw, 20px);
+        --spacing-small: clamp(8px, 1vw, 10px);
+        --border-radius: 30px;
+        --border-radius-small: 15px;
+        --transition: all 0.3s ease;
       }
 
-      .chat-message {
-        max-width: 90%;
-        font-size: var(--font-size-base);
+      :root[data-theme="Light"] {
+        --color: rgba(0, 0, 0, 1);
+        --background-image: url("https://pathetic-ai.pages.dev//images/light%20background.png");
+        --background-color: #ffffff;
+        --primary-color: #000000;
+        --secondary-color: #000000;
+        --border-color: rgba(0, 0, 0, 0.05);
+        --taskbar-background: rgba(255, 255, 255, 0.6);
+        --input-background: rgba(255, 255, 255, 0.7);
+        --button-background: rgba(0, 0, 0, 0.02);
+        --button-hover-background: rgba(0, 0, 0, 0.05);
+        --modal-background: rgba(255, 255, 255, 0.7);
+        --message-background: rgba(255, 255, 255, 0.6);
+        --message-user-background: rgba(255, 255, 255, 0.5);
+        --code-background: rgba(0, 0, 0, 0.02);
+        --code-text: #000000;
+        --notification-background: rgba(255, 255, 255, 0.6);
+        --notification-text: #000000;
+        --placeholder-color: rgba(0, 0, 0, 0.2);
+        --chat-input-container-background: rgba(255, 255, 255, 0.5);
+        --border-button-color: rgba(0, 0, 0, 0.1);
+      }
+
+      :root[data-theme="Dark"] {
+        --color: rgba(255, 255, 255, 1);
+        --background-image: url("https://pathetic-ai.pages.dev//images/dark%20background.png");
+        --background-color: #000000;
+        --primary-color: #ffffff;
+        --secondary-color: #ffffff;
+        --border-color: rgba(255, 255, 255, 0.03);
+        --taskbar-background: rgba(0, 0, 0, 0.5);
+        --input-background: rgba(0, 0, 0, 0.6);
+        --button-background: rgba(255, 255, 255, 0.02);
+        --button-hover-background: rgba(255, 255, 255, 0.05);
+        --modal-background: rgba(0, 0, 0, 0.6);
+        --message-background: rgba(0, 0, 0, 0.5);
+        --message-user-background: rgba(0, 0, 0, 0.4);
+        --chat-input-container-background: rgba(0, 0, 0, 0.5);
+        --notification-background-color: rgba(0, 0, 0, 0.5);
+      }
+
+      body {
+        background-color: var(--background-color);
+        background-image: var(--background-image);
+        font-family: 'Cabinet Grotesk', sans-serif;
+        background-size: cover;
+        background-attachment: fixed;
+        color: var(--primary-color);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        touch-action: none;
+        -webkit-overflow-scrolling: none;
+        overscroll-behavior: none;
+      }
+
+      .container {
+        position: fixed;
+        top: calc(60px + var(--spacing-normal) * 2);
+        bottom: calc(60px + var(--spacing-normal) * 2);
+        left: 50%;
+        transform: translateX(-50%);
+        width: var(--container-width);
+        overflow-y: auto;
+        padding-right: var(--spacing-small);
+      }
+
+      .taskbar {
+        position: fixed;
+        top: var(--spacing-normal);
+        left: 50%;
+        transform: translateX(-50%);
+        width: var(--container-width);
+        height: 60px;
+        background: var(--taskbar-background);
+        backdrop-filter: blur(10px);
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 var(--spacing-normal);
+        z-index: 1000;
+        overflow-x: visible;
+      }
+
+      .taskbar-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .brand {
+        font-size: 20px;
+        font-weight: 700;
+        cursor: pointer;
+        color: var(--primary-color);
+        transition: opacity 0.3s ease;
+      }
+
+      .brand:hover {
+        opacity: 0.8;
+      }
+
+      .preview-tag {
+        font-size: 14px;
+        color: var(--primary-color);
+        opacity: 0.7;
+      }
+
+      .taskbar button,
+      .chat-input-container button,
+      .theme-selector button {
+        background: var(--button-background);
+        border: 1px solid var(--border-color);
+        color: var(--primary-color);
+        padding: 8px 15px;
+        border-radius: 30px;
+        cursor: pointer;
+        margin-left: 10px;
+        transition: all 0.3s ease;
+      }
+
+      .taskbar button:hover,
+      .chat-input-container button:hover,
+      .theme-selector button:hover {
+        background: var(--button-hover-background);
+        transform: translateY(-1px);
+      }
+
+      .chat-messages {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-normal);
+        padding: var(--spacing-normal);
+        height: 100%;
+        overflow-y: auto;
       }
 
       .chat-input-container {
-        padding: calc(var(--spacing-small) * 1.5);
+        position: fixed;
+        bottom: var(--spacing-normal);
+        left: 50%;
+        transform: translateX(-50%);
+        width: var(--container-width);
+        max-width: var(--container-max-width);
+        display: flex;
+        gap: 10px;
+        background: var(--chat-input-container-background);
+        backdrop-filter: blur(10px);
+        padding: var(--spacing-normal);
+        border-radius: 30px;
+        border: 1px solid var(--border-color);
+        color: var(--primary-color);
       }
 
       .chat-input-container textarea {
-        font-size: var(--font-size-base);
+        flex: 1;
+        background: transparent;
+        border: none;
+        outline: none;
+        color: var(--color);
+        font-size: 16px;
+        padding: 10px;
+        border-radius: 10px;
+        resize: none;
+        min-height: 40px;
+        color: var(--primary-color);
+      }
+
+      .chat-input-container input::placeholder {
+        color: var(--color);
+      }
+
+      .chat-input-container button {
+        background: var(--button-background);
+        border: 1px solid var(--border-color);
+        color: var(--color);
+        padding: 8px 20px;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .chat-input-container button:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-1px);
+      }
+
+      .chat-message {
+        padding: var(--spacing-normal);
+        border-radius: 20px;
+        max-width: 85%;
+        white-space: pre-wrap;
+        line-height: 1.5;
+        font-size: clamp(14px, 3vw, 16px);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        animation: messageAppear 0.3s ease;
+      }
+
+      .chat-message.user {
+        background: var(--message-user-background);
+        align-self: flex-end;
+        border-bottom-right-radius: 5px;
+      }
+
+      .chat-message.bot {
+        background: var(--message-background);
+        align-self: flex-start;
+        border-bottom-left-radius: 5px;
       }
 
       button {
-        min-height: 44px;
-        min-width: 44px;
-        padding: 10px 20px;
+        background: var(--button-background);
+        border: 1px solid var(--border-color);
+        color: var(--primary-color);
+        padding: 8px 15px;
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        transition: var(--transition);
+      }
+
+      button:hover {
+        background: var(--button-hover-background);
+        transform: translateY(-1px);
       }
 
       .modal-overlay {
         position: fixed;
         inset: 0;
-        background: rgba(0, 0, 0, 0.4);
-        backdrop-filter: blur(3px);
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(5px);
         display: flex;
         justify-content: center;
         align-items: center;
         z-index: 2000;
-        animation: fadeIn 0.2s ease;
+        animation: fadeIn 0.3s ease;
       }
 
       .modal-window {
         background: var(--modal-background);
-        backdrop-filter: blur(8px);
+        backdrop-filter: blur(10px);
         border: 1px solid var(--border-color);
-        border-radius: 10px;
-        width: 90%;
-        max-width: 400px;
-        max-height: 80vh;
-        padding: 15px;
+        border-radius: var(--border-radius);
+        width: var(--container-width);
+        max-height: 90vh;
+        padding: var(--spacing-normal);
         color: var(--primary-color);
-        animation: slideUp 0.2s ease;
+        animation: slideUp 0.3s ease;
         display: flex;
         flex-direction: column;
-      }
-
-      discord-button {
-        margin-top: 200px;
       }
 
       .modal-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 10px;
+        margin-bottom: 20px;
         color: var(--primary-color);
       }
 
       .modal-title {
-        font-size: 18px;
+        font-size: 24px;
         font-weight: 700;
         color: var(--primary-color);
       }
@@ -615,155 +334,428 @@
       .modal-content {
         flex-grow: 1;
         overflow-y: auto;
-        line-height: 1.4;
-        font-size: 14px;
+        line-height: 1.6;
+        font-size: 16px;
         color: var(--primary-color);
       }
 
       .modal-content p {
-        margin: 4px 0;
-      }
-    }
-
-    @media (max-width: 480px) {
-      :root {
-        --container-width: 98%;
-        --spacing-normal: 10px;
-        --spacing-small: 5px;
+        margin: 5px 0;
       }
 
-      .taskbar {
-        padding: 8px var(--spacing-normal);
-      }
-
-      .taskbar-right button {
-        padding: 5px 10px;
-        font-size: 13px;
-      }
-
-      .brand {
-        font-size: 16px;
-      }
-
-      .preview-tag {
-        font-size: 11px;
-      }
-
-      .chat-message {
-        max-width: 90%;
-        padding: 12px 15px;
-      }
-
-      .modal-window {
-        padding: 15px;
-      }
-
-      .modal-title {
-        font-size: 20px;
-      }
-
-      .modal-content {
-        font-size: 14px;
+      .settings-content {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        color: var(--primary-color);
       }
 
       .settings-button {
-        padding: 12px;
-        font-size: 14px;
+        background: var(--button-background);
+        border: 1px solid var(--border-color);
+        color: var(--color);
+        padding: 15px;
+        border-radius: 15px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 15px;
+        margin-bottom: 15px;
+      }
+
+      .settings-button:hover {
+        background: var(--button-hover-background);
+        transform: translateX(5px);
+      }
+
+      .settings-button i {
+        width: 20px;
+        text-align: center;
       }
 
       .notification {
-        font-size: 13px;
+        position: fixed;
+        bottom: 100px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--notification-background-color);
+        color: var(--primary-color);
+        padding: 12px 25px;
+        border-radius: 30px;
+        backdrop-filter: blur(10px);
+        animation: slideUp 0.3s ease;
+        z-index: 2000;
+      }
+
+      .notification.fade-out {
+        animation: fadeOut 0.3s ease;
+      }
+
+      .code-block {
+        background: rgba(0, 0, 0, 0.6);
+        border-radius: 10px;
+        padding: 15px;
+        margin: 10px 0;
+        position: relative;
+      }
+
+      .code-block pre {
+        margin: 0;
+        white-space: pre-wrap;
+        font-family: 'Fira Code', monospace;
+        color: #e0e0e0;
+      }
+
+      .copy-button {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid var(--border-color);
+        color: white;
+        padding: 5px 10px;
+        border-radius: 15px;
+        cursor: pointer;
+        font-size: 12px;
+      }
+
+      .message-actions {
+        display: flex;
+        gap: 5px;
+        margin-top: 5px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .chat-message:hover .message-actions {
+        opacity: 1;
+      }
+
+      .action-button {
+        background: var(--button-background);
+        border: var(--border);
+        color: var(--primary-color);
+        padding: 3px 8px;
+        border-radius: 12px;
+        cursor: pointer;
+        font-size: 12px;
+      }
+
+      .custom-personality-form {
+        margin-top: 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding: 15px;
+        background: var(--button-background);
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius-small);
+      }
+
+      .custom-personality-input,
+      .custom-personality-textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        background: transparent color: var(--color);
+        font-family: inherit;
+        transition: var(--transition);
+      }
+
+      .custom-personality-input:focus,
+      .custom-personality-textarea:focus {
+        outline: none;
+        border-color: var(--secondary-color);
+      }
+
+      .custom-personality-textarea {
+        min-height: 100px;
+        resize: vertical;
+      }
+
+      .custom-personality-button {
+        background: var(--button-background);
+        color: var(--color);
+        border: none;
         padding: 10px 20px;
-      }
-    }
-
-    .selector-container {
-      position: relative;
-      display: inline-block;
-      width: 100%;
-    }
-
-    .selector {
-      background: var(--button-background);
-      border: 1px solid var(--border-color);
-      padding: 15px;
-      border-radius: 15px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-top: 10px;
-      margin-bottom: 10px;
-    }
-
-    .selector i {
-      font-size: 14px;
-      transition: transform 0.3s ease;
-    }
-
-    .selector:hover {
-      background: var(--button-hover-background);
-      transform: translateX(5px);
-    }
-
-    .options {
-      position: absolute;
-      top: calc(100% + 5px);
-      left: 0;
-      width: 100%;
-      display: none;
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-      z-index: 10;
-      background-color: var(--background-color);
-    }
-
-    .option {
-      padding: var(--spacing-small);
-      cursor: pointer;
-      font-size: 14px;
-      color: var(--primary-color);
-      transition: background-color 0.3s ease, transform 0.2s ease;
-      transform: translateX(5px);
-    }
-
-    .option:hover {
-      background-color: var(--button-hover-background);
-      transform: translateX(10px);
-    }
-
-    .options.active {
-      display: block;
-    }
-
-    .selector.open i {
-      transform: rotate(180deg);
-    }
-
-    @media (max-height: 600px) and (orientation: landscape) {
-      .container {
-        top: 70px;
-        bottom: 70px;
+        border-radius: var(--border-radius-small);
+        cursor: pointer;
+        transition: var(--transition);
       }
 
-      .taskbar {
-        height: 50px;
+      .custom-personality-button:hover {
+        opacity: 0.9;
+        transform: translateY(-2px);
       }
 
-      .chat-input-container {
-        padding: 8px 15px;
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+
+        to {
+          opacity: 1;
+        }
       }
 
-      .chat-message {
-        padding: 10px 15px;
-        margin-bottom: 8px;
+      @keyframes slideUp {
+        from {
+          transform: translateY(20px);
+          opacity: 0;
+        }
+
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
       }
-    }
+
+      @keyframes messageAppear {
+        from {
+          transform: translateY(10px);
+          opacity: 0;
+        }
+
+        to {
+          transform: translateY(0);
+          opacity: 1;
+        }
+      }
+
+      @keyframes fadeOut {
+        to {
+          opacity: 0;
+          transform: translate(-50%, 20px);
+        }
+      }
+
+      @media (max-width: 768px) {
+        :root {
+          --container-width: 95%;
+          --spacing-normal: clamp(12px, 3vw, 15px);
+          --spacing-small: clamp(6px, 2vw, 8px);
+          --border-radius: 20px;
+          --border-radius-small: 12px;
+        }
+
+        .chat-message {
+          max-width: 90%;
+          font-size: var(--font-size-base);
+        }
+
+        .chat-input-container {
+          padding: calc(var(--spacing-small) * 1.5);
+        }
+
+        .chat-input-container textarea {
+          font-size: var(--font-size-base);
+        }
+
+        button {
+          min-height: 44px;
+          min-width: 44px;
+          padding: 10px 20px;
+        }
+
+        .modal-overlay {
+          position: fixed;
+          inset: 0;
+          background: rgba(0, 0, 0, 0.4);
+          backdrop-filter: blur(3px);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          z-index: 2000;
+          animation: fadeIn 0.2s ease;
+        }
+
+        .modal-window {
+          background: var(--modal-background);
+          backdrop-filter: blur(8px);
+          border: 1px solid var(--border-color);
+          border-radius: 10px;
+          width: 90%;
+          max-width: 400px;
+          max-height: 80vh;
+          padding: 15px;
+          color: var(--primary-color);
+          animation: slideUp 0.2s ease;
+          display: flex;
+          flex-direction: column;
+        }
+
+        discord-button {
+          margin-top: 200px;
+        }
+
+        .modal-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 10px;
+          color: var(--primary-color);
+        }
+
+        .modal-title {
+          font-size: 18px;
+          font-weight: 700;
+          color: var(--primary-color);
+        }
+
+        .modal-content {
+          flex-grow: 1;
+          overflow-y: auto;
+          line-height: 1.4;
+          font-size: 14px;
+          color: var(--primary-color);
+        }
+
+        .modal-content p {
+          margin: 4px 0;
+        }
+      }
+
+      @media (max-width: 480px) {
+        :root {
+          --container-width: 98%;
+          --spacing-normal: 10px;
+          --spacing-small: 5px;
+        }
+
+        .taskbar {
+          padding: 8px var(--spacing-normal);
+        }
+
+        .taskbar-right button {
+          padding: 5px 10px;
+          font-size: 13px;
+        }
+
+        .brand {
+          font-size: 16px;
+        }
+
+        .preview-tag {
+          font-size: 11px;
+        }
+
+        .chat-message {
+          max-width: 90%;
+          padding: 12px 15px;
+        }
+
+        .modal-window {
+          padding: 15px;
+        }
+
+        .modal-title {
+          font-size: 20px;
+        }
+
+        .modal-content {
+          font-size: 14px;
+        }
+
+        .settings-button {
+          padding: 12px;
+          font-size: 14px;
+        }
+
+        .notification {
+          font-size: 13px;
+          padding: 10px 20px;
+        }
+      }
+
+      .selector-container {
+        position: relative;
+        display: inline-block;
+        width: 100%;
+      }
+
+      .selector {
+        background: var(--button-background);
+        border: 1px solid var(--border-color);
+        padding: 15px;
+        border-radius: 15px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+      }
+
+      .selector i {
+        font-size: 14px;
+        transition: transform 0.3s ease;
+      }
+
+      .selector:hover {
+        background: var(--button-hover-background);
+        transform: translateX(5px);
+      }
+
+      .options {
+        position: absolute;
+        top: calc(100% + 5px);
+        left: 0;
+        width: 100%;
+        display: none;
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        z-index: 10;
+        background-color: var(--background-color);
+      }
+
+      .option {
+        padding: var(--spacing-small);
+        cursor: pointer;
+        font-size: 14px;
+        color: var(--primary-color);
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        transform: translateX(5px);
+      }
+
+      .option:hover {
+        background-color: var(--button-hover-background);
+        transform: translateX(10px);
+      }
+
+      .options.active {
+        display: block;
+      }
+
+      .selector.open i {
+        transform: rotate(180deg);
+      }
+
+      @media (max-height: 600px) and (orientation: landscape) {
+        .container {
+          top: 70px;
+          bottom: 70px;
+        }
+
+        .taskbar {
+          height: 50px;
+        }
+
+        .chat-input-container {
+          padding: 8px 15px;
+        }
+
+        .chat-message {
+          padding: 10px 15px;
+          margin-bottom: 8px;
+        }
+      }
     </style>
   </head>
-
   <body>
     <div class="taskbar">
       <div class="taskbar-left">
@@ -796,26 +788,26 @@
       </button>
     </div>
     <script>
-    const CONFIG = {
-      MAX_RETRIES: 3,
-      TYPING_SPEED: 50,
-      MAX_CONTEXT_LENGTH: 10,
-      SUGGESTION_COUNT: 4,
-      API_TIMEOUT: 30000,
-      DEBOUNCE_DELAY: 300,
-      MAX_MESSAGE_LENGTH: 4000,
-      STORAGE_PREFIX: 'pathetic_ai_',
-      STORAGE_KEYS: {
-        THEME: 'theme',
-        API_KEY: 'openRouterApiKey',
-        CUSTOM_PERSONALITIES: 'customPersonalities',
-        MESSAGES: 'chatMessages',
-        LANGUAGE: 'preferredLanguage',
-        SETTINGS: 'userSettings',
-        PERSONALITY: 'selectedPersonality'
-      }
-    };
-    const PERSONALITIES = [{
+      const CONFIG = {
+        MAX_RETRIES: 3,
+        TYPING_SPEED: 50,
+        MAX_CONTEXT_LENGTH: 10,
+        SUGGESTION_COUNT: 4,
+        API_TIMEOUT: 30000,
+        DEBOUNCE_DELAY: 300,
+        MAX_MESSAGE_LENGTH: 4000,
+        STORAGE_PREFIX: 'pathetic_ai_',
+        STORAGE_KEYS: {
+          THEME: 'theme',
+          API_KEY: 'openRouterApiKey',
+          MESSAGES: 'chatMessages',
+          LANGUAGE: 'preferredLanguage',
+          SETTINGS: 'userSettings',
+          PERSONALITY: 'selectedPersonality',
+          CUSTOM_PERSONALITIES: 'customPersonalities'
+        }
+      };
+      const PERSONALITIES = [{
         name: "Friendly",
         systemMessage: `You are a friendly, warm, and supportive AI assistant who:
     - Uses positive and encouraging language
@@ -823,8 +815,7 @@
     - Maintains a conversational and approachable tone
     - Provides examples and analogies to aid understanding
     - Shows genuine interest in helping users succeed`
-      },
-      {
+      }, {
         name: "Professional",
         systemMessage: `You are a professional, efficient AI assistant who:
     - Communicates with precision and clarity
@@ -832,8 +823,7 @@
     - Maintains a formal but accessible tone
     - Provides well-structured responses
     - Emphasizes efficiency and practical solutions`
-      },
-      {
+      }, {
         name: "Academic",
         systemMessage: `You are a scholarly AI assistant who:
     - Uses academic language and terminology
@@ -841,8 +831,7 @@
     - Cites relevant sources and studies
     - Encourages critical thinking
     - Maintains high academic standards`
-      },
-      {
+      }, {
         name: "Casual",
         systemMessage: `You are a laid-back, informal AI assistant who:
     - Uses conversational, everyday language
@@ -850,8 +839,7 @@
     - Keeps responses concise and engaging
     - Encourages relaxed, easygoing interactions
     - Avoids unnecessary formality`
-      },
-      {
+      }, {
         name: "Motivational",
         systemMessage: `You are an inspiring and motivational AI assistant who:
     - Uses uplifting and encouraging language
@@ -859,8 +847,7 @@
     - Provides motivational quotes and wisdom
     - Reinforces confidence and resilience
     - Supports users in achieving their goals`
-      },
-      {
+      }, {
         name: "Concise",
         systemMessage: `You are a brief and to-the-point AI assistant who:
     - Keeps responses short and direct
@@ -868,8 +855,7 @@
     - Answers with clarity and brevity
     - Optimizes efficiency in communication
     - Sticks to essential information only`
-      },
-      {
+      }, {
         name: "Storyteller",
         systemMessage: `You are a creative, narrative-driven AI assistant who:
     - Uses storytelling to illustrate points
@@ -877,8 +863,7 @@
     - Captures imagination and interest
     - Makes learning enjoyable through stories
     - Adapts stories to suit the user's needs`
-      },
-      {
+      }, {
         name: "Sarcastic",
         systemMessage: `You are a witty, sarcastic AI assistant who:
     - Uses playful, humorous sarcasm
@@ -886,8 +871,7 @@
     - Maintains an entertaining and fun tone
     - Ensures sarcasm is lighthearted, not offensive
     - Keeps interactions engaging and humorous`
-      },
-      {
+      }, {
         name: "Empathetic",
         systemMessage: `You are a compassionate and understanding AI assistant who:
     - Listens attentively to users' concerns
@@ -895,8 +879,7 @@
     - Offers emotional support and encouragement
     - Helps users feel heard and understood
     - Prioritizes a caring, human-like approach`
-      },
-      {
+      }, {
         name: "Philosophical",
         systemMessage: `You are a deep-thinking, philosophical AI assistant who:
     - Explores profound questions and ideas
@@ -904,61 +887,59 @@
     - Uses wisdom from philosophy and history
     - Avoids simplistic answers, embracing complexity
     - Guides users toward deeper understanding`
-      }
-    ];
-
-    const MODELS = [{
-      name: "google/gemini-2.0-flash-exp:free",
-      priority: 1,
-      timeout: 20000,
-      retryDelay: 1000
-    }, {
-      name: "meta-llama/llama-3.2-3b-instruct:free",
-      priority: 2,
-      timeout: 25000,
-      retryDelay: 1500
-    }, {
-      name: "qwen/qwen-2-7b-instruct:free",
-      priority: 3,
-      timeout: 30000,
-      retryDelay: 2000
-    }];
-    const STATE = {
-      isWaitingForResponse: false,
-      customPersonalities: [],
-      editingMessageId: null,
-      voiceRecording: false,
-      messageHistory: [],
-      currentLanguage: 'English',
-      theme: 'dark',
-      selectedModel: MODELS[0].name,
-      contextLength: 0,
-      mediaRecorder: null,
-      selectedPersonality: PERSONALITIES[0],
-      settings: {
-        notifications: true,
-        soundEffects: true,
-        autoScroll: true,
-        autoComplete: true,
-        markdownPreview: true,
-        codeHighlighting: true
-      },
-      recognition: null,
-      editingState: null,
-      lastInteraction: Date.now(),
-      errorCount: 0
-    };
-    document.addEventListener('DOMContentLoaded', async () => {
-      try {
-        await initializeApp();
-      } catch (error) {
-        console.error('Initialization error:', error);
-        showError('Failed to initialize application');
-      }
-    });
-    const systemMessage = {
-      role: "system",
-      content: `You are PatheticAI Enhanced
+      }];
+      const MODELS = [{
+        name: "google/gemini-2.0-flash-exp:free",
+        priority: 1,
+        timeout: 20000,
+        retryDelay: 1000
+      }, {
+        name: "meta-llama/llama-3.2-3b-instruct:free",
+        priority: 2,
+        timeout: 25000,
+        retryDelay: 1500
+      }, {
+        name: "qwen/qwen-2-7b-instruct:free",
+        priority: 3,
+        timeout: 30000,
+        retryDelay: 2000
+      }];
+      const STATE = {
+        customPersonalities: [],
+        isWaitingForResponse: false,
+        editingMessageId: null,
+        voiceRecording: false,
+        messageHistory: [],
+        currentLanguage: 'English',
+        theme: 'dark',
+        selectedModel: MODELS[0].name,
+        contextLength: 0,
+        mediaRecorder: null,
+        selectedPersonality: PERSONALITIES[0],
+        settings: {
+          notifications: true,
+          soundEffects: true,
+          autoScroll: true,
+          autoComplete: true,
+          markdownPreview: true,
+          codeHighlighting: true
+        },
+        recognition: null,
+        editingState: null,
+        lastInteraction: Date.now(),
+        errorCount: 0
+      };
+      document.addEventListener('DOMContentLoaded', async () => {
+        try {
+          await initializeApp();
+        } catch (error) {
+          console.error('Initialization error:', error);
+          showError('Failed to initialize application');
+        }
+      });
+      const systemMessage = {
+        role: "system",
+        content: `You are PatheticAI Enhanced
 
     Key characteristics:
     - Friendly and empathetic AI assistant
@@ -966,932 +947,853 @@
     - Adapts communication style to user needs
     - Offers helpful suggestions and insights
     - Maintains context awareness`
-    };
-    document.addEventListener('DOMContentLoaded', () => {
-      initializeApp();
-      setupSecurityFeatures();
-    });
-
-    async function initializeApp() {
-
-      await loadSavedState();
-
-      initializeUI();
-
-      setupEventListeners();
-
-      await showWelcomeMessage();
-
-      if (!await checkApiKey()) {
-        disableInput();
-        showApiKeyModal();
+      };
+      document.addEventListener('DOMContentLoaded', () => {
+        initializeApp();
+        setupSecurityFeatures();
+      });
+      async function initializeApp() {
+        await loadSavedState();
+        initializeUI();
+        setupEventListeners();
+        await showWelcomeMessage();
+        if (!await checkApiKey()) {
+          disableInput();
+          showApiKeyModal();
+        }
+        initializeVoiceInput();
       }
 
-      initializeVoiceInput();
-    }
-
-    function getSystemMessage() {
-      return {
-        role: "system",
-        content: STATE.selectedPersonality.systemMessage
-      };
-    }
-    async function toggleVoiceInput() {
-      const voiceButton = document.querySelector('.voice-input-button');
-      const messageInput = document.getElementById('messageInput');
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (!STATE.voiceRecording) {
-        if (!SpeechRecognition) {
-          showError('Your browser does not support the Web Speech API');
-          return;
-        }
-        try {
-          const recognition = new SpeechRecognition();
-          recognition.continuous = false;
-          recognition.interimResults = true;
-          recognition.lang = 'en-US';
-          STATE.recognition = recognition;
-          recognition.onstart = () => {
-            STATE.voiceRecording = true;
-            voiceButton.classList.add('recording');
-            showNotification('Voice recording started');
-          };
-          recognition.onresult = (event) => {
-            let transcript = '';
-            let interimTranscript = '';
-            for (let i = event.resultIndex; i < event.results.length; i++) {
-              const result = event.results[i];
-              if (result.isFinal) {
-                transcript += result[0].transcript;
-              } else {
-                interimTranscript += result[0].transcript;
+      function getSystemMessage() {
+        return {
+          role: "system",
+          content: STATE.selectedPersonality.systemMessage
+        };
+      }
+      async function toggleVoiceInput() {
+        const voiceButton = document.querySelector('.voice-input-button');
+        const messageInput = document.getElementById('messageInput');
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!STATE.voiceRecording) {
+          if (!SpeechRecognition) {
+            showError('Your browser does not support the Web Speech API');
+            return;
+          }
+          try {
+            const recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = true;
+            recognition.lang = 'en-US';
+            STATE.recognition = recognition;
+            recognition.onstart = () => {
+              STATE.voiceRecording = true;
+              voiceButton.classList.add('recording');
+              showNotification('Voice recording started');
+            };
+            recognition.onresult = (event) => {
+              let transcript = '';
+              let interimTranscript = '';
+              for (let i = event.resultIndex; i < event.results.length; i++) {
+                const result = event.results[i];
+                if (result.isFinal) {
+                  transcript += result[0].transcript;
+                } else {
+                  interimTranscript += result[0].transcript;
+                }
               }
-            }
-            messageInput.value = transcript || interimTranscript;
-            messageInput.focus();
-          };
-          recognition.onerror = (event) => {
-            showError('Speech recognition error');
-            console.error('Speech recognition error:', event.error);
-          };
-          recognition.onend = () => {
+              messageInput.value = transcript || interimTranscript;
+              messageInput.focus();
+            };
+            recognition.onerror = (event) => {
+              showError('Speech recognition error');
+              console.error('Speech recognition error:', event.error);
+            };
+            recognition.onend = () => {
+              STATE.voiceRecording = false;
+              voiceButton.classList.remove('recording');
+              showNotification('Voice recording stopped');
+            };
+            recognition.start();
+          } catch (error) {
+            showError('Microphone access denied');
+            voiceButton.disabled = true;
+          }
+        } else {
+          if (STATE.recognition) {
+            STATE.recognition.stop();
             STATE.voiceRecording = false;
             voiceButton.classList.remove('recording');
             showNotification('Voice recording stopped');
-          };
-          recognition.start();
-        } catch (error) {
-          showError('Microphone access denied');
-          voiceButton.disabled = true;
+          }
         }
-      } else {
-        if (STATE.recognition) {
-          STATE.recognition.stop();
-          STATE.voiceRecording = false;
+      }
+      const voiceButton = document.getElementById('voiceButton');
+      const messageInput = document.getElementById('messageInput');
+      const notification = document.getElementById('notification');
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      let recognition;
+
+      function initializeVoiceInput() {
+        if (!SpeechRecognition) {
+          alert('Your browser does not support the Web Speech API');
+          return null;
+        }
+        const recognitionInstance = new SpeechRecognition();
+        recognitionInstance.continuous = false;
+        recognitionInstance.interimResults = true;
+        recognitionInstance.lang = 'en-US';
+        recognitionInstance.onstart = () => {
+          voiceButton.classList.add('recording');
+          showNotification('Voice recording started');
+        };
+        recognitionInstance.onresult = (event) => {
+          let transcript = '';
+          for (let i = event.resultIndex; i < event.results.length; i++) {
+            const result = event.results[i];
+            if (result.isFinal) {
+              transcript += result[0].transcript;
+            }
+          }
+          messageInput.value = transcript;
+        };
+        recognitionInstance.onerror = (event) => {
+          alert('Speech recognition error');
+          console.error('Speech recognition error:', event.error);
+        };
+        recognitionInstance.onend = () => {
           voiceButton.classList.remove('recording');
           showNotification('Voice recording stopped');
+        };
+        return recognitionInstance;
+      }
+      voiceButton.addEventListener('click', () => {
+        if (!recognition) {
+          recognition = initializeVoiceInput();
+          if (!recognition) return;
         }
-      }
-    }
-    const voiceButton = document.getElementById('voiceButton');
-    const messageInput = document.getElementById('messageInput');
-    const notification = document.getElementById('notification');
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    let recognition;
-
-    function initializeVoiceInput() {
-      if (!SpeechRecognition) {
-        alert('Your browser does not support the Web Speech API');
-        return null;
-      }
-      const recognitionInstance = new SpeechRecognition();
-      recognitionInstance.continuous = false;
-      recognitionInstance.interimResults = true;
-      recognitionInstance.lang = 'en-US';
-      recognitionInstance.onstart = () => {
-        voiceButton.classList.add('recording');
-        showNotification('Voice recording started');
-      };
-      recognitionInstance.onresult = (event) => {
-        let transcript = '';
-        for (let i = event.resultIndex; i < event.results.length; i++) {
-          const result = event.results[i];
-          if (result.isFinal) {
-            transcript += result[0].transcript;
-          }
-        }
-        messageInput.value = transcript;
-      };
-      recognitionInstance.onerror = (event) => {
-        alert('Speech recognition error');
-        console.error('Speech recognition error:', event.error);
-      };
-      recognitionInstance.onend = () => {
-        voiceButton.classList.remove('recording');
-        showNotification('Voice recording stopped');
-      };
-      return recognitionInstance;
-    }
-    voiceButton.addEventListener('click', () => {
-      if (!recognition) {
-        recognition = initializeVoiceInput();
-        if (!recognition) return;
-      }
-      if (voiceButton.classList.contains('recording')) {
-        recognition.stop();
-      } else {
-        recognition.start();
-      }
-    });
-
-    function showNotification(message) {
-      notification.innerText = message;
-      notification.style.display = 'block';
-      setTimeout(() => {
-        notification.style.display = 'none';
-      }, 3000);
-    }
-
-    function loadSavedState() {
-      try {
-        const savedMessages = localStorage.getItem(CONFIG.STORAGE_KEYS.MESSAGES);
-        if (savedMessages) {
-          STATE.messageHistory = JSON.parse(savedMessages);
-          STATE.messageHistory = STATE.messageHistory.filter(msg => msg && msg.role && msg.content && msg.timestamp);
-          const chatMessages = document.querySelector('.chat-messages');
-          chatMessages.innerHTML = '';
-          STATE.messageHistory.forEach(msg => {
-            const isUser = msg.role === 'user';
-            const {
-              element
-            } = createMessageElement(msg.content, isUser, new Date(msg.timestamp));
-            chatMessages.appendChild(element);
-          });
+        if (voiceButton.classList.contains('recording')) {
+          recognition.stop();
         } else {
-          showWelcomeMessage();
-        }
-        const savedSettings = localStorage.getItem(CONFIG.STORAGE_KEYS.SETTINGS);
-        if (savedSettings) {
-          const parsedSettings = JSON.parse(savedSettings);
-          STATE.settings = {
-            ...STATE.settings,
-            ...parsedSettings
-          };
-        }
-        const savedTheme = localStorage.getItem(CONFIG.STORAGE_KEYS.THEME);
-        if (savedTheme) {
-          STATE.theme = savedTheme;
-          document.documentElement.setAttribute('data-theme', savedTheme);
-        }
-        const savedLanguage = localStorage.getItem(CONFIG.STORAGE_KEYS.LANGUAGE);
-        if (savedLanguage) {
-          STATE.currentLanguage = savedLanguage;
-        }
-        const savedPersonality = localStorage.getItem(CONFIG.STORAGE_KEYS.PERSONALITY);
-        if (savedPersonality) {
-          const personality = PERSONALITIES.find(p => p.name === savedPersonality);
-          if (personality) {
-            STATE.selectedPersonality = personality;
-          }
-        }
-      } catch (error) {
-        console.error('Error loading saved state:', error);
-        STATE.messageHistory = [];
-        saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, []);
-        showWelcomeMessage();
-      }
-    }
-
-    function loadCustomPersonalities() {
-      try {
-        const savedCustomPersonalities = localStorage.getItem(CONFIG.STORAGE_KEYS.CUSTOM_PERSONALITIES);
-        if (savedCustomPersonalities) {
-          STATE.customPersonalities = JSON.parse(savedCustomPersonalities);
-        }
-      } catch (error) {
-        console.error('Error loading custom personalities:', error);
-        STATE.customPersonalities = [];
-      }
-    }
-
-    function saveCustomPersonalities() {
-      try {
-        localStorage.setItem(CONFIG.STORAGE_KEYS.CUSTOM_PERSONALITIES, JSON.stringify(STATE.customPersonalities));
-      } catch (error) {
-        console.error('Error saving custom personalities:', error);
-      }
-    }
-
-    function addCustomPersonality(name, systemMessage) {
-      const newPersonality = {
-        name,
-        systemMessage,
-        isCustom: true
-      };
-      STATE.customPersonalities.push(newPersonality);
-      saveCustomPersonalities();
-      return newPersonality;
-    }
-
-    function removeCustomPersonality(name) {
-      STATE.customPersonalities = STATE.customPersonalities.filter(p => p.name !== name);
-      saveCustomPersonalities();
-    }
-
-    function deletePersonality(name) {
-
-      STATE.customPersonalities = STATE.customPersonalities.filter(p => p.name !== name);
-
-      saveCustomPersonalities();
-
-      showNotification(`Custom personality "${name}" deleted.`);
-      showSettingsModal();
-    }
-
-    function saveToLocalStorage(key, value) {
-      try {
-        if (key === CONFIG.STORAGE_KEYS.MESSAGES) {
-          return false;
-        }
-        const serializedValue = typeof value === 'string' ? value : JSON.stringify(value);
-        localStorage.setItem(key, serializedValue);
-        return true;
-      } catch (error) {
-        console.error('Local storage error:', error);
-        return false;
-      }
-    }
-
-    function formatTimestamp(date) {
-      return new Intl.DateTimeFormat('default', {
-        hour: 'numeric',
-        minute: 'numeric',
-        second: 'numeric',
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric'
-      }).format(date);
-    }
-    async function copyToClipboard(text) {
-      try {
-        await navigator.clipboard.writeText(text);
-        showNotification('Copied to clipboard');
-      } catch (err) {
-        showNotification('Failed to copy to clipboard');
-      }
-    }
-
-    function createMessageElement(message, isUser, timestamp = new Date()) {
-      const messageId = Date.now().toString();
-      const messageElement = document.createElement('div');
-      messageElement.classList.add('chat-message', isUser ? 'user' : 'bot');
-      messageElement.dataset.messageId = messageId;
-      const contentDiv = document.createElement('div');
-      contentDiv.classList.add('message-content');
-      if (!isUser) {
-        contentDiv.innerHTML = marked.parse(message, {
-          highlight: function(code, language) {
-            if (language) {
-              return hljs.highlight(code, {
-                language
-              }).value;
-            }
-            return hljs.highlightAuto(code).value;
-          }
-        });
-        contentDiv.querySelectorAll('pre code').forEach((block) => {
-          const wrapper = document.createElement('div');
-          wrapper.className = 'code-block-wrapper';
-          const copyButton = document.createElement('button');
-          copyButton.className = 'code-copy-button';
-          copyButton.innerHTML = ' <i class = "fas fa-copy" > </i>';
-          copyButton.onclick = (e) => {
-            e.stopPropagation();
-            navigator.clipboard.writeText(block.textContent).then(() => {
-              copyButton.innerHTML = ' <i class = "fas fa-check" > </i>';
-              setTimeout(() => {
-                copyButton.innerHTML = ' <i class = "fas fa-copy" > </i>';
-              }, 2000);
-            });
-          };
-          block.parentNode.insertBefore(wrapper, block);
-          wrapper.appendChild(block);
-          wrapper.appendChild(copyButton);
-        });
-      } else {
-        contentDiv.textContent = message;
-      }
-      messageElement.appendChild(contentDiv);
-      const timestampDiv = document.createElement('div');
-      timestampDiv.className = 'message-timestamp';
-      timestampDiv.textContent = formatTimestamp(timestamp);
-      messageElement.appendChild(timestampDiv);
-      const actionsDiv = document.createElement('div');
-      actionsDiv.className = 'message-actions';
-      if (isUser) {
-        const editButton = document.createElement('button');
-        editButton.className = 'action-button';
-        editButton.innerHTML = ' <i class = "fa-regular fa-edit" > </i>';
-        editButton.onclick = () => startEditing(messageId);
-        actionsDiv.appendChild(editButton);
-      }
-      const copyButton = document.createElement('button');
-      copyButton.className = 'action-button';
-      copyButton.innerHTML = ' <i class = "fa-regular fa-copy" > </i>';
-      copyButton.onclick = () => copyToClipboard(message);
-      actionsDiv.appendChild(copyButton);
-      messageElement.appendChild(actionsDiv);
-      return {
-        element: messageElement,
-        id: messageId
-      };
-    }
-    async function startEditing(messageId) {
-      if (STATE.isWaitingForResponse) return;
-      const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
-      if (!messageElement) return;
-      const contentDiv = messageElement.querySelector('.message-content');
-      const originalText = contentDiv.textContent;
-      const textarea = document.createElement('textarea');
-      textarea.className = 'edit-input';
-      textarea.value = originalText;
-      contentDiv.replaceWith(textarea);
-      const messageIndex = STATE.messageHistory.findIndex(msg => msg.id === messageId);
-      STATE.editingState = {
-        messageId,
-        originalText,
-        messageIndex,
-        subsequentMessages: STATE.messageHistory.slice(messageIndex + 1)
-      };
-      textarea.focus();
-      messageElement.classList.add('edit-mode');
-      STATE.editingMessageId = messageId;
-      textarea.addEventListener('keydown', async (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-          e.preventDefault();
-          await finishEditing(messageId, textarea.value.trim());
-        } else if (e.key === 'Escape') {
-          cancelEditing(messageId);
+          recognition.start();
         }
       });
-    }
 
-    function cancelEditing(messageId) {
-      if (!STATE.editingState) return;
-      const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
-      if (!messageElement) return;
-      const textarea = messageElement.querySelector('.edit-input');
-      const contentDiv = document.createElement('div');
-      contentDiv.className = 'message-content';
-      contentDiv.textContent = STATE.editingState.originalText;
-      textarea.replaceWith(contentDiv);
-      messageElement.classList.remove('edit-mode');
-      STATE.editingMessageId = null;
-      STATE.editingState = null;
-    }
-    async function finishEditing(messageId, newText) {
-      if (!messageId || !newText || STATE.isWaitingForResponse || !STATE.editingState) return;
-      const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
-      if (!messageElement) return;
-      if (newText === STATE.editingState.originalText) {
-        cancelEditing(messageId);
-        return;
+      function showNotification(message) {
+        notification.innerText = message;
+        notification.style.display = 'block';
+        setTimeout(() => {
+          notification.style.display = 'none';
+        }, 3000);
       }
-      const textarea = messageElement.querySelector('.edit-input');
-      const contentDiv = document.createElement('div');
-      contentDiv.className = 'message-content';
-      contentDiv.textContent = newText;
-      textarea.replaceWith(contentDiv);
-      messageElement.classList.remove('edit-mode');
-      const {
-        messageIndex
-      } = STATE.editingState;
-      let nextElement = messageElement.nextElementSibling;
-      while (nextElement) {
-        const temp = nextElement.nextElementSibling;
-        nextElement.remove();
-        nextElement = temp;
-      }
-      STATE.messageHistory[messageIndex].content = newText;
-      STATE.messageHistory = STATE.messageHistory.slice(0, messageIndex + 1);
-      try {
-        const typingIndicator = createTypingIndicator();
-        document.querySelector('.chat-messages').appendChild(typingIndicator);
-        STATE.isWaitingForResponse = true;
-        const response = await sendMessageWithRetry(newText);
-        typingIndicator.remove();
-        if (response.text) {
-          const botMessageObj = {
-            role: "assistant",
-            content: response.text,
-            timestamp: Date.now(),
-            id: Date.now().toString(),
-            replyTo: messageId
-          };
-          STATE.messageHistory.push(botMessageObj);
-          const {
-            element: botElement
-          } = createMessageElement(response.text, false);
-          document.querySelector('.chat-messages').appendChild(botElement);
-          if (STATE.settings.autoScroll) {
-            botElement.scrollIntoView({
-              behavior: 'smooth'
-            });
-          }
-          if (STATE.settings.soundEffects) {
-            playMessageSound();
-          }
-        }
-      } catch (error) {
-        showError(`Error updating response: ${error.message}`);
-      } finally {
-        STATE.isWaitingForResponse = false;
-        STATE.editingMessageId = null;
-        STATE.editingState = null;
-        saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, STATE.messageHistory);
-      }
-    }
-    document.getElementById('messageInput').addEventListener('keydown', function(event) {
-      if (event.key === 'Enter' && !event.shiftKey) {
-        event.preventDefault();
-        sendMessage();
-      }
-    });
-    async function sendMessage() {
-      const textarea = document.getElementById('messageInput');
-      const message = textarea.value.trim();
-      if (!message || STATE.isWaitingForResponse || STATE.editingMessageId) return;
-      STATE.isWaitingForResponse = true;
-      disableInput();
-      try {
-        const {
-          element: messageElement,
-          id: messageId
-        } = createMessageElement(message, true, new Date());
-        document.querySelector('.chat-messages').appendChild(messageElement);
-        const messageObj = {
-          role: "user",
-          content: message,
-          timestamp: Date.now(),
-          id: messageId
-        };
-        STATE.messageHistory.push(messageObj);
-        saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, STATE.messageHistory);
-        textarea.value = '';
-        textarea.style.height = 'auto';
-        const response = await sendMessageWithRetry(message);
-        if (response.text) {
-          const botMessageObj = {
-            role: "assistant",
-            content: response.text,
-            timestamp: Date.now(),
-            id: Date.now().toString(),
-            replyTo: messageId
-          };
-          STATE.messageHistory.push(botMessageObj);
-          saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, STATE.messageHistory);
-          const {
-            element: botElement
-          } = createMessageElement(response.text, false);
-          document.querySelector('.chat-messages').appendChild(botElement);
-          if (STATE.settings.autoScroll) {
-            botElement.scrollIntoView({
-              behavior: 'smooth'
-            });
-          }
-          if (STATE.settings.soundEffects) {
-            playMessageSound();
-          }
-        }
-      } catch (error) {
-        showError(`Error: ${error.message}`);
-      } finally {
-        STATE.isWaitingForResponse = false;
-        enableInput();
-        textarea.focus();
-      }
-    }
-    async function sendMessageWithRetry(message, retries = CONFIG.MAX_RETRIES) {
-      try {
-        const typingIndicator = createTypingIndicator();
-        document.querySelector('.chat-messages').appendChild(typingIndicator);
-        const response = await tryMultipleModels(message);
-        typingIndicator.remove();
-        return response;
-      } catch (error) {
-        const existingTypingIndicator = document.querySelector('.typing-indicator');
-        if (existingTypingIndicator) {
-          existingTypingIndicator.remove();
-        }
-        if (retries > 0) {
-          showNotification(`Retrying... (${retries} attempts left)`);
-          await new Promise(resolve => setTimeout(resolve, 1000));
-          return sendMessageWithRetry(message, retries - 1);
-        }
-        throw error;
-      }
-    }
-    async function tryMultipleModels(userMessage) {
-      const apiKey = getApiKey();
-      if (!apiKey) {
-        throw new Error("API key not found. Please enter your API key first.");
-      }
-      for (let modelIndex = 0; modelIndex < MODELS.length; modelIndex++) {
+
+      function loadSavedState() {
         try {
-          const response = await Promise.race([
-            fetch("https://openrouter.ai/api/v1/chat/completions", {
-              method: "POST",
-              headers: {
-                "Authorization": `Bearer ${apiKey}`,
-                "Content-Type": "application/json"
-              },
-              body: JSON.stringify({
-                "model": MODELS[modelIndex].name,
-                "messages": [
-                  getSystemMessage(), ...STATE.messageHistory.filter(msg => msg.role === "user" || msg.role === "assistant"), {
-                    role: "user",
-                    content: `Please respond in ${STATE.currentLanguage}. ${userMessage}`
-                  }
-                ]
-              })
-            }).then(async res => {
-              if (!res.ok) {
-                const errorData = await res.json();
-                throw new Error(`API Error: ${errorData.error?.message || 'Unknown error'}`);
-              }
-              return res.json();
-            }),
-            new Promise((_, reject) => setTimeout(() => reject(new Error('Request timeout')), CONFIG.API_TIMEOUT))
-          ]);
-          if (response.choices && response.choices[0].message.content) {
-            return {
-              text: response.choices[0].message.content
+          const savedCustomPersonalities = localStorage.getItem(CONFIG.STORAGE_KEYS.CUSTOM_PERSONALITIES);
+          if (savedCustomPersonalities) {
+            STATE.customPersonalities = JSON.parse(savedCustomPersonalities);
+          }
+          const savedPersonalityName = localStorage.getItem(CONFIG.STORAGE_KEYS.PERSONALITY);
+          if (savedPersonalityName) {
+            const allPersonalities = [...PERSONALITIES, ...STATE.customPersonalities];
+            const personality = allPersonalities.find(p => p.name === savedPersonalityName);
+            if (personality) {
+              STATE.selectedPersonality = personality;
+            }
+          }
+          const savedMessages = localStorage.getItem(CONFIG.STORAGE_KEYS.MESSAGES);
+          if (savedMessages) {
+            STATE.messageHistory = JSON.parse(savedMessages);
+            STATE.messageHistory = STATE.messageHistory.filter(msg => msg && msg.role && msg.content && msg.timestamp);
+            const chatMessages = document.querySelector('.chat-messages');
+            chatMessages.innerHTML = '';
+            STATE.messageHistory.forEach(msg => {
+              const isUser = msg.role === 'user';
+              const {
+                element
+              } = createMessageElement(msg.content, isUser, new Date(msg.timestamp));
+              chatMessages.appendChild(element);
+            });
+          } else {
+            showWelcomeMessage();
+          }
+          const savedSettings = localStorage.getItem(CONFIG.STORAGE_KEYS.SETTINGS);
+          if (savedSettings) {
+            STATE.settings = {
+              ...STATE.settings,
+              ...JSON.parse(savedSettings)
             };
           }
-        } catch (error) {
-          console.error(`Model ${MODELS[modelIndex].name} failed:`, error);
-          if (modelIndex === MODELS.length - 1) {
-            throw new Error(`API Error: ${error.message}`);
+          const savedTheme = localStorage.getItem(CONFIG.STORAGE_KEYS.THEME);
+          if (savedTheme) {
+            STATE.theme = savedTheme;
+            document.documentElement.setAttribute('data-theme', savedTheme);
           }
-          continue;
+          const savedLanguage = localStorage.getItem(CONFIG.STORAGE_KEYS.LANGUAGE);
+          if (savedLanguage) {
+            STATE.currentLanguage = savedLanguage;
+          }
+        } catch (error) {
+          console.error('Error loading saved state:', error);
+          STATE.messageHistory = [];
+          saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, []);
+          showWelcomeMessage();
         }
       }
-      throw new Error("All API attempts failed. Please try again later.");
-    }
 
-    function setupEventListeners() {
-      window.addEventListener('focus', handleWindowFocus);
-      window.addEventListener('blur', handleWindowBlur);
-      window.addEventListener('online', () => showNotification('You are back online!'));
-      window.addEventListener('offline', () => showNotification('You are offline. Some features may be unavailable.'));
-      window.addEventListener('beforeunload', handleBeforeUnload);
-      document.querySelector('.container').addEventListener('wheel', handleScroll);
-      document.querySelector('.brand').addEventListener('click', showAboutModal);
-      window.addEventListener('resize', handleResize);
-    }
-
-    function handleWindowFocus() {
-      if (STATE.settings.notifications) {
-        document.title = 'PatheticAI Enhanced';
-      }
-    }
-
-    function handleWindowBlur() {
-      if (STATE.settings.notifications) {
-        const unreadMessages = STATE.messageHistory.filter(msg => msg.role === 'assistant' && msg.timestamp > document.lastModified).length;
-        if (unreadMessages > 0) {
-          document.title = `(${unreadMessages}) PatheticAI Enhanced`;
+      function saveToLocalStorage(key, value) {
+        try {
+          if (key === CONFIG.STORAGE_KEYS.MESSAGES) {
+            return false;
+          }
+          const serializedValue = typeof value === 'string' ? value : JSON.stringify(value);
+          localStorage.setItem(key, serializedValue);
+          return true;
+        } catch (error) {
+          console.error('Local storage error:', error);
+          return false;
         }
       }
-    }
 
-    function handleBeforeUnload(e) {
-      if (STATE.isWaitingForResponse || STATE.editingMessageId) {
-        e.preventDefault();
-        e.returnValue = '';
+      function formatTimestamp(date) {
+        return new Intl.DateTimeFormat('default', {
+          hour: 'numeric',
+          minute: 'numeric',
+          second: 'numeric',
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric'
+        }).format(date);
       }
-    }
-
-    function toggleSelector(selectorId, optionsId) {
-      const selector = document.getElementById(selectorId);
-      const options = document.getElementById(optionsId);
-
-      if (options.style.display === 'block') {
-        options.style.display = 'none';
-      } else {
-        options.style.display = 'block';
-      }
-    }
-
-    function handleScroll(e) {
-      if (STATE.settings.autoScroll) {
-        const container = document.querySelector('.container');
-        const isScrolledToBottom = container.scrollHeight - container.clientHeight <= container.scrollTop + 1;
-        if (!isScrolledToBottom) {
-          STATE.settings.autoScroll = false;
-          showNotification('Auto-scroll disabled');
-          saveToLocalStorage(CONFIG.STORAGE_KEYS.SETTINGS, STATE.settings);
+      async function copyToClipboard(text) {
+        try {
+          await navigator.clipboard.writeText(text);
+          showNotification('Copied to clipboard');
+        } catch (err) {
+          showNotification('Failed to copy to clipboard');
         }
       }
-    }
 
-    function handleResize() {
-      const textarea = document.getElementById('messageInput');
-      if (textarea) {
-        textarea.style.height = 'auto';
-        textarea.style.height = Math.min(textarea.scrollHeight, 200) + 'px';
+      function createMessageElement(message, isUser, timestamp = new Date()) {
+        const messageId = Date.now().toString();
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('chat-message', isUser ? 'user' : 'bot');
+        messageElement.dataset.messageId = messageId;
+        const contentDiv = document.createElement('div');
+        contentDiv.classList.add('message-content');
+        if (!isUser) {
+          contentDiv.innerHTML = marked.parse(message, {
+            highlight: function(code, language) {
+              if (language) {
+                return hljs.highlight(code, {
+                  language
+                }).value;
+              }
+              return hljs.highlightAuto(code).value;
+            }
+          });
+          contentDiv.querySelectorAll('pre code').forEach((block) => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'code-block-wrapper';
+            const copyButton = document.createElement('button');
+            copyButton.className = 'code-copy-button';
+            copyButton.innerHTML = '  <i class = "fas fa-copy" > </i>';
+            copyButton.onclick = (e) => {
+              e.stopPropagation();
+              navigator.clipboard.writeText(block.textContent).then(() => {
+                copyButton.innerHTML = '  <i class = "fas fa-check" > </i>';
+                setTimeout(() => {
+                  copyButton.innerHTML = '  <i class = "fas fa-copy" > </i>';
+                }, 2000);
+              });
+            };
+            block.parentNode.insertBefore(wrapper, block);
+            wrapper.appendChild(block);
+            wrapper.appendChild(copyButton);
+          });
+        } else {
+          contentDiv.textContent = message;
+        }
+        messageElement.appendChild(contentDiv);
+        const timestampDiv = document.createElement('div');
+        timestampDiv.className = 'message-timestamp';
+        timestampDiv.textContent = formatTimestamp(timestamp);
+        messageElement.appendChild(timestampDiv);
+        const actionsDiv = document.createElement('div');
+        actionsDiv.className = 'message-actions';
+        if (isUser) {
+          const editButton = document.createElement('button');
+          editButton.className = 'action-button';
+          editButton.innerHTML = '  <i class = "fa-regular fa-edit" > </i>';
+          editButton.onclick = () => startEditing(messageId);
+          actionsDiv.appendChild(editButton);
+        }
+        const copyButton = document.createElement('button');
+        copyButton.className = 'action-button';
+        copyButton.innerHTML = '  <i class = "fa-regular fa-copy" > </i>';
+        copyButton.onclick = () => copyToClipboard(message);
+        actionsDiv.appendChild(copyButton);
+        messageElement.appendChild(actionsDiv);
+        return {
+          element: messageElement,
+          id: messageId
+        };
       }
-    }
-
-    function showSettingsModal() {
-      const existingModal = document.querySelector('.modal-overlay');
-      if (existingModal) {
-        existingModal.remove();
+      async function startEditing(messageId) {
+        if (STATE.isWaitingForResponse) return;
+        const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
+        if (!messageElement) return;
+        const contentDiv = messageElement.querySelector('.message-content');
+        const originalText = contentDiv.textContent;
+        const textarea = document.createElement('textarea');
+        textarea.className = 'edit-input';
+        textarea.value = originalText;
+        contentDiv.replaceWith(textarea);
+        const messageIndex = STATE.messageHistory.findIndex(msg => msg.id === messageId);
+        STATE.editingState = {
+          messageId,
+          originalText,
+          messageIndex,
+          subsequentMessages: STATE.messageHistory.slice(messageIndex + 1)
+        };
+        textarea.focus();
+        messageElement.classList.add('edit-mode');
+        STATE.editingMessageId = messageId;
+        textarea.addEventListener('keydown', async (e) => {
+          if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            await finishEditing(messageId, textarea.value.trim());
+          } else if (e.key === 'Escape') {
+            cancelEditing(messageId);
+          }
+        });
       }
 
-      const modal = document.createElement('div');
-      modal.className = 'modal-overlay';
+      function cancelEditing(messageId) {
+        if (!STATE.editingState) return;
+        const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
+        if (!messageElement) return;
+        const textarea = messageElement.querySelector('.edit-input');
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'message-content';
+        contentDiv.textContent = STATE.editingState.originalText;
+        textarea.replaceWith(contentDiv);
+        messageElement.classList.remove('edit-mode');
+        STATE.editingMessageId = null;
+        STATE.editingState = null;
+      }
+      async function finishEditing(messageId, newText) {
+        if (!messageId || !newText || STATE.isWaitingForResponse || !STATE.editingState) return;
+        const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
+        if (!messageElement) return;
+        if (newText === STATE.editingState.originalText) {
+          cancelEditing(messageId);
+          return;
+        }
+        const textarea = messageElement.querySelector('.edit-input');
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'message-content';
+        contentDiv.textContent = newText;
+        textarea.replaceWith(contentDiv);
+        messageElement.classList.remove('edit-mode');
+        const {
+          messageIndex
+        } = STATE.editingState;
+        let nextElement = messageElement.nextElementSibling;
+        while (nextElement) {
+          const temp = nextElement.nextElementSibling;
+          nextElement.remove();
+          nextElement = temp;
+        }
+        STATE.messageHistory[messageIndex].content = newText;
+        STATE.messageHistory = STATE.messageHistory.slice(0, messageIndex + 1);
+        try {
+          const typingIndicator = createTypingIndicator();
+          document.querySelector('.chat-messages').appendChild(typingIndicator);
+          STATE.isWaitingForResponse = true;
+          const response = await sendMessageWithRetry(newText);
+          typingIndicator.remove();
+          if (response.text) {
+            const botMessageObj = {
+              role: "assistant",
+              content: response.text,
+              timestamp: Date.now(),
+              id: Date.now().toString(),
+              replyTo: messageId
+            };
+            STATE.messageHistory.push(botMessageObj);
+            const {
+              element: botElement
+            } = createMessageElement(response.text, false);
+            document.querySelector('.chat-messages').appendChild(botElement);
+            if (STATE.settings.autoScroll) {
+              botElement.scrollIntoView({
+                behavior: 'smooth'
+              });
+            }
+            if (STATE.settings.soundEffects) {
+              playMessageSound();
+            }
+          }
+        } catch (error) {
+          showError(`Error updating response: ${error.message}`);
+        } finally {
+          STATE.isWaitingForResponse = false;
+          STATE.editingMessageId = null;
+          STATE.editingState = null;
+          saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, STATE.messageHistory);
+        }
+      }
+      document.getElementById('messageInput').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter' && !event.shiftKey) {
+          event.preventDefault();
+          sendMessage();
+        }
+      });
+      async function sendMessage() {
+        const textarea = document.getElementById('messageInput');
+        const message = textarea.value.trim();
+        if (!message || STATE.isWaitingForResponse || STATE.editingMessageId) return;
+        STATE.isWaitingForResponse = true;
+        disableInput();
+        try {
+          const {
+            element: messageElement,
+            id: messageId
+          } = createMessageElement(message, true, new Date());
+          document.querySelector('.chat-messages').appendChild(messageElement);
+          const messageObj = {
+            role: "user",
+            content: message,
+            timestamp: Date.now(),
+            id: messageId
+          };
+          STATE.messageHistory.push(messageObj);
+          saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, STATE.messageHistory);
+          textarea.value = '';
+          textarea.style.height = 'auto';
+          const response = await sendMessageWithRetry(message);
+          if (response.text) {
+            const botMessageObj = {
+              role: "assistant",
+              content: response.text,
+              timestamp: Date.now(),
+              id: Date.now().toString(),
+              replyTo: messageId
+            };
+            STATE.messageHistory.push(botMessageObj);
+            saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, STATE.messageHistory);
+            const {
+              element: botElement
+            } = createMessageElement(response.text, false);
+            document.querySelector('.chat-messages').appendChild(botElement);
+            if (STATE.settings.autoScroll) {
+              botElement.scrollIntoView({
+                behavior: 'smooth'
+              });
+            }
+            if (STATE.settings.soundEffects) {
+              playMessageSound();
+            }
+          }
+        } catch (error) {
+          showError(`Error: ${error.message}`);
+        } finally {
+          STATE.isWaitingForResponse = false;
+          enableInput();
+          textarea.focus();
+        }
+      }
+      async function sendMessageWithRetry(message, retries = CONFIG.MAX_RETRIES) {
+        try {
+          const typingIndicator = createTypingIndicator();
+          document.querySelector('.chat-messages').appendChild(typingIndicator);
+          const response = await tryMultipleModels(message);
+          typingIndicator.remove();
+          return response;
+        } catch (error) {
+          const existingTypingIndicator = document.querySelector('.typing-indicator');
+          if (existingTypingIndicator) {
+            existingTypingIndicator.remove();
+          }
+          if (retries > 0) {
+            showNotification(`Retrying... (${retries} attempts left)`);
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            return sendMessageWithRetry(message, retries - 1);
+          }
+          throw error;
+        }
+      }
+      async function tryMultipleModels(userMessage) {
+        const apiKey = getApiKey();
+        if (!apiKey) {
+          throw new Error("API key not found. Please enter your API key first.");
+        }
+        const messages = [{
+          role: "system",
+          content: STATE.selectedPersonality.systemMessage
+        }, ...STATE.messageHistory.filter(msg => msg.role === "user" || msg.role === "assistant"), {
+          role: "user",
+          content: `Please respond in ${STATE.currentLanguage}. ${userMessage}`
+        }];
+        for (let modelIndex = 0; modelIndex < MODELS.length; modelIndex++) {
+          try {
+            const response = await Promise.race([
+              fetch("https://openrouter.ai/api/v1/chat/completions", {
+                method: "POST",
+                headers: {
+                  "Authorization": `Bearer ${apiKey}`,
+                  "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                  "model": MODELS[modelIndex].name,
+                  "messages": messages
+                })
+              }).then(async res => {
+                if (!res.ok) {
+                  const errorData = await res.json();
+                  throw new Error(`API Error: ${errorData.error?.message || 'Unknown error'}`);
+                }
+                return res.json();
+              }),
+              new Promise((_, reject) => setTimeout(() => reject(new Error('Request timeout')), CONFIG.API_TIMEOUT))
+            ]);
+            if (response.choices && response.choices[0].message.content) {
+              return {
+                text: response.choices[0].message.content
+              };
+            }
+          } catch (error) {
+            console.error(`Model ${MODELS[modelIndex].name} failed:`, error);
+            if (modelIndex === MODELS.length - 1) {
+              throw new Error(`API Error: ${error.message}`);
+            }
+            continue;
+          }
+        }
+        throw new Error("All API attempts failed. Please try again later.");
+      }
 
-      const allPersonalities = [...PERSONALITIES, ...STATE.customPersonalities];
+      function setupEventListeners() {
+        window.addEventListener('focus', handleWindowFocus);
+        window.addEventListener('blur', handleWindowBlur);
+        window.addEventListener('online', () => showNotification('You are back online!'));
+        window.addEventListener('offline', () => showNotification('You are offline. Some features may be unavailable.'));
+        window.addEventListener('beforeunload', handleBeforeUnload);
+        document.querySelector('.container').addEventListener('wheel', handleScroll);
+        document.querySelector('.brand').addEventListener('click', showAboutModal);
+        window.addEventListener('resize', handleResize);
+      }
 
-      const languageOptions = ['English', 'Spanish', 'French', 'German', 'Italian', 'Japanese', 'Chinese', 'Russian', 'Portuguese', 'Korean', 'Hindi', 'Arabic', 'Turkish', 'Dutch', 'Swedish', 'Greek', 'Polish', 'Vietnamese', 'Thai', 'Indonesian', 'Hebrew', 'Finnish', 'Czech', 'Hungarian']
-        .map(lang => `
-      <div class="option" data-language="${lang}" onclick="changeLanguage('${lang}'); closeAllSelectors();">
-        ${lang}
-      </div>
-    `).join('');
+      function handleWindowFocus() {
+        if (STATE.settings.notifications) {
+          document.title = 'PatheticAI Enhanced';
+        }
+      }
 
-      const personalityOptions = allPersonalities
-        .map(p => `
-      <div class="option" data-personality="${p.name}">
-        <span onclick="changePersonality('${p.name}'); closeAllSelectors();">${p.name}</span>
-        ${p.isCustom ? `
-          <button class="delete-personality" onclick="event.stopPropagation(); deletePersonality('${p.name}');">
-            ×
-          </button>
-        ` : ''}
-      </div>
-    `).join('');
+      function handleWindowBlur() {
+        if (STATE.settings.notifications) {
+          const unreadMessages = STATE.messageHistory.filter(msg => msg.role === 'assistant' && msg.timestamp > document.lastModified).length;
+          if (unreadMessages > 0) {
+            document.title = `(${unreadMessages}) PatheticAI Enhanced`;
+          }
+        }
+      }
 
-      const themeOptions = `
-    <div class="option" data-theme="Light" onclick="changeTheme('Light'); closeAllSelectors();">Light</div>
-    <div class="option" data-theme="Dark" onclick="changeTheme('Dark'); closeAllSelectors();">Dark</div>
+      function handleBeforeUnload(e) {
+        if (STATE.isWaitingForResponse || STATE.editingMessageId) {
+          e.preventDefault();
+          e.returnValue = '';
+        }
+      }
+
+      function handleScroll(e) {
+        if (STATE.settings.autoScroll) {
+          const container = document.querySelector('.container');
+          const isScrolledToBottom = container.scrollHeight - container.clientHeight <= container.scrollTop + 1;
+          if (!isScrolledToBottom) {
+            STATE.settings.autoScroll = false;
+            showNotification('Auto-scroll disabled');
+            saveToLocalStorage(CONFIG.STORAGE_KEYS.SETTINGS, STATE.settings);
+          }
+        }
+      }
+
+      function handleResize() {
+        const textarea = document.getElementById('messageInput');
+        if (textarea) {
+          textarea.style.height = 'auto';
+          textarea.style.height = Math.min(textarea.scrollHeight, 200) + 'px';
+        }
+      }
+
+      function showSettingsModal() {
+        const modal = document.createElement('div');
+        modal.className = 'modal-overlay';
+        const allPersonalities = [...PERSONALITIES, ...STATE.customPersonalities];
+        const languageOptions = ['English', 'Spanish', 'French', 'German', 'Italian', 'Japanese', 'Chinese', 'Russian', 'Portuguese', 'Korean', 'Hindi', 'Arabic', 'Turkish', 'Dutch', 'Swedish', 'Greek', 'Polish', 'Vietnamese', 'Thai', 'Indonesian', 'Hebrew', 'Finnish', 'Czech', 'Hungarian'].map(lang => `
+    
+																												<div class="option" data-language="${lang}" onclick="changeLanguage('${lang}')">${lang}</div>
+  `).join('');
+        const personalityOptions = allPersonalities.map(p => `
+    
+																												<div class="option" data-personality="${p.name}" onclick="changePersonality('${p.name}')">
+      ${p.name}
+      ${p.isCustom ? `
+																													<button class="delete-personality" onclick="event.stopPropagation(); removeCustomPersonality('${p.name}'); closeModal(); showSettingsModal();">×</button>` : ''}
+    
+																												</div>
+  `).join('');
+        const themeOptions = `
+    
+																												<div class="option" data-theme="light" onclick="changeTheme('light')">Light</div>
+																												<div class="option" data-theme="dark" onclick="changeTheme('dark')">Dark</div>
   `;
-
-      modal.innerHTML = `
-    <div class="modal-window">
-      <div class="modal-header">
-        <span class="modal-title">Settings</span>
-        <button class="close-button" onclick="closeModal()">×</button>
-      </div>
-      <div class="modal-content">
-        <div class="settings-section">
-          <div class="settings-button" onclick="resetChat()">
-            <i class="fa fa-trash"></i> Clear Chat History
-          </div>
-        </div>
-
-        <div class="settings-section">
-          <div class="selector-container">
-            <div class="selector" id="languageSelector" onclick="toggleSelector('languageSelector', 'languageOptions')">
-              <span><i class="fa-solid fa-language"></i> Language: ${STATE.currentLanguage}</span>
-              <i class="fa fa-chevron-down"></i>
-            </div>
-            <div class="options" id="languageOptions">
+        const customPersonalityForm = `
+    
+																												<div class="custom-personality-form">
+																													<input type="text" id="customPersonalityName" placeholder="Enter personality name" class="custom-personality-input">
+																														<textarea id="customPersonalitySystem" placeholder="Enter system message/instructions" class="custom-personality-textarea"></textarea>
+																														<button onclick="saveNewCustomPersonality()" class="custom-personality-button">Add Custom Personality</button>
+																													</div>
+  `;
+        modal.innerHTML = `
+    
+																													<div class="modal-window">
+																														<div class="modal-header">
+																															<span class="modal-title">Settings</span>
+																															<button class="close-button" aria-label="Close settings" onclick="closeModal()">✖</button>
+																														</div>
+																														<div class="modal-content">
+																															<div class="settings-section">
+																																<div class="settings-button" onclick="resetChat()">
+																																	<i class="fa fa-trash"></i> Clear Chat History
+          
+																																</div>
+																															</div>
+																															<div class="settings-section">
+																																<div class="selector-container">
+																																	<div class="selector" id="languageSelector" onclick="toggleLanguageSelector()">
+																																		<span>
+																																			<i class="fa-solid fa-language"></i> Language: ${STATE.currentLanguage}
+																																		</span>
+																																		<i class="fa fa-chevron-down"></i>
+																																	</div>
+																																	<div class="options" id="languageOptions" style="display:none;">
               ${languageOptions}
             </div>
-          </div>
-        </div>
-
-        <div class="settings-section">
-          <div class="selector-container">
-            <div class="selector" id="personalitySelector" onclick="toggleSelector('personalitySelector', 'personalityOptions')">
-              <span><i class="fa-solid fa-theater-masks"></i> Personality: ${STATE.selectedPersonality.name}</span>
-              <i class="fa fa-chevron-down"></i>
-            </div>
-            <div class="options" id="personalityOptions">
+																																</div>
+																															</div>
+																															<div class="settings-section">
+																																<div class="selector-container">
+																																	<div class="selector" id="personalitySelector" onclick="togglePersonalitySelector()">
+																																		<span>
+																																			<i class="fa-solid fa-theater-masks"></i> Personality: ${STATE.selectedPersonality.name}
+																																		</span>
+																																		<i class="fa fa-chevron-down"></i>
+																																	</div>
+																																	<div class="options" id="personalityOptions" style="display:none;">
               ${personalityOptions}
             </div>
-          </div>
-
-          <div class="custom-personality-form">
-            <input 
-              type="text" 
-              id="customPersonalityName" 
-              placeholder="Enter personality name" 
-              class="custom-personality-input"
-            >
-            <textarea 
-              id="customPersonalitySystem" 
-              placeholder="Enter system message/instructions" 
-              class="custom-personality-textarea"
-            ></textarea>
-            <button onclick="saveNewCustomPersonality()" class="custom-personality-button">
-              Add Custom Personality
-            </button>
-          </div>
-        </div>
-
-        <div class="settings-section">
-          <div class="selector-container">
-            <div class="selector" id="themeSelector" onclick="toggleSelector('themeSelector', 'themeOptions')">
-              <span><i class="fa-solid fa-palette"></i> Theme: ${STATE.theme}</span>
-              <i class="fa fa-chevron-down"></i>
-            </div>
-            <div class="options" id="themeOptions">
+																																</div>
+          ${customPersonalityForm}
+        
+																															</div>
+																															<div class="settings-section">
+																																<div class="selector-container">
+																																	<div class="selector" id="themeSelector" onclick="toggleThemeSelector()">
+																																		<span>
+																																			<i class="fa-solid fa-palette"></i> Theme: ${STATE.theme}
+																																		</span>
+																																		<i class="fa fa-chevron-down"></i>
+																																	</div>
+																																	<div class="options" id="themeOptions" style="display:none;">
               ${themeOptions}
             </div>
-          </div>
-        </div>
-
-        <div class="settings-section">
-          <div class="settings-button" onclick="toggleSetting('notifications')">
-            <i class="fas fa-bell"></i> Notifications: ${STATE.settings.notifications ? 'On' : 'Off'}
-          </div>
-          <div class="settings-button" onclick="toggleSetting('soundEffects')">
-            <i class="fas fa-volume-up"></i> Sound Effects: ${STATE.settings.soundEffects ? 'On' : 'Off'}
-          </div>
-          <div class="settings-button" onclick="toggleSetting('autoScroll')">
-            <i class="fas fa-scroll"></i> Auto Scroll: ${STATE.settings.autoScroll ? 'On' : 'Off'}
-          </div>
-          <div class="settings-button danger" onclick="removeApiKey()">
-            <i class="fas fa-key"></i> Remove API Key
-          </div>
-        </div>
-      </div>
-    </div>
+																																</div>
+																															</div>
+																															<div class="settings-section">
+																																<div class="settings-button" onclick="toggleSetting('notifications')">
+																																	<i class="fas fa-bell"></i> Notifications: ${STATE.settings.notifications ? 'On' : 'Off'}
+          
+																																</div>
+																																<div class="settings-button" onclick="toggleSetting('soundEffects')">
+																																	<i class="fas fa-volume-up"></i> Sound Effects: ${STATE.settings.soundEffects ? 'On' : 'Off'}
+          
+																																</div>
+																																<div class="settings-button" onclick="toggleSetting('autoScroll')">
+																																	<i class="fas fa-scroll"></i> Auto Scroll: ${STATE.settings.autoScroll ? 'On' : 'Off'}
+          
+																																</div>
+																																<div class="settings-button" onclick="toggleSetting('autoComplete')">
+																																	<i class="fas fa-magic"></i> Auto Complete: ${STATE.settings.autoComplete ? 'On' : 'Off'}
+          
+																																</div>
+																																<div class="settings-button" onclick="toggleSetting('markdownPreview')">
+																																	<i class="fas fa-markdown"></i> Markdown Preview: ${STATE.settings.markdownPreview ? 'On' : 'Off'}
+          
+																																</div>
+																																<div class="settings-button" onclick="toggleSetting('codeHighlighting')">
+																																	<i class="fas fa-code"></i> Code Highlighting: ${STATE.settings.codeHighlighting ? 'On' : 'Off'}
+          
+																																</div>
+																																<div class="settings-button danger" onclick="removeApiKey()">
+																																	<i class="fas fa-key"></i> Remove API Key
+          
+																																</div>
+																															</div>
+																														</div>
+																													</div>
   `;
-
-      modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-          closeModal();
-        }
-      });
-
-      document.body.appendChild(modal);
-    }
-
-    function closeModal() {
-      const modal = document.querySelector('.modal-overlay');
-      if (modal) {
-        modal.classList.add('fade-out');
-        setTimeout(() => {
-          modal.remove();
-        }, 300);
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) {
+            closeModal();
+          }
+        });
+        document.body.appendChild(modal);
       }
-      closeAllSelectors();
-    }
-
-    function changeLanguage(language) {
-      STATE.currentLanguage = language;
-      saveState();
-      closeModal();
-      showSettingsModal();
-      showNotification(`Language changed to ${language}`);
-    }
-
-    function changeTheme(theme) {
-      STATE.theme = theme;
-      document.documentElement.setAttribute('data-theme', theme);
-      saveState();
-      closeModal();
-      showSettingsModal();
-      showNotification(`Theme changed to ${theme}`);
-    }
-
-    function changePersonality(personalityName) {
-      const personality = [...PERSONALITIES, ...STATE.customPersonalities]
-        .find(p => p.name === personalityName);
-
-      if (personality) {
-        STATE.selectedPersonality = personality;
-        saveState();
-        closeModal();
-        showSettingsModal();
-        showNotification(`Personality changed to ${personalityName}`);
-      }
-    }
-
-    function toggleSetting(setting) {
-      const settingState = STATE.settings[setting];
-      const fadeOutDuration = 300;
-
-      STATE.settings[setting] = !settingState;
-      saveToLocalStorage(CONFIG.STORAGE_KEYS.SETTINGS, STATE.settings);
-
-      const settingButton = document.querySelector(`[onclick="toggleSetting('${setting}')"]`);
-      const dropdownButton = document.querySelector(`.settings-button.${setting}`);
-
-      if (settingButton) {
-        settingButton.textContent = `${capitalizeFirstLetter(setting)}: ${STATE.settings[setting] ? 'On' : 'Off'}`;
-      }
-
-      if (dropdownButton) {
-        dropdownButton.innerHTML = `<i class="fas fa-${setting === 'notifications' ? 'bell' : 'volume-up'}"></i> ${capitalizeFirstLetter(setting)}: ${STATE.settings[setting] ? 'On' : 'Off'}`;
-
-        dropdownButton.classList.add('fade-out');
-        setTimeout(() => {
-          dropdownButton.classList.remove('fade-out');
-
-        }, fadeOutDuration);
-      }
-
-      showNotification(`${setting} ${STATE.settings[setting] ? 'enabled' : 'disabled'}`);
-
-      closeModal();
-      showSettingsModal();
-    }
-
-    function capitalizeFirstLetter(string) {
-      return string.charAt(0).toUpperCase() + string.slice(1);
-    }
-
-    function playMessageSound() {
-      if (!STATE.settings.soundEffects) return;
-      const audio = new Audio('audios/notification.mp3');
-      audio.volume = 0.5;
-      audio.play().catch(err => console.log('Error playing sound', err));
-    }
-
-    function initializeTheme() {
-      const savedTheme = localStorage.getItem(CONFIG.STORAGE_KEYS.THEME) || 'light';
-      document.documentElement.setAttribute('data-theme', savedTheme);
-      STATE.theme = savedTheme;
-    }
-
-    function showAboutModal() {
-      const modal = document.createElement('div');
-      modal.className = 'modal-overlay';
-
-      modal.innerHTML = `
-    <div class="modal-window">
-      <div class="modal-header">
-        <span class="modal-title">About PatheticAI</span>
-        <button class="close-button" aria-label="Close modal">X</button>
-      </div>
-      <div class="modal-content">
-        <p><strong>PatheticAI:</strong> 1.5</p>
-        <br>
-        <p><strong>Enhanced Features:</strong></p>
-        <ul>
-          <li>Improved message handling</li>
-          <li>Better code display and copying</li>
-          <li>Advanced editing capabilities</li>
-          <li>Added Voice Input</li>
-          <li>More Settings</li>
-        </ul>
-      </div>
-      <div class="modal-footer">
-        <button class="discord-button">
-          <a href="https://discord.gg/Hb5ccPY3XV" target="_blank" rel="noopener noreferrer" aria-label="Join us on Discord">
-            <i class="fab fa-discord" aria-hidden="true"></i> Join us on Discord
-          </a>
-        </button>
-      </div>
-    </div>
-  `;
 
       function closeModal() {
-        modal.classList.add('fade-out');
-        setTimeout(() => modal.remove(), 300);
+        const modal = document.querySelector('.modal-overlay');
+        if (modal) {
+          modal.classList.add('fade-out');
+          setTimeout(() => modal.remove(), 200);
+        }
       }
 
-      modal.addEventListener('click', (e) => {
-        if (e.target === modal || e.target.classList.contains('close-button')) {
-          closeModal();
+      function toggleLanguageSelector() {
+        const options = document.getElementById('languageOptions');
+        options.style.display = options.style.display === 'none' || options.style.display === '' ? 'block' : 'none';
+      }
+
+      function toggleThemeSelector() {
+        const themeOptions = document.getElementById('themeOptions');
+        themeOptions.style.display = themeOptions.style.display === 'none' || themeOptions.style.display === '' ? 'block' : 'none';
+      }
+
+      function changeLanguage(language) {
+        STATE.currentLanguage = language;
+        const languageSelector = document.getElementById('languageSelector');
+        const languageSpan = languageSelector.querySelector('span');
+        languageSpan.innerHTML = `
+
+																														
+																													<i class="fa-solid fa-language"></i> Language: ${language}`;
+        showNotification(`Language changed to ${language}`);
+      }
+
+      function changeTheme(theme) {
+        STATE.theme = theme;
+        document.documentElement.setAttribute('data-theme', theme);
+        saveToLocalStorage(CONFIG.STORAGE_KEYS.THEME, theme);
+        const themeSelector = document.getElementById('themeSelector');
+        const themeSpan = themeSelector.querySelector('span');
+        themeSpan.innerHTML = `
+
+																														
+																													<i class="fa-solid fa-palette"></i> Select Theme: ${theme}`;
+        document.getElementById('themeOptions').style.display = 'none';
+        showNotification(`Theme changed to ${theme}`);
+      }
+
+      function toggleSetting(setting) {
+        STATE.settings[setting] = !STATE.settings[setting];
+        saveToLocalStorage(CONFIG.STORAGE_KEYS.SETTINGS, STATE.settings);
+        const settingButton = document.querySelector(`[onclick="toggleSetting('${setting}')"]`);
+        if (settingButton) {
+          settingButton.textContent = `${setting.charAt(0).toUpperCase() + setting.slice(1)}: ${STATE.settings[setting] ? 'On' : 'Off'}`;
         }
-      });
+        showNotification(`${setting} ${STATE.settings[setting] ? 'enabled' : 'disabled'}`);
+        closeModal();
+        showSettingsModal();
+      }
 
-      document.body.appendChild(modal);
+      function playMessageSound() {
+        if (!STATE.settings.soundEffects) return;
+        const audio = new Audio('audios/notification.mp3');
+        audio.volume = 0.5;
+        audio.play().catch(err => console.log('Error playing sound', err));
+      }
 
-      const discordButton = modal.querySelector('.discord-button');
-      const discordLink = modal.querySelector('.discord-button a');
-      const modalFooter = modal.querySelector('.modal-footer');
+      function initializeTheme() {
+        const savedTheme = localStorage.getItem(CONFIG.STORAGE_KEYS.THEME) || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        STATE.theme = savedTheme;
+      }
 
-      discordButton.style.marginTop = '20px';
-      discordLink.style.textDecoration = 'none';
-      discordLink.style.color = 'inherit';
-
-      modalFooter.style.display = 'flex';
-      modalFooter.style.justifyContent = 'center';
-      modalFooter.style.alignItems = 'center';
-    }
-
-    function checkAndStoreApiKey() {
-      const storedApiKey = getApiKey();
-      if (!storedApiKey) {
+      function showAboutModal() {
         const modal = document.createElement('div');
         modal.className = 'modal-overlay';
         modal.innerHTML = `
-                    <div class="modal-window">
-                        <div class="modal-header">
-                            <span class="modal-title">API Key Required</span>
-                        </div>
-                        <div class="modal-content">
-                            <p>To use PatheticAI, you need an API key from OpenRouter.</p>
-                            <br>
-                            <div style="margin: 20px 0;">
-                                <input type="text" 
+    
+																													<div class="modal-window">
+																														<div class="modal-header">
+																															<span class="modal-title">About PatheticAI</span>
+																															<button class="close-button" aria-label="Close modal">X</button>
+																														</div>
+																														<div class="modal-content">
+																															<p>
+																																<strong>PatheticAI:</strong> 1.5
+																															</p>
+																															<br>
+																																<p>
+																																	<strong>Enhanced Features:</strong>
+																																</p>
+																																<ul>
+																																	<li>Improved message handling</li>
+																																	<li>Better code display and copying</li>
+																																	<li>Advanced editing capabilities</li>
+																																	<li>Added Voice Input</li>
+																																	<li>More Settings</li>
+																																</ul>
+																															</div>
+																															<div class="modal-footer">
+																																<button class="discord-button">
+																																	<a href="https://discord.gg/Hb5ccPY3XV" target="_blank" rel="noopener noreferrer" aria-label="Join us on Discord">
+																																		<i class="fab fa-discord" aria-hidden="true"></i> Join us on Discord
+          
+																																	</a>
+																																</button>
+																															</div>
+																														</div>
+  `;
+
+        function closeModal() {
+          modal.classList.add('fade-out');
+          setTimeout(() => modal.remove(), 300);
+        }
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal || e.target.classList.contains('close-button')) {
+            closeModal();
+          }
+        });
+        document.body.appendChild(modal);
+        const discordButton = modal.querySelector('.discord-button');
+        const discordLink = modal.querySelector('.discord-button a');
+        const modalFooter = modal.querySelector('.modal-footer');
+        discordButton.style.marginTop = '20px';
+        discordLink.style.textDecoration = 'none';
+        discordLink.style.color = 'inherit';
+        modalFooter.style.display = 'flex';
+        modalFooter.style.justifyContent = 'center';
+        modalFooter.style.alignItems = 'center';
+      }
+
+      function checkAndStoreApiKey() {
+        const storedApiKey = getApiKey();
+        if (!storedApiKey) {
+          const modal = document.createElement('div');
+          modal.className = 'modal-overlay';
+          modal.innerHTML = `
+                    
+																														<div class="modal-window">
+																															<div class="modal-header">
+																																<span class="modal-title">API Key Required</span>
+																															</div>
+																															<div class="modal-content">
+																																<p>To use PatheticAI, you need an API key from OpenRouter.</p>
+																																<br>
+																																	<div style="margin: 20px 0;">
+																																		<input type="text" 
                                     id="apiKeyInput" 
                                     placeholder="Enter your API key (sk-or-v1-...)" 
                                     style="width: 100%; 
@@ -1901,8 +1803,8 @@
                                     border-radius: 15px; 
                                     color: var(--color); 
                                     font-size: 14px;">
-                            </div>
-                            <button onclick="saveApiKey()" 
+																																		</div>
+																																		<button onclick="saveApiKey()" 
                                 style="width: 100%; 
                                 padding: 25px; 
                                 margin-bottom: 10px;
@@ -1914,112 +1816,194 @@
                                 transition: all 0.3s ease;">
                                 Enter
                             </button>
-                            <div class="settings-button" onclick="window.open('https://openrouter.ai/settings/keys', '_blank')">
-                                <i class="fas fa-key"></i>
+																																		<div class="settings-button" onclick="window.open('https://openrouter.ai/settings/keys', '_blank')">
+																																			<i class="fas fa-key"></i>
                                 Get Key
-                            </div>
-                            <div class="settings-button" onclick="window.open('/help', '_blank')">
-                                <i class="fas fa-book"></i>
+                            
+																																		</div>
+																																		<div class="settings-button" onclick="window.open('/help', '_blank')">
+																																			<i class="fas fa-book"></i>
                                 Help
-                            </div>
-                        </div>
-                    </div>
+                            
+																																		</div>
+																																	</div>
+																																</div>
                 `;
-        document.body.appendChild(modal);
-        document.getElementById('startupButton').addEventListener('click', function() {
-          saveApiKey();
-        });
-        document.getElementById('helpButton').addEventListener('click', function() {
-          window.location.href = '/help';
-        });
-        return false;
+          document.body.appendChild(modal);
+          document.getElementById('startupButton').addEventListener('click', function() {
+            saveApiKey();
+          });
+          document.getElementById('helpButton').addEventListener('click', function() {
+            window.location.href = '/help';
+          });
+          return false;
+        }
+        return true;
       }
-      return true;
-    }
 
-    function saveApiKey() {
-      const apiKey = document.getElementById('apiKeyInput').value.trim();
-      if (apiKey && apiKey.startsWith('sk-or-')) {
-        localStorage.setItem('openRouterApiKey', apiKey);
-        document.querySelector('.modal-overlay').remove();
-        showNotification('Booting...');
-        setTimeout(() => {
-          window.location.reload();
-        }, 1000);
-      } else {
-        showNotification('API key not suitable for PatheticAI...');
+      function saveApiKey() {
+        const apiKey = document.getElementById('apiKeyInput').value.trim();
+        if (apiKey && apiKey.startsWith('sk-or-')) {
+          localStorage.setItem('openRouterApiKey', apiKey);
+          document.querySelector('.modal-overlay').remove();
+          showNotification('Booting...');
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
+        } else {
+          showNotification('API key not suitable for PatheticAI...');
+        }
       }
-    }
 
-    function togglePersonalitySelector() {
-      const options = document.getElementById('personalityOptions');
-      options.style.display = options.style.display === 'none' || options.style.display === '' ? 'block' : 'none';
-    }
+      function togglePersonalitySelector() {
+        const options = document.getElementById('personalityOptions');
+        options.style.display = options.style.display === 'none' || options.style.display === '' ? 'block' : 'none';
+      }
 
-    function changePersonality(personalityName) {
-      const personality = [...PERSONALITIES, ...STATE.customPersonalities].find(p => p.name === personalityName);
-      if (personality) {
-        STATE.selectedPersonality = personality;
-        localStorage.setItem(CONFIG.STORAGE_KEYS.PERSONALITY, personalityName);
-        const personalitySelector = document.getElementById('personalitySelector').querySelector('span');
-        personalitySelector.innerHTML = `<i class="fa-solid fa-theater-masks"></i>‎ ‎ Personality: ${personalityName}`;
-        showNotification(`Personality changed to ${personalityName}`);
+      function changePersonality(personalityName) {
+        const allPersonalities = [...PERSONALITIES, ...STATE.customPersonalities];
+        const personality = allPersonalities.find(p => p.name === personalityName);
+        if (personality) {
+          STATE.selectedPersonality = personality;
+          saveToLocalStorage(CONFIG.STORAGE_KEYS.PERSONALITY, personalityName);
+          const personalitySelector = document.getElementById('personalitySelector');
+          if (personalitySelector) {
+            const personalitySpan = personalitySelector.querySelector('span');
+            personalitySpan.innerHTML = `
+																																<i class="fa-solid fa-theater-masks"></i>‎ ‎ Personality: ${personalityName}`;
+          }
+          showNotification(`Personality changed to ${personalityName}`);
+          closeModal();
+          showSettingsModal();
+        }
+      }
+
+      function loadCustomPersonalities() {
+        try {
+          const savedCustomPersonalities = localStorage.getItem(CONFIG.STORAGE_KEYS.CUSTOM_PERSONALITIES);
+          if (savedCustomPersonalities) {
+            STATE.customPersonalities = JSON.parse(savedCustomPersonalities);
+          }
+        } catch (error) {
+          console.error('Error loading custom personalities:', error);
+          STATE.customPersonalities = [];
+        }
+      }
+
+      function saveCustomPersonalities() {
+        try {
+          saveToLocalStorage(CONFIG.STORAGE_KEYS.CUSTOM_PERSONALITIES, STATE.customPersonalities);
+        } catch (error) {
+          console.error('Error saving custom personalities:', error);
+          showNotification('Error saving custom personality');
+        }
+      }
+
+      function addCustomPersonality(name, systemMessage) {
+        const newPersonality = {
+          name,
+          systemMessage,
+          isCustom: true
+        };
+        STATE.customPersonalities.push(newPersonality);
+        saveCustomPersonalities();
+        STATE.selectedPersonality = newPersonality;
+        saveToLocalStorage(CONFIG.STORAGE_KEYS.PERSONALITY, name);
+        return newPersonality;
+      }
+
+      function removeCustomPersonality(name) {
+        STATE.customPersonalities = STATE.customPersonalities.filter(p => p.name !== name);
+        saveCustomPersonalities();
+      }
+
+      function saveNewCustomPersonality() {
+        const nameInput = document.getElementById('customPersonalityName');
+        const systemInput = document.getElementById('customPersonalitySystem');
+        const name = nameInput.value.trim();
+        const systemMessage = systemInput.value.trim();
+        if (!name || !systemMessage) {
+          showNotification('Please enter both name and system message');
+          return;
+        }
+        if ([...PERSONALITIES, ...STATE.customPersonalities].some(p => p.name === name)) {
+          showNotification('A personality with this name already exists');
+          return;
+        }
+        addCustomPersonality(name, systemMessage);
+        showNotification('Custom personality added');
+        nameInput.value = '';
+        systemInput.value = '';
         closeModal();
         showSettingsModal();
       }
-    }
 
-    function removeApiKey() {
-      localStorage.removeItem('openRouterApiKey');
-      disableInput();
-      showNotification('API key removed');
-      location.reload();
-    }
+      function changePersonality(personalityName) {
+        const personality = [...PERSONALITIES, ...STATE.customPersonalities].find(p => p.name === personalityName);
+        if (personality) {
+          STATE.selectedPersonality = personality;
+          localStorage.setItem(CONFIG.STORAGE_KEYS.PERSONALITY, personalityName);
+          const personalitySelector = document.getElementById('personalitySelector').querySelector('span');
+          personalitySelector.innerHTML = `
+																																<i class="fa-solid fa-theater-masks"></i>‎ ‎ Personality: ${personalityName}`;
+          showNotification(`Personality changed to ${personalityName}`);
+          closeModal();
+          showSettingsModal();
+        }
+      }
 
-    function disableInput() {
-      const textarea = document.getElementById('messageInput');
-      const sendButton = document.querySelector('.chat-input-container button');
-      textarea.disabled = true;
-      sendButton.disabled = true;
-      textarea.placeholder = 'Please enter API key in settings...';
-    }
+      function removeApiKey() {
+        localStorage.removeItem('openRouterApiKey');
+        disableInput();
+        showNotification('API key removed');
+        location.reload();
+      }
 
-    function enableInput() {
-      const textarea = document.getElementById('messageInput');
-      const sendButton = document.querySelector('.chat-input-container button');
-      textarea.disabled = false;
-      sendButton.disabled = false;
-      textarea.placeholder = 'Type your message...';
-    }
+      function disableInput() {
+        const textarea = document.getElementById('messageInput');
+        const sendButton = document.querySelector('.chat-input-container button');
+        textarea.disabled = true;
+        sendButton.disabled = true;
+        textarea.placeholder = 'Please enter API key in settings...';
+      }
 
-    function showNotification(message) {
-      if (!STATE.settings.notifications) return;
-      const notification = document.createElement('div');
-      notification.className = 'notification';
-      notification.textContent = message;
-      document.body.appendChild(notification);
-      setTimeout(() => {
-        notification.classList.add('fade-out');
-        setTimeout(() => notification.remove(), 300);
-      }, 2000);
-    }
+      function enableInput() {
+        const textarea = document.getElementById('messageInput');
+        const sendButton = document.querySelector('.chat-input-container button');
+        textarea.disabled = false;
+        sendButton.disabled = false;
+        textarea.placeholder = 'Type your message...';
+      }
 
-    function createTypingIndicator() {
-      const typingElement = document.createElement('div');
-      typingElement.className = 'chat-message bot typing-indicator';
-      typingElement.innerHTML = `
+      function showNotification(message) {
+        if (!STATE.settings.notifications) return;
+        const notification = document.createElement('div');
+        notification.className = 'notification';
+        notification.textContent = message;
+        document.body.appendChild(notification);
+        setTimeout(() => {
+          notification.classList.add('fade-out');
+          setTimeout(() => notification.remove(), 300);
+        }, 2000);
+      }
 
-<div class="message-content">
-<div class="typing-dots">
-<span></span>
-<span></span>
-<span></span>
-</div>
-</div>
+      function createTypingIndicator() {
+        const typingElement = document.createElement('div');
+        typingElement.className = 'chat-message bot typing-indicator';
+        typingElement.innerHTML = `
+
+																																						
+																																<div class="message-content">
+																																	<div class="typing-dots">
+																																		<span></span>
+																																		<span></span>
+																																		<span></span>
+																																	</div>
+																																</div>
       `;
-      return typingElement;
-    }
-    const typingIndicatorStyles = `
+        return typingElement;
+      }
+      const typingIndicatorStyles = `
     .typing-indicator {
       opacity: 0.7;
       margin: 10px 0;
@@ -2053,180 +2037,165 @@
     }
     `;
 
-    function showWelcomeMessage() {
-      const existingMessages = document.querySelector('.chat-messages');
-      const existingWelcomeMessage = Array.from(existingMessages.children).find(message => message.classList.contains('bot') && message.textContent.includes("Welcome to PatheticAI"));
-      if (existingWelcomeMessage) return;
-      const welcomeMessage = `👋 Welcome to PatheticAI! I'm here to help you with any questions or tasks you may have. Feel free to start our conversation!`;
-      const {
-        element
-      } = createMessageElement(welcomeMessage, false);
-      const resetLink = element.querySelector('.reset-chat-link');
-      if (resetLink) {
-        resetLink.addEventListener('click', resetChat);
+      function showWelcomeMessage() {
+        const existingMessages = document.querySelector('.chat-messages');
+        const existingWelcomeMessage = Array.from(existingMessages.children).find(message => message.classList.contains('bot') && message.textContent.includes("Welcome to PatheticAI"));
+        if (existingWelcomeMessage) return;
+        const welcomeMessage = `👋 Welcome to PatheticAI! I'm here to help you with any questions or tasks you may have. Feel free to start our conversation!`;
+        const {
+          element
+        } = createMessageElement(welcomeMessage, false);
+        const resetLink = element.querySelector('.reset-chat-link');
+        if (resetLink) {
+          resetLink.addEventListener('click', resetChat);
+        }
+        existingMessages.appendChild(element);
       }
-      existingMessages.appendChild(element);
-    }
 
-    function resetChat() {
-      STATE.messageHistory = [];
-      saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, []);
-      const chatMessages = document.querySelector('.chat-messages');
-      chatMessages.innerHTML = '';
-      showNotification('Chat history cleared');
-      showWelcomeMessage();
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-      checkAndStoreApiKey();
-    });
-
-    function getApiKey() {
-      const apiKey = localStorage.getItem('openRouterApiKey');
-      return apiKey && apiKey.startsWith('sk-or-') ? apiKey : null;
-    }
-
-    function checkAndStoreApiKey() {
-      if (!getApiKey()) {
-        showApiKeyModal();
+      function resetChat() {
+        STATE.messageHistory = [];
+        saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, []);
+        const chatMessages = document.querySelector('.chat-messages');
+        chatMessages.innerHTML = '';
+        showNotification('Chat history cleared');
+        showWelcomeMessage();
       }
-    }
+      document.addEventListener('DOMContentLoaded', function() {
+        checkAndStoreApiKey();
+      });
 
-    function showApiKeyModal() {
-      if (document.querySelector('.modal-overlay')) return;
+      function getApiKey() {
+        const apiKey = localStorage.getItem('openRouterApiKey');
+        return apiKey && apiKey.startsWith('sk-or-') ? apiKey : null;
+      }
 
-      const modal = document.createElement('div');
-      modal.className = 'modal-overlay';
-      modal.innerHTML = `
-    <div class="modal-window">
-      <div class="modal-header">
-        <span class="modal-title">API Key Required</span>
-      </div>
-      <div class="modal-content">
-        <p>To use PatheticAI, you need an API key from OpenRouter.</p>
-        <div style="margin: 20px 0;">
-          <input type="text" 
+      function checkAndStoreApiKey() {
+        if (!getApiKey()) {
+          showApiKeyModal();
+        }
+      }
+
+      function showApiKeyModal() {
+        if (document.querySelector('.modal-overlay')) return;
+        const modal = document.createElement('div');
+        modal.className = 'modal-overlay';
+        modal.innerHTML = `
+    
+																																<div class="modal-window">
+																																	<div class="modal-header">
+																																		<span class="modal-title">API Key Required</span>
+																																	</div>
+																																	<div class="modal-content">
+																																		<p>To use PatheticAI, you need an API key from OpenRouter.</p>
+																																		<div style="margin: 20px 0;">
+																																			<input type="text" 
             id="apiKeyInput" 
             placeholder="Enter your API key (sk-or-v1-...)" 
             style="width: 100%; padding: 15px; background: var(--button-background); 
             border: var(--border-color); border-radius: 15px; color: var(--color); font-size: 14px;">
-        </div>
-        <button id="saveApiKeyButton" 
+																																			</div>
+																																			<button id="saveApiKeyButton" 
           style="width: 100%; padding: 15px; margin-bottom: 10px; background: var(--button-background); 
           border: var(--border-color); border-radius: 15px; color: var(--color); cursor: pointer; transition: all 0.3s ease;">
           Enter
         </button>
-        <div id="getKeyButton" class="settings-button">
-          <i class="fas fa-key"></i> Get Key
-        </div>
-        <div id="helpButton" class="settings-button">
-          <i class="fas fa-book"></i> Help
-        </div>
-      </div>
-    </div>
+																																			<div id="getKeyButton" class="settings-button">
+																																				<i class="fas fa-key"></i> Get Key
+        
+																																			</div>
+																																			<div id="helpButton" class="settings-button">
+																																				<i class="fas fa-book"></i> Help
+        
+																																			</div>
+																																		</div>
+																																	</div>
   `;
-
-      document.body.appendChild(modal);
-
-      document.getElementById('saveApiKeyButton').addEventListener('click', saveApiKey);
-      document.getElementById('getKeyButton').addEventListener('click', () => {
-        window.open('https://openrouter.ai/settings/keys', '_blank');
-      });
-      document.getElementById('helpButton').addEventListener('click', () => {
-        window.open('/help', '_blank');
-      });
-    }
-const AudioManager = {
-  sounds: {
-    hover: new Audio('https://pathetic-ai.pages.dev/audios/click.mp3'),
-    send: new Audio('https://pathetic-ai.pages.dev/audios/send.mp3'),
-    receive: new Audio('https://pathetic-ai.pages.dev/audios/receive.mp3'),
-    click: new Audio('https://pathetic-ai.pages.dev/audios/click.mp3'),
-    notification: new Audio('https://pathetic-ai.pages.dev/audios/notification.mp3')
-  },
-
-  volumes: {
-    hover: 1,
-    send: 1,
-    receive: 1,
-    click: 1,
-    notification: 1
-  },
-
-  init() {
-    Object.keys(this.sounds).forEach(soundName => {
-      const audio = this.sounds[soundName];
-      audio.volume = this.volumes[soundName];
-      audio.preload = "auto";
-    });
-
-    document.querySelectorAll('button, .settings-button, .selector, .option').forEach(button => {
-      button.addEventListener('mouseenter', () => this.playSound('hover'));
-      button.addEventListener('click', () => this.playSound('click'));
-    });
-
-    const observer = new MutationObserver(mutations => {
-      mutations.forEach(mutation => {
-        mutation.addedNodes.forEach(node => {
-          if (node.nodeType === 1) {
-            node.querySelectorAll('button, .settings-button, .selector, .option').forEach(button => {
-              button.addEventListener('mouseenter', () => this.playSound('hover'));
-              button.addEventListener('click', () => this.playSound('click'));
-            });
-          }
+        document.body.appendChild(modal);
+        document.getElementById('saveApiKeyButton').addEventListener('click', saveApiKey);
+        document.getElementById('getKeyButton').addEventListener('click', () => {
+          window.open('https://openrouter.ai/settings/keys', '_blank');
         });
-      });
-    });
-
-    observer.observe(document.body, { childList: true, subtree: true });
-
-    if (window.sendMessage) {
-      const originalSendMessage = window.sendMessage;
-      window.sendMessage = async function () {
-        AudioManager.playSound('send');
-        return originalSendMessage.apply(this, arguments);
-      };
-    }
-
-    if (window.createMessageElement) {
-      const originalCreateMessageElement = window.createMessageElement;
-      window.createMessageElement = function (message, isUser, timestamp) {
-        if (!isUser) {
-          AudioManager.playSound('receive');
+        document.getElementById('helpButton').addEventListener('click', () => {
+          window.open('/help', '_blank');
+        });
+      }
+      const AudioManager = {
+        sounds: {
+          hover: new Audio('/audios/click.mp3'),
+          send: new Audio('/audios/send.mp3'),
+          receive: new Audio('/audios/receive.mp3'),
+          click: new Audio('/audios/click.mp3'),
+          notification: new Audio('/audios/notification.mp3')
+        },
+        volumes: {
+          hover: 1,
+          send: 1,
+          receive: 1,
+          click: 1,
+          notification: 1
+        },
+        init() {
+          Object.keys(this.sounds).forEach(soundName => {
+            const audio = this.sounds[soundName];
+            audio.volume = this.volumes[soundName];
+            audio.preload = "auto";
+          });
+          document.querySelectorAll('button, .settings-button, .selector, .option').forEach(button => {
+            button.addEventListener('mouseenter', () => this.playSound('hover'));
+            button.addEventListener('click', () => this.playSound('click'));
+          });
+          const observer = new MutationObserver(mutations => {
+            mutations.forEach(mutation => {
+              mutation.addedNodes.forEach(node => {
+                if (node.nodeType === 1) {
+                  node.querySelectorAll('button, .settings-button, .selector, .option').forEach(button => {
+                    button.addEventListener('mouseenter', () => this.playSound('hover'));
+                    button.addEventListener('click', () => this.playSound('click'));
+                  });
+                }
+              });
+            });
+          });
+          observer.observe(document.body, {
+            childList: true,
+            subtree: true
+          });
+          const originalSendMessage = window.sendMessage;
+          window.sendMessage = async function() {
+            AudioManager.playSound('send');
+            return originalSendMessage.apply(this, arguments);
+          };
+          const originalCreateMessageElement = window.createMessageElement;
+          window.createMessageElement = function(message, isUser, timestamp) {
+            if (!isUser) {
+              AudioManager.playSound('receive');
+            }
+            return originalCreateMessageElement(message, isUser, timestamp);
+          };
+          const originalShowNotification = window.showNotification;
+          window.showNotification = function(message) {
+            AudioManager.playSound('notification');
+            return originalShowNotification(message);
+          };
+        },
+        playSound(soundName) {
+          if (!STATE.settings.soundEffects) return;
+          const sound = this.sounds[soundName];
+          if (sound) {
+            sound.volume = this.volumes[soundName];
+            sound.currentTime = 0;
+            sound.play().catch(err => console.log(`Error playing sound '${soundName}':`, err));
+          }
+        },
+        setVolume(soundName, volume) {
+          if (this.sounds[soundName]) {
+            this.sounds[soundName].volume = Math.max(0, Math.min(1, volume));
+            console.log(`Volume set: ${soundName} = ${this.sounds[soundName].volume}`);
+          }
         }
-        return originalCreateMessageElement(message, isUser, timestamp);
       };
-    }
-
-    if (window.showNotification) {
-      const originalShowNotification = window.showNotification;
-      window.showNotification = function (message) {
-        AudioManager.playSound('notification');
-        return originalShowNotification(message);
-      };
-    }
-  },
-
-  playSound(soundName) {
-    if (!STATE.settings?.soundEffects) return;
-
-    const sound = this.sounds[soundName];
-    if (sound) {
-      sound.volume = this.volumes[soundName];
-      sound.currentTime = 0;
-      sound.play().catch(err => console.log(`Error playing sound '${soundName}':`, err));
-    }
-  },
-
-  setVolume(soundName, volume) {
-    if (this.sounds[soundName]) {
-      this.volumes[soundName] = Math.max(0, Math.min(1, volume));
-      console.log(`Volume set: ${soundName} = ${this.volumes[soundName]}`);
-    }
-  }
-};
-
-document.addEventListener('DOMContentLoaded', () => {
-  AudioManager.init();
-});
+      document.addEventListener('DOMContentLoaded', () => {
+        AudioManager.init();
+        loadCustomPersonalities();
+      });
     </script>
