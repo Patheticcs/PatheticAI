@@ -975,13 +975,9 @@
     async function initializeApp() {
 
       await loadSavedState();
-
       initializeUI();
-
       setupEventListeners();
-
       await showWelcomeMessage();
-
       if (!await checkApiKey()) {
         disableInput();
         showApiKeyModal();
@@ -1173,6 +1169,34 @@
         STATE.customPersonalities = [];
       }
     }
+function saveNewCustomPersonality() {
+  const nameInput = document.getElementById('customPersonalityName');
+  const systemInput = document.getElementById('customPersonalitySystem');
+
+  const name = nameInput.value.trim();
+  const systemMessage = systemInput.value.trim();
+
+  if (!name || !systemMessage) {
+    showNotification('Please enter both name and system message');
+    return;
+  }
+
+  if ([...PERSONALITIES, ...STATE.customPersonalities].some(p => p.name === name)) {
+    showNotification('A personality with this name already exists');
+    return;
+  }
+
+  addCustomPersonality(name, systemMessage);
+  showNotification(`Custom personality "${name}" added`);
+
+  // Clear input fields
+  nameInput.value = '';
+  systemInput.value = '';
+
+  // Close and refresh settings modal
+  closeModal();
+  showSettingsModal();
+}
 
     function saveCustomPersonalities() {
       try {
