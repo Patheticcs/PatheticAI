@@ -69,7 +69,7 @@
       --background-image: url("https://pathetic-ai.pages.dev//images/light%20background.png");
       --background-color: #ffffff;
       --primary-color: #000000;
-      --secondary-color: #9c00d5;
+      --secondary-color: #000000;
       --border-color: rgba(0, 0, 0, 0.05);
       --taskbar-background: rgba(255, 255, 255, 0.6);
       --input-background: rgba(255, 255, 255, 0.7);
@@ -92,7 +92,7 @@
       --background-image: url("https://pathetic-ai.pages.dev//images/dark%20background.png");
       --background-color: #000000;
       --primary-color: #ffffff;
-      --secondary-color: #9c00d5;
+      --secondary-color: #ffffff;
       --border-color: rgba(255, 255, 255, 0.03);
       --taskbar-background: rgba(0, 0, 0, 0.5);
       --input-background: rgba(0, 0, 0, 0.6);
@@ -198,28 +198,6 @@
       transform: translateY(-1px);
     }
 
-    .edit-input {
-      width: 100%;
-      min-height: 40px;
-      font-size: 16px;
-      font-family: inherit;
-      color: var(--color);
-      border-radius: 8px;
-      padding: 10px;
-      resize: none;
-      outline: none;
-      transition: border 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-    }
-
-    .edit-mode .edit-input {
-      background: var(--modal-background);
-      border-color: var(--border-button-color);
-    }
-
-    .edit-mode {
-      animation: fadeInGlass 0.2s ease-in-out;
-    }
-
     .chat-messages {
       display: flex;
       flex-direction: column;
@@ -279,105 +257,6 @@
       transform: translateY(-1px);
     }
 
-    .settings-section {
-      margin-bottom: 20px;
-    }
-
-    .custom-personality-form {
-      margin-top: 15px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      padding: 15px;
-      background: var(--button-background);
-      border: 1px solid var(--border-color);
-      border-radius: var(--border-radius-small);
-    }
-
-    .custom-personality-input,
-    .custom-personality-textarea {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      background: var(--input-background);
-      color: var(--primary-color);
-      font-family: inherit;
-      transition: var(--transition);
-    }
-
-    .custom-personality-input:focus,
-    .custom-personality-textarea:focus {
-      outline: none;
-      border-color: var(--secondary-color);
-    }
-
-    .custom-personality-textarea {
-      min-height: 100px;
-      resize: vertical;
-    }
-
-    .custom-personality-button {
-      align-self: flex-end;
-      background: var(--secondary-color);
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: var(--border-radius-small);
-      cursor: pointer;
-      transition: var(--transition);
-    }
-
-    .custom-personality-button:hover {
-      opacity: 0.9;
-      transform: translateY(-2px);
-    }
-
-    .selector-container .options {
-      background: var(--modal-background);
-      backdrop-filter: blur(10px);
-      border: 1px solid var(--border-color);
-      border-radius: var(--border-radius-small);
-      overflow: hidden;
-      max-height: 200px;
-      overflow-y: auto;
-    }
-
-    .selector-container .option {
-      padding: 12px 15px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid var(--border-color);
-      background: var(--button-background);
-    }
-
-    .selector-container .option:last-child {
-      border-bottom: none;
-    }
-
-    .delete-personality {
-      background: rgba(255, 59, 48, 0.1);
-      color: #ff3b30;
-      border: 1px solid rgba(255, 59, 48, 0.2);
-      border-radius: 50%;
-      width: 24px;
-      height: 24px;
-      padding: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-      margin-left: 10px;
-      min-height: unset;
-      min-width: unset;
-    }
-
-    .delete-personality:hover {
-      background: rgba(255, 59, 48, 0.2);
-      transform: scale(1.1);
-    }
-
     .chat-message {
       padding: var(--spacing-normal);
       border-radius: 20px;
@@ -428,12 +307,6 @@
       align-items: center;
       z-index: 2000;
       animation: fadeIn 0.3s ease;
-      transition: opacity 0.3s ease-out;
-
-    }
-
-    .modal-overlay.fade-out {
-      opacity: 0;
     }
 
     .modal-window {
@@ -448,7 +321,6 @@
       animation: slideUp 0.3s ease;
       display: flex;
       flex-direction: column;
-
     }
 
     .modal-header {
@@ -575,6 +447,55 @@
       border-radius: 12px;
       cursor: pointer;
       font-size: 12px;
+    }
+
+    .custom-personality-form {
+      margin-top: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 15px;
+      background: var(--button-background);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-small);
+    }
+
+    .custom-personality-input,
+    .custom-personality-textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background: transparent
+      color: var(--color);
+      font-family: inherit;
+      transition: var(--transition);
+    }
+
+    .custom-personality-input:focus,
+    .custom-personality-textarea:focus {
+      outline: none;
+      border-color: var(--secondary-color);
+    }
+
+    .custom-personality-textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .custom-personality-button {
+      background: var(--button-background);
+      color: var(--color);
+      border: none;
+      padding: 10px 20px;
+      border-radius: var(--border-radius-small);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .custom-personality-button:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
     }
 
     @keyframes fadeIn {
@@ -1277,30 +1198,13 @@
       saveCustomPersonalities();
     }
 
-    function saveNewCustomPersonality() {
-      const nameInput = document.getElementById('customPersonalityName');
-      const systemInput = document.getElementById('customPersonalitySystem');
+    function deletePersonality(name) {
 
-      const name = nameInput.value.trim();
-      const systemMessage = systemInput.value.trim();
+      STATE.customPersonalities = STATE.customPersonalities.filter(p => p.name !== name);
 
-      if (!name || !systemMessage) {
-        showNotification('Please enter both name and system message');
-        return;
-      }
+      saveCustomPersonalities();
 
-      if ([...PERSONALITIES, ...STATE.customPersonalities].some(p => p.name === name)) {
-        showNotification('A personality with this name already exists');
-        return;
-      }
-
-      addCustomPersonality(name, systemMessage);
-      showNotification('Custom personality added');
-
-      nameInput.value = '';
-      systemInput.value = '';
-
-      closeModal();
+      showNotification(`Custom personality "${name}" deleted.`);
       showSettingsModal();
     }
 
@@ -1700,7 +1604,6 @@
     }
 
     function showSettingsModal() {
-
       const existingModal = document.querySelector('.modal-overlay');
       if (existingModal) {
         existingModal.remove();
@@ -1818,6 +1721,7 @@
       </div>
     </div>
   `;
+
       modal.addEventListener('click', (e) => {
         if (e.target === modal) {
           closeModal();
