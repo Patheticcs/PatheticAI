@@ -1811,15 +1811,6 @@
           <div class="settings-button" onclick="toggleSetting('autoScroll')">
             <i class="fas fa-scroll"></i> Auto Scroll: ${STATE.settings.autoScroll ? 'On' : 'Off'}
           </div>
-          <div class="settings-button" onclick="toggleSetting('autoComplete')">
-            <i class="fas fa-magic"></i> Auto Complete: ${STATE.settings.autoComplete ? 'On' : 'Off'}
-          </div>
-          <div class="settings-button" onclick="toggleSetting('markdownPreview')">
-            <i class="fas fa-markdown"></i> Markdown Preview: ${STATE.settings.markdownPreview ? 'On' : 'Off'}
-          </div>
-          <div class="settings-button" onclick="toggleSetting('codeHighlighting')">
-            <i class="fas fa-code"></i> Code Highlighting: ${STATE.settings.codeHighlighting ? 'On' : 'Off'}
-          </div>
           <div class="settings-button danger" onclick="removeApiKey()">
             <i class="fas fa-key"></i> Remove API Key
           </div>
@@ -1827,7 +1818,6 @@
       </div>
     </div>
   `;
-
       modal.addEventListener('click', (e) => {
         if (e.target === modal) {
           closeModal();
@@ -1879,13 +1869,37 @@
     }
 
     function toggleSetting(setting) {
-      STATE.settings[setting] = !STATE.settings[setting];
-      saveState();
+      const settingState = STATE.settings[setting];
+      const fadeOutDuration = 300;
+
+      STATE.settings[setting] = !settingState;
+      saveToLocalStorage(CONFIG.STORAGE_KEYS.SETTINGS, STATE.settings);
+
+      const settingButton = document.querySelector(`[onclick="toggleSetting('${setting}')"]`);
+      const dropdownButton = document.querySelector(`.settings-button.${setting}`);
+
+      if (settingButton) {
+        settingButton.textContent = `${capitalizeFirstLetter(setting)}: ${STATE.settings[setting] ? 'On' : 'Off'}`;
+      }
+
+      if (dropdownButton) {
+        dropdownButton.innerHTML = `<i class="fas fa-${setting === 'notifications' ? 'bell' : 'volume-up'}"></i> ${capitalizeFirstLetter(setting)}: ${STATE.settings[setting] ? 'On' : 'Off'}`;
+
+        dropdownButton.classList.add('fade-out');
+        setTimeout(() => {
+          dropdownButton.classList.remove('fade-out');
+
+        }, fadeOutDuration);
+      }
+
+      showNotification(`${setting} ${STATE.settings[setting] ? 'enabled' : 'disabled'}`);
 
       closeModal();
       showSettingsModal();
+    }
 
-      showNotification(`${setting} ${STATE.settings[setting] ? 'enabled' : 'disabled'}`);
+    function capitalizeFirstLetter(string) {
+      return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
     function playMessageSound() {
@@ -2091,13 +2105,13 @@
       typingElement.className = 'chat-message bot typing-indicator';
       typingElement.innerHTML = `
 
-																																						<div class="message-content">
-																																							<div class="typing-dots">
-																																								<span></span>
-																																								<span></span>
-																																								<span></span>
-																																							</div>
-																																						</div>
+<div class="message-content">
+<div class="typing-dots">
+<span></span>
+<span></span>
+<span></span>
+</div>
+</div>
       `;
       return typingElement;
     }
