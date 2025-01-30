@@ -279,6 +279,105 @@
       transform: translateY(-1px);
     }
 
+    .settings-section {
+      margin-bottom: 20px;
+    }
+
+    .custom-personality-form {
+      margin-top: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 15px;
+      background: var(--button-background);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-small);
+    }
+
+    .custom-personality-input,
+    .custom-personality-textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background: var(--input-background);
+      color: var(--primary-color);
+      font-family: inherit;
+      transition: var(--transition);
+    }
+
+    .custom-personality-input:focus,
+    .custom-personality-textarea:focus {
+      outline: none;
+      border-color: var(--secondary-color);
+    }
+
+    .custom-personality-textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .custom-personality-button {
+      align-self: flex-end;
+      background: var(--secondary-color);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: var(--border-radius-small);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .custom-personality-button:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+
+    .selector-container .options {
+      background: var(--modal-background);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-small);
+      overflow: hidden;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .selector-container .option {
+      padding: 12px 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-color);
+      background: var(--button-background);
+    }
+
+    .selector-container .option:last-child {
+      border-bottom: none;
+    }
+
+    .delete-personality {
+      background: rgba(255, 59, 48, 0.1);
+      color: #ff3b30;
+      border: 1px solid rgba(255, 59, 48, 0.2);
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      margin-left: 10px;
+      min-height: unset;
+      min-width: unset;
+    }
+
+    .delete-personality:hover {
+      background: rgba(255, 59, 48, 0.2);
+      transform: scale(1.1);
+    }
+
     .chat-message {
       padding: var(--spacing-normal);
       border-radius: 20px;
@@ -788,6 +887,7 @@
       STORAGE_KEYS: {
         THEME: 'theme',
         API_KEY: 'openRouterApiKey',
+        CUSTOM_PERSONALITIES: 'customPersonalities',
         MESSAGES: 'chatMessages',
         LANGUAGE: 'preferredLanguage',
         SETTINGS: 'userSettings',
@@ -795,30 +895,96 @@
       }
     };
     const PERSONALITIES = [{
-      name: "Friendly",
-      systemMessage: `You are a friendly, warm, and supportive AI assistant who:
+        name: "Friendly",
+        systemMessage: `You are a friendly, warm, and supportive AI assistant who:
     - Uses positive and encouraging language
     - Explains complex topics in simple terms
     - Maintains a conversational and approachable tone
     - Provides examples and analogies to aid understanding
     - Shows genuine interest in helping users succeed`
-    }, {
-      name: "Professional",
-      systemMessage: `You are a professional, efficient AI assistant who:
+      },
+      {
+        name: "Professional",
+        systemMessage: `You are a professional, efficient AI assistant who:
     - Communicates with precision and clarity
     - Focuses on accuracy and factual information
     - Maintains a formal but accessible tone
     - Provides well-structured responses
     - Emphasizes efficiency and practical solutions`
-    }, {
-      name: "Academic",
-      systemMessage: `You are a scholarly AI assistant who:
+      },
+      {
+        name: "Academic",
+        systemMessage: `You are a scholarly AI assistant who:
     - Uses academic language and terminology
     - Provides in-depth analysis and research context
     - Cites relevant sources and studies
     - Encourages critical thinking
     - Maintains high academic standards`
-    }];
+      },
+      {
+        name: "Casual",
+        systemMessage: `You are a laid-back, informal AI assistant who:
+    - Uses conversational, everyday language
+    - Incorporates humor and lightheartedness
+    - Keeps responses concise and engaging
+    - Encourages relaxed, easygoing interactions
+    - Avoids unnecessary formality`
+      },
+      {
+        name: "Motivational",
+        systemMessage: `You are an inspiring and motivational AI assistant who:
+    - Uses uplifting and encouraging language
+    - Helps users stay positive and focused
+    - Provides motivational quotes and wisdom
+    - Reinforces confidence and resilience
+    - Supports users in achieving their goals`
+      },
+      {
+        name: "Concise",
+        systemMessage: `You are a brief and to-the-point AI assistant who:
+    - Keeps responses short and direct
+    - Avoids unnecessary details or explanations
+    - Answers with clarity and brevity
+    - Optimizes efficiency in communication
+    - Sticks to essential information only`
+      },
+      {
+        name: "Storyteller",
+        systemMessage: `You are a creative, narrative-driven AI assistant who:
+    - Uses storytelling to illustrate points
+    - Weaves engaging and vivid narratives
+    - Captures imagination and interest
+    - Makes learning enjoyable through stories
+    - Adapts stories to suit the user's needs`
+      },
+      {
+        name: "Sarcastic",
+        systemMessage: `You are a witty, sarcastic AI assistant who:
+    - Uses playful, humorous sarcasm
+    - Provides sharp, clever responses
+    - Maintains an entertaining and fun tone
+    - Ensures sarcasm is lighthearted, not offensive
+    - Keeps interactions engaging and humorous`
+      },
+      {
+        name: "Empathetic",
+        systemMessage: `You are a compassionate and understanding AI assistant who:
+    - Listens attentively to users' concerns
+    - Responds with kindness and patience
+    - Offers emotional support and encouragement
+    - Helps users feel heard and understood
+    - Prioritizes a caring, human-like approach`
+      },
+      {
+        name: "Philosophical",
+        systemMessage: `You are a deep-thinking, philosophical AI assistant who:
+    - Explores profound questions and ideas
+    - Encourages introspection and curiosity
+    - Uses wisdom from philosophy and history
+    - Avoids simplistic answers, embracing complexity
+    - Guides users toward deeper understanding`
+      }
+    ];
 
     const MODELS = [{
       name: "google/gemini-2.0-flash-exp:free",
@@ -838,6 +1004,7 @@
     }];
     const STATE = {
       isWaitingForResponse: false,
+      customPersonalities: [],
       editingMessageId: null,
       voiceRecording: false,
       messageHistory: [],
@@ -1072,6 +1239,69 @@
         saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, []);
         showWelcomeMessage();
       }
+    }
+
+    function loadCustomPersonalities() {
+      try {
+        const savedCustomPersonalities = localStorage.getItem(CONFIG.STORAGE_KEYS.CUSTOM_PERSONALITIES);
+        if (savedCustomPersonalities) {
+          STATE.customPersonalities = JSON.parse(savedCustomPersonalities);
+        }
+      } catch (error) {
+        console.error('Error loading custom personalities:', error);
+        STATE.customPersonalities = [];
+      }
+    }
+
+    function saveCustomPersonalities() {
+      try {
+        localStorage.setItem(CONFIG.STORAGE_KEYS.CUSTOM_PERSONALITIES, JSON.stringify(STATE.customPersonalities));
+      } catch (error) {
+        console.error('Error saving custom personalities:', error);
+      }
+    }
+
+    function addCustomPersonality(name, systemMessage) {
+      const newPersonality = {
+        name,
+        systemMessage,
+        isCustom: true
+      };
+      STATE.customPersonalities.push(newPersonality);
+      saveCustomPersonalities();
+      return newPersonality;
+    }
+
+    function removeCustomPersonality(name) {
+      STATE.customPersonalities = STATE.customPersonalities.filter(p => p.name !== name);
+      saveCustomPersonalities();
+    }
+
+    function saveNewCustomPersonality() {
+      const nameInput = document.getElementById('customPersonalityName');
+      const systemInput = document.getElementById('customPersonalitySystem');
+
+      const name = nameInput.value.trim();
+      const systemMessage = systemInput.value.trim();
+
+      if (!name || !systemMessage) {
+        showNotification('Please enter both name and system message');
+        return;
+      }
+
+      if ([...PERSONALITIES, ...STATE.customPersonalities].some(p => p.name === name)) {
+        showNotification('A personality with this name already exists');
+        return;
+      }
+
+      addCustomPersonality(name, systemMessage);
+      showNotification('Custom personality added');
+
+      nameInput.value = '';
+      systemInput.value = '';
+
+      closeModal();
+      showSettingsModal();
     }
 
     function saveToLocalStorage(key, value) {
@@ -1438,6 +1668,17 @@
       }
     }
 
+    function toggleSelector(selectorId, optionsId) {
+      const selector = document.getElementById(selectorId);
+      const options = document.getElementById(optionsId);
+
+      if (options.style.display === 'block') {
+        options.style.display = 'none';
+      } else {
+        options.style.display = 'block';
+      }
+    }
+
     function handleScroll(e) {
       if (STATE.settings.autoScroll) {
         const container = document.querySelector('.container');
@@ -1459,101 +1700,140 @@
     }
 
     function showSettingsModal() {
+
+      const existingModal = document.querySelector('.modal-overlay');
+      if (existingModal) {
+        existingModal.remove();
+      }
+
       const modal = document.createElement('div');
       modal.className = 'modal-overlay';
-      const languageOptions = ['English', 'Spanish', 'French', 'German', 'Italian', 'Japanese', 'Chinese', 'Russian', 'Portuguese', 'Korean', 'Hindi', 'Arabic', 'Turkish', 'Dutch', 'Swedish', 'Greek', 'Polish', 'Vietnamese', 'Thai', 'Indonesian', 'Hebrew', 'Finnish', 'Czech', 'Hungarian'].map(lang => `
 
-																												<div class="option" data-language="${lang}" onclick="changeLanguage('${lang}')">${lang}</div>
+      const allPersonalities = [...PERSONALITIES, ...STATE.customPersonalities];
+
+      const languageOptions = ['English', 'Spanish', 'French', 'German', 'Italian', 'Japanese', 'Chinese', 'Russian', 'Portuguese', 'Korean', 'Hindi', 'Arabic', 'Turkish', 'Dutch', 'Swedish', 'Greek', 'Polish', 'Vietnamese', 'Thai', 'Indonesian', 'Hebrew', 'Finnish', 'Czech', 'Hungarian']
+        .map(lang => `
+      <div class="option" data-language="${lang}" onclick="changeLanguage('${lang}'); closeAllSelectors();">
+        ${lang}
+      </div>
     `).join('');
+
+      const personalityOptions = allPersonalities
+        .map(p => `
+      <div class="option" data-personality="${p.name}">
+        <span onclick="changePersonality('${p.name}'); closeAllSelectors();">${p.name}</span>
+        ${p.isCustom ? `
+          <button class="delete-personality" onclick="event.stopPropagation(); deletePersonality('${p.name}');">
+            ×
+          </button>
+        ` : ''}
+      </div>
+    `).join('');
+
       const themeOptions = `
-
-																												<div class="option" data-theme="light" onclick="changeTheme('Dark')">Dark</div>
-																												<div class="option" data-theme="dark" onclick="changeTheme('Light')">Light</div>
+    <div class="option" data-theme="Light" onclick="changeTheme('Light'); closeAllSelectors();">Light</div>
+    <div class="option" data-theme="Dark" onclick="changeTheme('Dark'); closeAllSelectors();">Dark</div>
   `;
-      const personalityOptions = PERSONALITIES.map(p => `
 
-																												<div class="option" data-personality="${p.name}" onclick="changePersonality('${p.name}')">${p.name}</div>
-    `).join('');
       modal.innerHTML = `
+    <div class="modal-window">
+      <div class="modal-header">
+        <span class="modal-title">Settings</span>
+        <button class="close-button" onclick="closeModal()">×</button>
+      </div>
+      <div class="modal-content">
+        <div class="settings-section">
+          <div class="settings-button" onclick="resetChat()">
+            <i class="fa fa-trash"></i> Clear Chat History
+          </div>
+        </div>
 
-																												<div class="modal-window">
-																													<div class="modal-header">
-																														<span class="modal-title">Settings</span>
-																														<button class="close-button" aria-label="Close settings" onclick="closeModal()">✖</button>
-																													</div>
-																													<div class="modal-content">
-																														<div class="settings-section">
-																															<div class="settings-button" onclick="resetChat()">
-																																<i class="fa fa-trash"></i> Clear Chat
-
-																															</div>
-																														</div>
-																														<div class="settings-section">
-																															<div class="selector-container">
-																																<div class="selector" id="languageSelector" onclick="toggleLanguageSelector()">
-																																	<span>
-																																		<i class="fa-solid fa-language"></i>‎ ‎ Language: ${STATE.currentLanguage}
-
-																																	</span>
-																																	<i class="fa fa-chevron-down"></i>
-																																</div>
-																																<div class="options" id="languageOptions" style="display:none;">
+        <div class="settings-section">
+          <div class="selector-container">
+            <div class="selector" id="languageSelector" onclick="toggleSelector('languageSelector', 'languageOptions')">
+              <span><i class="fa-solid fa-language"></i> Language: ${STATE.currentLanguage}</span>
+              <i class="fa fa-chevron-down"></i>
+            </div>
+            <div class="options" id="languageOptions">
               ${languageOptions}
-																											</div>
-																															</div>
-																															<div class="settings-section">
-																																<div class="selector-container">
-																																	<div class="selector" id="personalitySelector" onclick="togglePersonalitySelector()">
-																																		<span>
-																																			<i class="fa-solid fa-theater-masks"></i>‎ ‎ Personality: ${STATE.selectedPersonality.name}
+            </div>
+          </div>
+        </div>
 
-																																		</span>
-																																		<i class="fa fa-chevron-down"></i>
-																																	</div>
-																																	<div class="options" id="personalityOptions" style="display:none;">
+        <div class="settings-section">
+          <div class="selector-container">
+            <div class="selector" id="personalitySelector" onclick="toggleSelector('personalitySelector', 'personalityOptions')">
+              <span><i class="fa-solid fa-theater-masks"></i> Personality: ${STATE.selectedPersonality.name}</span>
+              <i class="fa fa-chevron-down"></i>
+            </div>
+            <div class="options" id="personalityOptions">
               ${personalityOptions}
             </div>
-																																</div>
-																															</div>
-																															<div class="settings-section">
-																																<div class="selector-container">
-																																	<div class="selector" id="themeSelector" onclick="toggleThemeSelector()">
-																																		<span>
-																																			<i class="fa-solid fa-palette"></i>‎ ‎ Select Theme
+          </div>
 
-																																		</span>
-																																		<i class="fa fa-chevron-down"></i>
-																																	</div>
-																																	<div class="options" id="themeOptions">
+          <div class="custom-personality-form">
+            <input 
+              type="text" 
+              id="customPersonalityName" 
+              placeholder="Enter personality name" 
+              class="custom-personality-input"
+            >
+            <textarea 
+              id="customPersonalitySystem" 
+              placeholder="Enter system message/instructions" 
+              class="custom-personality-textarea"
+            ></textarea>
+            <button onclick="saveNewCustomPersonality()" class="custom-personality-button">
+              Add Custom Personality
+            </button>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <div class="selector-container">
+            <div class="selector" id="themeSelector" onclick="toggleSelector('themeSelector', 'themeOptions')">
+              <span><i class="fa-solid fa-palette"></i> Theme: ${STATE.theme}</span>
+              <i class="fa fa-chevron-down"></i>
+            </div>
+            <div class="options" id="themeOptions">
               ${themeOptions}
-																											</div>
-																																</div>
-																																<div class="settings-section">
-																																	<div class="settings-button" onclick="toggleSetting('notifications')">
-																																		<i class="fas fa-bell"></i> Notifications: ${STATE.settings.notifications ? 'On' : 'Off'}
+            </div>
+          </div>
+        </div>
 
-																																	</div>
-																																	<div class="settings-button" onclick="toggleSetting('soundEffects')">
-																																		<i class="fas fa-volume-up"></i> Sound Effects: ${STATE.settings.soundEffects ? 'On' : 'Off'}
-
-																																	</div>
-																																	<div class="settings-button" onclick="toggleSetting('autoScroll')">
-																																		<i class="fas fa-scroll"></i> Auto Scroll: ${STATE.settings.autoScroll ? 'On' : 'Off'}
-
-																																	</div>
-																																	<div class="settings-button" onclick="removeApiKey()">
-																																		<i class="fas fa-key"></i> Remove API Key
-
-																																	</div>
-																																</div>
-																															</div>
-																														</div>
+        <div class="settings-section">
+          <div class="settings-button" onclick="toggleSetting('notifications')">
+            <i class="fas fa-bell"></i> Notifications: ${STATE.settings.notifications ? 'On' : 'Off'}
+          </div>
+          <div class="settings-button" onclick="toggleSetting('soundEffects')">
+            <i class="fas fa-volume-up"></i> Sound Effects: ${STATE.settings.soundEffects ? 'On' : 'Off'}
+          </div>
+          <div class="settings-button" onclick="toggleSetting('autoScroll')">
+            <i class="fas fa-scroll"></i> Auto Scroll: ${STATE.settings.autoScroll ? 'On' : 'Off'}
+          </div>
+          <div class="settings-button" onclick="toggleSetting('autoComplete')">
+            <i class="fas fa-magic"></i> Auto Complete: ${STATE.settings.autoComplete ? 'On' : 'Off'}
+          </div>
+          <div class="settings-button" onclick="toggleSetting('markdownPreview')">
+            <i class="fas fa-markdown"></i> Markdown Preview: ${STATE.settings.markdownPreview ? 'On' : 'Off'}
+          </div>
+          <div class="settings-button" onclick="toggleSetting('codeHighlighting')">
+            <i class="fas fa-code"></i> Code Highlighting: ${STATE.settings.codeHighlighting ? 'On' : 'Off'}
+          </div>
+          <div class="settings-button danger" onclick="removeApiKey()">
+            <i class="fas fa-key"></i> Remove API Key
+          </div>
+        </div>
+      </div>
+    </div>
   `;
+
       modal.addEventListener('click', (e) => {
         if (e.target === modal) {
           closeModal();
         }
       });
+
       document.body.appendChild(modal);
     }
 
@@ -1561,53 +1841,51 @@
       const modal = document.querySelector('.modal-overlay');
       if (modal) {
         modal.classList.add('fade-out');
-        setTimeout(() => modal.remove(), 200);
+        setTimeout(() => {
+          modal.remove();
+        }, 300);
       }
-    }
-
-    function toggleLanguageSelector() {
-      const options = document.getElementById('languageOptions');
-      options.style.display = options.style.display === 'none' || options.style.display === '' ? 'block' : 'none';
-    }
-
-    function toggleThemeSelector() {
-      const themeOptions = document.getElementById('themeOptions');
-      themeOptions.style.display = themeOptions.style.display === 'none' || themeOptions.style.display === '' ? 'block' : 'none';
+      closeAllSelectors();
     }
 
     function changeLanguage(language) {
       STATE.currentLanguage = language;
-      const languageSelector = document.getElementById('languageSelector');
-      const languageSpan = languageSelector.querySelector('span');
-      languageSpan.innerHTML = `
-
-																														<i class="fa-solid fa-language"></i> Language: ${language}`;
+      saveState();
+      closeModal();
+      showSettingsModal();
       showNotification(`Language changed to ${language}`);
     }
 
     function changeTheme(theme) {
       STATE.theme = theme;
       document.documentElement.setAttribute('data-theme', theme);
-      saveToLocalStorage(CONFIG.STORAGE_KEYS.THEME, theme);
-      const themeSelector = document.getElementById('themeSelector');
-      const themeSpan = themeSelector.querySelector('span');
-      themeSpan.innerHTML = `
-
-																														<i class="fa-solid fa-palette"></i> Select Theme: ${theme}`;
-      document.getElementById('themeOptions').style.display = 'none';
+      saveState();
+      closeModal();
+      showSettingsModal();
       showNotification(`Theme changed to ${theme}`);
+    }
+
+    function changePersonality(personalityName) {
+      const personality = [...PERSONALITIES, ...STATE.customPersonalities]
+        .find(p => p.name === personalityName);
+
+      if (personality) {
+        STATE.selectedPersonality = personality;
+        saveState();
+        closeModal();
+        showSettingsModal();
+        showNotification(`Personality changed to ${personalityName}`);
+      }
     }
 
     function toggleSetting(setting) {
       STATE.settings[setting] = !STATE.settings[setting];
-      saveToLocalStorage(CONFIG.STORAGE_KEYS.SETTINGS, STATE.settings);
-      const settingButton = document.querySelector(`[onclick="toggleSetting('${setting}')"]`);
-      if (settingButton) {
-        settingButton.textContent = `${setting.charAt(0).toUpperCase() + setting.slice(1)}: ${STATE.settings[setting] ? 'On' : 'Off'}`;
-      }
-      showNotification(`${setting} ${STATE.settings[setting] ? 'enabled' : 'disabled'}`);
+      saveState();
+
       closeModal();
       showSettingsModal();
+
+      showNotification(`${setting} ${STATE.settings[setting] ? 'enabled' : 'disabled'}`);
     }
 
     function playMessageSound() {
@@ -1761,12 +2039,12 @@
     }
 
     function changePersonality(personalityName) {
-      const personality = PERSONALITIES.find(p => p.name === personalityName);
+      const personality = [...PERSONALITIES, ...STATE.customPersonalities].find(p => p.name === personalityName);
       if (personality) {
         STATE.selectedPersonality = personality;
         localStorage.setItem(CONFIG.STORAGE_KEYS.PERSONALITY, personalityName);
         const personalitySelector = document.getElementById('personalitySelector').querySelector('span');
-        personalitySelector.textContent = `Personality: ${personalityName}`;
+        personalitySelector.innerHTML = `<i class="fa-solid fa-theater-masks"></i>‎ ‎ Personality: ${personalityName}`;
         showNotification(`Personality changed to ${personalityName}`);
         closeModal();
         showSettingsModal();
@@ -1941,76 +2219,38 @@
       });
     }
 
-    function saveApiKey() {
-      const apiKey = document.getElementById('apiKeyInput').value.trim();
-
-      if (!apiKey) {
-        showNotification('Please enter an API key.');
-        return;
-      }
-
-      if (apiKey.startsWith('sk-or-')) {
-        localStorage.setItem('openRouterApiKey', apiKey);
-        document.querySelector('.modal-overlay').remove();
-        showNotification('Booting...');
-        setTimeout(() => {
-          window.location.reload();
-        }, 1000);
-      } else {
-        showNotification('API key not suitable for PatheticAI...');
-      }
-    }
-
-    function initializeUI() {
-      console.log("UI Initialized with Theme:", STATE.theme);
-      console.log("Current Language:", STATE.currentLanguage);
-    }
-
-    function contactEmail() {
-      window.open('https://discord.gg/Hb5ccPY3XV', '_blank');
-    }
-
-    function setupEventListeners() {}
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
-        console.log('Service Worker registered with scope:', registration.scope);
-      }).catch(function(error) {
-        console.log('Service Worker registration failed:', error);
-      });
-    }
-    document.addEventListener('DOMContentLoaded', () => {
-      const theme = localStorage.getItem("theme") || "Light";
-      document.documentElement.setAttribute("data-theme", theme);
-      const oppositeThemeImage = theme === "Light" ? "https://pathetic-ai.pages.dev//images/dark%20background.png" : "https://pathetic-ai.pages.dev//images/light%20background.png";
-      const img = new Image();
-      img.src = oppositeThemeImage;
-    });
     const AudioManager = {
       sounds: {
-        hover: new Audio('https://pathetic-ai.pages.dev/audios/recieve.mp3'),
-        send: new Audio('https://pathetic-ai.pages.dev/audios/notification.mp3'),
-        receive: new Audio('https://pathetic-ai.pages.dev/audios/notification.mp3'),
+        hover: new Audio('https://pathetic-ai.pages.dev/audios/click.mp3'),
+        send: new Audio('https://pathetic-ai.pages.dev/audios/send.mp3'),
+        receive: new Audio('https://pathetic-ai.pages.dev/audios/receive.mp3'),
         click: new Audio('https://pathetic-ai.pages.dev/audios/click.mp3'),
         notification: new Audio('https://pathetic-ai.pages.dev/audios/notification.mp3')
       },
 
+      volumes: {
+        hover: 1,
+        send: 1,
+        receive: 1,
+        click: 1,
+        notification: 1
+      },
+
       init() {
-        Object.values(this.sounds).forEach(audio => {
-          audio.load();
-          audio.volume = 0.5;
+        Object.keys(this.sounds).forEach(soundName => {
+          const audio = this.sounds[soundName];
+          audio.volume = this.volumes[soundName];
+          audio.preload = "auto";
         });
 
         document.querySelectorAll('button, .settings-button, .selector, .option').forEach(button => {
           button.addEventListener('mouseenter', () => this.playSound('hover'));
-        });
-
-        document.querySelectorAll('button, .settings-button, .selector, .option').forEach(button => {
           button.addEventListener('click', () => this.playSound('click'));
         });
 
-        const observer = new MutationObserver((mutations) => {
-          mutations.forEach((mutation) => {
-            mutation.addedNodes.forEach((node) => {
+        const observer = new MutationObserver(mutations => {
+          mutations.forEach(mutation => {
+            mutation.addedNodes.forEach(node => {
               if (node.nodeType === 1) {
                 node.querySelectorAll('button, .settings-button, .selector, .option').forEach(button => {
                   button.addEventListener('mouseenter', () => this.playSound('hover'));
@@ -2052,20 +2292,22 @@
 
         const sound = this.sounds[soundName];
         if (sound) {
-
+          sound.volume = this.volumes[soundName];
           sound.currentTime = 0;
-          sound.play().catch(err => console.log('Error playing sound:', err));
+          sound.play().catch(err => console.log(`Error playing sound '${soundName}':`, err));
         }
       },
 
-      setVolume(volume) {
-        Object.values(this.sounds).forEach(audio => {
-          audio.volume = Math.max(0, Math.min(1, volume));
-        });
+      setVolume(soundName, volume) {
+        if (this.sounds[soundName]) {
+          this.sounds[soundName].volume = Math.max(0, Math.min(1, volume));
+          console.log(`Volume set: ${soundName} = ${this.sounds[soundName].volume}`);
+        }
       }
     };
 
     document.addEventListener('DOMContentLoaded', () => {
       AudioManager.init();
+      loadCustomPersonalities();
     });
     </script>
