@@ -175,8 +175,15 @@
 
     .preview-tag {
       font-size: 14px;
+      cursor: pointer;
       color: var(--primary-color);
+      transition: opacity 0.3s ease;
       opacity: 0.7;
+
+    }
+
+    .preview-tag:hover {
+      opacity: 0.5;
     }
 
     .taskbar button,
@@ -308,8 +315,12 @@
       align-items: center;
       z-index: 2000;
       animation: fadeIn 0.3s ease;
+      transition: opacity 0.2s ease;
     }
 
+   .modal-overlay.fade-out {
+     opacity: 0;
+    }
     .modal-window {
       background: var(--modal-background);
       backdrop-filter: blur(10px);
