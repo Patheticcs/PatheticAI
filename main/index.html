@@ -458,6 +458,7 @@
       .custom-personality-textarea {
         width: 100%;
         padding: 10px;
+        color: var(--color);
         border: 1px solid var(--border-color);
         border-radius: 8px;
         background: transparent color: var(--color);
@@ -469,6 +470,8 @@
       .custom-personality-textarea:focus {
         outline: none;
         border-color: var(--secondary-color);
+        color: var(--color);
+
       }
 
       .custom-personality-textarea {
@@ -1622,18 +1625,6 @@
 																																</div>
 																																<div class="settings-button" onclick="toggleSetting('autoScroll')">
 																																	<i class="fas fa-scroll"></i> Auto Scroll: ${STATE.settings.autoScroll ? 'On' : 'Off'}
-          
-																																</div>
-																																<div class="settings-button" onclick="toggleSetting('autoComplete')">
-																																	<i class="fas fa-magic"></i> Auto Complete: ${STATE.settings.autoComplete ? 'On' : 'Off'}
-          
-																																</div>
-																																<div class="settings-button" onclick="toggleSetting('markdownPreview')">
-																																	<i class="fas fa-markdown"></i> Markdown Preview: ${STATE.settings.markdownPreview ? 'On' : 'Off'}
-          
-																																</div>
-																																<div class="settings-button" onclick="toggleSetting('codeHighlighting')">
-																																	<i class="fas fa-code"></i> Code Highlighting: ${STATE.settings.codeHighlighting ? 'On' : 'Off'}
           
 																																</div>
 																																<div class="settings-button danger" onclick="removeApiKey()">
