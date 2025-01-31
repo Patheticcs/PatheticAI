@@ -75,7 +75,7 @@
       --message-user-background: rgba(255, 255, 255, 0.5);
       --code-background: rgba(0, 0, 0, 0.02);
       --code-text: #000000;
-      --notification-background: rgba(255, 255, 255, 0.6);
+      --notification-background: rgba(255, 255, 255, 0.4);
       --notification-text: #000000;
       --placeholder-color: rgba(0, 0, 0, 0.2);
       --chat-input-container-background: rgba(255, 255, 255, 0.5);
@@ -88,16 +88,22 @@
       --background-color: #000000;
       --primary-color: #ffffff;
       --secondary-color: #ffffff;
-      --border-color: rgba(255, 255, 255, 0.03);
-      --taskbar-background: rgba(0, 0, 0, 0.5);
-      --input-background: rgba(0, 0, 0, 0.6);
+      --border-color: rgba(255, 255, 255, 0.05);
+      --taskbar-background: rgba(0, 0, 0, 0.6);
+      --input-background: rgba(0, 0, 0, 0.7);
       --button-background: rgba(255, 255, 255, 0.02);
       --button-hover-background: rgba(255, 255, 255, 0.05);
-      --modal-background: rgba(0, 0, 0, 0.6);
-      --message-background: rgba(0, 0, 0, 0.5);
-      --message-user-background: rgba(0, 0, 0, 0.4);
+      --modal-background: rgba(0, 0, 0, 0.7);
+      --message-background: rgba(0, 0, 0, 0.6);
+      --message-user-background: rgba(0, 0, 0, 0.5);
+      --code-background: rgba(255, 255, 255, 0.02);
+      --code-text: #ffffff;
+      --notification-background: rgba(0, 0, 0, 0.4);
+      --notification-text: #ffffff;
+      --placeholder-color: rgba(255, 255, 255, 0.2);
       --chat-input-container-background: rgba(0, 0, 0, 0.5);
-      --notification-background-color: rgba(0, 0, 0, 0.5);
+      --border-button-color: rgba(255, 255, 255, 0.1);
+
     }
 
     body {
@@ -381,7 +387,7 @@
       bottom: 100px;
       left: 50%;
       transform: translateX(-50%);
-      background: var(--notification-background-color);
+      background: var(--notification-background);
       color: var(--primary-color);
       padding: 12px 25px;
       border-radius: 30px;
@@ -499,9 +505,9 @@
       margin-right: 10px;
       padding: 0 5px;
       background: var(--button-background);
-      border: 1px solid var(--border-color);
-      border-radius: 4px;
-      color: red;
+      border: 1px solid var(--color);
+      border-radius: 100px;
+      color: var(--color);
       cursor: pointer;
       display: block;
       width: fit-content;
@@ -780,8 +786,8 @@
   <body>
     <div class="taskbar">
       <div class="taskbar-left">
-        <span class="brand">PatheticAI</span>
-        <span class="preview-tag">Version 1.5</span>
+        <span class="brand" onclick="showAboutModal()">PatheticAI</span>
+        <span class="preview-tag" onclick="showAboutModal()">Version 1.5</span>
       </div>
       <div class="taskbar-right">
         <button onclick="showSettingsModal()" title="Settings">
