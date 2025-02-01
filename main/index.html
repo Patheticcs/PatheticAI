@@ -976,6 +976,30 @@
           margin: 4px 0;
         }
       }
+@media (max-width: 640px) {
+  .modal-window {
+    width: 95%;
+    max-height: 95vh;
+  }
+
+  .settings-tabs {
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+  }
+
+  .tab-button {
+    padding: 0.5rem 1rem;
+    white-space: nowrap;
+  }
+
+  .danger-actions {
+    flex-direction: column;
+  }
+
+  .theme-options-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
 
       @media (max-width: 480px) {
         :root {
