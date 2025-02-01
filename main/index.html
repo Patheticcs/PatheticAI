@@ -2045,6 +2045,10 @@ const PERSONALITIES = [{
                 Remove API Key
 
 																																			</button>
+																																			<button class="danger-button" onclick="clearCache()">
+<i class="fa-solid fa-server"></i>                Clear Cahche
+
+																																			</button>
 																																		</div>
 																																	</div>
 																																</div>
@@ -2522,26 +2526,26 @@ const PERSONALITIES = [{
       }
 
 function removeApiKey() {
-
     localStorage.removeItem('openRouterApiKey');
+    disableInput();
+    showNotification('API Key Removed');
+    location.reload();
+}
 
+function clearCache() {
+    localStorage.removeItem('openRouterApiKey');
     localStorage.clear();
-
     sessionStorage.clear();
-
     document.cookie.split(';').forEach(function(c) {
         document.cookie = c
             .replace(/^ +/, '')
             .replace(/(?=\=)/, '=' + 'expired')
             .replace(/expires=.*$/, 'expires=Thu, 01 Jan 1970 00:00:00 GMT');
     });
-
     disableInput();
-    showNotification('API key and all data cleared');
-
+    showNotification('Data Cleared');
     location.reload();
 }
-
       function disableInput() {
         const textarea = document.getElementById('messageInput');
         const sendButton = document.querySelector('.chat-input-container button');
