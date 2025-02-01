@@ -1118,7 +1118,7 @@
         <button onclick="showAboutModal()" title="Join Discord">
           <i class="fa fa-user-group"></i>
         </button>
-        <button onclick="contactEmail()" title="Join Discord">
+        <button onclick="discordButton()" title="Join Discord">
           <i class="fa-brands fa-discord"></i>
         </button>
       </div>
@@ -2695,6 +2695,9 @@
           }
         }
       };
+  function discordButton() {
+    window.open("https://discord.gg/Hb5ccPY3XV", "_blank");
+  }
       document.addEventListener('DOMContentLoaded', () => {
         AudioManager.init();
         loadCustomPersonalities();
