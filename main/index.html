@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="Dark">
+<html lang="en" data-theme="Light">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -1924,7 +1924,6 @@ const PERSONALITIES = [{
         const allPersonalities = [...PERSONALITIES, ...STATE.customPersonalities];
         const languageOptions = ['English', 'Spanish', 'French', 'German', 'Italian', 'Japanese', 'Chinese', 'Russian', 'Portuguese', 'Korean', 'Hindi', 'Arabic', 'Turkish', 'Dutch', 'Swedish', 'Greek', 'Polish', 'Vietnamese', 'Thai', 'Indonesian', 'Hebrew', 'Finnish', 'Czech', 'Hungarian', 'Romanian', 'Norwegian', 'Danish', 'Bulgarian', 'Ukrainian', 'Malay', 'Swahili', 'Tamil', 'Bengali', 'Punjabi', 'Telugu', 'Marathi', 'Gujarati', 'Malayalam', 'Kannada', 'Oriya', 'Assamese', 'Nepali', 'Sinhala', 'Khmer', 'Laotian', 'Filipino', 'Mongolian', 'Pashto', 'Farsi', 'Uzbek', 'Kazakh', 'Tajik', 'Azerbaijani', 'Georgian', 'Armenian', 'Albanian', 'Serbian', 'Croatian', 'Bosnian', 'Slovak', 'Slovenian', 'Estonian', 'Latvian', 'Lithuanian', 'Icelandic', 'Irish', 'Welsh', 'Basque', 'Catalan', 'Galician', 'Maltese', 'Corsican', 'Haitian Creole', 'Quechua', 'Nahuatl', 'Maya', 'Yiddish', 'Esperanto'].map(lang => `
 
-																												
 																												<div class="option language-option" data-language="${lang}" onclick="changeLanguage('${lang}')">
 																													<span class="language-flag" data-country="${getCountryCode(lang)}"></span>
 																													<span class="language-name">${lang}</span>
@@ -1933,24 +1932,20 @@ const PERSONALITIES = [{
   `).join('');
         const personalityOptions = allPersonalities.map(p => `
 
-																												
 																												<div class="option personality-option ${p.isCustom ? 'custom-personality' : ''}" data-personality="${p.name}" onclick="changePersonality('${p.name}')">
 																													<div class="personality-header">
 																														<i class="fa-solid ${getPersonalityIcon(p.name)}"></i>
 																														<span class="personality-name">${p.name}</span>
         ${p.isCustom ? `
 
-																													
 																													</div>` : ''}
 
-																												
 																												</div>
 																												<p class="personality-description">${p.description || 'No description available'}</p>
 																											</div>
   `).join('');
         const themeOptions = `
 
-																											
 																											<div class="option theme-option" data-theme="light" onclick="changeTheme('Light')">
 																												<div class="theme-preview light-preview">
 																													<div class="preview-header"></div>
@@ -1968,14 +1963,12 @@ const PERSONALITIES = [{
   `;
         modal.innerHTML = `
 
-																											
 																											<div class="modal-window">
 																												<div class="modal-header">
 																													<span class="modal-title">
 																														<i class="fa-solid fa-gear fa-spin-hover"></i>
           Settings
 
-																													
 																													</span>
 																													<div class="modal-actions">
 																														<button class="help-button" onclick="showSettingsHelp()">
@@ -1991,17 +1984,14 @@ const PERSONALITIES = [{
 																														<button class="tab-button active" data-tab="general">
 																															<i class="fa-solid fa-sliders"></i> General
 
-																														
 																														</button>
 																														<button class="tab-button" data-tab="appearance">
 																															<i class="fa-solid fa-palette"></i> Appearance
 
-																														
 																														</button>
 																														<button class="tab-button" data-tab="personalities">
 																															<i class="fa-solid fa-theater-masks"></i> Personalities
 
-																														
 																														</button>
 																													</div>
 																													<div class="tab-content active" data-tab="general">
@@ -2014,7 +2004,6 @@ const PERSONALITIES = [{
 																																		<span class="language-flag" data-country="${getCountryCode(STATE.currentLanguage)}"></span>
                   ${STATE.currentLanguage}
 
-																																	
 																																	</span>
 																																	<i class="fa-solid fa-chevron-down"></i>
 																																</div>
@@ -2025,7 +2014,6 @@ const PERSONALITIES = [{
 																																		</div>
                 ${languageOptions}
 
-																																	
 																																	</div>
 																																</div>
 																															</div>
@@ -2051,13 +2039,11 @@ const PERSONALITIES = [{
 																																				<i class="fa-solid fa-trash"></i>
                 Clear Chat History
 
-																																			
 																																			</button>
 																																			<button class="danger-button" onclick="removeApiKey()">
 																																				<i class="fa-solid fa-key"></i>
                 Remove API Key
 
-																																			
 																																			</button>
 																																		</div>
 																																	</div>
@@ -2089,7 +2075,6 @@ const PERSONALITIES = [{
 																																						<i class="fa-solid ${getPersonalityIcon(STATE.selectedPersonality.name)}"></i>
                   ${STATE.selectedPersonality.name}
 
-																																					
 																																					</span>
 																																					<i class="fa-solid fa-chevron-down"></i>
 																																				</div>
@@ -2254,7 +2239,6 @@ const PERSONALITIES = [{
         const languageSpan = languageSelector.querySelector('span');
         languageSpan.innerHTML = `
 
-																															
 																															<i class="fa-solid fa-language"></i> Language: ${language}`;
         showNotification(`Language changed to ${language}`);
       }
@@ -2267,7 +2251,6 @@ const PERSONALITIES = [{
         const themeSpan = themeSelector.querySelector('span');
         themeSpan.innerHTML = `
 
-																															
 																															<i class="fa-solid fa-palette"></i> Select Theme: ${theme}`;
         document.getElementById('themeOptions').style.display = 'none';
         showNotification(`Theme changed to ${theme}`);
@@ -2303,7 +2286,6 @@ const PERSONALITIES = [{
         modal.className = 'modal-overlay';
         modal.innerHTML = `
 
-																															
 																															<div class="modal-window">
 																																<div class="modal-header">
 																																	<span class="modal-title">About PatheticAI</span>
@@ -2313,7 +2295,6 @@ const PERSONALITIES = [{
 																																	<p>
 																																		<strong>PatheticAI:</strong> 1.5
 
-																																	
 																																	</p>
 																																	<br>
 																																		<p>
@@ -2332,7 +2313,6 @@ const PERSONALITIES = [{
 																																			<a href="https://discord.gg/Hb5ccPY3XV" target="_blank" rel="noopener noreferrer" aria-label="Join us on Discord">
 																																				<i class="fab fa-discord" aria-hidden="true"></i> Join us on Discord
 
-																																			
 																																			</a>
 																																		</button>
 																																	</div>
@@ -2367,7 +2347,6 @@ const PERSONALITIES = [{
           modal.className = 'modal-overlay';
           modal.innerHTML = `
 
-																																
 																																<div class="modal-window">
 																																	<div class="modal-header">
 																																		<span class="modal-title">API Key Required</span>
@@ -2403,13 +2382,11 @@ const PERSONALITIES = [{
 																																					<i class="fas fa-key"></i>
                                 Get Key
 
-																																				
 																																				</div>
 																																				<div class="settings-button" onclick="window.open('/help', '_blank')">
 																																					<i class="fas fa-book"></i>
                                 Help
 
-																																				
 																																				</div>
 																																			</div>
 																																		</div>
@@ -2456,7 +2433,6 @@ const PERSONALITIES = [{
             const personalitySpan = personalitySelector.querySelector('span');
             personalitySpan.innerHTML = `
 
-         
 																																		<i class="fa-solid fa-theater-masks"></i>‎ ‎ Personality: ${personalityName}`;
           }
           showNotification(`Personality changed to ${personalityName}`);
@@ -2538,7 +2514,6 @@ const PERSONALITIES = [{
           const personalitySelector = document.getElementById('personalitySelector').querySelector('span');
           personalitySelector.innerHTML = `
 
-          
 																																		<i class="fa-solid fa-theater-masks"></i>‎ ‎ Personality: ${personalityName}`;
           showNotification(`Personality changed to ${personalityName}`);
           closeModal();
@@ -2546,12 +2521,26 @@ const PERSONALITIES = [{
         }
       }
 
-      function removeApiKey() {
-        localStorage.removeItem('openRouterApiKey');
-        disableInput();
-        showNotification('API key removed');
-        location.reload();
-      }
+function removeApiKey() {
+
+    localStorage.removeItem('openRouterApiKey');
+
+    localStorage.clear();
+
+    sessionStorage.clear();
+
+    document.cookie.split(';').forEach(function(c) {
+        document.cookie = c
+            .replace(/^ +/, '')
+            .replace(/(?=\=)/, '=' + 'expired')
+            .replace(/expires=.*$/, 'expires=Thu, 01 Jan 1970 00:00:00 GMT');
+    });
+
+    disableInput();
+    showNotification('API key and all data cleared');
+
+    location.reload();
+}
 
       function disableInput() {
         const textarea = document.getElementById('messageInput');
@@ -2586,7 +2575,6 @@ const PERSONALITIES = [{
         typingElement.className = 'chat-message bot typing-indicator';
         typingElement.innerHTML = `
 
-																																		
 																																		<div class="typing-container">
 																																			<div class="typing-dots">
 																																				<span></span>
@@ -2698,7 +2686,6 @@ const PERSONALITIES = [{
         modal.className = 'modal-overlay';
         modal.innerHTML = `
 
-																																		
 																																		<div class="modal-window">
 																																			<div class="modal-header">
 																																				<span class="modal-title">API Key Required</span>
@@ -2720,12 +2707,10 @@ const PERSONALITIES = [{
 																																					<div id="getKeyButton" class="settings-button">
 																																						<i class="fas fa-key"></i> Get Key
 
-																																					
 																																					</div>
 																																					<div id="helpButton" class="settings-button">
 																																						<i class="fas fa-book"></i> Help
 
-																																					
 																																					</div>
 																																				</div>
 																																			</div>
