@@ -3,7 +3,7 @@
   "short_name": "PatheticAI",
   "description": "PatheticAI is an AI chatbot designed to assist, automate tasks, and provide real-time conversations with users.",
   "start_url": "/",
-  "display": "standalone",
+  "display": "fullscreen",
   "background_color": "#ffffff",
   "theme_color": "#000000",
   "icons": [
@@ -17,5 +17,8 @@
       "sizes": "512x512",
       "type": "image/png"
     }
-  ]
+  ],
+  "ios": {
+    "status_bar_style": "black-translucent"
+  }
 }
