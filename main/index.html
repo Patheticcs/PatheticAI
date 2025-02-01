@@ -212,7 +212,150 @@
       .preview-tag:hover {
         opacity: 0.5;
       }
+.info-section {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 24px;
+    padding: 12px;
+    background: var(--button-background);
+    border-radius: 12px;
+}
 
+.info-icon {
+    color: var(--color-secondary);
+    font-size: 1.2em;
+}
+
+.input-container {
+    margin: 20px 0;
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-wrapper input {
+    width: 100%;
+    padding: 15px;
+    padding-right: 40px;
+    background: var(--button-background);
+    border: 2px solid var(--border-color);
+    border-radius: 15px;
+    color: var(--color);
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.input-wrapper input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px var(--primary-color-alpha);
+    outline: none;
+}
+
+.input-validation {
+    position: absolute;
+    right: 12px;
+    color: var(--color-secondary);
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 0.2s ease;
+}
+
+.input-validation.valid {
+    opacity: 1;
+    transform: scale(1);
+    color: var(--success-color);
+}
+
+.input-feedback {
+    margin-top: 8px;
+    font-size: 0.9em;
+    color: var(--error-color);
+    min-height: 20px;
+}
+
+.primary-button {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 20px;
+    background: var(--primary-color);
+    border: none;
+    border-radius: 15px;
+    color: white;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.primary-button:hover {
+    background: var(--primary-color-dark);
+}
+
+.primary-button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.button-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: opacity 0.2s ease;
+}
+
+.button-loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 24px;
+    height: 24px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 1s linear infinite;
+    display: none;
+}
+
+.primary-button.success {
+    background: var(--success-color);
+}
+
+.primary-button.error {
+    background: var(--error-color);
+}
+
+.action-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+.secondary-button {
+    flex: 1;
+    padding: 12px;
+    background: var(--button-background);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    color: var(--color);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.secondary-button:hover {
+    background: var(--button-background-hover);
+}
+@keyframes spin {
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+}
       .taskbar button,
       .chat-input-container button,
       .theme-selector button {
@@ -348,6 +491,23 @@
       .modal-overlay.fade-out {
         opacity: 0;
         pointer-events: none;
+      }
+
+
+      .api-modal-window {
+        background: var(--modal-background, #fff);
+        backdrop-filter: blur(15px);
+        border: 1px solid var(--border-color, #ccc);
+        border-radius: var(--border-radius, 10px);
+        width: var(--container-width, 80%);
+        width: 900px;
+        height: 35vh;
+        padding: var(--spacing-normal, 20px);
+        color: var(--primary-color, #333);
+        animation: slideUp 0.4s ease-out;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
       }
 
       .modal-window {
@@ -2368,68 +2528,6 @@ const PERSONALITIES = [{
         modalFooter.style.alignItems = 'center';
       }
 
-      function checkAndStoreApiKey() {
-        const storedApiKey = getApiKey();
-        if (!storedApiKey) {
-          const modal = document.createElement('div');
-          modal.className = 'modal-overlay';
-          modal.innerHTML = `
-
-																																<div class="modal-window">
-																																	<div class="modal-header">
-																																		<span class="modal-title">API Key Required</span>
-																																	</div>
-																																	<div class="modal-content">
-																																		<p>To use PatheticAI, you need an API key from OpenRouter.</p>
-																																		<br>
-																																			<div style="margin: 20px 0;">
-																																				<input type="text" 
-                                    id="apiKeyInput" 
-                                    placeholder="Enter your API key (sk-or-v1-...)" 
-                                    style="width: 100%; 
-                                    padding: 15px; 
-                                    background: var(--button-background);
-                                    border: var(--border-color);
-                                    border-radius: 15px; 
-                                    color: var(--color); 
-                                    font-size: 14px;">
-																																				</div>
-																																				<button onclick="saveApiKey()" 
-                                style="width: 100%; 
-                                padding: 25px; 
-                                margin-bottom: 10px;
-                                    background: var(--button-background);
-                                border: var(--border-color);
-                                border-radius: 15px; 
-                                color: var(--color); 
-                                cursor: pointer;
-                                transition: all 0.3s ease;">
-                                Enter
-                            </button>
-																																				<div class="settings-button" onclick="window.open('https://openrouter.ai/settings/keys', '_blank')">
-																																					<i class="fas fa-key"></i>
-                                Get Key
-
-																																				</div>
-																																				<div class="settings-button" onclick="window.open('/help', '_blank')">
-																																					<i class="fas fa-book"></i>
-                                Help
-
-																																				</div>
-																																			</div>
-																																		</div>
-                `;
-          document.body.appendChild(modal);
-          document.getElementById('startupButton').addEventListener('click', function() {
-            saveApiKey();
-          });
-          document.getElementById('helpButton').addEventListener('click', function() {
-            window.location.href = '/help';
-          });
-          return false;
-        }
-        return true;
-      }
 
       function saveApiKey() {
         const apiKey = document.getElementById('apiKeyInput').value.trim();
@@ -2707,51 +2805,140 @@ function clearCache() {
           showApiKeyModal();
         }
       }
+function showApiKeyModal() {
+    if (document.querySelector('.modal-overlay')) return;
+    
+    const modal = document.createElement('div');
+    modal.className = 'modal-overlay';
+    modal.innerHTML = `
+        <div class="api-modal-window">
+            <div class="modal-header">
+                <span class="modal-title">
+                    <i class="fas fa-key-skeleton" style="margin-right: 8px;"></i>
+                    API Key Required
+                </span>
+                <button class="modal-close" aria-label="Close modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-content">
+                <div class="info-section">
+                    <div class="info-icon">
+                        <i class="fas fa-info-circle"></i>
+                    </div>
+                    <p>To use PatheticAI, you need an API key from OpenRouter.</p>
+                </div>
+                
+                <div class="input-container">
+                    <div class="input-wrapper">
+                        <input type="text" 
+                            id="apiKeyInput" 
+                            placeholder="Enter your API key (sk-or-v1-...)" 
+                            autocomplete="off"
+                            spellcheck="false">
+                        <div class="input-validation">
+                            <i class="fas fa-check-circle validation-icon"></i>
+                        </div>
+                    </div>
+                    <div class="input-feedback"></div>
+                </div>
 
-      function showApiKeyModal() {
-        if (document.querySelector('.modal-overlay')) return;
-        const modal = document.createElement('div');
-        modal.className = 'modal-overlay';
-        modal.innerHTML = `
+                <button id="saveApiKeyButton" class="primary-button">
+                    <span class="button-content">
+                        <i class="fas fa-check"></i>
+                        <span>Save API Key</span>
+                    </span>
+                    <div class="button-loader"></div>
+                </button>
 
-																																		<div class="modal-window">
-																																			<div class="modal-header">
-																																				<span class="modal-title">API Key Required</span>
-																																			</div>
-																																			<div class="modal-content">
-																																				<p>To use PatheticAI, you need an API key from OpenRouter.</p>
-																																				<div style="margin: 20px 0;">
-																																					<input type="text" 
-            id="apiKeyInput" 
-            placeholder="Enter your API key (sk-or-v1-...)" 
-            style="width: 100%; padding: 15px; background: var(--button-background); 
-            border: var(--border-color); border-radius: 15px; color: var(--color); font-size: 14px;">
-																																					</div>
-																																					<button id="saveApiKeyButton" 
-          style="width: 100%; padding: 15px; margin-bottom: 10px; background: var(--button-background); 
-          border: var(--border-color); border-radius: 15px; color: var(--color); cursor: pointer; transition: all 0.3s ease;">
-          Enter
-        </button>
-																																					<div id="getKeyButton" class="settings-button">
-																																						<i class="fas fa-key"></i> Get Key
+                <div class="action-buttons">
+                    <button id="getKeyButton" class="secondary-button">
+                        <i class="fas fa-key"></i>
+                        <span>Get Key</span>
+                    </button>
+                    <button id="helpButton" class="secondary-button">
+                        <i class="fas fa-book"></i>
+                        <span>Help Guide</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
 
-																																					</div>
-																																					<div id="helpButton" class="settings-button">
-																																						<i class="fas fa-book"></i> Help
+    document.body.appendChild(modal);
 
-																																					</div>
-																																				</div>
-																																			</div>
-  `;
-        document.body.appendChild(modal);
-        document.getElementById('saveApiKeyButton').addEventListener('click', saveApiKey);
-        document.getElementById('getKeyButton').addEventListener('click', () => {
-          window.open('https://openrouter.ai/settings/keys', '_blank');
-        });
-        document.getElementById('helpButton').addEventListener('click', () => {
-          window.open('/help', '_blank');
-        });
-      }
+    // Add entrance animation
+    requestAnimationFrame(() => {
+        modal.classList.add('visible');
+    });
+
+    // Close button functionality
+    const closeButton = modal.querySelector('.modal-close');
+    closeButton.addEventListener('click', () => {
+        modal.classList.remove('visible');
+        setTimeout(() => modal.remove(), 300);
+    });
+
+    // Input validation and feedback
+    const apiKeyInput = document.getElementById('apiKeyInput');
+    const inputValidation = modal.querySelector('.input-validation');
+    const inputFeedback = modal.querySelector('.input-feedback');
+
+    apiKeyInput.addEventListener('input', (e) => {
+        const value = e.target.value;
+        if (value.startsWith('sk-or-v1-')) {
+            inputValidation.classList.add('valid');
+            inputFeedback.textContent = '';
+        } else {
+            inputValidation.classList.remove('valid');
+            if (value && !value.startsWith('sk-or-v1-')) {
+                inputFeedback.textContent = 'API key should start with "sk-or-v1-"';
+            } else {
+                inputFeedback.textContent = '';
+            }
+        }
+    });
+
+    // Save button with loading state
+    const saveButton = document.getElementById('saveApiKeyButton');
+    saveButton.addEventListener('click', async () => {
+        const buttonContent = saveButton.querySelector('.button-content');
+        const buttonLoader = saveButton.querySelector('.button-loader');
+        
+        saveButton.disabled = true;
+        buttonContent.style.opacity = '0';
+        buttonLoader.style.display = 'block';
+        
+        try {
+            await saveApiKey();
+            // Show success state
+            buttonContent.innerHTML = '<i class="fas fa-check"></i><span>Saved!</span>';
+            saveButton.classList.add('success');
+        } catch (error) {
+            // Show error state
+            buttonContent.innerHTML = '<i class="fas fa-exclamation-triangle"></i><span>Error</span>';
+            saveButton.classList.add('error');
+        } finally {
+            buttonLoader.style.display = 'none';
+            buttonContent.style.opacity = '1';
+            setTimeout(() => {
+                saveButton.disabled = false;
+                saveButton.classList.remove('success', 'error');
+                buttonContent.innerHTML = '<i class="fas fa-check"></i><span>Save API Key</span>';
+            }, 2000);
+        }
+    });
+
+    // External link buttons
+    document.getElementById('getKeyButton').addEventListener('click', () => {
+        window.open('https://openrouter.ai/settings/keys', '_blank');
+    });
+
+    document.getElementById('helpButton').addEventListener('click', () => {
+        window.open('/help', '_blank');
+    });
+}
+
       const AudioManager = {
         sounds: {
           hover: new Audio('/audios/click.mp3'),
