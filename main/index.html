@@ -93,46 +93,45 @@
         --hover-color: #f3f4f6;
         --input-bg: #ffffff;
         --toggle-bg: #2e2a24;
-        --un-toggle-bg: white; 
+        --un-toggle-bg: white;
       }
 
       :root[data-theme="Dark"] {
---color: rgba(255, 255, 255, 1);
---background-image: url("https://pathetic-ai.pages.dev//images/dark%20background.png");
---background-color: #000000;
---secondary-color: #ffffff;
---border-color: rgba(255, 255, 255, 0.05);
---taskbar-background: rgba(0, 0, 0, 0.6);
---input-background: rgba(0, 0, 0, 0.7);
---button-background: rgba(255, 255, 255, 0.02);
---button-hover-background: rgba(255, 255, 255, 0.05);
---modal-background: rgba(0, 0, 0, 0.7);
---message-background: rgba(0, 0, 0, 0.6);
---message-user-background: rgba(0, 0, 0, 0.5);
---code-background: rgba(255, 255, 255, 0.02);
---code-text: #ffffff;
---notification-background: rgba(0, 0, 0, 0.4);
---notification-text: #ffffff;
---placeholder-color: rgba(255, 255, 255, 0.2);
---chat-input-container-background: rgba(0, 0, 0, 0.5);
---border-button-color: rgba(255, 255, 255, 0.1);
---checkbox-bg: #000000;
---slider-track-bg: #18191c;
---thumb-border: #000000;
---focus-ring: rgba(59, 130, 246, 0.3);
---disabled-bg: #18191c;
---disabled-border: #4b5563;
---background-color: #000000;
---header-bg: #212529;
---text-color: #e5e5e5;
---text-muted: #d1d5db;
---primary-color: #fff;
---danger-color: #ef4444;
---hover-color: #18191c;
---input-bg: #000000;
---toggle-bg: #d1d5db;
---un-toggle-bg: black;
-
+        --color: rgba(255, 255, 255, 1);
+        --background-image: url("https://pathetic-ai.pages.dev//images/dark%20background.png");
+        --background-color: #000000;
+        --secondary-color: #ffffff;
+        --border-color: rgba(255, 255, 255, 0.05);
+        --taskbar-background: rgba(0, 0, 0, 0.6);
+        --input-background: rgba(0, 0, 0, 0.7);
+        --button-background: rgba(255, 255, 255, 0.02);
+        --button-hover-background: rgba(255, 255, 255, 0.05);
+        --modal-background: rgba(0, 0, 0, 0.7);
+        --message-background: rgba(0, 0, 0, 0.6);
+        --message-user-background: rgba(0, 0, 0, 0.5);
+        --code-background: rgba(255, 255, 255, 0.02);
+        --code-text: #ffffff;
+        --notification-background: rgba(0, 0, 0, 0.4);
+        --notification-text: #ffffff;
+        --placeholder-color: rgba(255, 255, 255, 0.2);
+        --chat-input-container-background: rgba(0, 0, 0, 0.5);
+        --border-button-color: rgba(255, 255, 255, 0.1);
+        --checkbox-bg: #000000;
+        --slider-track-bg: #18191c;
+        --thumb-border: #000000;
+        --focus-ring: rgba(59, 130, 246, 0.3);
+        --disabled-bg: #18191c;
+        --disabled-border: #4b5563;
+        --background-color: #000000;
+        --header-bg: #212529;
+        --text-color: #e5e5e5;
+        --text-muted: #d1d5db;
+        --primary-color: #fff;
+        --danger-color: #ef4444;
+        --hover-color: #18191c;
+        --input-bg: #000000;
+        --toggle-bg: #d1d5db;
+        --un-toggle-bg: black;
       }
 
       body {
@@ -336,32 +335,35 @@
       .modal-overlay {
         position: fixed;
         inset: 0;
-        background: rgba(0, 0, 0, 0.5);
-        backdrop-filter: blur(5px);
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(8px);
         display: flex;
         justify-content: center;
         align-items: center;
         z-index: 2000;
-        animation: fadeIn 0.3s ease;
-        transition: opacity 0.2s ease;
+        animation: fadeIn 0.3s ease-out;
+        transition: opacity 0.2s ease-in-out;
       }
 
       .modal-overlay.fade-out {
         opacity: 0;
+        pointer-events: none;
       }
 
       .modal-window {
-        background: var(--modal-background);
-        backdrop-filter: blur(10px);
-        border: 1px solid var(--border-color);
-        border-radius: var(--border-radius);
-        width: var(--container-width);
+        background: var(--modal-background, #fff);
+        backdrop-filter: blur(15px);
+        border: 1px solid var(--border-color, #ccc);
+        border-radius: var(--border-radius, 10px);
+        width: var(--container-width, 80%);
+        width: 900px;
         height: 50vh;
-        padding: var(--spacing-normal);
-        color: var(--primary-color);
-        animation: slideUp 0.3s ease;
+        padding: var(--spacing-normal, 20px);
+        color: var(--primary-color, #333);
+        animation: slideUp 0.4s ease-out;
         display: flex;
         flex-direction: column;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
       }
 
       .modal-header {
@@ -369,25 +371,28 @@
         justify-content: space-between;
         align-items: center;
         margin-bottom: 20px;
-        color: var(--primary-color);
+        color: var(--primary-color, #333);
       }
 
       .modal-title {
-        font-size: 24px;
+        font-size: 1.5rem;
         font-weight: 700;
-        color: var(--primary-color);
+        color: var(--primary-color, #333);
+        margin: 0;
       }
 
       .modal-content {
         flex-grow: 1;
         overflow-y: auto;
         line-height: 1.6;
-        font-size: 16px;
-        color: var(--primary-color);
+        font-size: 1rem;
+        color: var(--primary-color, #333);
       }
 
       .modal-content p {
-        margin: 5px 0;
+        margin: 10px 0;
+        font-size: 1rem;
+        color: var(--text-color, #666);
       }
 
       .settings-content {
@@ -499,6 +504,7 @@
         border: 1px solid var(--border-color);
         border-radius: 6px;
         background-color: var(--input-bg);
+        color: var(--primary-color);
       }
 
       .search-box i {
@@ -506,7 +512,7 @@
         left: 1.25rem;
         top: 50%;
         transform: translateY(-50%);
-        color: var(--text-muted);
+        color: var(--primary-color);
       }
 
       .theme-options-grid {
@@ -670,6 +676,7 @@
         background-color: var(--danger-color);
         color: white;
       }
+
       .slider-wrapper {
         width: 100%;
         margin: 1rem 0;
@@ -696,11 +703,13 @@
         background: var(--slider-track-bg);
         border-radius: 3px;
         outline: none;
+        color: var(--primary-color);
       }
 
       input[type="range"]::-webkit-slider-thumb {
         -webkit-appearance: none;
         width: 20px;
+        color: var(--primary-color);
         height: 20px;
         border-radius: 50%;
         background: var(--primary-color);
@@ -719,6 +728,7 @@
         border: 2px solid var(--thumb-border);
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         transition: all 0.2s ease;
+        color: var(--primary-color);
       }
 
       input[type="range"]:hover::-webkit-slider-thumb {
@@ -1545,13 +1555,13 @@
             wrapper.className = 'code-block-wrapper';
             const copyButton = document.createElement('button');
             copyButton.className = 'code-copy-button';
-            copyButton.innerHTML = '    <i class = "fas fa-copy" ></i>';
+            copyButton.innerHTML = '     < i class = "fas fa-copy" > < /i>';
             copyButton.onclick = (e) => {
               e.stopPropagation();
               navigator.clipboard.writeText(block.textContent).then(() => {
-                copyButton.innerHTML = '    <i class = "fas fa-check" ></i>';
+                copyButton.innerHTML = '     <i class = "fas fa-check" > </i>';
                 setTimeout(() => {
-                  copyButton.innerHTML = '    <i class = "fas fa-copy" ></i>';
+                  copyButton.innerHTML = '     <i class = "fas fa-copy" > </i>';
                 }, 2000);
               });
             };
@@ -1572,13 +1582,13 @@
         if (isUser) {
           const editButton = document.createElement('button');
           editButton.className = 'action-button';
-          editButton.innerHTML = '    <i class = "fa-regular fa-edit" ></i>';
+          editButton.innerHTML = '     <i class = "fa-regular fa-edit" > </i>';
           editButton.onclick = () => startEditing(messageId);
           actionsDiv.appendChild(editButton);
         }
         const copyButton = document.createElement('button');
         copyButton.className = 'action-button';
-        copyButton.innerHTML = '    <i class = "fa-regular fa-copy" ></i>';
+        copyButton.innerHTML = '     <i class = "fa-regular fa-copy" > </i>';
         copyButton.onclick = () => copyToClipboard(message);
         actionsDiv.appendChild(copyButton);
         messageElement.appendChild(actionsDiv);
@@ -1613,6 +1623,19 @@
             await finishEditing(messageId, textarea.value.trim());
           } else if (e.key === 'Escape') {
             cancelEditing(messageId);
+          }
+        });
+      }
+
+      function filterLanguages(searchQuery) {
+        const languageOptions = document.querySelectorAll('.language-option');
+        searchQuery = searchQuery.toLowerCase();
+        languageOptions.forEach(option => {
+          const languageName = option.querySelector('.language-name').textContent.toLowerCase();
+          if (languageName.includes(searchQuery)) {
+            option.style.display = 'block';
+          } else {
+            option.style.display = 'none';
           }
         });
       }
@@ -1879,7 +1902,7 @@
         const modal = document.createElement('div');
         modal.className = 'modal-overlay';
         const allPersonalities = [...PERSONALITIES, ...STATE.customPersonalities];
-        const languageOptions = ['English', 'Spanish', 'French', 'German', 'Italian', 'Japanese', 'Chinese', 'Russian', 'Portuguese', 'Korean', 'Hindi', 'Arabic', 'Turkish', 'Dutch', 'Swedish', 'Greek', 'Polish', 'Vietnamese', 'Thai', 'Indonesian', 'Hebrew', 'Finnish', 'Czech', 'Hungarian'].map(lang => `
+        const languageOptions = ['English', 'Spanish', 'French', 'German', 'Italian', 'Japanese', 'Chinese', 'Russian', 'Portuguese', 'Korean', 'Hindi', 'Arabic', 'Turkish', 'Dutch', 'Swedish', 'Greek', 'Polish', 'Vietnamese', 'Thai', 'Indonesian', 'Hebrew', 'Finnish', 'Czech', 'Hungarian', 'Romanian', 'Norwegian', 'Danish', 'Bulgarian', 'Ukrainian', 'Malay', 'Swahili', 'Tamil', 'Bengali', 'Punjabi', 'Telugu', 'Marathi', 'Gujarati', 'Malayalam', 'Kannada', 'Oriya', 'Assamese', 'Nepali', 'Sinhala', 'Khmer', 'Laotian', 'Filipino', 'Mongolian', 'Pashto', 'Farsi', 'Uzbek', 'Kazakh', 'Tajik', 'Azerbaijani', 'Georgian', 'Armenian', 'Albanian', 'Serbian', 'Croatian', 'Bosnian', 'Slovak', 'Slovenian', 'Estonian', 'Latvian', 'Lithuanian', 'Icelandic', 'Irish', 'Welsh', 'Basque', 'Catalan', 'Galician', 'Maltese', 'Corsican', 'Haitian Creole', 'Quechua', 'Nahuatl', 'Maya', 'Yiddish', 'Esperanto'].map(lang => `
 
 																												
 																												<div class="option language-option" data-language="${lang}" onclick="changeLanguage('${lang}')">
@@ -1896,6 +1919,7 @@
 																														<i class="fa-solid ${getPersonalityIcon(p.name)}"></i>
 																														<span class="personality-name">${p.name}</span>
         ${p.isCustom ? `
+
 																													
 																													</div>` : ''}
 
@@ -2086,9 +2110,84 @@
 
       function getLanguageCode(language) {
         const codeMap = {
-          'English': 'en',
+          'English': 'us',
           'Spanish': 'es',
           'French': 'fr',
+          'German': 'de',
+          'Italian': 'it',
+          'Japanese': 'jp',
+          'Chinese': 'cn',
+          'Russian': 'ru',
+          'Portuguese': 'pt',
+          'Korean': 'kr',
+          'Hindi': 'in',
+          'Arabic': 'ae',
+          'Turkish': 'tr',
+          'Dutch': 'nl',
+          'Swedish': 'se',
+          'Greek': 'gr',
+          'Polish': 'pl',
+          'Vietnamese': 'vn',
+          'Thai': 'th',
+          'Indonesian': 'id',
+          'Hebrew': 'il',
+          'Finnish': 'fi',
+          'Czech': 'cz',
+          'Hungarian': 'hu',
+          'Romanian': 'ro',
+          'Norwegian': 'no',
+          'Danish': 'dk',
+          'Bulgarian': 'bg',
+          'Ukrainian': 'ua',
+          'Malay': 'my',
+          'Swahili': 'ke',
+          'Tamil': 'lk',
+          'Bengali': 'bd',
+          'Punjabi': 'pk',
+          'Telugu': 'in',
+          'Marathi': 'in',
+          'Gujarati': 'in',
+          'Malayalam': 'in',
+          'Kannada': 'in',
+          'Oriya': 'in',
+          'Assamese': 'in',
+          'Nepali': 'np',
+          'Sinhala': 'lk',
+          'Khmer': 'kh',
+          'Laotian': 'la',
+          'Filipino': 'ph',
+          'Mongolian': 'mn',
+          'Pashto': 'af',
+          'Farsi': 'ir',
+          'Uzbek': 'uz',
+          'Kazakh': 'kz',
+          'Tajik': 'tj',
+          'Azerbaijani': 'az',
+          'Georgian': 'ge',
+          'Armenian': 'am',
+          'Albanian': 'al',
+          'Serbian': 'rs',
+          'Croatian': 'hr',
+          'Bosnian': 'ba',
+          'Slovak': 'sk',
+          'Slovenian': 'si',
+          'Estonian': 'ee',
+          'Latvian': 'lv',
+          'Lithuanian': 'lt',
+          'Icelandic': 'is',
+          'Irish': 'ie',
+          'Welsh': 'gb',
+          'Basque': 'es',
+          'Catalan': 'es',
+          'Galician': 'es',
+          'Maltese': 'mt',
+          'Corsican': 'fr',
+          'Haitian Creole': 'ht',
+          'Quechua': 'pe',
+          'Nahuatl': 'mx',
+          'Maya': 'mx',
+          'Yiddish': 'il',
+          'Esperanto': 'eo',
         };
         return codeMap[language] || '';
       }
@@ -2337,7 +2436,7 @@
             const personalitySpan = personalitySelector.querySelector('span');
             personalitySpan.innerHTML = `
 
-																																		
+         
 																																		<i class="fa-solid fa-theater-masks"></i>‎ ‎ Personality: ${personalityName}`;
           }
           showNotification(`Personality changed to ${personalityName}`);
@@ -2419,7 +2518,7 @@
           const personalitySelector = document.getElementById('personalitySelector').querySelector('span');
           personalitySelector.innerHTML = `
 
-																																		
+          
 																																		<i class="fa-solid fa-theater-masks"></i>‎ ‎ Personality: ${personalityName}`;
           showNotification(`Personality changed to ${personalityName}`);
           closeModal();
@@ -2695,9 +2794,10 @@
           }
         }
       };
-  function discordButton() {
-    window.open("https://discord.gg/Hb5ccPY3XV", "_blank");
-  }
+
+      function discordButton() {
+        window.open("https://discord.gg/Hb5ccPY3XV", "_blank");
+      }
       document.addEventListener('DOMContentLoaded', () => {
         AudioManager.init();
         loadCustomPersonalities();
