@@ -2516,6 +2516,7 @@ const PERSONALITIES = [{
             closeModal();
           }
         });
+
         document.body.appendChild(modal);
         const discordButton = modal.querySelector('.discord-button');
         const discordLink = modal.querySelector('.discord-button a');
@@ -2528,6 +2529,56 @@ const PERSONALITIES = [{
         modalFooter.style.alignItems = 'center';
       }
 
+function showSettingsHelp() {
+  const modal = document.createElement('div');
+  modal.className = 'modal-overlay';
+  modal.innerHTML = `
+    <div class="modal-window stylish-modal">
+      <div class="modal-header">
+        <span class="modal-title">Settings Help</span>
+        <button class="close-button" aria-label="Close modal">&times;</button>
+      </div>
+      <div class="modal-content">
+        <p><strong>Need help with settings?</strong> Here’s what you can customize:</p>
+        <div class="help-section">
+          <h3><i class="fa-solid fa-language"></i> Language</h3>
+          <p>Select your preferred language from a wide range of options.</p>
+        </div>
+        <div class="help-section">
+          <h3><i class="fa-solid fa-bell"></i> Notifications</h3>
+          <p>Enable or disable desktop notifications and sound effects.</p>
+        </div>
+        <div class="help-section">
+          <h3><i class="fa-solid fa-palette"></i> Theme</h3>
+          <p>Switch between Light and Dark modes to suit your preference.</p>
+        </div>
+        <div class="help-section">
+          <h3><i class="fa-solid fa-masks-theater"></i> Personalities</h3>
+          <p>Choose different personalities to tailor the AI’s responses.</p>
+        </div>
+        <div class="help-section">
+          <h3><i class="fa-solid fa-exclamation-triangle"></i> Danger Zone</h3>
+          <p>Reset chat history, remove API keys, or clear cache.</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="primary-button">Got It!</button>
+      </div>
+    </div>
+  `;
+
+  function closeModal() {
+    modal.classList.add('fade-out');
+    setTimeout(() => modal.remove(), 300);
+  }
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal || e.target.classList.contains('close-button') || e.target.classList.contains('primary-button')) {
+      closeModal();
+    }
+  });
+
+  document.body.appendChild(modal);
+}
 
       function saveApiKey() {
         const apiKey = document.getElementById('apiKeyInput').value.trim();
@@ -2547,7 +2598,6 @@ const PERSONALITIES = [{
         const options = document.getElementById('personalityOptions');
         options.style.display = options.style.display === 'none' || options.style.display === '' ? 'block' : 'none';
       }
-
       function changePersonality(personalityName) {
         const allPersonalities = [...PERSONALITIES, ...STATE.customPersonalities];
         const personality = allPersonalities.find(p => p.name === personalityName);
