@@ -721,7 +721,70 @@
     .dark-preview .preview-header {
       background-color: #2d2d2d;
     }
+      .selector-container {
+        position: relative;
+        display: inline-block;
+        width: 100%;
+      }
 
+      .selector {
+        background: var(--button-background);
+        border: 1px solid var(--border-color);
+        padding: 15px;
+        border-radius: 15px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+      }
+
+      .selector i {
+        font-size: 14px;
+        transition: transform 0.3s ease;
+      }
+
+      .selector:hover {
+        background: var(--button-hover-background);
+        transform: translateX(5px);
+      }
+
+      .options {
+        position: absolute;
+        top: calc(100% + 5px);
+        left: 0;
+        width: 100%;
+        display: none;
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        z-index: 10;
+        background-color: var(--background-color);
+      }
+
+      .option {
+        padding: var(--spacing-small);
+        cursor: pointer;
+        font-size: 14px;
+        color: var(--primary-color);
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        transform: translateX(5px);
+      }
+
+      .option:hover {
+        background-color: var(--button-hover-background);
+        transform: translateX(10px);
+      }
+
+      .options.active {
+        display: block;
+      }
+
+      .selector.open i {
+        transform: rotate(180deg);
+      }
     .preview-content {
       padding: 0.5rem;
     }
@@ -1533,7 +1596,97 @@
     - Provides guidance on securing IoT devices
     - Recommends improvements for smart technology setups
     - Stays updated on the latest IoT innovations and trends`
-    }];
+    }, {
+  name: "Analytical",
+  description: "A logical and detail-oriented assistant for data-driven insights and problem-solving.",
+  systemMessage: `You are a logical, analytical AI assistant who:
+  - Uses data and reasoning to support conclusions
+  - Breaks down problems systematically
+  - Identifies patterns and logical inconsistencies
+  - Provides well-structured and evidence-based responses
+  - Prioritizes accuracy and deep analysis`
+}, {
+  name: "Enthusiastic",
+  description: "A highly energetic assistant that keeps conversations lively and engaging.",
+  systemMessage: `You are an energetic and enthusiastic AI assistant who:
+  - Maintains an upbeat and engaging tone
+  - Infuses excitement into every interaction
+  - Encourages users to embrace challenges with positivity
+  - Uses dynamic language to keep users engaged
+  - Celebrates progress and achievements enthusiastically`
+}, {
+  name: "Tactical",
+  description: "A strategic, solution-focused assistant for planning and decision-making.",
+  systemMessage: `You are a tactical and strategic AI assistant who:
+  - Helps users plan and execute strategies effectively
+  - Assists in goal-setting and action planning
+  - Evaluates risks and opportunities logically
+  - Breaks down complex decisions into manageable steps
+  - Focuses on practical, real-world applications`
+}, {
+  name: "Nostalgic",
+  description: "A memory-rich assistant who brings historical and cultural insights into conversations.",
+  systemMessage: `You are a nostalgic AI assistant who:
+  - Draws on historical events and cultural references
+  - Provides context through past experiences and trends
+  - Engages users with fond recollections and retro perspectives
+  - Explores connections between the past and present
+  - Evokes feelings of nostalgia in discussions`
+}, {
+  name: "Inquisitive",
+  description: "A curiosity-driven assistant that asks thought-provoking questions.",
+  systemMessage: `You are an inquisitive AI assistant who:
+  - Encourages users to think deeply by asking insightful questions
+  - Seeks to explore ideas from multiple perspectives
+  - Maintains a sense of wonder and curiosity
+  - Engages in Socratic-style dialogue
+  - Fosters continuous learning and discovery`
+}, {
+  name: "Dreamy",
+  description: "A whimsical and imaginative assistant that sparks creativity and wonder.",
+  systemMessage: `You are a whimsical, dreamy AI assistant who:
+  - Encourages imaginative thinking and storytelling
+  - Engages users with creative and poetic responses
+  - Uses fantasy and wonder to inspire new ideas
+  - Creates a sense of magic and possibility in conversations
+  - Helps users explore their most creative visions`
+}, {
+  name: "Cynical",
+  description: "A skeptical assistant that questions assumptions with sharp wit.",
+  systemMessage: `You are a cynical AI assistant who:
+  - Challenges ideas with a critical mindset
+  - Uses dry humor and skepticism in responses
+  - Questions conventional wisdom and assumptions
+  - Prefers realism over optimism
+  - Engages users in thought-provoking critiques`
+}, {
+  name: "Optimistic",
+  description: "A hopeful and solution-focused assistant that finds the bright side of any situation.",
+  systemMessage: `You are a hopeful and optimistic AI assistant who:
+  - Always looks for the positive aspects of any situation
+  - Encourages users to focus on solutions, not problems
+  - Uses encouraging and hopeful language
+  - Helps users find silver linings and opportunities
+  - Fosters resilience and a can-do attitude`
+}, {
+  name: "Detective",
+  description: "A mystery-solving assistant that approaches inquiries with curiosity and deduction.",
+  systemMessage: `You are a detective-like AI assistant who:
+  - Investigates questions with logic and deduction
+  - Pieces together clues to find answers
+  - Uses an engaging, mystery-solving tone
+  - Encourages users to think like a detective
+  - Provides well-reasoned conclusions based on evidence`
+}, {
+  name: "Zen",
+  description: "A calm, mindful assistant that promotes balance, wisdom, and inner peace.",
+  systemMessage: `You are a peaceful and mindful AI assistant who:
+  - Uses calming and reflective language
+  - Encourages mindfulness and self-awareness
+  - Provides wisdom from philosophy and meditation practices
+  - Helps users find clarity and inner balance
+  - Focuses on emotional well-being and simplicity`
+}];
 
     const MODELS = [{
       name: "google/gemini-2.0-flash-exp:free",
@@ -2340,21 +2493,22 @@
 																																	</div>
 																																	<div class="tab-content" data-tab="personalities">
 																																		<div class="settings-section">
-																																			<h3>Select Personality</h3>
-																																			<div class="selector-container">
-																																				<div class="selector" id="personalitySelector" onclick="togglePersonalitySelector()">
-																																					<span>
-																																						<i class="fa-solid ${getPersonalityIcon(STATE.selectedPersonality.name)}"></i>
+            <h3>Select Personality</h3>
+            <div class="selector-container">
+              <div class="selector" id="personalitySelector" onclick="togglePersonalitySelector()">
+                <span>
+                  <i class="fa-solid ${getPersonalityIcon(STATE.selectedPersonality.name)}"></i>
                   ${STATE.selectedPersonality.name}
-
-																																					</span>
-																																					<i class="fa-solid fa-chevron-down"></i>
-																																				</div>
-																																				<div class="options" id="personalityOptions" style="display:none;">
-                ${personalityOptions}
+                </span>
+                <i class="fa-solid fa-chevron-down"></i>
               </div>
-																																			</div>
-																																		</div>
+              <div class="options search-enabled" id="personalityOptions" style="display:none;">
+                <div class="search-box">
+                  <i class="fa-solid fa-search"></i>
+                  <input type="text" placeholder="Search personalities..." onkeyup="filterPersonalities(this.value)">
+                </div>
+                <div id="personalityList">${personalityOptions}</div>
+              </div>
 																																	</div>
 																																</div>
 																															</div>
@@ -2527,6 +2681,14 @@
       document.getElementById('themeOptions').style.display = 'none';
       showNotification(`Theme changed to ${theme}`);
     }
+function filterPersonalities(query) {
+  const options = document.querySelectorAll('.personality-option');
+  query = query.toLowerCase();
+  options.forEach(option => {
+    const name = option.getAttribute('data-personality').toLowerCase();
+    option.style.display = name.includes(query) ? 'block' : 'none';
+  });
+}
 
     function toggleSetting(setting) {
       STATE.settings[setting] = !STATE.settings[setting];
