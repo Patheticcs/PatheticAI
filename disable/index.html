@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Devtools Is Disabled</title>
+    <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@700,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
+    <meta name="description" content="PatheticAI is an AI chatbot designed to assist, automate tasks, and provide real-time conversations with users.">
+    <meta property="og:description" content="PatheticAI is an AI chatbot designed to assist, automate tasks, and provide real-time conversations with users.">
+    <meta property="og:title" content="Pathetic">
+    <meta property="og:image" content="/icon.png">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="PatheticAI">
+    <meta property="og:locale" content="en_US">
+    <link rel="icon" href="/icon.png" type="image/png">
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden;
+        font-family: Arial, sans-serif;
+      }
+
+      .hero {
+        position: relative;
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ffffff;
+        text-align: center;
+      }
+
+      .discord-link {
+        color: white;
+        font-weight: bold;
+      }
+
+      #particles-js {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        background: #000;
+      }
+
+      .hero-content {
+        z-index: 1;
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: 3em;
+        margin-bottom: 50px;
+      }
+
+      p {
+        font-size: 14px;
+        max-width: 600px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="hero">
+      <div id="particles-js"></div>
+      <div class="hero-content">
+        <h1>Dev Tools Have Been Disabled</h1>
+        <p>If you think this was an error, please go to our <a href="https://discord.gg/Hb5ccPY3XV" target="_blank" class="discord-link">Discord server</a> and create a ticket. </p>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+      particlesJS("particles-js", {
+        "particles": {
+          "number": {
+            "value": 80,
+            "density": {
+              "enable": true,
+              "value_area": 800
+            }
+          },
+          "color": {
+            "value": "#ffffff"
+          },
+          "shape": {
+            "type": "circle",
+            "stroke": {
+              "width": 0,
+              "color": "#040404"
+            }
+          },
+          "opacity": {
+            "value": 0.5,
+            "random": true
+          },
+          "size": {
+            "value": 1.5,
+            "random": true
+          },
+          "move": {
+            "direction": "top",
+            "out_mode": "out",
+            "speed": 0.5,
+            "random": true
+          },
+          "line_linked": {
+            "enable": false
+          }
+        },
+        "interactivity": {
+          "detect_on": "canvas",
+          "events": {
+            "onhover": {
+              "enable": false,
+              "mode": "grab"
+            },
+            "onclick": {
+              "enable": false,
+              "mode": "push"
+            },
+            "resize": false
+          },
+          "modes": {
+            "grab": {
+              "distance": 400,
+              "line_linked": {
+                "opacity": 0.5
+              }
+            },
+            "bubble": {
+              "distance": 400,
+              "size": 4,
+              "duration": 0.3,
+              "opacity": 1,
+              "speed": 3
+            },
+            "repulse": {
+              "distance": 200,
+              "duration": 0.4
+            },
+            "push": {
+              "particles_nb": 4
+            },
+            "remove": {
+              "particles_nb": 2
+            }
+          }
+        },
+        "retina_detect": true
+      });
+    </script>
+  </body>
