@@ -38,7 +38,7 @@
             if (widthDifference > threshold || heightDifference > threshold) {
                 if (!devToolsOpen) {
                     devToolsOpen = true;
-                    window.location.href = "about:blank";
+                    window.location.href = "/disable";
                 }
             } else {
                 devToolsOpen = false;
