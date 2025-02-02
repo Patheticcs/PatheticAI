@@ -38,7 +38,6 @@
             if (widthDifference > threshold || heightDifference > threshold) {
                 if (!devToolsOpen) {
                     devToolsOpen = true;
-                    alert("Dev Tools Isn't Allowed");
                     window.location.href = "about:blank";
                 }
             } else {
