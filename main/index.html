@@ -34,7 +34,7 @@
     <meta name="apple-mobile-web-app-title" content="PatheticAI">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="mobile-web-app-capable" content="yes">
-     <!-- Security -->
+    <!-- Security -->
     <script src="/main/security.js"></script>
     <style>
     * {
@@ -60,7 +60,6 @@
     }
 
     :root[data-theme="Light"] {
-      --color: rgba(0, 0, 0, 1);
       --background-image: url("/images/light%20background.png");
       --background-color: #ffffff;
       --secondary-color: #000000;
@@ -79,22 +78,24 @@
       --placeholder-color: rgba(0, 0, 0, 0.2);
       --chat-input-container-background: rgba(255, 255, 255, 0.5);
       --border-button-color: rgba(0, 0, 0, 0.1);
-      --checkbox-bg: #ffffff;
-      --slider-track-bg: #e5e7eb;
-      --thumb-border: #ffffff;
-      --focus-ring: rgba(59, 130, 246, 0.3);
-      --disabled-bg: #f3f4f6;
-      --disabled-border: #d1d5db;
-      --background-color: #ffffff;
-      --header-bg: #f8f9fa;
-      --text-color: #1a1a1a;
-      --text-muted: #6b7280;
-      --primary-color: #000;
-      --danger-color: #ef4444;
-      --hover-color: #f3f4f6;
-      --input-bg: #ffffff;
-      --toggle-bg: #2e2a24;
-      --un-toggle-bg: white;
+      --border-button-color: rgba(0, 0, 0, 0.07);
+      --checkbox-bg: rgba(255, 255, 255, 0.5);
+      --slider-track-bg: rgba(229, 231, 235, 0.5);
+      --thumb-border: rgba(255, 255, 255, 0.8);
+      --focus-ring: rgba(59, 130, 246, 0.25);
+      --disabled-bg: rgba(243, 244, 246, 0.5);
+      --disabled-border: rgba(209, 213, 219, 0.4);
+      --header-bg: rgba(248, 249, 250, 0.3);
+      --text-color: rgba(26, 26, 26, 0.9);
+      --text-muted: rgba(107, 114, 128, 0.8);
+      --primary-color: rgba(0, 0, 0, 0.85);
+      --danger-color: rgba(239, 68, 68, 0.85);
+      --hover-color: rgba(243, 244, 246, 0.5);
+      --input-bg: rgba(255, 255, 255, 0.3);
+      --toggle-bg: rgba(46, 42, 36, 0.6);
+      --un-toggle-bg: rgba(255, 255, 255, 0.6);
+      --glassmorphism-blur: blur(10px);
+
     }
 
     :root[data-theme="Dark"] {
@@ -567,9 +568,10 @@
       color: var(--primary-color);
     }
 
-.hidden-checkbox {
-  display: none;
-}
+    .hidden-checkbox {
+      display: none;
+    }
+
     .settings-button {
       background: var(--button-background);
       border: 1px solid var(--border-color);
@@ -724,70 +726,72 @@
     .dark-preview .preview-header {
       background-color: #2d2d2d;
     }
-      .selector-container {
-        position: relative;
-        display: inline-block;
-        width: 100%;
-      }
 
-      .selector {
-        background: var(--button-background);
-        border: 1px solid var(--border-color);
-        padding: 15px;
-        border-radius: 15px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin-top: 10px;
-        margin-bottom: 10px;
-      }
+    .selector-container {
+      position: relative;
+      display: inline-block;
+      width: 100%;
+    }
 
-      .selector i {
-        font-size: 14px;
-        transition: transform 0.3s ease;
-      }
+    .selector {
+      background: var(--button-background);
+      border: 1px solid var(--border-color);
+      padding: 15px;
+      border-radius: 15px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
 
-      .selector:hover {
-        background: var(--button-hover-background);
-        transform: translateX(5px);
-      }
+    .selector i {
+      font-size: 14px;
+      transition: transform 0.3s ease;
+    }
 
-      .options {
-        position: absolute;
-        top: calc(100% + 5px);
-        left: 0;
-        width: 100%;
-        display: none;
-        border: 1px solid var(--border-color);
-        border-radius: 10px;
-        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-        z-index: 10;
-        background-color: var(--background-color);
-      }
+    .selector:hover {
+      background: var(--button-hover-background);
+      transform: translateX(5px);
+    }
 
-      .option {
-        padding: var(--spacing-small);
-        cursor: pointer;
-        font-size: 14px;
-        color: var(--primary-color);
-        transition: background-color 0.3s ease, transform 0.2s ease;
-        transform: translateX(5px);
-      }
+    .options {
+      position: absolute;
+      top: calc(100% + 5px);
+      left: 0;
+      width: 100%;
+      display: none;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+      z-index: 10;
+      background-color: var(--background-color);
+    }
 
-      .option:hover {
-        background-color: var(--button-hover-background);
-        transform: translateX(10px);
-      }
+    .option {
+      padding: var(--spacing-small);
+      cursor: pointer;
+      font-size: 14px;
+      color: var(--primary-color);
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      transform: translateX(5px);
+    }
 
-      .options.active {
-        display: block;
-      }
+    .option:hover {
+      background-color: var(--button-hover-background);
+      transform: translateX(10px);
+    }
 
-      .selector.open i {
-        transform: rotate(180deg);
-      }
+    .options.active {
+      display: block;
+    }
+
+    .selector.open i {
+      transform: rotate(180deg);
+    }
+
     .preview-content {
       padding: 0.5rem;
     }
@@ -1602,96 +1606,96 @@
     - Recommends improvements for smart technology setups
     - Stays updated on the latest IoT innovations and trends`
     }, {
-  name: "Analytical",
-  description: "A logical and detail-oriented assistant for data-driven insights and problem-solving.",
-  systemMessage: `You are a logical, analytical AI assistant who:
+      name: "Analytical",
+      description: "A logical and detail-oriented assistant for data-driven insights and problem-solving.",
+      systemMessage: `You are a logical, analytical AI assistant who:
   - Uses data and reasoning to support conclusions
   - Breaks down problems systematically
   - Identifies patterns and logical inconsistencies
   - Provides well-structured and evidence-based responses
   - Prioritizes accuracy and deep analysis`
-}, {
-  name: "Enthusiastic",
-  description: "A highly energetic assistant that keeps conversations lively and engaging.",
-  systemMessage: `You are an energetic and enthusiastic AI assistant who:
+    }, {
+      name: "Enthusiastic",
+      description: "A highly energetic assistant that keeps conversations lively and engaging.",
+      systemMessage: `You are an energetic and enthusiastic AI assistant who:
   - Maintains an upbeat and engaging tone
   - Infuses excitement into every interaction
   - Encourages users to embrace challenges with positivity
   - Uses dynamic language to keep users engaged
   - Celebrates progress and achievements enthusiastically`
-}, {
-  name: "Tactical",
-  description: "A strategic, solution-focused assistant for planning and decision-making.",
-  systemMessage: `You are a tactical and strategic AI assistant who:
+    }, {
+      name: "Tactical",
+      description: "A strategic, solution-focused assistant for planning and decision-making.",
+      systemMessage: `You are a tactical and strategic AI assistant who:
   - Helps users plan and execute strategies effectively
   - Assists in goal-setting and action planning
   - Evaluates risks and opportunities logically
   - Breaks down complex decisions into manageable steps
   - Focuses on practical, real-world applications`
-}, {
-  name: "Nostalgic",
-  description: "A memory-rich assistant who brings historical and cultural insights into conversations.",
-  systemMessage: `You are a nostalgic AI assistant who:
+    }, {
+      name: "Nostalgic",
+      description: "A memory-rich assistant who brings historical and cultural insights into conversations.",
+      systemMessage: `You are a nostalgic AI assistant who:
   - Draws on historical events and cultural references
   - Provides context through past experiences and trends
   - Engages users with fond recollections and retro perspectives
   - Explores connections between the past and present
   - Evokes feelings of nostalgia in discussions`
-}, {
-  name: "Inquisitive",
-  description: "A curiosity-driven assistant that asks thought-provoking questions.",
-  systemMessage: `You are an inquisitive AI assistant who:
+    }, {
+      name: "Inquisitive",
+      description: "A curiosity-driven assistant that asks thought-provoking questions.",
+      systemMessage: `You are an inquisitive AI assistant who:
   - Encourages users to think deeply by asking insightful questions
   - Seeks to explore ideas from multiple perspectives
   - Maintains a sense of wonder and curiosity
   - Engages in Socratic-style dialogue
   - Fosters continuous learning and discovery`
-}, {
-  name: "Dreamy",
-  description: "A whimsical and imaginative assistant that sparks creativity and wonder.",
-  systemMessage: `You are a whimsical, dreamy AI assistant who:
+    }, {
+      name: "Dreamy",
+      description: "A whimsical and imaginative assistant that sparks creativity and wonder.",
+      systemMessage: `You are a whimsical, dreamy AI assistant who:
   - Encourages imaginative thinking and storytelling
   - Engages users with creative and poetic responses
   - Uses fantasy and wonder to inspire new ideas
   - Creates a sense of magic and possibility in conversations
   - Helps users explore their most creative visions`
-}, {
-  name: "Cynical",
-  description: "A skeptical assistant that questions assumptions with sharp wit.",
-  systemMessage: `You are a cynical AI assistant who:
+    }, {
+      name: "Cynical",
+      description: "A skeptical assistant that questions assumptions with sharp wit.",
+      systemMessage: `You are a cynical AI assistant who:
   - Challenges ideas with a critical mindset
   - Uses dry humor and skepticism in responses
   - Questions conventional wisdom and assumptions
   - Prefers realism over optimism
   - Engages users in thought-provoking critiques`
-}, {
-  name: "Optimistic",
-  description: "A hopeful and solution-focused assistant that finds the bright side of any situation.",
-  systemMessage: `You are a hopeful and optimistic AI assistant who:
+    }, {
+      name: "Optimistic",
+      description: "A hopeful and solution-focused assistant that finds the bright side of any situation.",
+      systemMessage: `You are a hopeful and optimistic AI assistant who:
   - Always looks for the positive aspects of any situation
   - Encourages users to focus on solutions, not problems
   - Uses encouraging and hopeful language
   - Helps users find silver linings and opportunities
   - Fosters resilience and a can-do attitude`
-}, {
-  name: "Detective",
-  description: "A mystery-solving assistant that approaches inquiries with curiosity and deduction.",
-  systemMessage: `You are a detective-like AI assistant who:
+    }, {
+      name: "Detective",
+      description: "A mystery-solving assistant that approaches inquiries with curiosity and deduction.",
+      systemMessage: `You are a detective-like AI assistant who:
   - Investigates questions with logic and deduction
   - Pieces together clues to find answers
   - Uses an engaging, mystery-solving tone
   - Encourages users to think like a detective
   - Provides well-reasoned conclusions based on evidence`
-}, {
-  name: "Zen",
-  description: "A calm, mindful assistant that promotes balance, wisdom, and inner peace.",
-  systemMessage: `You are a peaceful and mindful AI assistant who:
+    }, {
+      name: "Zen",
+      description: "A calm, mindful assistant that promotes balance, wisdom, and inner peace.",
+      systemMessage: `You are a peaceful and mindful AI assistant who:
   - Uses calming and reflective language
   - Encourages mindfulness and self-awareness
   - Provides wisdom from philosophy and meditation practices
   - Helps users find clarity and inner balance
   - Focuses on emotional well-being and simplicity`
-}];
+    }];
 
     const MODELS = [{
       name: "google/gemini-2.0-flash-exp:free",
@@ -2342,30 +2346,31 @@
       }
     }
 
-function showSettingsModal() {
-  const modal = document.createElement('div');
-  modal.className = 'modal-overlay';
+    function showSettingsModal() {
+      const modal = document.createElement('div');
+      modal.className = 'modal-overlay';
 
-  const allPersonalities = [...PERSONALITIES, ...STATE.customPersonalities];
-  const languageOptions = [
-    'Afrikaans', 'Albanian', 'Amharic', 'Arabic', 'Armenian', 'Azerbaijani',
-    'Basque', 'Belarusian', 'Bengali', 'Bosnian', 'Bulgarian', 'Burmese',
-    'Catalan', 'Cebuano', 'Chinese (Simplified)', 'Chinese (Traditional)', 'Corsican',
-    'Croatian', 'Czech', 'Danish', 'Dutch', 'English', 'Esperanto', 'Estonian',
-    'Filipino', 'Finnish', 'French', 'Frisian', 'Galician', 'Georgian', 'German',
-    'Greek', 'Gujarati', 'Haitian Creole', 'Hausa', 'Hawaiian', 'Hebrew', 'Hindi',
-    'Hmong', 'Hungarian', 'Icelandic', 'Igbo', 'Indonesian', 'Irish', 'Italian',
-    'Japanese', 'Javanese', 'Kannada', 'Kazakh', 'Khmer', 'Kinyarwanda', 'Korean',
-    'Kurdish', 'Kyrgyz', 'Lao', 'Latin', 'Latvian', 'Lithuanian', 'Luxembourgish',
-    'Macedonian', 'Malagasy', 'Malay', 'Malayalam', 'Maltese', 'Maori', 'Marathi',
-    'Mongolian', 'Myanmar (Burmese)', 'Nepali', 'Norwegian', 'Nyanja (Chichewa)',
-    'Odia (Oriya)', 'Pashto', 'Persian (Farsi)', 'Polish', 'Portuguese', 'Punjabi',
-    'Romanian', 'Russian', 'Samoan', 'Scots Gaelic', 'Serbian', 'Sesotho', 'Shona',
-    'Sindhi', 'Sinhala (Sinhalese)', 'Slovak', 'Slovenian', 'Somali', 'Spanish',
-    'Sundanese', 'Swahili', 'Swedish', 'Tajik', 'Tamil', 'Tatar', 'Telugu', 'Thai',
-    'Turkish', 'Turkmen', 'Ukrainian', 'Urdu', 'Uyghur', 'Uzbek', 'Vietnamese',
-    'Welsh', 'Xhosa', 'Yiddish', 'Yoruba', 'Zulu']
-    .map(lang => `
+      const allPersonalities = [...PERSONALITIES, ...STATE.customPersonalities];
+      const languageOptions = [
+          'Afrikaans', 'Albanian', 'Amharic', 'Arabic', 'Armenian', 'Azerbaijani',
+          'Basque', 'Belarusian', 'Bengali', 'Bosnian', 'Bulgarian', 'Burmese',
+          'Catalan', 'Cebuano', 'Chinese (Simplified)', 'Chinese (Traditional)', 'Corsican',
+          'Croatian', 'Czech', 'Danish', 'Dutch', 'English', 'Esperanto', 'Estonian',
+          'Filipino', 'Finnish', 'French', 'Frisian', 'Galician', 'Georgian', 'German',
+          'Greek', 'Gujarati', 'Haitian Creole', 'Hausa', 'Hawaiian', 'Hebrew', 'Hindi',
+          'Hmong', 'Hungarian', 'Icelandic', 'Igbo', 'Indonesian', 'Irish', 'Italian',
+          'Japanese', 'Javanese', 'Kannada', 'Kazakh', 'Khmer', 'Kinyarwanda', 'Korean',
+          'Kurdish', 'Kyrgyz', 'Lao', 'Latin', 'Latvian', 'Lithuanian', 'Luxembourgish',
+          'Macedonian', 'Malagasy', 'Malay', 'Malayalam', 'Maltese', 'Maori', 'Marathi',
+          'Mongolian', 'Myanmar (Burmese)', 'Nepali', 'Norwegian', 'Nyanja (Chichewa)',
+          'Odia (Oriya)', 'Pashto', 'Persian (Farsi)', 'Polish', 'Portuguese', 'Punjabi',
+          'Romanian', 'Russian', 'Samoan', 'Scots Gaelic', 'Serbian', 'Sesotho', 'Shona',
+          'Sindhi', 'Sinhala (Sinhalese)', 'Slovak', 'Slovenian', 'Somali', 'Spanish',
+          'Sundanese', 'Swahili', 'Swedish', 'Tajik', 'Tamil', 'Tatar', 'Telugu', 'Thai',
+          'Turkish', 'Turkmen', 'Ukrainian', 'Urdu', 'Uyghur', 'Uzbek', 'Vietnamese',
+          'Welsh', 'Xhosa', 'Yiddish', 'Yoruba', 'Zulu'
+        ]
+        .map(lang => `
       <div class="option language-option" data-language="${lang}" onclick="changeLanguage('${lang}')">
         <span class="language-flag" data-country="${getCountryCode(lang)}"></span>
         <span class="language-name">${lang}</span>
@@ -2373,7 +2378,7 @@ function showSettingsModal() {
       </div>
     `).join('');
 
-  const personalityOptions = allPersonalities.map(p => `
+      const personalityOptions = allPersonalities.map(p => `
     <div class="option personality-option ${p.isCustom ? 'custom-personality' : ''}" data-personality="${p.name}" onclick="changePersonality('${p.name}')">
       <div class="personality-header">
         <i class="fa-solid ${getPersonalityIcon(p.name)}"></i>
@@ -2384,7 +2389,7 @@ function showSettingsModal() {
     </div>
   `).join('');
 
-  const themeOptions = `
+      const themeOptions = `
     <div class="option theme-option" data-theme="light" onclick="changeTheme('Light')">
       <div class="theme-preview light-preview">
         <div class="preview-header"></div>
@@ -2401,7 +2406,7 @@ function showSettingsModal() {
     </div>
   `;
 
-  modal.innerHTML = `
+      modal.innerHTML = `
     <div class="modal-window">
       <div class="modal-header">
         <span class="modal-title">
@@ -2470,7 +2475,7 @@ function showSettingsModal() {
             </div>
           </div>
         </div>
-        
+
         <div class="tab-content" data-tab="appearance">
           <div class="settings-section">
             <h3>Theme</h3>
@@ -2533,10 +2538,10 @@ function showSettingsModal() {
     </div>
   `;
 
-  modal.addEventListener('click', (e) => {
-    if (e.target === modal) {
-      closeModal();
-    }
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          closeModal();
+        }
 
       });
       modal.querySelectorAll('.tab-button').forEach(button => {
@@ -2560,132 +2565,133 @@ function showSettingsModal() {
       return languageMap[language] || 'unknown';
     }
 
-function getLanguageCode(language) {
-  const codeMap = {
+    function getLanguageCode(language) {
+      const codeMap = {
 
-    'English': 'us',
-    'Spanish': 'es',
-    'French': 'fr',
-    'German': 'de',
-    'Italian': 'it',
-    'Japanese': 'jp',
-    'Chinese': 'cn', 
-    'Russian': 'ru',
-    'Portuguese': 'pt',
-    'Korean': 'kr',
-    'Hindi': 'in',
-    'Arabic': 'ae',
-    'Turkish': 'tr',
-    'Dutch': 'nl',
-    'Swedish': 'se',
-    'Greek': 'gr',
-    'Polish': 'pl',
-    'Vietnamese': 'vn',
-    'Thai': 'th',
-    'Indonesian': 'id',
-    'Hebrew': 'il',
-    'Finnish': 'fi',
-    'Czech': 'cz',
-    'Hungarian': 'hu',
-    'Romanian': 'ro',
-    'Norwegian': 'no',
-    'Danish': 'dk',
-    'Bulgarian': 'bg',
-    'Ukrainian': 'ua',
-    'Malay': 'my',
-    'Swahili': 'ke',
-    'Tamil': 'lk',
-    'Bengali': 'bd',
-    'Punjabi': 'pk',
-    'Telugu': 'in',
-    'Marathi': 'in',
-    'Gujarati': 'in',
-    'Malayalam': 'in',
-    'Kannada': 'in',
-    'Oriya': 'in',
-    'Assamese': 'in',
-    'Nepali': 'np',
-    'Sinhala': 'lk',
-    'Khmer': 'kh',
-    'Laotian': 'la',
-    'Filipino': 'ph',
-    'Mongolian': 'mn',
-    'Pashto': 'af',
-    'Farsi': 'ir',
-    'Uzbek': 'uz',
-    'Kazakh': 'kz',
-    'Tajik': 'tj',
-    'Azerbaijani': 'az',
-    'Georgian': 'ge',
-    'Armenian': 'am',
-    'Albanian': 'al',
-    'Serbian': 'rs',
-    'Croatian': 'hr',
-    'Bosnian': 'ba',
-    'Slovak': 'sk',
-    'Slovenian': 'si',
-    'Estonian': 'ee',
-    'Latvian': 'lv',
-    'Lithuanian': 'lt',
-    'Icelandic': 'is',
-    'Irish': 'ie',
-    'Welsh': 'gb',
-    'Basque': 'es',
-    'Catalan': 'es',
-    'Galician': 'es',
-    'Maltese': 'mt',
-    'Corsican': 'fr',
-    'Haitian Creole': 'ht',
-    'Quechua': 'pe',
-    'Nahuatl': 'mx',
-    'Maya': 'mx',
-    'Yiddish': 'il',
-    'Esperanto': 'eo',
+        'English': 'us',
+        'Spanish': 'es',
+        'French': 'fr',
+        'German': 'de',
+        'Italian': 'it',
+        'Japanese': 'jp',
+        'Chinese': 'cn',
+        'Russian': 'ru',
+        'Portuguese': 'pt',
+        'Korean': 'kr',
+        'Hindi': 'in',
+        'Arabic': 'ae',
+        'Turkish': 'tr',
+        'Dutch': 'nl',
+        'Swedish': 'se',
+        'Greek': 'gr',
+        'Polish': 'pl',
+        'Vietnamese': 'vn',
+        'Thai': 'th',
+        'Indonesian': 'id',
+        'Hebrew': 'il',
+        'Finnish': 'fi',
+        'Czech': 'cz',
+        'Hungarian': 'hu',
+        'Romanian': 'ro',
+        'Norwegian': 'no',
+        'Danish': 'dk',
+        'Bulgarian': 'bg',
+        'Ukrainian': 'ua',
+        'Malay': 'my',
+        'Swahili': 'ke',
+        'Tamil': 'lk',
+        'Bengali': 'bd',
+        'Punjabi': 'pk',
+        'Telugu': 'in',
+        'Marathi': 'in',
+        'Gujarati': 'in',
+        'Malayalam': 'in',
+        'Kannada': 'in',
+        'Oriya': 'in',
+        'Assamese': 'in',
+        'Nepali': 'np',
+        'Sinhala': 'lk',
+        'Khmer': 'kh',
+        'Laotian': 'la',
+        'Filipino': 'ph',
+        'Mongolian': 'mn',
+        'Pashto': 'af',
+        'Farsi': 'ir',
+        'Uzbek': 'uz',
+        'Kazakh': 'kz',
+        'Tajik': 'tj',
+        'Azerbaijani': 'az',
+        'Georgian': 'ge',
+        'Armenian': 'am',
+        'Albanian': 'al',
+        'Serbian': 'rs',
+        'Croatian': 'hr',
+        'Bosnian': 'ba',
+        'Slovak': 'sk',
+        'Slovenian': 'si',
+        'Estonian': 'ee',
+        'Latvian': 'lv',
+        'Lithuanian': 'lt',
+        'Icelandic': 'is',
+        'Irish': 'ie',
+        'Welsh': 'gb',
+        'Basque': 'es',
+        'Catalan': 'es',
+        'Galician': 'es',
+        'Maltese': 'mt',
+        'Corsican': 'fr',
+        'Haitian Creole': 'ht',
+        'Quechua': 'pe',
+        'Nahuatl': 'mx',
+        'Maya': 'mx',
+        'Yiddish': 'il',
+        'Esperanto': 'eo',
 
-    'Afrikaans': 'za',             
-    'Amharic': 'et',               
-    'Belarusian': 'by',            
-    'Burmese': 'mm',               
-    'Cebuano': 'ph',               
-    'Chinese (Simplified)': 'cn',
-    'Chinese (Traditional)': 'tw', 
-    'Frisian': 'nl',               
-    'Hausa': 'ng',                 
-    'Hawaiian': 'us',              
-    'Hmong': '',                   
-    'Igbo': 'ng',                  
-    'Javanese': 'id',              
-    'Kinyarwanda': 'rw',           
-    'Kurdish': 'tr',               
-    'Kyrgyz': 'kg',                
-    'Lao': 'la',
-    'Latin': '',                   
-    'Luxembourgish': 'lu',         
-    'Macedonian': 'mk',            
-    'Malagasy': 'mg',              
-    'Maori': 'nz',                 
-    'Myanmar (Burmese)': 'mm',     
-    'Nyanja (Chichewa)': 'mw',      
-    'Odia (Oriya)': 'in',          
-    'Persian (Farsi)': 'ir',       
-    'Samoan': 'ws',               
-    'Scots Gaelic': 'gb',          
-    'Sesotho': 'ls',               
-    'Shona': 'zw',                
-    'Sindhi': 'pk',               
-    'Somali': 'so',               
-    'Sundanese': 'id',             
-    'Tatar': 'ru',                
-    'Turkmen': 'tm',              
-    'Urdu': 'pk',                 
-    'Uyghur': 'cn',               
-    'Xhosa': 'za',                
-    'Yoruba': 'ng',               
-    'Zulu': 'za'                  
-  };
+        'Afrikaans': 'za',
+        'Amharic': 'et',
+        'Belarusian': 'by',
+        'Burmese': 'mm',
+        'Cebuano': 'ph',
+        'Chinese (Simplified)': 'cn',
+        'Chinese (Traditional)': 'tw',
+        'Frisian': 'nl',
+        'Hausa': 'ng',
+        'Hawaiian': 'us',
+        'Hmong': '',
+        'Igbo': 'ng',
+        'Javanese': 'id',
+        'Kinyarwanda': 'rw',
+        'Kurdish': 'tr',
+        'Kyrgyz': 'kg',
+        'Lao': 'la',
+        'Latin': '',
+        'Luxembourgish': 'lu',
+        'Macedonian': 'mk',
+        'Malagasy': 'mg',
+        'Maori': 'nz',
+        'Myanmar (Burmese)': 'mm',
+        'Nyanja (Chichewa)': 'mw',
+        'Odia (Oriya)': 'in',
+        'Persian (Farsi)': 'ir',
+        'Samoan': 'ws',
+        'Scots Gaelic': 'gb',
+        'Sesotho': 'ls',
+        'Shona': 'zw',
+        'Sindhi': 'pk',
+        'Somali': 'so',
+        'Sundanese': 'id',
+        'Tatar': 'ru',
+        'Turkmen': 'tm',
+        'Urdu': 'pk',
+        'Uyghur': 'cn',
+        'Xhosa': 'za',
+        'Yoruba': 'ng',
+        'Zulu': 'za'
+      };
 
-  return codeMap[language] || '';
-}
+      return codeMap[language] || '';
+    }
+
     function getPersonalityIcon(personality) {
       const iconMap = {
         'Professional': 'fa-user-tie',
@@ -2744,14 +2750,15 @@ function getLanguageCode(language) {
       document.getElementById('themeOptions').style.display = 'none';
       showNotification(`Theme changed to ${theme}`);
     }
-function filterPersonalities(query) {
-  const options = document.querySelectorAll('.personality-option');
-  query = query.toLowerCase();
-  options.forEach(option => {
-    const name = option.getAttribute('data-personality').toLowerCase();
-    option.style.display = name.includes(query) ? 'block' : 'none';
-  });
-}
+
+    function filterPersonalities(query) {
+      const options = document.querySelectorAll('.personality-option');
+      query = query.toLowerCase();
+      options.forEach(option => {
+        const name = option.getAttribute('data-personality').toLowerCase();
+        option.style.display = name.includes(query) ? 'block' : 'none';
+      });
+    }
 
     function toggleSetting(setting) {
       STATE.settings[setting] = !STATE.settings[setting];
@@ -2778,13 +2785,12 @@ function filterPersonalities(query) {
       STATE.theme = savedTheme;
     }
 
-function showAboutModal() {
-  // Create the modal overlay
-  const modal = document.createElement('div');
-  modal.className = 'modal-overlay';
+    function showAboutModal() {
 
-  // Set modal content
-  modal.innerHTML = `
+      const modal = document.createElement('div');
+      modal.className = 'modal-overlay';
+
+      modal.innerHTML = `
     <div class="modal-window">
       <div class="modal-header">
         <span class="modal-title">About PatheticAI</span>
@@ -2812,36 +2818,31 @@ function showAboutModal() {
     </div>
   `;
 
-  // Close modal function
-  function closeModal() {
-    modal.classList.add('fade-out');
-    setTimeout(() => modal.remove(), 300);
-  }
+      function closeModal() {
+        modal.classList.add('fade-out');
+        setTimeout(() => modal.remove(), 300);
+      }
 
-  // Event listener to close the modal on click
-  modal.addEventListener('click', (e) => {
-    if (e.target === modal || e.target.classList.contains('close-button')) {
-      closeModal();
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal || e.target.classList.contains('close-button')) {
+          closeModal();
+        }
+      });
+
+      document.body.appendChild(modal);
+
+      const discordButton = modal.querySelector('.discord-button');
+      const discordLink = modal.querySelector('.discord-button a');
+      const modalFooter = modal.querySelector('.modal-footer');
+
+      discordButton.style.marginTop = '20px';
+      discordLink.style.textDecoration = 'none';
+      discordLink.style.color = 'inherit';
+
+      modalFooter.style.display = 'flex';
+      modalFooter.style.justifyContent = 'center';
+      modalFooter.style.alignItems = 'center';
     }
-  });
-
-  // Append modal to the body
-  document.body.appendChild(modal);
-
-  // Styling the discord button and footer
-  const discordButton = modal.querySelector('.discord-button');
-  const discordLink = modal.querySelector('.discord-button a');
-  const modalFooter = modal.querySelector('.modal-footer');
-
-  discordButton.style.marginTop = '20px';
-  discordLink.style.textDecoration = 'none';
-  discordLink.style.color = 'inherit';
-
-  // Center footer contents
-  modalFooter.style.display = 'flex';
-  modalFooter.style.justifyContent = 'center';
-  modalFooter.style.alignItems = 'center';
-}
 
     function showSettingsHelp() {
       const modal = document.createElement('div');
