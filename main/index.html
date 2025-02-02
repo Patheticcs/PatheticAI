@@ -521,8 +521,8 @@
       border: 1px solid var(--border-color, #ccc);
       border-radius: var(--border-radius, 10px);
       width: var(--container-width, 80%);
-      width: 900px;
-      height: 50vh;
+      width: 800px;
+      height: auto;
       padding: var(--spacing-normal, 20px);
       color: var(--primary-color, #333);
       animation: slideUp 0.4s ease-out;
@@ -1755,11 +1755,9 @@
     };
     document.addEventListener('DOMContentLoaded', () => {
       initializeApp();
-      setupSecurityFeatures();
     });
     async function initializeApp() {
       await loadSavedState();
-      initializeUI();
       setupEventListeners();
       await showWelcomeMessage();
       if (!await checkApiKey()) {
@@ -2780,65 +2778,70 @@ function filterPersonalities(query) {
       STATE.theme = savedTheme;
     }
 
-    function showAboutModal() {
-      const modal = document.createElement('div');
-      modal.className = 'modal-overlay';
-      modal.innerHTML = `
+function showAboutModal() {
+  // Create the modal overlay
+  const modal = document.createElement('div');
+  modal.className = 'modal-overlay';
 
-																															<div class="modal-window">
-																																<div class="modal-header">
-																																	<span class="modal-title">About PatheticAI</span>
-																																	<button class="close-button" aria-label="Close modal">X</button>
-																																</div>
-																																<div class="modal-content">
-																																	<p>
-																																		<strong>PatheticAI:</strong> 1.5
-
-																																	</p>
-																																	<br>
-																																		<p>
-																																			<strong>Enhanced Features:</strong>
-																																		</p>
-																																		<ul>
-																																			<li>Improved message handling</li>
-																																			<li>Better code display and copying</li>
-																																			<li>Advanced editing capabilities</li>
-																																			<li>Added Voice Input</li>
-																																			<li>More Settings</li>
-																																		</ul>
-																																	</div>
-																																	<div class="modal-footer">
-																																		<button class="discord-button">
-																																			<a href="https://discord.gg/Hb5ccPY3XV" target="_blank" rel="noopener noreferrer" aria-label="Join us on Discord">
-																																				<i class="fab fa-discord" aria-hidden="true"></i> Join us on Discord
-
-																																			</a>
-																																		</button>
-																																	</div>
-																																</div>
+  // Set modal content
+  modal.innerHTML = `
+    <div class="modal-window">
+      <div class="modal-header">
+        <span class="modal-title">About PatheticAI</span>
+        <button class="close-button" aria-label="Close modal">X</button>
+      </div>
+      <div class="modal-content">
+        <p><strong>PatheticAI:</strong> 1.5</p>
+        <br>
+        <p><strong>Enhanced Features:</strong></p>
+        <ul>
+          <li>Improved message handling</li>
+          <li>Better code display and copying</li>
+          <li>Advanced editing capabilities</li>
+          <li>Added Voice Input</li>
+          <li>More Settings</li>
+        </ul>
+      </div>
+      <div class="modal-footer">
+        <button class="discord-button">
+          <a href="https://discord.gg/Hb5ccPY3XV" target="_blank" rel="noopener noreferrer" aria-label="Join us on Discord">
+            <i class="fab fa-discord" aria-hidden="true"></i> Join us on Discord
+          </a>
+        </button>
+      </div>
+    </div>
   `;
 
-      function closeModal() {
-        modal.classList.add('fade-out');
-        setTimeout(() => modal.remove(), 300);
-      }
-      modal.addEventListener('click', (e) => {
-        if (e.target === modal || e.target.classList.contains('close-button')) {
-          closeModal();
-        }
-      });
+  // Close modal function
+  function closeModal() {
+    modal.classList.add('fade-out');
+    setTimeout(() => modal.remove(), 300);
+  }
 
-      document.body.appendChild(modal);
-      const discordButton = modal.querySelector('.discord-button');
-      const discordLink = modal.querySelector('.discord-button a');
-      const modalFooter = modal.querySelector('.modal-footer');
-      discordButton.style.marginTop = '20px';
-      discordLink.style.textDecoration = 'none';
-      discordLink.style.color = 'inherit';
-      modalFooter.style.display = 'flex';
-      modalFooter.style.justifyContent = 'center';
-      modalFooter.style.alignItems = 'center';
+  // Event listener to close the modal on click
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal || e.target.classList.contains('close-button')) {
+      closeModal();
     }
+  });
+
+  // Append modal to the body
+  document.body.appendChild(modal);
+
+  // Styling the discord button and footer
+  const discordButton = modal.querySelector('.discord-button');
+  const discordLink = modal.querySelector('.discord-button a');
+  const modalFooter = modal.querySelector('.modal-footer');
+
+  discordButton.style.marginTop = '20px';
+  discordLink.style.textDecoration = 'none';
+  discordLink.style.color = 'inherit';
+
+  // Center footer contents
+  modalFooter.style.display = 'flex';
+  modalFooter.style.justifyContent = 'center';
+  modalFooter.style.alignItems = 'center';
+}
 
     function showSettingsHelp() {
       const modal = document.createElement('div');
