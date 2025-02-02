@@ -23,19 +23,23 @@
         height: 100%;
         font-family: Arial, sans-serif;
         color: #ffffff;
-        overflow-y: hidden;
         overflow-x: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow-y: hidden;
+
       }
 
       .hero {
-        position: relative;
-        width: 100%;
+        width: 1000%;
         min-height: 100vh;
         display: flex;
         align-items: center;
         justify-content: center;
         text-align: center;
         padding: 20px;
+        overflow-y: hidden;
       }
 
       #particles-js {
@@ -46,6 +50,8 @@
         left: 0;
         z-index: -1;
         background: #000;
+        overflow-y: hidden;
+
       }
 
       .hero-content {
@@ -55,6 +61,9 @@
         padding: 40px;
         border-radius: 10px;
         box-sizing: border-box;
+        text-align: center;
+        overflow-y: hidden;
+
       }
 
       h1 {
@@ -87,6 +96,8 @@
       .step-list {
         list-style: none;
         padding: 0;
+        overflow: hidden;
+
       }
 
       .step-list li {
@@ -94,23 +105,24 @@
         padding: 15px;
         border-radius: 8px;
         background-color: rgba(0, 0, 0, 0.5);
+        overflow: hidden;
+
       }
 
       .step-list li h3 {
         font-size: 1.2em;
         margin-bottom: 10px;
+        overflow: hidden;
+
       }
 
       .step-list li p {
         margin-bottom: 0;
+        overflow: hidden;
+
       }
 
       @media screen and (max-width: 768px) {
-      html,
-      body {
-        overflow-y: auto;
-      }
-
         h1 {
           font-size: 2em;
           margin-bottom: 40px;
