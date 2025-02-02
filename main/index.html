@@ -2480,8 +2480,8 @@
                 <i class="fa-solid fa-palette"></i> Appearance </button>
               <button class="tab-button" data-tab="personalities">
                 <i class="fa-solid fa-theater-masks"></i> Personalities </button>
-              <button class="tab-button" data-tab="extra">
-                <i class="fa-solid fa-gear"></i> Extra </button>
+              <button class="tab-button" data-tab="security">
+                <i class="fa-solid fa-triangle-exclamation"></i> Security </button>
             </div>
             <div class="tab-content active" data-tab="general">
               <div class="settings-section">
@@ -2519,6 +2519,15 @@
             </div>
             <div class="tab-content" data-tab="appearance">
               <div class="settings-section">
+                <h3>Chat Display</h3>
+                <div class="display-options">
+                  <label class="toggle-switch">
+                    <input type="checkbox" ${STATE.settings.autoScroll ? "checked" : ""} onchange="toggleSetting('autoScroll')" class="hidden-checkbox">
+                    <span class="toggle-slider"></span>
+                    <span class="toggle-label">Auto Scroll</span>
+                  </label>
+                </div>
+              </div>
                 <h3>Theme</h3>
                 <div class="theme-options-grid"> ${themeOptions} </div>
               </div>
@@ -2567,17 +2576,8 @@
                     .join("")} </div>
               </div>
             </div>
-            <div class="tab-content" data-tab="extra">
+            <div class="tab-content" data-tab="security">
               <div class="settings-section">
-                <h3>Chat Display</h3>
-                <div class="display-options">
-                  <label class="toggle-switch">
-                    <input type="checkbox" ${STATE.settings.autoScroll ? "checked" : ""} onchange="toggleSetting('autoScroll')" class="hidden-checkbox">
-                    <span class="toggle-slider"></span>
-                    <span class="toggle-label">Auto Scroll</span>
-                  </label>
-                </div>
-              </div>
               <div class="settings-section danger-zone">
                 <h3>Danger Zone</h3>
                 <div class="danger-actions">
