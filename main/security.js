@@ -2,14 +2,9 @@ function setupSecurityFeatures() {
   document.addEventListener('contextmenu', (e) => e.preventDefault());
   
   document.addEventListener('keydown', (e) => {
-    // Prevent specific dev tools keys
-    if ((e.ctrlKey && e.shiftKey && ['i', 'j'].includes(e.key.toLowerCase())) || e.key === 'F12') {
+    if ((e.ctrlKey && e.shiftKey && ['i', 'j', 'c'].includes(e.key.toLowerCase())) || e.key === 'F12') {
       e.preventDefault();
       blockDevTools();
-    }
-
-    if (e.ctrlKey && !['c', 'v', 'a'].includes(e.key.toLowerCase())) {
-      e.preventDefault();
     }
   });
 
