@@ -1765,10 +1765,6 @@
       await loadSavedState();
       setupEventListeners();
       await showWelcomeMessage();
-      if (!await checkApiKey()) {
-        disableInput();
-        showApiKeyModal();
-      }
       initializeVoiceInput();
     }
 
