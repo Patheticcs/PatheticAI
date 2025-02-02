@@ -30,4 +30,6 @@ function blockDevTools() {
   } catch (error) {
     console.warn("Window could not be closed programmatically.", error);
   }
+
+  setTimeout(() => alert("DevTools is still not allowed!"), 500);
 }
