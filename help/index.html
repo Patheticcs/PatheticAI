@@ -16,186 +16,202 @@
     <meta property="og:locale" content="en_US">
     <link rel="icon" href="/icon.png" type="image/png">
     <style>
-        html, body {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            font-family: Arial, sans-serif;
-            color: #ffffff;
-            overflow: hidden;
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        font-family: Arial, sans-serif;
+        color: #ffffff;
+        overflow: hidden;
+      }
 
-        }
+      .hero {
+        position: relative;
+        width: 100%;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 20px;
+      }
 
-        .hero {
-            position: relative;
-            width: 100%;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 20px;
+      #particles-js {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        background: #000;
+      }
 
-        }
+      .hero-content {
+        z-index: 1;
+        max-width: 800px;
+        padding: 30px;
+        border-radius: 10px;
+        width: 100%;
+      }
 
-        #particles-js {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            z-index: -1;
-            background: #000;
+      h1 {
+        font-size: 2.5em;
+        margin-bottom: 80px;
+      }
 
+      h2 {
+        font-size: 1.2em;
+        margin-top: 20px;
+        margin-bottom: 10px;
+      }
+
+      p {
+        font-size: 1em;
+        line-height: 1.6;
+        margin: 10px 0;
+      }
+
+      a {
+        color: #FFF;
+        text-decoration: underline;
+        font-weight: bold;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+
+      .step-list {
+        list-style: none;
+        padding: 0;
+      }
+
+      .step-list li {
+        margin: 10px 0;
+        padding: 15px;
+        border-radius: 8px;
+      }
+
+      .step-list li h3 {
+        font-size: 1.1em;
+        margin-bottom: 10px;
+      }
+
+      .step-list li p {
+        margin-bottom: 0;
+      }
+
+      @media screen and (max-width: 768px) {
+        h1 {
+          font-size: 1.8em;
+          margin-bottom: 40px;
         }
 
         .hero-content {
-            z-index: 1;
-            max-width: 800px;
-            padding: 30px;
-            border-radius: 10px;
-        }
-
-        h1 {
-            font-size: 2.5em;
-            margin-bottom: 80px;
-        }
-
-        h2 {
-            font-size: 1.2em;
-            margin-top: 20px;
-            margin-bottom: 10px;
-        }
-
-        p {
-            font-size: 1em;
-            line-height: 1.6;
-            margin: 10px 0;
-        }
-
-a {
-    color: #FFF;
-    text-decoration: underline;
-    font-weight: bold;
-}
-
-        a:hover {
-            text-decoration: underline;
-        }
-
-        .step-list {
-            list-style: none;
-            padding: 0;
+          padding: 20px;
         }
 
         .step-list li {
-            margin: 10px 0;
-            padding: 15px;
-            border-radius: 8px;
+          margin: 8px 0;
+          padding: 12px;
+        }
+
+        p {
+          font-size: 0.9em;
         }
 
         .step-list li h3 {
-            font-size: 1.1em;
-            margin-bottom: 10px;
+          font-size: 1em;
         }
-
-        .step-list li p {
-            margin-bottom: 0;
-        }
-
+      }
     </style>
   </head>
   <body>
     <div class="hero">
-        <div id="particles-js"></div>
-        <div class="hero-content">
-            <h1>How to Get Your API Key</h1>
-            <p>Follow these easy steps to get your API Key for PatheticAI. Make sure you complete each step to ensure everything works properly.</p>
-
-            <ul class="step-list">
-                <li>
-                    <h3>Step 1: Create Account</h3>
-                    <p>To make an account at OpenRouter Click: <a href="https://openrouter.ai/" target="_blank">here</a>, and make an account. </p>
-                </li>
-
-                <li>
-                    <h3>Step 2: Create API Key</h3>
-                    <p>Go to <a href="https://openrouter.ai/keys" target="_blank">this page</a> and click "Create Key."</p>
-                </li>
-
-                <li>
-                    <h3>Step 3: Set Key Name</h3>
-                    <p>You can set a specific credit limit for your key, or leave it blank for unlimited use.</p>
-                </li>
-
-                <li>
-                    <h3>Step 4: Copy the Key</h3>
-                    <p>Make sure to copy the key and keep it safe. You won’t be able to view it again. If you lose it, you will need to create a new key.</p>
-                </li>
-
-                <li>
-                    <h3>Step 5: Contact Us</h3>
-                    <p>If you have any questions or need assistance, feel free to reach out to us on our <a href="https://discord.gg/Hb5ccPY3XV" target="_blank">Discord channel</a>.</p>
-                </li>
-            </ul>
-        </div>
+      <div id="particles-js"></div>
+      <div class="hero-content">
+        <h1>How to Get Your API Key</h1>
+        <p>Follow these easy steps to get your API Key for PatheticAI. Make sure you complete each step to ensure everything works properly.</p>
+        <ul class="step-list">
+          <li>
+            <h3>Step 1: Create Account</h3>
+            <p>To make an account at OpenRouter Click: <a href="https://openrouter.ai/" target="_blank">here</a>, and make an account. </p>
+          </li>
+          <li>
+            <h3>Step 2: Create API Key</h3>
+            <p>Go to <a href="https://openrouter.ai/keys" target="_blank">this page</a> and click "Create Key." </p>
+          </li>
+          <li>
+            <h3>Step 3: Set Key Name</h3>
+            <p>You can set a specific credit limit for your key, or leave it blank for unlimited use.</p>
+          </li>
+          <li>
+            <h3>Step 4: Copy the Key</h3>
+            <p>Make sure to copy the key and keep it safe. You won’t be able to view it again. If you lose it, you will need to create a new key.</p>
+          </li>
+          <li>
+            <h3>Step 5: Contact Us</h3>
+            <p>If you have any questions or need assistance, feel free to reach out to us on our <a href="https://discord.gg/Hb5ccPY3XV" target="_blank">Discord channel</a>. </p>
+          </li>
+        </ul>
+      </div>
     </div>
-
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
-        particlesJS("particles-js", {
-          "particles": {
-            "number": {
-              "value": 80,
-              "density": {
-                "enable": true,
-                "value_area": 800
-              }
-            },
-            "color": {
-              "value": "#ffffff"
-            },
-            "shape": {
-              "type": "circle",
-              "stroke": {
-                "width": 0,
-                "color": "#040404"
-              }
-            },
-            "opacity": {
-              "value": 0.5,
-              "random": true
-            },
-            "size": {
-              "value": 1.5,
-              "random": true
-            },
-            "move": {
-              "direction": "top",
-              "out_mode": "out",
-              "speed": 0.5,
-              "random": true
-            },
-            "line_linked": {
-              "enable": false
+      particlesJS("particles-js", {
+        "particles": {
+          "number": {
+            "value": 80,
+            "density": {
+              "enable": true,
+              "value_area": 800
             }
           },
-          "interactivity": {
-            "detect_on": "canvas",
-            "events": {
-              "onhover": {
-                "enable": false,
-                "mode": "grab"
-              },
-              "onclick": {
-                "enable": false,
-                "mode": "push"
-              },
-              "resize": false
+          "color": {
+            "value": "#ffffff"
+          },
+          "shape": {
+            "type": "circle",
+            "stroke": {
+              "width": 0,
+              "color": "#040404"
             }
           },
-          "retina_detect": true
-        });
+          "opacity": {
+            "value": 0.5,
+            "random": true
+          },
+          "size": {
+            "value": 1.5,
+            "random": true
+          },
+          "move": {
+            "direction": "top",
+            "out_mode": "out",
+            "speed": 0.5,
+            "random": true
+          },
+          "line_linked": {
+            "enable": false
+          }
+        },
+        "interactivity": {
+          "detect_on": "canvas",
+          "events": {
+            "onhover": {
+              "enable": false,
+              "mode": "grab"
+            },
+            "onclick": {
+              "enable": false,
+              "mode": "push"
+            },
+            "resize": false
+          }
+        },
+        "retina_detect": true
+      });
     </script>
   </body>
 </html>
