@@ -22,22 +22,16 @@
         padding: 0;
         height: 100%;
         font-family: Arial, sans-serif;
-        overflow: visible; 
-      }
-
-      .hero {
-        position: relative;
-        width: 100%;
-        min-height: 100vh;
+        overflow-x: hidden;
+        overflow-y: auto;
         display: flex;
-        align-items: center;
         justify-content: center;
-        color: #ffffff;
-        text-align: center;
+        align-items: center;
+        flex-direction: column;
       }
 
       #particles-js {
-        position: absolute;
+        position: fixed;
         width: 100%;
         height: 100%;
         top: 0;
@@ -46,61 +40,66 @@
         background: #000;
       }
 
-      .hero-content {
+      .hero {
+        width: 100%;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 20px;
         z-index: 1;
+      }
+
+      .hero-content {
         padding: 20px;
         max-width: 800px;
       }
 
       h1 {
-        font-size: 3em;
-        margin-bottom: 50px;
+        font-size: 2.5em;
+        margin-bottom: 30px;
+        color: white;
       }
 
       h2 {
-        font-size: 1em;
-        margin-top: 40px;
+        font-size: 1.3em;
+        margin-top: 30px;
         margin-bottom: 10px;
+        color: white;
       }
 
       p {
-        font-size: 14px;
+        font-size: 1em;
         line-height: 1.5;
         max-width: 800px;
         margin: 10px auto;
-      }
-
-      .tos-list {
-        text-align: left;
-        margin-top: 20px;
-      }
-
-      .tos-list li {
-        margin: 10px 0;
+        color: white;
       }
 
       @media screen and (max-width: 768px) {
 
+        html,
+        body {
+          overflow-x: hidden;
+        }
+
+        .hero {
+          padding: 15px;
+        }
+
         h1 {
           font-size: 1.8em;
-          margin-bottom: 40px;
+          margin-bottom: 20px;
         }
 
-        .hero-content {
-          padding: 20px;
-        }
-
-        .step-list li {
-          margin: 8px 0;
-          padding: 12px;
+        h2 {
+          font-size: 1.1em;
         }
 
         p {
           font-size: 0.9em;
-        }
-
-        .step-list li h3 {
-          font-size: 1em;
         }
       }
     </style>
