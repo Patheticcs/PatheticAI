@@ -35,7 +35,6 @@
         <meta name="mobile-web-app-capable" content="yes" />
         <!-- Security -->
         <script src="/main/security.js"></script>
-        <script src="app.js"></script>
         <style>
             * {
                 margin: 0;
@@ -520,7 +519,7 @@
                 border: 1px solid var(--border-color, #ccc);
                 border-radius: var(--border-radius, 10px);
                 width: var(--container-width, 80%);
-                width: 800px;
+                width: 1000px;
                 height: auto;
                 padding: var(--spacing-normal, 20px);
                 color: var(--primary-color, #333);
@@ -1753,9 +1752,6 @@
                 role: "system",
                 content: `You are PatheticAI Enhanced Key characteristics: - Friendly and empathetic AI assistant - Provides clear, concise responses - Adapts communication style to user needs - Offers helpful suggestions and insights - Maintains context awareness`,
             };
-            document.addEventListener("DOMContentLoaded", () => {
-                initializeApp();
-            });
             async function initializeApp() {
                 await loadSavedState();
                 setupEventListeners();
@@ -1891,6 +1887,7 @@
                     if (savedCustomPersonalities) {
                         STATE.customPersonalities = JSON.parse(savedCustomPersonalities);
                     }
+
                     const savedPersonalityName = localStorage.getItem(CONFIG.STORAGE_KEYS.PERSONALITY);
                     if (savedPersonalityName) {
                         const allPersonalities = [...PERSONALITIES, ...STATE.customPersonalities];
@@ -1899,20 +1896,36 @@
                             STATE.selectedPersonality = personality;
                         }
                     }
+
                     const savedMessages = localStorage.getItem(CONFIG.STORAGE_KEYS.MESSAGES);
                     if (savedMessages) {
-                        STATE.messageHistory = JSON.parse(savedMessages);
-                        STATE.messageHistory = STATE.messageHistory.filter((msg) => msg && msg.role && msg.content && msg.timestamp);
+                        const parsedMessages = JSON.parse(savedMessages);
+
+                        STATE.messageHistory = parsedMessages.filter((msg) => msg && msg.role && msg.content && msg.timestamp && (msg.role === "user" || msg.role === "assistant"));
+
+                        STATE.messageHistory = STATE.messageHistory.map((msg) => ({
+                            ...msg,
+                            id: msg.id || Date.now().toString(),
+                        }));
+
                         const chatMessages = document.querySelector(".chat-messages");
                         chatMessages.innerHTML = "";
+
                         STATE.messageHistory.forEach((msg) => {
                             const isUser = msg.role === "user";
                             const { element } = createMessageElement(msg.content, isUser, new Date(msg.timestamp));
                             chatMessages.appendChild(element);
                         });
+
+                        loadEditState();
+
+                        if (STATE.settings.autoScroll) {
+                            chatMessages.scrollTop = chatMessages.scrollHeight;
+                        }
                     } else {
                         showWelcomeMessage();
                     }
+
                     const savedSettings = localStorage.getItem(CONFIG.STORAGE_KEYS.SETTINGS);
                     if (savedSettings) {
                         STATE.settings = {
@@ -1920,11 +1933,13 @@
                             ...JSON.parse(savedSettings),
                         };
                     }
+
                     const savedTheme = localStorage.getItem(CONFIG.STORAGE_KEYS.THEME);
                     if (savedTheme) {
                         STATE.theme = savedTheme;
                         document.documentElement.setAttribute("data-theme", savedTheme);
                     }
+
                     const savedLanguage = localStorage.getItem(CONFIG.STORAGE_KEYS.LANGUAGE);
                     if (savedLanguage) {
                         STATE.currentLanguage = savedLanguage;
@@ -1936,19 +1951,41 @@
                     showWelcomeMessage();
                 }
             }
+            function clearChatHistory() {
+                if (confirm("Are you sure you want to clear all chat history? This cannot be undone.")) {
+                    STATE.messageHistory = [];
+                    saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, []);
+                    const chatMessages = document.querySelector(".chat-messages");
+                    chatMessages.innerHTML = "";
+                    showWelcomeMessage();
+                }
+            }
 
             function saveToLocalStorage(key, value) {
                 try {
-                    if (key === CONFIG.STORAGE_KEYS.MESSAGES) {
-                        return false;
-                    }
                     const serializedValue = typeof value === "string" ? value : JSON.stringify(value);
                     localStorage.setItem(key, serializedValue);
                     return true;
                 } catch (error) {
                     console.error("Local storage error:", error);
+
+                    if (key === CONFIG.STORAGE_KEYS.MESSAGES) {
+                        try {
+                            const messages = JSON.parse(value);
+                            const trimmedMessages = messages.slice(-50);
+                            localStorage.setItem(key, JSON.stringify(trimmedMessages));
+                            return true;
+                        } catch (e) {
+                            console.error("Failed to save trimmed messages:", e);
+                            return false;
+                        }
+                    }
                     return false;
                 }
+            }
+            function updateMessageHistory(newMessage) {
+                STATE.messageHistory.push(newMessage);
+                saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, STATE.messageHistory);
             }
 
             function formatTimestamp(date) {
@@ -2093,33 +2130,47 @@
             }
             async function finishEditing(messageId, newText) {
                 if (!messageId || !newText || STATE.isWaitingForResponse || !STATE.editingState) return;
+
                 const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
                 if (!messageElement) return;
+
                 if (newText === STATE.editingState.originalText) {
                     cancelEditing(messageId);
                     return;
                 }
+
                 const textarea = messageElement.querySelector(".edit-input");
                 const contentDiv = document.createElement("div");
                 contentDiv.className = "message-content";
                 contentDiv.textContent = newText;
                 textarea.replaceWith(contentDiv);
                 messageElement.classList.remove("edit-mode");
+
                 const { messageIndex } = STATE.editingState;
+
                 let nextElement = messageElement.nextElementSibling;
                 while (nextElement) {
                     const temp = nextElement.nextElementSibling;
                     nextElement.remove();
                     nextElement = temp;
                 }
+
                 STATE.messageHistory[messageIndex].content = newText;
+
                 STATE.messageHistory = STATE.messageHistory.slice(0, messageIndex + 1);
+
+                saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, STATE.messageHistory);
+
                 try {
+                    STATE.isWaitingForResponse = true;
+
                     const typingIndicator = createTypingIndicator();
                     document.querySelector(".chat-messages").appendChild(typingIndicator);
-                    STATE.isWaitingForResponse = true;
+
                     const response = await sendMessageWithRetry(newText);
+
                     typingIndicator.remove();
+
                     if (response.text) {
                         const botMessageObj = {
                             role: "assistant",
@@ -2128,9 +2179,13 @@
                             id: Date.now().toString(),
                             replyTo: messageId,
                         };
+
                         STATE.messageHistory.push(botMessageObj);
+                        saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, STATE.messageHistory);
+
                         const { element: botElement } = createMessageElement(response.text, false);
                         document.querySelector(".chat-messages").appendChild(botElement);
+
                         if (STATE.settings.autoScroll) {
                             botElement.scrollIntoView({
                                 behavior: "smooth",
@@ -2146,7 +2201,21 @@
                     STATE.isWaitingForResponse = false;
                     STATE.editingMessageId = null;
                     STATE.editingState = null;
-                    saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, STATE.messageHistory);
+                }
+            }
+
+            function loadEditState() {
+                const editingMessageId = STATE.editingMessageId;
+                if (editingMessageId) {
+                    const messageIndex = STATE.messageHistory.findIndex((msg) => msg.id === editingMessageId);
+                    if (messageIndex !== -1) {
+                        STATE.editingState = {
+                            messageId: editingMessageId,
+                            originalText: STATE.messageHistory[messageIndex].content,
+                            messageIndex,
+                            subsequentMessages: STATE.messageHistory.slice(messageIndex + 1),
+                        };
+                    }
                 }
             }
             document.getElementById("messageInput").addEventListener("keydown", function (event) {
@@ -2158,23 +2227,30 @@
             async function sendMessage() {
                 const textarea = document.getElementById("messageInput");
                 const message = textarea.value.trim();
+
                 if (!message || STATE.isWaitingForResponse || STATE.editingMessageId) return;
+
                 STATE.isWaitingForResponse = true;
                 disableInput();
+
                 try {
                     const { element: messageElement, id: messageId } = createMessageElement(message, true, new Date());
                     document.querySelector(".chat-messages").appendChild(messageElement);
+
                     const messageObj = {
                         role: "user",
                         content: message,
                         timestamp: Date.now(),
                         id: messageId,
                     };
-                    STATE.messageHistory.push(messageObj);
-                    saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, STATE.messageHistory);
+
+                    updateMessageHistory(messageObj);
+
                     textarea.value = "";
                     textarea.style.height = "auto";
+
                     const response = await sendMessageWithRetry(message);
+
                     if (response.text) {
                         const botMessageObj = {
                             role: "assistant",
@@ -2183,15 +2259,16 @@
                             id: Date.now().toString(),
                             replyTo: messageId,
                         };
-                        STATE.messageHistory.push(botMessageObj);
-                        saveToLocalStorage(CONFIG.STORAGE_KEYS.MESSAGES, STATE.messageHistory);
+
+                        updateMessageHistory(botMessageObj);
+
                         const { element: botElement } = createMessageElement(response.text, false);
                         document.querySelector(".chat-messages").appendChild(botElement);
+
                         if (STATE.settings.autoScroll) {
-                            botElement.scrollIntoView({
-                                behavior: "smooth",
-                            });
+                            botElement.scrollIntoView({ behavior: "smooth" });
                         }
+
                         if (STATE.settings.soundEffects) {
                             playMessageSound();
                         }
@@ -3371,13 +3448,13 @@
                     }
                 },
             };
-
             function discordButton() {
                 window.open("https://discord.gg/Hb5ccPY3XV", "_blank");
             }
             document.addEventListener("DOMContentLoaded", () => {
                 AudioManager.init();
                 loadCustomPersonalities();
+                initializeApp();
             });
         </script>
     </body>
