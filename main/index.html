@@ -1,41 +1,36 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="Light">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-        <title>PatheticAI</title>
-        <!-- Preload critical assets -->
-        <link rel="preload" href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@700,400&display=swap" as="style" />
-        <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" />
-        <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/github-dark.min.css" as="style" />
-        <link rel="preload" href="/images/icon.png" as="image" />
-        <link rel="preload" href="/images/light%20background.png" as="image" />
-        <link rel="preload" href="/images/dark%20background.png" as="image" />
-        <!-- Favicons and Meta Tags -->
-        <link rel="manifest" href="/manifest.json" />
-        <link rel="icon" href="/images/icon.png" type="image/png" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/github-dark.min.css" />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.0.2/marked.min.js"></script>
-        <!-- Meta description and social media sharing -->
-        <meta name="description" content="PatheticAI - Advanced AI chatbot with enhanced features for seamless conversations and task automation" />
-        <meta name="keywords" content="AI, chatbot, machine learning, conversation, automation" />
-        <meta name="robots" content="index, follow" />
-        <meta property="og:title" content="PatheticAI Enhanced" />
-        <meta property="og:description" content="Advanced AI chatbot with enhanced features for seamless conversations and task automation" />
-        <meta property="og:image" content="/images/icon.png" />
-        <meta property="og:type" content="website" />
-        <meta property="og:site_name" content="PatheticAI" />
-        <meta name="theme-color" content="#ffffff" />
-        <!-- Apple specific meta tags -->
-        <link rel="apple-touch-icon" href="/images/icon.png" />
-        <meta name="apple-mobile-web-app-title" content="PatheticAI" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        <meta name="mobile-web-app-capable" content="yes" />
-        <!-- Security -->
-        <script src="/main/security.js"></script>
-        <style>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>PatheticAI</title>
+  <link rel="preload" href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@700,400&amp;display=swap" as="style">
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style">
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/github-dark.min.css" as="style">
+  <link rel="preload" href="/images/icon.png" as="image">
+  <link rel="preload" href="/images/light%20background.png" as="image">
+  <link rel="preload" href="/images/dark%20background.png" as="image">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" href="/images/icon.png" type="image/png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/github-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.0.2/marked.min.js"></script>
+  <meta name="description" content="PatheticAI - Advanced AI chatbot with enhanced features for seamless conversations and task automation">
+  <meta name="keywords" content="AI, chatbot, machine learning, conversation, automation">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="PatheticAI Enhanced">
+  <meta property="og:description" content="Advanced AI chatbot with enhanced features for seamless conversations and task automation">
+  <meta property="og:image" content="/images/icon.png">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="PatheticAI">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="apple-touch-icon" href="/images/icon.png">
+  <meta name="apple-mobile-web-app-title" content="PatheticAI">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="mobile-web-app-capable" content="yes">
+  <script src="/main/security.js"></script>
+  <style>
             * {
                 margin: 0;
                 padding: 0;
@@ -58,7 +53,7 @@
                 --transition: all 0.3s ease;
             }
 
-:root[data-theme="Light"] {
+  :root[data-theme="Light"] {
 
     --color: rgba(0, 0, 0, 1);
     --secondary-color: #000000;
@@ -95,9 +90,9 @@
     --hover-color: #e5e7eb;
     --toggle-bg: #6b7280;
     --un-toggle-bg: white;
-}
+  }
 
-:root[data-theme="Dark"] {
+  :root[data-theme="Dark"] {
 
     --color: rgba(255, 255, 255, 1);
     --secondary-color: #ffffff;
@@ -134,7 +129,7 @@
     --hover-color: #18191c;
     --toggle-bg: #d1d5db;
     --un-toggle-bg: black;
-}
+  }
 
             body {
                 background-color: var(--background-color);
@@ -3235,7 +3230,7 @@
             styleSheet.textContent = typingIndicatorStyles;
             document.head.appendChild(styleSheet);
 
-function showWelcomeMessages() {
+  function showWelcomeMessages() {
     const existingMessages = document.querySelector(".chat-messages");
 
     if (!existingMessages) return;
@@ -3247,7 +3242,7 @@ function showWelcomeMessages() {
     const welcomeMessage2 = `Editing Previous Chat's that Got Saved, are currently not Working.`;
     const { element: message2 } = createMessageElement(welcomeMessage2, false);
     existingMessages.appendChild(message2);
-}
+  }
 
             function resetChat() {
                 STATE.messageHistory = [];
@@ -3469,6 +3464,6 @@ function showWelcomeMessages() {
                 loadCustomPersonalities();
                 initializeApp();
             });
-        </script>
-    </body>
+  </script>
+</body>
 </html>
