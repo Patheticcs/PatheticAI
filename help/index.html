@@ -23,7 +23,8 @@
         height: 100%;
         font-family: Arial, sans-serif;
         color: #ffffff;
-        overflow: hidden;
+        overflow-y: hidden;
+        overflow-x: hidden;
       }
 
       .hero {
@@ -49,15 +50,16 @@
 
       .hero-content {
         z-index: 1;
-        max-width: 800px;
-        padding: 30px;
-        border-radius: 10px;
+        max-width: 900px;
         width: 100%;
+        padding: 40px;
+        border-radius: 10px;
+        box-sizing: border-box;
       }
 
       h1 {
         font-size: 2.5em;
-        margin-bottom: 80px;
+        margin-bottom: 60px;
       }
 
       h2 {
@@ -91,10 +93,11 @@
         margin: 10px 0;
         padding: 15px;
         border-radius: 8px;
+        background-color: rgba(0, 0, 0, 0.5);
       }
 
       .step-list li h3 {
-        font-size: 1.1em;
+        font-size: 1.2em;
         margin-bottom: 10px;
       }
 
@@ -103,8 +106,13 @@
       }
 
       @media screen and (max-width: 768px) {
+      html,
+      body {
+        overflow-y: auto;
+      }
+
         h1 {
-          font-size: 1.8em;
+          font-size: 2em;
           margin-bottom: 40px;
         }
 
@@ -124,6 +132,34 @@
         .step-list li h3 {
           font-size: 1em;
         }
+
+        /* Make sure the container is responsive on mobile */
+        .hero {
+          padding: 10px;
+        }
+      }
+
+      @media screen and (max-width: 480px) {
+        h1 {
+          font-size: 1.6em;
+          margin-bottom: 30px;
+        }
+
+        .hero-content {
+          padding: 15px;
+        }
+
+        .step-list li {
+          padding: 10px;
+        }
+
+        p {
+          font-size: 0.8em;
+        }
+
+        .step-list li h3 {
+          font-size: 0.9em;
+        }
       }
     </style>
   </head>
@@ -136,11 +172,11 @@
         <ul class="step-list">
           <li>
             <h3>Step 1: Create Account</h3>
-            <p>To make an account at OpenRouter Click: <a href="https://openrouter.ai/" target="_blank">here</a>, and make an account. </p>
+            <p>To make an account at OpenRouter Click: <a href="https://openrouter.ai/" target="_blank">here</a>, and make an account.</p>
           </li>
           <li>
             <h3>Step 2: Create API Key</h3>
-            <p>Go to <a href="https://openrouter.ai/keys" target="_blank">this page</a> and click "Create Key." </p>
+            <p>Go to <a href="https://openrouter.ai/keys" target="_blank">this page</a> and click "Create Key."</p>
           </li>
           <li>
             <h3>Step 3: Set Key Name</h3>
@@ -152,7 +188,7 @@
           </li>
           <li>
             <h3>Step 5: Contact Us</h3>
-            <p>If you have any questions or need assistance, feel free to reach out to us on our <a href="https://discord.gg/Hb5ccPY3XV" target="_blank">Discord channel</a>. </p>
+            <p>If you have any questions or need assistance, feel free to reach out to us on our <a href="https://discord.gg/Hb5ccPY3XV" target="_blank">Discord channel</a>.</p>
           </li>
         </ul>
       </div>
