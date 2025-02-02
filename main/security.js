@@ -20,17 +20,26 @@
         }
     });
 
-    // DevTools detection using a more reliable method
-    const devToolsDetect = () => {
-        const threshold = 100; // Adjust the threshold to a reasonable value
-        const widthDiff = window.outerWidth - window.innerWidth;
-        const heightDiff = window.outerHeight - window.innerHeight;
+    // More reliable DevTools detection
+    let lastWidth = window.outerWidth;
+    let lastHeight = window.outerHeight;
 
-        // Check for significant difference in window size, which indicates DevTools
-        if (widthDiff > threshold || heightDiff > threshold) {
+    const devToolsDetect = () => {
+        const currentWidth = window.outerWidth;
+        const currentHeight = window.outerHeight;
+
+        // Check for sudden large changes in window size (usually caused by opening DevTools)
+        if (
+            (currentWidth - lastWidth > 100 || currentHeight - lastHeight > 100) || 
+            (currentWidth - lastWidth < -100 || currentHeight - lastHeight < -100)
+        ) {
             alert("DevTools isn't allowed!");
             window.location.href = 'about:blank'; // Redirect to a blank page
         }
+
+        // Update the last size values for future comparisons
+        lastWidth = currentWidth;
+        lastHeight = currentHeight;
     };
 
     // Check every 500 milliseconds (faster detection)
