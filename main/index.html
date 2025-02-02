@@ -61,7 +61,7 @@
 
     :root[data-theme="Light"] {
       --color: rgba(0, 0, 0, 1);
-      --background-image: url("https://pathetic-ai.pages.dev//images/light%20background.png");
+      --background-image: url("/images/light%20background.png");
       --background-color: #ffffff;
       --secondary-color: #000000;
       --border-color: rgba(0, 0, 0, 0.05);
@@ -99,7 +99,7 @@
 
     :root[data-theme="Dark"] {
       --color: rgba(255, 255, 255, 1);
-      --background-image: url("https://pathetic-ai.pages.dev//images/dark%20background.png");
+      --background-image: url("/images/dark%20background.png");
       --background-color: #000000;
       --secondary-color: #ffffff;
       --border-color: rgba(255, 255, 255, 0.05);
@@ -567,6 +567,9 @@
       color: var(--primary-color);
     }
 
+.hidden-checkbox {
+  display: none;
+}
     .settings-button {
       background: var(--button-background);
       border: 1px solid var(--border-color);
@@ -794,6 +797,8 @@
       align-items: center;
       gap: 0.75rem;
       cursor: pointer;
+      margin-top: 30px;
+      margin-bottom: 30px;
     }
 
     .toggle-slider {
@@ -1449,8 +1454,8 @@
   <body>
     <div class="taskbar">
       <div class="taskbar-left">
-        <span class="brand" onclick="showAboutModal()">PatheticAI</span>
-        <span class="preview-tag" onclick="showAboutModal()">Version 1.5</span>
+        <span class="brand">PatheticAI</span>
+        <span class="preview-tag">Version 1.5</span>
       </div>
       <div class="taskbar-right">
         <button onclick="showSettingsModal()" title="Settings">
@@ -2339,164 +2344,146 @@
       }
     }
 
-    function showSettingsModal() {
-      const modal = document.createElement('div');
-      modal.className = 'modal-overlay';
-      const allPersonalities = [...PERSONALITIES, ...STATE.customPersonalities];
-      const languageOptions = ['English', 'Spanish', 'French', 'German', 'Italian', 'Japanese', 'Chinese', 'Russian', 'Portuguese', 'Korean', 'Hindi', 'Arabic', 'Turkish', 'Dutch', 'Swedish', 'Greek', 'Polish', 'Vietnamese', 'Thai', 'Indonesian', 'Hebrew', 'Finnish', 'Czech', 'Hungarian', 'Romanian', 'Norwegian', 'Danish', 'Bulgarian', 'Ukrainian', 'Malay', 'Swahili', 'Tamil', 'Bengali', 'Punjabi', 'Telugu', 'Marathi', 'Gujarati', 'Malayalam', 'Kannada', 'Oriya', 'Assamese', 'Nepali', 'Sinhala', 'Khmer', 'Laotian', 'Filipino', 'Mongolian', 'Pashto', 'Farsi', 'Uzbek', 'Kazakh', 'Tajik', 'Azerbaijani', 'Georgian', 'Armenian', 'Albanian', 'Serbian', 'Croatian', 'Bosnian', 'Slovak', 'Slovenian', 'Estonian', 'Latvian', 'Lithuanian', 'Icelandic', 'Irish', 'Welsh', 'Basque', 'Catalan', 'Galician', 'Maltese', 'Corsican', 'Haitian Creole', 'Quechua', 'Nahuatl', 'Maya', 'Yiddish', 'Esperanto'].map(lang => `
+function showSettingsModal() {
+  const modal = document.createElement('div');
+  modal.className = 'modal-overlay';
 
-																												<div class="option language-option" data-language="${lang}" onclick="changeLanguage('${lang}')">
-																													<span class="language-flag" data-country="${getCountryCode(lang)}"></span>
-																													<span class="language-name">${lang}</span>
-																													<span class="language-code">${getLanguageCode(lang)}</span>
-																												</div>
+  const allPersonalities = [...PERSONALITIES, ...STATE.customPersonalities];
+  const languageOptions = [
+    'Afrikaans', 'Albanian', 'Amharic', 'Arabic', 'Armenian', 'Azerbaijani',
+    'Basque', 'Belarusian', 'Bengali', 'Bosnian', 'Bulgarian', 'Burmese',
+    'Catalan', 'Cebuano', 'Chinese (Simplified)', 'Chinese (Traditional)', 'Corsican',
+    'Croatian', 'Czech', 'Danish', 'Dutch', 'English', 'Esperanto', 'Estonian',
+    'Filipino', 'Finnish', 'French', 'Frisian', 'Galician', 'Georgian', 'German',
+    'Greek', 'Gujarati', 'Haitian Creole', 'Hausa', 'Hawaiian', 'Hebrew', 'Hindi',
+    'Hmong', 'Hungarian', 'Icelandic', 'Igbo', 'Indonesian', 'Irish', 'Italian',
+    'Japanese', 'Javanese', 'Kannada', 'Kazakh', 'Khmer', 'Kinyarwanda', 'Korean',
+    'Kurdish', 'Kyrgyz', 'Lao', 'Latin', 'Latvian', 'Lithuanian', 'Luxembourgish',
+    'Macedonian', 'Malagasy', 'Malay', 'Malayalam', 'Maltese', 'Maori', 'Marathi',
+    'Mongolian', 'Myanmar (Burmese)', 'Nepali', 'Norwegian', 'Nyanja (Chichewa)',
+    'Odia (Oriya)', 'Pashto', 'Persian (Farsi)', 'Polish', 'Portuguese', 'Punjabi',
+    'Romanian', 'Russian', 'Samoan', 'Scots Gaelic', 'Serbian', 'Sesotho', 'Shona',
+    'Sindhi', 'Sinhala (Sinhalese)', 'Slovak', 'Slovenian', 'Somali', 'Spanish',
+    'Sundanese', 'Swahili', 'Swedish', 'Tajik', 'Tamil', 'Tatar', 'Telugu', 'Thai',
+    'Turkish', 'Turkmen', 'Ukrainian', 'Urdu', 'Uyghur', 'Uzbek', 'Vietnamese',
+    'Welsh', 'Xhosa', 'Yiddish', 'Yoruba', 'Zulu']
+    .map(lang => `
+      <div class="option language-option" data-language="${lang}" onclick="changeLanguage('${lang}')">
+        <span class="language-flag" data-country="${getCountryCode(lang)}"></span>
+        <span class="language-name">${lang}</span>
+        <span class="language-code">${getLanguageCode(lang)}</span>
+      </div>
+    `).join('');
+
+  const personalityOptions = allPersonalities.map(p => `
+    <div class="option personality-option ${p.isCustom ? 'custom-personality' : ''}" data-personality="${p.name}" onclick="changePersonality('${p.name}')">
+      <div class="personality-header">
+        <i class="fa-solid ${getPersonalityIcon(p.name)}"></i>
+        <span class="personality-name">${p.name}</span>
+        ${p.isCustom ? `</div>` : ''}
+      </div>
+      <p class="personality-description">${p.description || 'No description available'}</p>
+    </div>
   `).join('');
-      const personalityOptions = allPersonalities.map(p => `
 
-																												<div class="option personality-option ${p.isCustom ? 'custom-personality' : ''}" data-personality="${p.name}" onclick="changePersonality('${p.name}')">
-																													<div class="personality-header">
-																														<i class="fa-solid ${getPersonalityIcon(p.name)}"></i>
-																														<span class="personality-name">${p.name}</span>
-        ${p.isCustom ? `
-
-																													</div>` : ''}
-
-																												</div>
-																												<p class="personality-description">${p.description || 'No description available'}</p>
-																											</div>
-  `).join('');
-      const themeOptions = `
-
-																											<div class="option theme-option" data-theme="light" onclick="changeTheme('Light')">
-																												<div class="theme-preview light-preview">
-																													<div class="preview-header"></div>
-																													<div class="preview-content"></div>
-																												</div>
-																												<span>Light</span>
-																											</div>
-																											<div class="option theme-option" data-theme="dark" onclick="changeTheme('Dark')">
-																												<div class="theme-preview dark-preview">
-																													<div class="preview-header"></div>
-																													<div class="preview-content"></div>
-																												</div>
-																												<span>Dark</span>
-																											</div>
+  const themeOptions = `
+    <div class="option theme-option" data-theme="light" onclick="changeTheme('Light')">
+      <div class="theme-preview light-preview">
+        <div class="preview-header"></div>
+        <div class="preview-content"></div>
+      </div>
+      <span>Light</span>
+    </div>
+    <div class="option theme-option" data-theme="dark" onclick="changeTheme('Dark')">
+      <div class="theme-preview dark-preview">
+        <div class="preview-header"></div>
+        <div class="preview-content"></div>
+      </div>
+      <span>Dark</span>
+    </div>
   `;
-      modal.innerHTML = `
 
-																											<div class="modal-window">
-																												<div class="modal-header">
-																													<span class="modal-title">
-																														<i class="fa-solid fa-gear fa-spin-hover"></i>
-          Settings
+  modal.innerHTML = `
+    <div class="modal-window">
+      <div class="modal-header">
+        <span class="modal-title">
+          <i class="fa-solid fa-gear fa-spin-hover"></i> Settings
+        </span>
+        <div class="modal-actions">
+          <button class="help-button" onclick="showSettingsHelp()">
+            <i class="fa-solid fa-circle-question"></i>
+          </button>
+          <button class="close-button" aria-label="Close settings" onclick="closeModal()">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      </div>
+      <div class="modal-content">
+        <div class="settings-tabs">
+          <button class="tab-button active" data-tab="general">
+            <i class="fa-solid fa-sliders"></i> General
+          </button>
+          <button class="tab-button" data-tab="appearance">
+            <i class="fa-solid fa-palette"></i> Appearance
+          </button>
+          <button class="tab-button" data-tab="personalities">
+            <i class="fa-solid fa-theater-masks"></i> Personalities
+          </button>
+          <button class="tab-button" data-tab="extra">
+            <i class="fa-solid fa-gear"></i> Extra
+          </button>
+        </div>
 
-																													</span>
-																													<div class="modal-actions">
-																														<button class="help-button" onclick="showSettingsHelp()">
-																															<i class="fa-solid fa-circle-question"></i>
-																														</button>
-																														<button class="close-button" aria-label="Close settings" onclick="closeModal()">
-																															<i class="fa-solid fa-xmark"></i>
-																														</button>
-																													</div>
-																												</div>
-																												<div class="modal-content">
-																													<div class="settings-tabs">
-																														<button class="tab-button active" data-tab="general">
-																															<i class="fa-solid fa-sliders"></i> General
-
-																														</button>
-																														<button class="tab-button" data-tab="appearance">
-																															<i class="fa-solid fa-palette"></i> Appearance
-
-																														</button>
-																														<button class="tab-button" data-tab="personalities">
-																															<i class="fa-solid fa-theater-masks"></i> Personalities
-
-																														</button>
-																														<button class="tab-button" data-tab="extra">
-																															<i class="fa-solid fa-gear"></i> Extra
-
-																														</button>
-																													</div>
-																													<div class="tab-content active" data-tab="general">
-																														<div class="settings-section">
-																															<h3>Language</h3>
-																															<div class="selector-container">
-																																<div class="selector" id="languageSelector" onclick="toggleLanguageSelector()">
-																																	<span>
-																																		<i class="fa-solid fa-language"></i>
-																																		<span class="language-flag" data-country="${getCountryCode(STATE.currentLanguage)}"></span>
+        <div class="tab-content active" data-tab="general">
+          <div class="settings-section">
+            <h3>Language</h3>
+            <div class="selector-container">
+              <div class="selector" id="languageSelector" onclick="toggleLanguageSelector()">
+                <span>
+                  <i class="fa-solid fa-language"></i>
+                  <span class="language-flag" data-country="${getCountryCode(STATE.currentLanguage)}"></span>
                   ${STATE.currentLanguage}
-
-																																	</span>
-																																	<i class="fa-solid fa-chevron-down"></i>
-																																</div>
-																																<div class="options search-enabled" id="languageOptions" style="display:none;">
-																																	<div class="search-box">
-																																		<i class="fa-solid fa-search"></i>
-																																		<input type="text" placeholder="Search languages..." onkeyup="filterLanguages(this.value)">
-																																		</div>
+                </span>
+                <i class="fa-solid fa-chevron-down"></i>
+              </div>
+              <div class="options search-enabled" id="languageOptions" style="display:none;">
+                <div class="search-box">
+                  <i class="fa-solid fa-search"></i>
+                  <input type="text" placeholder="Search languages..." onkeyup="filterLanguages(this.value)">
+                </div>
                 ${languageOptions}
+              </div>
+            </div>
+          </div>
 
-																																	</div>
-																																</div>
-																															</div>
-																															<div class="settings-section">
-																																<h3>Notifications</h3>
-																																<div class="toggle-group">
-																																	<label class="toggle-switch">
-																																		<input type="checkbox" ${STATE.settings.notifications ? 'checked' : ''} onchange="toggleSetting('notifications')">
-																																			<span class="toggle-slider"></span>
-																																			<span class="toggle-label">Desktop Notifications</span>
-																																		</label>
-																																		<label class="toggle-switch">
-																																			<input type="checkbox" ${STATE.settings.soundEffects ? 'checked' : ''} onchange="toggleSetting('soundEffects')">
-																																				<span class="toggle-slider"></span>
-																																				<span class="toggle-label">Sound Effects</span>
-																																			</label>
-																																		</div>
-																																	</div>
-																																	<div class="settings-section danger-zone">
-																																		<h3>Danger Zone</h3>
-																																		<div class="danger-actions">
-																																			<button class="danger-button" onclick="resetChat()">
-																																				<i class="fa-solid fa-trash"></i>
-                Clear Chat History
-
-																																			</button>
-																																			<button class="danger-button" onclick="removeApiKey()">
-																																				<i class="fa-solid fa-key"></i>
-                Remove API Key
-
-																																			</button>
-																																			<button class="danger-button" onclick="clearCache()">
-<i class="fa-solid fa-server"></i>                Clear Cahche
-
-																																			</button>
-																																		</div>
-																																	</div>
-																																</div>
-																																<div class="tab-content" data-tab="appearance">
-																																	<div class="settings-section">
-																																		<h3>Theme</h3>
-																																		<div class="theme-options-grid">
+          <div class="settings-section">
+            <h3>Notifications</h3>
+            <div class="toggle-group">
+              <label class="toggle-switch">
+                <input type="checkbox" ${STATE.settings.notifications ? 'checked' : ''} onchange="toggleSetting('notifications')" class="hidden-checkbox">
+                <span class="toggle-slider"></span>
+                <span class="toggle-label">Notifications</span>
+              </label>
+              <label class="toggle-switch">
+                <input type="checkbox" ${STATE.settings.soundEffects ? 'checked' : ''} onchange="toggleSetting('soundEffects')" class="hidden-checkbox">
+                <span class="toggle-slider"></span>
+                <span class="toggle-label">Sound Effects</span>
+              </label>
+            </div>
+          </div>
+        </div>
+        
+        <div class="tab-content" data-tab="appearance">
+          <div class="settings-section">
+            <h3>Theme</h3>
+            <div class="theme-options-grid">
               ${themeOptions}
             </div>
-																																	</div>
-																																	<div class="settings-section">
-																																		<h3>Chat Display</h3>
-																																		<div class="display-options">
-																																			<label class="toggle-switch">
-																																				<input type="checkbox" ${STATE.settings.autoScroll ? 'checked' : ''} onchange="toggleSetting('autoScroll')">
-																																					<span class="toggle-slider"></span>
-																																					<span class="toggle-label">Auto Scroll</span>
-																																				</label>
-																																			</div>
-																																		</div>
-																																	</div>
-																																	<div class="tab-content" data-tab="personalities">
-																																		<div class="settings-section">
+          </div>
+        </div>
+
+        <div class="tab-content" data-tab="personalities">
+          <div class="settings-section">
             <h3>Select Personality</h3>
             <div class="selector-container">
               <div class="selector" id="personalitySelector" onclick="togglePersonalitySelector()">
@@ -2513,19 +2500,46 @@
                 </div>
                 <div id="personalityList">${personalityOptions}</div>
               </div>
-																																	</div>
-																																</div>
-																															</div>
-																																<div class="tab-content" data-tab="extra">
-																																	<div class="settings-section">
-																																		<h3>Extra</h3>
-Coming Soon 
-																															</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-content" data-tab="extra">
+          <div class="settings-section">
+            <h3>Chat Display</h3>
+            <div class="display-options">
+              <label class="toggle-switch">
+                <input type="checkbox" ${STATE.settings.autoScroll ? 'checked' : ''} onchange="toggleSetting('autoScroll')" class="hidden-checkbox">
+                <span class="toggle-slider"></span>
+                <span class="toggle-label">Auto Scroll</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="settings-section danger-zone">
+            <h3>Danger Zone</h3>
+            <div class="danger-actions">
+              <button class="danger-button" onclick="resetChat()">
+                <i class="fa-solid fa-trash"></i> Clear Chat History
+              </button>
+              <button class="danger-button" onclick="removeApiKey()">
+                <i class="fa-solid fa-key"></i> Remove API Key
+              </button>
+              <button class="danger-button" onclick="clearCache()">
+                <i class="fa-solid fa-server"></i> Clear Cache
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   `;
-      modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-          closeModal();
-        }
+
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      closeModal();
+    }
+
       });
       modal.querySelectorAll('.tab-button').forEach(button => {
         button.addEventListener('click', () => {
@@ -2548,90 +2562,132 @@ Coming Soon
       return languageMap[language] || 'unknown';
     }
 
-    function getLanguageCode(language) {
-      const codeMap = {
-        'English': 'us',
-        'Spanish': 'es',
-        'French': 'fr',
-        'German': 'de',
-        'Italian': 'it',
-        'Japanese': 'jp',
-        'Chinese': 'cn',
-        'Russian': 'ru',
-        'Portuguese': 'pt',
-        'Korean': 'kr',
-        'Hindi': 'in',
-        'Arabic': 'ae',
-        'Turkish': 'tr',
-        'Dutch': 'nl',
-        'Swedish': 'se',
-        'Greek': 'gr',
-        'Polish': 'pl',
-        'Vietnamese': 'vn',
-        'Thai': 'th',
-        'Indonesian': 'id',
-        'Hebrew': 'il',
-        'Finnish': 'fi',
-        'Czech': 'cz',
-        'Hungarian': 'hu',
-        'Romanian': 'ro',
-        'Norwegian': 'no',
-        'Danish': 'dk',
-        'Bulgarian': 'bg',
-        'Ukrainian': 'ua',
-        'Malay': 'my',
-        'Swahili': 'ke',
-        'Tamil': 'lk',
-        'Bengali': 'bd',
-        'Punjabi': 'pk',
-        'Telugu': 'in',
-        'Marathi': 'in',
-        'Gujarati': 'in',
-        'Malayalam': 'in',
-        'Kannada': 'in',
-        'Oriya': 'in',
-        'Assamese': 'in',
-        'Nepali': 'np',
-        'Sinhala': 'lk',
-        'Khmer': 'kh',
-        'Laotian': 'la',
-        'Filipino': 'ph',
-        'Mongolian': 'mn',
-        'Pashto': 'af',
-        'Farsi': 'ir',
-        'Uzbek': 'uz',
-        'Kazakh': 'kz',
-        'Tajik': 'tj',
-        'Azerbaijani': 'az',
-        'Georgian': 'ge',
-        'Armenian': 'am',
-        'Albanian': 'al',
-        'Serbian': 'rs',
-        'Croatian': 'hr',
-        'Bosnian': 'ba',
-        'Slovak': 'sk',
-        'Slovenian': 'si',
-        'Estonian': 'ee',
-        'Latvian': 'lv',
-        'Lithuanian': 'lt',
-        'Icelandic': 'is',
-        'Irish': 'ie',
-        'Welsh': 'gb',
-        'Basque': 'es',
-        'Catalan': 'es',
-        'Galician': 'es',
-        'Maltese': 'mt',
-        'Corsican': 'fr',
-        'Haitian Creole': 'ht',
-        'Quechua': 'pe',
-        'Nahuatl': 'mx',
-        'Maya': 'mx',
-        'Yiddish': 'il',
-        'Esperanto': 'eo',
-      };
-      return codeMap[language] || '';
-    }
+function getLanguageCode(language) {
+  const codeMap = {
 
+    'English': 'us',
+    'Spanish': 'es',
+    'French': 'fr',
+    'German': 'de',
+    'Italian': 'it',
+    'Japanese': 'jp',
+    'Chinese': 'cn', 
+    'Russian': 'ru',
+    'Portuguese': 'pt',
+    'Korean': 'kr',
+    'Hindi': 'in',
+    'Arabic': 'ae',
+    'Turkish': 'tr',
+    'Dutch': 'nl',
+    'Swedish': 'se',
+    'Greek': 'gr',
+    'Polish': 'pl',
+    'Vietnamese': 'vn',
+    'Thai': 'th',
+    'Indonesian': 'id',
+    'Hebrew': 'il',
+    'Finnish': 'fi',
+    'Czech': 'cz',
+    'Hungarian': 'hu',
+    'Romanian': 'ro',
+    'Norwegian': 'no',
+    'Danish': 'dk',
+    'Bulgarian': 'bg',
+    'Ukrainian': 'ua',
+    'Malay': 'my',
+    'Swahili': 'ke',
+    'Tamil': 'lk',
+    'Bengali': 'bd',
+    'Punjabi': 'pk',
+    'Telugu': 'in',
+    'Marathi': 'in',
+    'Gujarati': 'in',
+    'Malayalam': 'in',
+    'Kannada': 'in',
+    'Oriya': 'in',
+    'Assamese': 'in',
+    'Nepali': 'np',
+    'Sinhala': 'lk',
+    'Khmer': 'kh',
+    'Laotian': 'la',
+    'Filipino': 'ph',
+    'Mongolian': 'mn',
+    'Pashto': 'af',
+    'Farsi': 'ir',
+    'Uzbek': 'uz',
+    'Kazakh': 'kz',
+    'Tajik': 'tj',
+    'Azerbaijani': 'az',
+    'Georgian': 'ge',
+    'Armenian': 'am',
+    'Albanian': 'al',
+    'Serbian': 'rs',
+    'Croatian': 'hr',
+    'Bosnian': 'ba',
+    'Slovak': 'sk',
+    'Slovenian': 'si',
+    'Estonian': 'ee',
+    'Latvian': 'lv',
+    'Lithuanian': 'lt',
+    'Icelandic': 'is',
+    'Irish': 'ie',
+    'Welsh': 'gb',
+    'Basque': 'es',
+    'Catalan': 'es',
+    'Galician': 'es',
+    'Maltese': 'mt',
+    'Corsican': 'fr',
+    'Haitian Creole': 'ht',
+    'Quechua': 'pe',
+    'Nahuatl': 'mx',
+    'Maya': 'mx',
+    'Yiddish': 'il',
+    'Esperanto': 'eo',
+
+    'Afrikaans': 'za',             
+    'Amharic': 'et',               
+    'Belarusian': 'by',            
+    'Burmese': 'mm',               
+    'Cebuano': 'ph',               
+    'Chinese (Simplified)': 'cn',
+    'Chinese (Traditional)': 'tw', 
+    'Frisian': 'nl',               
+    'Hausa': 'ng',                 
+    'Hawaiian': 'us',              
+    'Hmong': '',                   
+    'Igbo': 'ng',                  
+    'Javanese': 'id',              
+    'Kinyarwanda': 'rw',           
+    'Kurdish': 'tr',               
+    'Kyrgyz': 'kg',                
+    'Lao': 'la',
+    'Latin': '',                   
+    'Luxembourgish': 'lu',         
+    'Macedonian': 'mk',            
+    'Malagasy': 'mg',              
+    'Maori': 'nz',                 
+    'Myanmar (Burmese)': 'mm',     
+    'Nyanja (Chichewa)': 'mw',      
+    'Odia (Oriya)': 'in',          
+    'Persian (Farsi)': 'ir',       
+    'Samoan': 'ws',               
+    'Scots Gaelic': 'gb',          
+    'Sesotho': 'ls',               
+    'Shona': 'zw',                
+    'Sindhi': 'pk',               
+    'Somali': 'so',               
+    'Sundanese': 'id',             
+    'Tatar': 'ru',                
+    'Turkmen': 'tm',              
+    'Urdu': 'pk',                 
+    'Uyghur': 'cn',               
+    'Xhosa': 'za',                
+    'Yoruba': 'ng',               
+    'Zulu': 'za'                  
+  };
+
+  return codeMap[language] || '';
+}
     function getPersonalityIcon(personality) {
       const iconMap = {
         'Professional': 'fa-user-tie',
