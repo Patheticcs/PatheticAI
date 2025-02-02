@@ -3,204 +3,125 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>How to Get API Key</title>
+    <title>Terms of Service</title>
     <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@700,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css">
-    <meta name="description" content="PatheticAI's How to Get API Key">
-    <meta property="og:description" content="PatheticAI's How to Get API Key">
-    <meta property="og:title" content="PatheticAI How to Get API Key">
+    <meta name="description" content="PatheticAI Terms of Service">
+    <meta property="og:description" content="PatheticAI Terms of Service">
+    <meta property="og:title" content="PatheticAI Terms of Service">
     <meta property="og:image" content="/icon.png">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="PatheticAI">
     <meta property="og:locale" content="en_US">
-    <link rel="icon" href="/icon.png" type="images/icon.png">
+    <link rel="icon" href="/images/icon.png" type="image/png">
     <style>
-      html,
-      body {
+      html, body {
         margin: 0;
         padding: 0;
         height: 100%;
         font-family: Arial, sans-serif;
-        color: #ffffff;
-        overflow-x: hidden;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        overflow-y: hidden;
+        overflow: auto; /* ALLOW SCROLL */
       }
 
       .hero {
-        width: 1000%;
-        min-height: 100vh;
+        position: relative;
+        width: 100%;
+        min-height: auto; /* FIX: Allow content to expand */
         display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
+        color: #ffffff;
         text-align: center;
         padding: 20px;
-        overflow-y: hidden;
       }
 
       #particles-js {
-        position: absolute;
+        position: fixed;
         width: 100%;
         height: 100%;
         top: 0;
         left: 0;
         z-index: -1;
         background: #000;
-        overflow-y: hidden;
       }
 
       .hero-content {
         z-index: 1;
-        max-width: 900px;
-        width: 100%;
-        padding: 40px;
-        border-radius: 10px;
-        box-sizing: border-box;
-        text-align: center;
-        overflow-y: hidden;
+        padding: 20px;
+        max-width: 800px;
       }
 
       h1 {
-        font-size: 2.5em;
-        margin-bottom: 60px;
+        font-size: 3em;
+        margin-bottom: 50px;
       }
 
       h2 {
-        font-size: 1.2em;
-        margin-top: 20px;
+        font-size: 1.5em;
+        margin-top: 40px;
         margin-bottom: 10px;
       }
 
       p {
-        font-size: 1em;
-        line-height: 1.6;
+        font-size: 14px;
+        line-height: 1.5;
+        max-width: 800px;
+        margin: 10px auto;
+      }
+
+      .tos-list {
+        text-align: left;
+        margin-top: 20px;
+      }
+
+      .tos-list li {
         margin: 10px 0;
-      }
-
-      a {
-        color: #FFF;
-        text-decoration: underline;
-        font-weight: bold;
-      }
-
-      a:hover {
-        text-decoration: underline;
-      }
-
-      .step-list {
-        list-style: none;
-        padding: 0;
-        overflow: hidden;
-      }
-
-      .step-list li {
-        margin: 10px 0;
-        padding: 15px;
-        border-radius: 8px;
-        background-color: rgba(0, 0, 0, 0.5);
-        overflow: hidden;
-      }
-
-      .step-list li h3 {
-        font-size: 1.2em;
-        margin-bottom: 10px;
-        overflow: hidden;
-      }
-
-      .step-list li p {
-        margin-bottom: 0;
-        overflow: hidden;
       }
 
       @media screen and (max-width: 768px) {
-
-        html,
-        body {
-          overflow-y: visible;
+        h1 {
+          font-size: 1.8em;
+          margin-bottom: 40px;
         }
 
-        h1 {
-          font-size: 2em;
-          margin-bottom: 40px;
+        .hero {
+          min-height: auto; /* Allow scrolling */
         }
 
         .hero-content {
           padding: 20px;
         }
 
-        .step-list li {
-          margin: 8px 0;
-          padding: 12px;
-        }
-
         p {
-          font-size: 0.9em;
-        }
-
-        .step-list li h3 {
           font-size: 1em;
-        }
-
-        .hero {
-          padding: 10px;
-        }
-      }
-
-      @media screen and (max-width: 480px) {
-        h1 {
-          font-size: 1.6em;
-          margin-bottom: 30px;
-        }
-
-        .hero-content {
-          padding: 15px;
-        }
-
-        .step-list li {
-          padding: 10px;
-        }
-
-        p {
-          font-size: 0.8em;
-        }
-
-        .step-list li h3 {
-          font-size: 0.9em;
         }
       }
     </style>
   </head>
   <body>
+    <div id="particles-js"></div>
     <div class="hero">
-      <div id="particles-js"></div>
       <div class="hero-content">
-        <h1>How to Get Your API Key</h1>
-        <p>Follow these easy steps to get your API Key for PatheticAI. Make sure you complete each step to ensure everything works properly.</p>
-        <ul class="step-list">
-          <li>
-            <h3>Step 1: Create Account</h3>
-            <p>To make an account at OpenRouter Click: <a href="https://openrouter.ai/" target="_blank">here</a>, and make an account. </p>
-          </li>
-          <li>
-            <h3>Step 2: Create API Key</h3>
-            <p>Go to <a href="https://openrouter.ai/keys" target="_blank">this page</a> and click "Create Key." </p>
-          </li>
-          <li>
-            <h3>Step 3: Set Key Name</h3>
-            <p>You can set a specific credit limit for your key, or leave it blank for unlimited use.</p>
-          </li>
-          <li>
-            <h3>Step 4: Copy the Key</h3>
-            <p>Make sure to copy the key and keep it safe. You won’t be able to view it again. If you lose it, you will need to create a new key.</p>
-          </li>
-          <li>
-            <h3>Step 5: Contact Us</h3>
-            <p>If you have any questions or need assistance, feel free to reach out to us on our <a href="https://discord.gg/Hb5ccPY3XV" target="_blank">Discord channel</a>. </p>
-          </li>
-        </ul>
+        <h1>Terms of Service</h1>
+        <p>Welcome to PatheticAI. By using our service, you agree to the following terms and conditions. Please read them carefully.</p>
+        <div class="tos-list">
+          <h2>1. Acceptance of Terms</h2>
+          <p>By accessing or using PatheticAI, you agree to comply with these Terms of Service. If you do not agree, you may not use the service.</p>
+          <h2>2. Changes to the Terms</h2>
+          <p>We may update our Terms of Service from time to time. It is your responsibility to review the changes.</p>
+          <h2>3. User Responsibilities</h2>
+          <p>As a user of PatheticAI, you agree to use the service responsibly and not for any illegal activities.</p>
+          <h2>4. Privacy</h2>
+          <p>We are committed to protecting your privacy. Please review our Privacy Policy to understand how your data is handled.</p>
+          <h2>5. Limitation of Liability</h2>
+          <p>PatheticAI will not be responsible for any damages or losses that arise from the use or inability to use our service.</p>
+          <h2>6. Termination</h2>
+          <p>We reserve the right to terminate or suspend your access to PatheticAI at any time for any reason.</p>
+          <h2>7. Contact Us</h2>
+          <p>If you have any questions or concerns about these Terms of Service, please contact us at <a href="https://discord.gg/Hb5ccPY3XV">discord.gg/Hb5ccPY3XV</a>. </p>
+        </div>
       </div>
     </div>
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
