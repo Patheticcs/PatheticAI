@@ -58,80 +58,83 @@
                 --transition: all 0.3s ease;
             }
 
-            :root[data-theme="Light"] {
-                --background-image: url("/images/light%20background.png");
-                --background-color: #ffffff;
-                --secondary-color: #000000;
-                --border-color: rgba(0, 0, 0, 0.05);
-                --taskbar-background: rgba(255, 255, 255, 0.6);
-                --input-background: rgba(255, 255, 255, 0.7);
-                --button-background: rgba(0, 0, 0, 0.02);
-                --button-hover-background: rgba(0, 0, 0, 0.05);
-                --modal-background: rgba(255, 255, 255, 0.7);
-                --message-background: rgba(255, 255, 255, 0.6);
-                --message-user-background: rgba(255, 255, 255, 0.5);
-                --code-background: rgba(0, 0, 0, 0.02);
-                --code-text: #000000;
-                --notification-background: rgba(255, 255, 255, 0.4);
-                --notification-text: #000000;
-                --placeholder-color: rgba(0, 0, 0, 0.2);
-                --chat-input-container-background: rgba(255, 255, 255, 0.5);
-                --border-button-color: rgba(0, 0, 0, 0.1);
-                --border-button-color: rgba(0, 0, 0, 0.07);
-                --checkbox-bg: rgba(255, 255, 255, 0.5);
-                --slider-track-bg: rgba(229, 231, 235, 0.5);
-                --thumb-border: rgba(255, 255, 255, 0.8);
-                --focus-ring: rgba(59, 130, 246, 0.25);
-                --disabled-bg: rgba(243, 244, 246, 0.5);
-                --disabled-border: rgba(209, 213, 219, 0.4);
-                --header-bg: rgba(248, 249, 250, 0.3);
-                --text-color: rgba(26, 26, 26, 0.9);
-                --text-muted: rgba(107, 114, 128, 0.8);
-                --primary-color: rgba(0, 0, 0, 0.85);
-                --danger-color: rgba(239, 68, 68, 0.85);
-                --hover-color: rgba(243, 244, 246, 0.5);
-                --input-bg: rgba(255, 255, 255, 0.3);
-                --toggle-bg: rgba(46, 42, 36, 0.9);
-                --un-toggle-bg: rgba(255, 255, 255, 0.9);
-            }
+:root[data-theme="Light"] {
 
-            :root[data-theme="Dark"] {
-                --color: rgba(255, 255, 255, 1);
-                --background-image: url("/images/dark%20background.png");
-                --background-color: #000000;
-                --secondary-color: #ffffff;
-                --border-color: rgba(255, 255, 255, 0.05);
-                --taskbar-background: rgba(0, 0, 0, 0.6);
-                --input-background: rgba(0, 0, 0, 0.7);
-                --button-background: rgba(255, 255, 255, 0.02);
-                --button-hover-background: rgba(255, 255, 255, 0.05);
-                --modal-background: rgba(0, 0, 0, 0.7);
-                --message-background: rgba(0, 0, 0, 0.6);
-                --message-user-background: rgba(0, 0, 0, 0.5);
-                --code-background: rgba(255, 255, 255, 0.02);
-                --code-text: #ffffff;
-                --notification-background: rgba(0, 0, 0, 0.4);
-                --notification-text: #ffffff;
-                --placeholder-color: rgba(255, 255, 255, 0.2);
-                --chat-input-container-background: rgba(0, 0, 0, 0.5);
-                --border-button-color: rgba(255, 255, 255, 0.1);
-                --checkbox-bg: #000000;
-                --slider-track-bg: #18191c;
-                --thumb-border: #000000;
-                --focus-ring: rgba(59, 130, 246, 0.3);
-                --disabled-bg: #18191c;
-                --disabled-border: #4b5563;
-                --background-color: #000000;
-                --header-bg: #212529;
-                --text-color: #e5e5e5;
-                --text-muted: #d1d5db;
-                --primary-color: #fff;
-                --danger-color: #ef4444;
-                --hover-color: #18191c;
-                --input-bg: #000000;
-                --toggle-bg: #d1d5db;
-                --un-toggle-bg: black;
-            }
+    --color: rgba(0, 0, 0, 1);
+    --secondary-color: #000000;
+    --code-text: #000000;
+    --text-color: #1f2937;
+    --text-muted: #6b7280;
+    --primary-color: #000;
+    --danger-color: #b91c1c;
+    --notification-text: #000000;
+    --placeholder-color: rgba(0, 0, 0, 0.2);
+
+    --background-image: url("/images/light%20background.png");
+    --background-color: #ffffff;
+    --input-background: rgba(255, 255, 255, 0.7);
+    --taskbar-background: rgba(255, 255, 255, 0.6);
+    --button-background: rgba(0, 0, 0, 0.02);
+    --modal-background: rgba(255, 255, 255, 0.7);
+    --message-background: rgba(255, 255, 255, 0.6);
+    --message-user-background: rgba(255, 255, 255, 0.5);
+    --code-background: rgba(0, 0, 0, 0.02);
+    --notification-background: rgba(255, 255, 255, 0.4);
+    --chat-input-container-background: rgba(255, 255, 255, 0.5);
+
+    --border-color: rgba(0, 0, 0, 0.03);
+    --border-button-color: rgba(0, 0, 0, 0.1);
+    --focus-ring: rgba(59, 130, 246, 0.6);
+
+    --checkbox-bg: #ffffff;
+    --slider-track-bg: #e5e7eb;
+    --thumb-border: #ffffff;
+    --disabled-bg: #e5e7eb;
+    --disabled-border: #9ca3af;
+    --header-bg: #f8f9fa;
+    --hover-color: #e5e7eb;
+    --toggle-bg: #6b7280;
+    --un-toggle-bg: white;
+}
+
+:root[data-theme="Dark"] {
+
+    --color: rgba(255, 255, 255, 1);
+    --secondary-color: #ffffff;
+    --code-text: #ffffff;
+    --text-color: #e5e5e5;
+    --text-muted: #d1d5db;
+    --primary-color: #fff;
+    --danger-color: #ef4444;
+    --notification-text: #ffffff;
+    --placeholder-color: rgba(255, 255, 255, 0.2);
+
+    --background-image: url("/images/dark%20background.png");
+    --background-color: #000000;
+    --input-background: rgba(0, 0, 0, 0.7);
+    --taskbar-background: rgba(0, 0, 0, 0.6);
+    --button-background: rgba(255, 255, 255, 0.02);
+    --modal-background: rgba(0, 0, 0, 0.7);
+    --message-background: rgba(0, 0, 0, 0.6);
+    --message-user-background: rgba(0, 0, 0, 0.5);
+    --code-background: rgba(255, 255, 255, 0.02);
+    --notification-background: rgba(0, 0, 0, 0.4);
+    --chat-input-container-background: rgba(0, 0, 0, 0.5);
+
+    --border-color: rgba(255, 255, 255, 0.05);
+    --border-button-color: rgba(255, 255, 255, 0.1);
+    --focus-ring: rgba(59, 130, 246, 0.3);
+
+    --checkbox-bg: #000000;
+    --slider-track-bg: #18191c;
+    --thumb-border: #000000;
+    --disabled-bg: #18191c;
+    --disabled-border: #4b5563;
+    --header-bg: #212529;
+    --hover-color: #18191c;
+    --toggle-bg: #d1d5db;
+    --un-toggle-bg: black;
+}
 
             body {
                 background-color: var(--background-color);
@@ -448,7 +451,7 @@
                 font-size: clamp(14px, 3vw, 16px);
                 backdrop-filter: blur(10px);
                 -webkit-backdrop-filter: blur(10px);
-                border: 1px solid rgba(255, 255, 255, 0.1);
+                border: 1px solid var(--border-color);
                 animation: messageAppear 0.3s ease;
             }
 
@@ -1755,7 +1758,7 @@
             async function initializeApp() {
                 await loadSavedState();
                 setupEventListeners();
-                await showWelcomeMessage();
+                await showWelcomeMessages();
                 initializeVoiceInput();
             }
 
@@ -2536,139 +2539,148 @@
           </div>
           <span>Dark</span>
         </div> `;
-                modal.innerHTML = ` <div class="modal-window">
-          <div class="modal-header">
-            <span class="modal-title">
-               Settings </span>
+    modal.innerHTML = `
+    <div class="modal-window">
+        <div class="modal-header">
+            <span class="modal-title">Settings</span>
             <div class="modal-actions">
-              <button class="help-button" onclick="showSettingsHelp()">
-                <i class="fa-solid fa-circle-question"></i>
-              </button>
-              <button class="close-button" aria-label="Close settings" onclick="closeModal()">
-                <i class="fa-solid fa-xmark"></i>
-              </button>
+                <button class="help-button" onclick="showSettingsHelp()">
+                    <i class="fa-solid fa-circle-question"></i>
+                </button>
+                <button class="close-button" aria-label="Close settings" onclick="closeModal()">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
             </div>
-          </div>
-          <div class="modal-content">
+        </div>
+        <div class="modal-content">
             <div class="settings-tabs">
-              <button class="tab-button active" data-tab="general">
-                <i class="fa-solid fa-sliders"></i> General </button>
-              <button class="tab-button" data-tab="appearance">
-                <i class="fa-solid fa-palette"></i> Appearance </button>
-              <button class="tab-button" data-tab="personalities">
-                <i class="fa-solid fa-theater-masks"></i> Personalities </button>
-              <button class="tab-button" data-tab="security">
-                <i class="fa-solid fa-triangle-exclamation"></i> Security </button>
+                <button class="tab-button active" data-tab="general">
+                    <i class="fa-solid fa-sliders"></i> General
+                </button>
+                <button class="tab-button" data-tab="appearance">
+                    <i class="fa-solid fa-palette"></i> Appearance
+                </button>
+                <button class="tab-button" data-tab="personalities">
+                    <i class="fa-solid fa-theater-masks"></i> Personalities
+                </button>
+                <button class="tab-button" data-tab="security">
+                    <i class="fa-solid fa-triangle-exclamation"></i> Security
+                </button>
             </div>
             <div class="tab-content active" data-tab="general">
-              <div class="settings-section">
-                <h3>Language</h3>
-                <div class="selector-container">
-                  <div class="selector" id="languageSelector" onclick="toggleLanguageSelector()">
-                    <span>
-                      <i class="fa-solid fa-language"></i>
-                      <span class="language-flag" data-country="${getCountryCode(STATE.currentLanguage)}"></span> ${STATE.currentLanguage} </span>
-                    <i class="fa-solid fa-chevron-down"></i>
-                  </div>
-                  <div class="options search-enabled" id="languageOptions" style="display:none;">
-                    <div class="search-box">
-                      <i class="fa-solid fa-search"></i>
-                      <input type="text" placeholder="Search languages..." onkeyup="filterLanguages(this.value)">
-                    </div> ${languageOptions}
-                  </div>
+                <div class="settings-section">
+                    <h3>Language</h3>
+                    <div class="selector-container">
+                        <div class="selector" id="languageSelector" onclick="toggleLanguageSelector()">
+                            <span>
+                                <i class="fa-solid fa-language"></i>
+                                <span class="language-flag" data-country="${getCountryCode(STATE.currentLanguage)}"></span> ${STATE.currentLanguage}
+                            </span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="options search-enabled" id="languageOptions" style="display:none;">
+                            <div class="search-box">
+                                <i class="fa-solid fa-search"></i>
+                                <input type="text" placeholder="Search languages..." onkeyup="filterLanguages(this.value)">
+                            </div> ${languageOptions}
+                        </div>
+                    </div>
                 </div>
-              </div>
-              <div class="settings-section">
-                <h3>Notifications</h3>
-                <div class="toggle-group">
-                  <label class="toggle-switch">
-                    <input type="checkbox" ${STATE.settings.notifications ? "checked" : ""} onchange="toggleSetting('notifications')" class="hidden-checkbox">
-                    <span class="toggle-slider"></span>
-                    <span class="toggle-label">Notifications</span>
-                  </label>
-                  <label class="toggle-switch">
-                    <input type="checkbox" ${STATE.settings.soundEffects ? "checked" : ""} onchange="toggleSetting('soundEffects')" class="hidden-checkbox">
-                    <span class="toggle-slider"></span>
-                    <span class="toggle-label">Sound Effects</span>
-                  </label>
+                <div class="settings-section">
+                    <h3>Notifications</h3>
+                    <div class="toggle-group">
+                        <label class="toggle-switch">
+                            <input type="checkbox" ${STATE.settings.notifications ? "checked" : ""} onchange="toggleSetting('notifications')" class="hidden-checkbox">
+                            <span class="toggle-slider"></span>
+                            <span class="toggle-label">Notifications</span>
+                        </label>
+                        <label class="toggle-switch">
+                            <input type="checkbox" ${STATE.settings.soundEffects ? "checked" : ""} onchange="toggleSetting('soundEffects')" class="hidden-checkbox">
+                            <span class="toggle-slider"></span>
+                            <span class="toggle-label">Sound Effects</span>
+                        </label>
+                    </div>
                 </div>
-              </div>
             </div>
             <div class="tab-content" data-tab="appearance">
-              <div class="settings-section">
-                <h3>Chat Display</h3>
-                <div class="display-options">
-                  <label class="toggle-switch">
-                    <input type="checkbox" ${STATE.settings.autoScroll ? "checked" : ""} onchange="toggleSetting('autoScroll')" class="hidden-checkbox">
-                    <span class="toggle-slider"></span>
-                    <span class="toggle-label">Auto Scroll</span>
-                  </label>
+                <div class="settings-section">
+                    <h3>Chat Display</h3>
+                    <div class="display-options">
+                        <label class="toggle-switch">
+                            <input type="checkbox" ${STATE.settings.autoScroll ? "checked" : ""} onchange="toggleSetting('autoScroll')" class="hidden-checkbox">
+                            <span class="toggle-slider"></span>
+                            <span class="toggle-label">Auto Scroll</span>
+                        </label>
+                    </div>
                 </div>
-              </div>
                 <h3>Theme</h3>
-                <div class="theme-options-grid"> ${themeOptions} </div>
-              </div>
+                <div class="theme-options-grid">${themeOptions}</div>
             </div>
             <div class="tab-content" data-tab="personalities">
-              <div class="settings-section">
-                <h3>Default Personalities</h3>
-                <div class="selector-container">
-                  <div class="selector" id="personalitySelector" onclick="togglePersonalitySelector()">
-                    <span>
-                      <i class="fa-solid ${getPersonalityIcon(STATE.selectedPersonality.name)}"></i> ${STATE.selectedPersonality.name} </span>
-                    <i class="fa-solid fa-chevron-down"></i>
-                  </div>
-                  <div class="options search-enabled" id="personalityOptions" style="display:none;">
-                    <div class="search-box">
-                      <i class="fa-solid fa-search"></i>
-                      <input type="text" placeholder="Search personalities..." onkeyup="filterPersonalities(this.value)">
+                <div class="settings-section">
+                    <h3>Default Personalities</h3>
+                    <div class="selector-container">
+                        <div class="selector" id="personalitySelector" onclick="togglePersonalitySelector()">
+                            <span>
+                                <i class="fa-solid ${getPersonalityIcon(STATE.selectedPersonality.name)}"></i> ${STATE.selectedPersonality.name}
+                            </span>
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                        <div class="options search-enabled" id="personalityOptions" style="display:none;">
+                            <div class="search-box">
+                                <i class="fa-solid fa-search"></i>
+                                <input type="text" placeholder="Search personalities..." onkeyup="filterPersonalities(this.value)">
+                            </div>
+                            <div id="personalityList">${personalityOptions}</div>
+                        </div>
                     </div>
-                    <div id="personalityList">${personalityOptions}</div>
-                  </div>
                 </div>
-              </div>
-              <div class="settings-section custom-personalities-section">
-                <div class="section-header">
-                  <h3>Custom Personalities</h3>
-                  <button class="add-button" onclick="showAddCustomPersonalityModal()">
-                    <i class="fa-solid fa-plus"></i> Add New </button>
+                <div class="settings-section custom-personalities-section">
+                    <div class="section-header">
+                        <h3>Custom Personalities</h3>
+                        <button class="add-button" onclick="showAddCustomPersonalityModal()">
+                            <i class="fa-solid fa-plus"></i> Add New
+                        </button>
+                    </div>
+                    <div class="custom-personalities-list">${STATE.customPersonalities
+                        .map(
+                            (p) => `
+                            <div class="custom-personality-item">
+                                <div class="personality-info">
+                                    <h4>${p.name}</h4>
+                                    <p>${p.description}</p>
+                                </div>
+                                <div class="personality-actions">
+                                    <button class="select-button" onclick="changePersonality('${p.name}')">
+                                        <i class="fa-solid fa-check"></i>
+                                    </button>
+                                    <button class="delete-button" onclick="deleteCustomPersonality('${p.name}')">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>`
+                        )
+                        .join("")}</div>
                 </div>
-                <div class="custom-personalities-list"> ${STATE.customPersonalities
-                    .map(
-                        (p) => ` <div class="custom-personality-item">
-                    <div class="personality-info">
-                      <h4>${p.name}</h4>
-                      <p>${p.description}</p>
-                    </div>
-                    <div class="personality-actions">
-                      <button class="select-button" onclick="changePersonality('${p.name}')">
-                        <i class="fa-solid fa-check"></i>
-                      </button>
-                      <button class="delete-button" onclick="deleteCustomPersonality('${p.name}')">
-                        <i class="fa-solid fa-trash"></i>
-                      </button>
-                    </div>
-                  </div> `
-                    )
-                    .join("")} </div>
-              </div>
             </div>
             <div class="tab-content" data-tab="security">
-              <div class="settings-section">
-              <div class="settings-section danger-zone">
-                <h3>Danger Zone</h3>
-                <div class="danger-actions">
-                  <button class="danger-button" onclick="resetChat()">
-                    <i class="fa-solid fa-trash"></i> Clear Chat History </button>
-                  <button class="danger-button" onclick="removeApiKey()">
-                    <i class="fa-solid fa-key"></i> Remove API Key </button>
-                  <button class="danger-button" onclick="clearCache()">
-                    <i class="fa-solid fa-server"></i> Clear Cache </button>
+                <div class="settings-section danger-zone">
+                    <h3>Danger Zone</h3>
+                    <div class="danger-actions">
+                        <button class="danger-button" onclick="resetChat()">
+                            <i class="fa-solid fa-trash"></i> Clear Chat History
+                        </button>
+                        <button class="danger-button" onclick="removeApiKey()">
+                            <i class="fa-solid fa-key"></i> Remove API Key
+                        </button>
+                        <button class="danger-button" onclick="clearCache()">
+                            <i class="fa-solid fa-server"></i> Clear Cache
+                        </button>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
-        </div> `;
+        </div>
+    </div>`;
                 modal.addEventListener("click", (e) => {
                     if (e.target === modal) {
                         closeModal();
@@ -3223,18 +3235,19 @@
             styleSheet.textContent = typingIndicatorStyles;
             document.head.appendChild(styleSheet);
 
-            function showWelcomeMessage() {
-                const existingMessages = document.querySelector(".chat-messages");
-                const existingWelcomeMessage = Array.from(existingMessages.children).find((message) => message.classList.contains("bot") && message.textContent.includes("Welcome to PatheticAI"));
-                if (existingWelcomeMessage) return;
-                const welcomeMessage = `👋 Welcome to PatheticAI! I'm here to help you with any questions or tasks you may have. Feel free to start our conversation!`;
-                const { element } = createMessageElement(welcomeMessage, false);
-                const resetLink = element.querySelector(".reset-chat-link");
-                if (resetLink) {
-                    resetLink.addEventListener("click", resetChat);
-                }
-                existingMessages.appendChild(element);
-            }
+function showWelcomeMessages() {
+    const existingMessages = document.querySelector(".chat-messages");
+
+    if (!existingMessages) return;
+
+    const welcomeMessage1 = `👋 Welcome to PatheticAI! I'm here to help you with any questions or tasks you may have.`;
+    const { element: message1 } = createMessageElement(welcomeMessage1, false);
+    existingMessages.appendChild(message1);
+
+    const welcomeMessage2 = `Editing Previous Chat's that Got Saved, are currently not Working.`;
+    const { element: message2 } = createMessageElement(welcomeMessage2, false);
+    existingMessages.appendChild(message2);
+}
 
             function resetChat() {
                 STATE.messageHistory = [];
