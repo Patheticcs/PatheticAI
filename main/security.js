@@ -1,11 +1,12 @@
 (function() {
-
+    // Disable right-click context menu
     document.addEventListener('contextmenu', (e) => {
         e.preventDefault();
         alert("DevTools isn't allowed!");
-        window.location.href = 'about:blank'; 
+        window.location.href = 'about:blank'; // Redirect to a blank page
     });
 
+    // Disable keyboard shortcuts (F12, Ctrl+Shift+I, etc.)
     document.addEventListener('keydown', (e) => {
         if (
             e.key === 'F12' || 
@@ -15,18 +16,23 @@
         ) {
             e.preventDefault();
             alert("DevTools isn't allowed!");
-            window.location.href = 'about:blank'; 
+            window.location.href = 'about:blank'; // Redirect to a blank page
         }
     });
 
+    // DevTools detection using a more reliable method
     const devToolsDetect = () => {
-        const threshold = 160;
-        const width = window.outerWidth - window.innerWidth > threshold || window.outerHeight - window.innerHeight > threshold;
-        if (width) {
+        const threshold = 100; // Adjust the threshold to a reasonable value
+        const widthDiff = window.outerWidth - window.innerWidth;
+        const heightDiff = window.outerHeight - window.innerHeight;
+
+        // Check for significant difference in window size, which indicates DevTools
+        if (widthDiff > threshold || heightDiff > threshold) {
             alert("DevTools isn't allowed!");
-            window.location.href = 'about:blank'; 
+            window.location.href = 'about:blank'; // Redirect to a blank page
         }
     };
 
-    setInterval(devToolsDetect, 1000);
+    // Check every 500 milliseconds (faster detection)
+    setInterval(devToolsDetect, 500);
 })();
