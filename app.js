@@ -1,31 +1,16 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyDsDfz6JhuFAv97zEe1UWT5JmUfeTmwRWY",
-      authDomain: "patheticai.firebaseapp.com",
-      projectId: "patheticai",
-      storageBucket: "patheticai.firebasestorage.app",
-      messagingSenderId: "879461950480",
-      appId: "1:879461950480:web:571ab4f5ea4d9792205695",
-      measurementId: "G-5WQ52J5ZYY"
-    };
-
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-async function addUser() {
+const addUserToDatabase = async (name, email, age) => {
   try {
-    const docRef = await addDoc(collection(db, "users"), {
-      name: "John Doe",
-      email: "john.doe@example.com",
-      age: 30
+    const response = await fetch('https://us-central1-YOUR_PROJECT_ID.cloudfunctions.net/addUser', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ name, email, age }),  // Send data as JSON
     });
-    console.log("Document written with ID: ", docRef.id);
-  } catch (e) {
-    console.error("Error adding document: ", e);
-  }
-}
 
-addUser();
+    const result = await response.json();
+    console.log(result.message);  // "User added with ID: ..."
+  } catch (error) {
+    console.error("Error:", error);
+  }
+};
