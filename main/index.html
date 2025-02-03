@@ -1909,12 +1909,6 @@
                         const chatMessages = document.querySelector(".chat-messages");
                         chatMessages.innerHTML = "";
 
-                        STATE.messageHistory.forEach((msg) => {
-                            const isUser = msg.role === "user";
-                            const { element } = createMessageElement(msg.content, isUser, new Date(msg.timestamp));
-                            chatMessages.appendChild(element);
-                        });
-
                         loadEditState();
 
                         if (STATE.settings.autoScroll) {
