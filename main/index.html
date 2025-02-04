@@ -2012,13 +2012,13 @@
             wrapper.className = "code-block-wrapper";
             const copyButton = document.createElement("button");
             copyButton.className = "code-copy-button";
-            copyButton.innerHTML = '  < i class = "fas fa-copy" > < /i>';
+            copyButton.innerHTML = '  <i class = "fas fa-copy" > </i>';
             copyButton.onclick = (e) => {
               e.stopPropagation();
               navigator.clipboard.writeText(block.textContent).then(() => {
-                copyButton.innerHTML = '  < i class = "fas fa-check" > < /i>';
+                copyButton.innerHTML = '  <i class = "fas fa-check" > </i>';
                 setTimeout(() => {
-                  copyButton.innerHTML = '  < i class = "fas fa-copy" > < /i>';
+                  copyButton.innerHTML = '  <i class = "fas fa-copy" > </i>';
                 }, 2000);
               });
             };
@@ -2039,13 +2039,13 @@
         if (isUser) {
           const editButton = document.createElement("button");
           editButton.className = "action-button";
-          editButton.innerHTML = '  < i class = "fa-regular fa-edit" > < /i>';
+          editButton.innerHTML = '  <i class = "fa-regular fa-edit" ></i>';
           editButton.onclick = () => startEditing(messageId);
           actionsDiv.appendChild(editButton);
         }
         const copyButton = document.createElement("button");
         copyButton.className = "action-button";
-        copyButton.innerHTML = '  < i class = "fa-regular fa-copy" > < /i>';
+        copyButton.innerHTML = '  <i class = "fa-regular fa-copy" ></i>';
         copyButton.onclick = () => copyToClipboard(message);
         actionsDiv.appendChild(copyButton);
         messageElement.appendChild(actionsDiv);
