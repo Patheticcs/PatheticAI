@@ -86,6 +86,7 @@
         --hover-color: #e5e7eb;
         --toggle-bg: #6b7280;
         --un-toggle-bg: white;
+        --box-shadow: 0 0px 30px rgba(0, 0, 0, 0.2);
       }
 
       :root[data-theme="Dark"] {
@@ -121,6 +122,7 @@
         --hover-color: #18191c;
         --toggle-bg: #d1d5db;
         --un-toggle-bg: black;
+        --box-shadow: 0 0px 30px rgba(255, 255, 255, 0.2);
       }
 
       body {
@@ -516,7 +518,7 @@
         animation: slideUp 0.4s ease-out;
         display: flex;
         flex-direction: column;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        box-shadow: var(--box-shadow);
       }
 
       .modal-header {
