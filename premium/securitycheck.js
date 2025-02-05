@@ -3,38 +3,45 @@ async function checkAuth() {
     const loggedIn = localStorage.getItem('loggedIn');
     const savedKey = localStorage.getItem('loggedInKey');
     const timestamp = localStorage.getItem('loginTimestamp');
+
+    // Check if any necessary values are missing
     if (!loggedIn || !savedKey || !timestamp) {
-      window.location.href = '/premium';
+      redirectToPremium();
       return;
     }
+
     const now = Date.now();
-    const expires = parseInt(timestamp) + 24 * 60 * 60 * 1000;
+    const expires = parseInt(timestamp, 10) + 24 * 60 * 60 * 1000;
+
+    // Check if the session has expired
     if (now > expires) {
       clearSession();
-      window.location.href = '/premium';
+      redirectToPremium();
       return;
     }
-try {
-  const response = await fetch('premium.json');
-  if (!response.ok) {
-    throw new Error('Network response was not ok');
-  }
-  const data = await response.json();
-  
-  if (!data.validKeys.includes(savedKey)) {
-    clearSession();
-    window.location.href = '/premium';
-    return;
-  }
-} catch (error) {
-  console.error('There was a problem with the fetch operation:', error);
-  clearSession();
-  window.location.href = '/premium';
-}
+
+    // Validate the key against the server
+    try {
+      const response = await fetch('premium.json');
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      if (!data.validKeys.includes(savedKey)) {
+        clearSession();
+        redirectToPremium();
+        return;
+      }
+    } catch (error) {
+      console.error('There was a problem with the fetch operation:', error);
+      clearSession();
+      redirectToPremium();
+    }
   } catch (error) {
     console.error('Auth check failed:', error);
     clearSession();
-    window.location.href = '/premium';
+    redirectToPremium();
   }
 }
 
@@ -44,8 +51,14 @@ function clearSession() {
   localStorage.removeItem('loginTimestamp');
 }
 
+function redirectToPremium() {
+  window.location.href = '/premium';
+}
+
+// Initial auth check
 checkAuth();
 
+// Periodic auth check every 5 minutes
 setInterval(() => {
   checkAuth().catch((error) => {
     console.error('Periodic auth check failed:', error);
