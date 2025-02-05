@@ -270,7 +270,10 @@
         <div class="glass-overlay"></div>
         <div class="container" id="login-container">
             <div class="content-wrapper">
-                <h2>PatheticAI <br>Premium Version</h2>
+                <h2>
+                    PatheticAI <br />
+                    Premium Version
+                </h2>
                 <div class="input-group">
                     <input type="text" id="key" placeholder="Enter your access key" autocomplete="off" />
                 </div>
@@ -290,7 +293,6 @@
                 }
             });
 
-            // KEY SYSTEM
             class KeySystem {
                 constructor() {
                     this.submitBtn = document.getElementById("submitBtn");
@@ -363,14 +365,20 @@
                     if (!this.keysCache) {
                         try {
                             const response = await fetch("premium.json");
-                            if (!response.ok) throw new Error("Failed to fetch keys");
+                            if (!response.ok) {
+                                console.error("Failed to fetch keys:", response.statusText);
+                                throw new Error("Failed to fetch keys");
+                            }
                             const data = await response.json();
                             this.keysCache = data.validKeys;
+                            console.log("Keys fetched successfully:", this.keysCache);
                         } catch (error) {
                             console.error("Error fetching keys:", error);
                             throw error;
                         }
                     }
+
+                    console.log("Checking if key is valid:", key);
                     return this.keysCache.includes(key);
                 }
 
