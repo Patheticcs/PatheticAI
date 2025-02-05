@@ -321,7 +321,7 @@
                     const urlParams = new URLSearchParams(window.location.search);
                     if (urlParams.has("expired")) {
                         this.showAlert("Session expired. Please enter a new key", "error");
-                        urlParams.delete("expired"); // Clean up the URL after displaying the alert
+                        urlParams.delete("expired");
                         window.history.replaceState({}, document.title, window.location.pathname);
                     }
                 }
@@ -362,7 +362,7 @@
                 async checkKeyValidity(key) {
                     if (!this.keysCache) {
                         try {
-                            const response = await fetch("oxbe.json");
+                            const response = await fetch("premium.json");
                             if (!response.ok) throw new Error("Failed to fetch keys");
                             const data = await response.json();
                             this.keysCache = data.validKeys;
@@ -379,7 +379,7 @@
                     localStorage.setItem("loggedIn", "true");
                     localStorage.setItem("loggedInKey", key);
                     localStorage.setItem("loginTimestamp", Date.now().toString());
-                    setTimeout(() => (window.location.href = "/home"), 1500);
+                    setTimeout(() => (window.location.href = "/premium/main"), 1500);
                 }
 
                 handleFailedLogin() {
@@ -429,7 +429,7 @@
                             this.showAlert("Session expired. Please enter a new key", "error");
                             return;
                         }
-                        window.location.href = "/premium/main";
+                        window.location.href = "/premium";
                     } catch (error) {
                         console.error("Session check error:", error);
                         this.clearSession();
