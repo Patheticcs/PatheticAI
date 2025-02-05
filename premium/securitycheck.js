@@ -4,7 +4,7 @@ async function checkAuth() {
     const savedKey = localStorage.getItem('loggedInKey');
     const timestamp = localStorage.getItem('loginTimestamp');
     if (!loggedIn || !savedKey || !timestamp) {
-      window.location.href = '/?expired=true';
+      window.location.href = '/premium';
       return;
     }
     const now = Date.now();
