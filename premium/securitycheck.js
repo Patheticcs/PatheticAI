@@ -11,7 +11,7 @@ async function checkAuth() {
     const expires = parseInt(timestamp) + 24 * 60 * 60 * 1000;
     if (now > expires) {
       clearSession();
-      window.location.href = '/?expired=true';
+      window.location.href = '/premium';
       return;
     }
 try {
@@ -23,18 +23,18 @@ try {
   
   if (!data.validKeys.includes(savedKey)) {
     clearSession();
-    window.location.href = '/?expired=true';
+    window.location.href = '/premium';
     return;
   }
 } catch (error) {
   console.error('There was a problem with the fetch operation:', error);
   clearSession();
-  window.location.href = '/?error=true';
+  window.location.href = '/premium';
 }
   } catch (error) {
     console.error('Auth check failed:', error);
     clearSession();
-    window.location.href = '/?expired=true';
+    window.location.href = '/premium';
   }
 }
 
