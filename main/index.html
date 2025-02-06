@@ -30,6 +30,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="mobile-web-app-capable" content="yes" />
     <script src="/main/security.js"></script>
+    <script src="/premium/securitycheck.js"></script>
     <style>
       * {
         margin: 0;
@@ -1535,12 +1536,10 @@
         <span class="preview-tag">Free Version</span>
       </div>
       <div class="taskbar-right">
-<button onclick="window.open('/premium', '_blank')" title="Premium">
-<i class="fa-solid fa-crown"></i></button>
         <button onclick="showSettingsModal()" title="Settings">
           <i class="fa-solid fa-cog"></i>
         </button>
-        <button onclick="showAboutModal()" title="About Us">
+        <button onclick="showAboutModal()" title="Join Discord">
           <i class="fa fa-circle-info"></i>
         </button>
         <button onclick="discordButton()" title="Join Discord">
@@ -2366,180 +2365,341 @@
         }
       }
 
-function showSettingsModal() {
-  const modal = document.createElement("div");
-  modal.className = "modal-overlay";
-  const allPersonalities = [...PERSONALITIES, ...STATE.customPersonalities];
-  const languageOptions = [
-    "Afrikaans", "Albanian", "Amharic", "Arabic", "Armenian", "Azerbaijani", "Basque", "Belarusian", "Bengali", "Bosnian",
-    "Bulgarian", "Burmese", "Catalan", "Cebuano", "Chinese (Simplified)", "Chinese (Traditional)", "Corsican", "Croatian", "Czech",
-    "Danish", "Dutch", "English", "Esperanto", "Estonian", "Finnish", "French", "Georgian", "German", "Greek", "Gujarati", "Haitian Creole",
-    "Hausa", "Hebrew", "Hindi", "Hungarian", "Icelandic", "Igbo", "Indonesian", "Irish", "Italian", "Japanese", "Javanese", "Kannada",
-    "Kazakh", "Khmer", "Korean", "Kurdish", "Kyrgyz", "Latvian", "Lithuanian", "Luxembourgish", "Malay", "Malayalam", "Maltese", "Mongolian",
-    "Nepali", "Norwegian", "Pashto", "Persian (Farsi)", "Polish", "Portuguese", "Punjabi", "Quechua", "Romanian", "Russian", "Samoan", "Serbian",
-    "Sinhala", "Slovak", "Slovenian", "Somali", "Spanish", "Sundanese", "Swahili", "Swedish", "Tagalog", "Tamil", "Telugu", "Thai", "Turkish",
-    "Ukrainian", "Urdu", "Uzbek", "Vietnamese", "Welsh", "Xhosa", "Yiddish", "Yoruba", "Zulu",
-  ]
-    .map(
-      (lang) => ` 
-        <div class="option language-option" data-language="${lang}" onclick="changeLanguage('${lang}')">
-          <span class="language-flag" data-country="${getCountryCode(lang)}"></span>
-          <span class="language-name">${lang}</span>
-          <span class="language-code">${getLanguageCode(lang)}</span>
-        </div> `
-    )
-    .join("");
-  const personalityOptions = allPersonalities
-    .map(
-      (p) => ` 
-        <div class="option personality-option ${p.isCustom ? "custom-personality" : ""}" data-personality="${p.name}" onclick="changePersonality('${p.name}')">
-          <div class="personality-header">
-            <i class="fa-solid ${getPersonalityIcon(p.name)}"></i>
-            <span class="personality-name">${p.name}</span>
-          </div>
-          <p class="personality-description">${p.description || "No description available"}</p>
-        </div> `
-    )
-    .join("");
-  const themeOptions = ` 
-    <div class="option theme-option" data-theme="light" onclick="changeTheme('Light')">
-      <div class="theme-preview light-preview">
-        <div class="preview-header"></div>
-        <div class="preview-content"></div>
-      </div>
-      <span>Light</span>
-    </div>
-    <div class="option theme-option" data-theme="dark" onclick="changeTheme('Dark')">
-      <div class="theme-preview dark-preview">
-        <div class="preview-header"></div>
-        <div class="preview-content"></div>
-      </div>
-      <span>Dark</span>
-    </div> `;
-  modal.innerHTML = `
-    <div class="modal-window">
-      <div class="modal-header">
-        <span class="modal-title">Settings</span>
-        <div class="modal-actions">
-          <button class="help-button" onclick="showSettingsHelp()">
-            <i class="fa-solid fa-circle-question"></i>
-          </button>
-          <button class="close-button" aria-label="Close settings" onclick="closeModal()">
-            <i class="fa-solid fa-xmark"></i>
-          </button>
-        </div>
-      </div>
-      <div class="modal-content">
-        <div class="settings-tabs">
-          <button class="tab-button active" data-tab="general">
-            <i class="fa-solid fa-sliders"></i> General
-          </button>
-          <button class="tab-button" data-tab="appearance">
-            <i class="fa-solid fa-palette"></i> Appearance
-          </button>
-          <button class="tab-button" data-tab="personalities">
-            <i class="fa-solid fa-theater-masks"></i> Personalities
-          </button>
-          <button class="tab-button" data-tab="security">
-            <i class="fa-solid fa-triangle-exclamation"></i> Security
-          </button>
-        </div>
-        <div class="tab-content active" data-tab="general">
-          <div class="settings-section">
-            <h3>Language</h3>
-            <div class="selector-container">
-              <div class="selector" id="languageSelector" onclick="toggleLanguageSelector()">
-                <span>
-                  <i class="fa-solid fa-language"></i>
-                  <span class="language-flag" data-country="${getCountryCode(STATE.currentLanguage)}"></span> ${STATE.currentLanguage}
-                </span>
-                <i class="fa-solid fa-chevron-down"></i>
-              </div>
-              <div class="options search-enabled" id="languageOptions" style="display:none;">
-                <div class="search-box">
-                  <i class="fa-solid fa-search"></i>
-                  <input type="text" placeholder="Search languages..." onkeyup="filterLanguages(this.value)">
-                </div> ${languageOptions}
-              </div>
-            </div>
-          </div>
-          <div class="settings-section">
-            <h3>Notifications</h3>
-            <div class="toggle-group">
-              <label class="toggle-switch">
-                <input type="checkbox" ${STATE.settings.notifications ? "checked" : ""} onchange="toggleSetting('notifications')" class="hidden-checkbox">
-                <span class="toggle-slider"></span>
-                <span class="toggle-label">Notifications</span>
-              </label>
-              <label class="toggle-switch">
-                <input type="checkbox" ${STATE.settings.soundEffects ? "checked" : ""} onchange="toggleSetting('soundEffects')" class="hidden-checkbox">
-                <span class="toggle-slider"></span>
-                <span class="toggle-label">Sound Effects</span>
-              </label>
-            </div>
-          </div>
-        </div>
-        <div class="tab-content" data-tab="appearance">
-          <div class="settings-section">
-            <h3>Chat Display</h3>
-            <div class="display-options">
-              <label class="toggle-switch">
-                <input type="checkbox" ${STATE.settings.autoScroll ? "checked" : ""} onchange="toggleSetting('autoScroll')" class="hidden-checkbox">
-                <span class="toggle-slider"></span>
-                <span class="toggle-label">Auto Scroll</span>
-              </label>
-            </div>
-          </div>
-          <h3>Theme</h3>
-          <div class="theme-options-grid">${themeOptions}</div>
-        </div>
-        <div class="tab-content" data-tab="personalities">
-          <div class="settings-section">
-            <h3>Default Personalities</h3>
-            <p>To get custom bot personalities, you need to purchase premium.</p>
-            <button class="primary-button" onclick="window.open('https://discord.gg/Hb5ccPY3XV', '_blank')">
-              <i class="fa-solid fa-plug"></i> Join My Discord
-            </button>
-          </div>
-        </div>
-        <div class="tab-content" data-tab="security">
-          <div class="settings-section danger-zone">
-            <h3>Danger Zone</h3>
-            <div class="danger-actions">
-              <button class="danger-button" onclick="resetChat()">
-                <i class="fa-solid fa-trash"></i> Clear Chat History
-              </button>
-              <button class="danger-button" onclick="removeApiKey()">
-                <i class="fa-solid fa-key"></i> Remove API Key
-              </button>
-              <button class="danger-button" onclick="clearCache()">
-                <i class="fa-solid fa-server"></i> Clear Cache
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>`;
-
-  modal.addEventListener("click", (e) => {
-    if (e.target === modal) {
-      closeModal();
-    }
-  });
-
-  modal.querySelectorAll(".tab-button").forEach((button) => {
-    button.addEventListener("click", () => {
-      const tabName = button.dataset.tab;
-      modal.querySelectorAll(".tab-button").forEach((btn) => btn.classList.remove("active"));
-      modal.querySelectorAll(".tab-content").forEach((content) => content.classList.remove("active"));
-      button.classList.add("active");
-      modal.querySelector(`.tab-content[data-tab="${tabName}"]`).classList.add("active");
-    });
-  });
-
-  document.body.appendChild(modal);
-}
-
+      function showSettingsModal() {
+        const modal = document.createElement("div");
+        modal.className = "modal-overlay";
+        const allPersonalities = [...PERSONALITIES, ...STATE.customPersonalities];
+        const languageOptions = [
+          "Afrikaans",
+          "Albanian",
+          "Amharic",
+          "Arabic",
+          "Armenian",
+          "Azerbaijani",
+          "Basque",
+          "Belarusian",
+          "Bengali",
+          "Bosnian",
+          "Bulgarian",
+          "Burmese",
+          "Catalan",
+          "Cebuano",
+          "Chinese (Simplified)",
+          "Chinese (Traditional)",
+          "Corsican",
+          "Croatian",
+          "Czech",
+          "Danish",
+          "Dutch",
+          "English",
+          "Esperanto",
+          "Estonian",
+          "Finnish",
+          "French",
+          "Georgian",
+          "German",
+          "Greek",
+          "Gujarati",
+          "Haitian Creole",
+          "Hausa",
+          "Hebrew",
+          "Hindi",
+          "Hungarian",
+          "Icelandic",
+          "Igbo",
+          "Indonesian",
+          "Irish",
+          "Italian",
+          "Japanese",
+          "Javanese",
+          "Kannada",
+          "Kazakh",
+          "Khmer",
+          "Korean",
+          "Kurdish",
+          "Kyrgyz",
+          "Latvian",
+          "Lithuanian",
+          "Luxembourgish",
+          "Malay",
+          "Malayalam",
+          "Maltese",
+          "Mongolian",
+          "Nepali",
+          "Norwegian",
+          "Pashto",
+          "Persian (Farsi)",
+          "Polish",
+          "Portuguese",
+          "Punjabi",
+          "Quechua",
+          "Romanian",
+          "Russian",
+          "Samoan",
+          "Serbian",
+          "Sinhala",
+          "Slovak",
+          "Slovenian",
+          "Somali",
+          "Spanish",
+          "Sundanese",
+          "Swahili",
+          "Swedish",
+          "Tagalog",
+          "Tamil",
+          "Telugu",
+          "Thai",
+          "Turkish",
+          "Ukrainian",
+          "Urdu",
+          "Uzbek",
+          "Vietnamese",
+          "Welsh",
+          "Xhosa",
+          "Yiddish",
+          "Yoruba",
+          "Zulu",
+        ]
+          .map(
+            (lang) => ` 
+			
+			<div class="option language-option" data-language="${lang}" onclick="changeLanguage('${lang}')">
+				<span class="language-flag" data-country="${getCountryCode(lang)}"></span>
+				<span class="language-name">${lang}</span>
+				<span class="language-code">${getLanguageCode(lang)}</span>
+			</div> `
+          )
+          .join("");
+        const personalityOptions = allPersonalities
+          .map(
+            (p) => ` 
+			
+			<div class="option personality-option ${p.isCustom ? "custom-personality" : ""}" data-personality="${p.name}" onclick="changePersonality('${p.name}')">
+				<div class="personality-header">
+					<i class="fa-solid ${getPersonalityIcon(p.name)}"></i>
+					<span class="personality-name">${p.name}</span>
+				</div>
+				<p class="personality-description">${p.description || "No description available"}</p>
+			</div> `
+          )
+          .join("");
+        const themeOptions = ` 
+			
+			<div class="option theme-option" data-theme="light" onclick="changeTheme('Light')">
+				<div class="theme-preview light-preview">
+					<div class="preview-header"></div>
+					<div class="preview-content"></div>
+				</div>
+				<span>Light</span>
+			</div>
+			<div class="option theme-option" data-theme="dark" onclick="changeTheme('Dark')">
+				<div class="theme-preview dark-preview">
+					<div class="preview-header"></div>
+					<div class="preview-content"></div>
+				</div>
+				<span>Dark</span>
+			</div> `;
+        modal.innerHTML = `
+    
+			
+			<div class="modal-window">
+				<div class="modal-header">
+					<span class="modal-title">Settings</span>
+					<div class="modal-actions">
+						<button class="help-button" onclick="showSettingsHelp()">
+							<i class="fa-solid fa-circle-question"></i>
+						</button>
+						<button class="close-button" aria-label="Close settings" onclick="closeModal()">
+							<i class="fa-solid fa-xmark"></i>
+						</button>
+					</div>
+				</div>
+				<div class="modal-content">
+					<div class="settings-tabs">
+						<button class="tab-button active" data-tab="general">
+							<i class="fa-solid fa-sliders"></i> General
+                
+						
+						</button>
+						<button class="tab-button" data-tab="appearance">
+							<i class="fa-solid fa-palette"></i> Appearance
+                
+						
+						</button>
+						<button class="tab-button" data-tab="personalities">
+							<i class="fa-solid fa-theater-masks"></i> Personalities
+                
+						
+						</button>
+						<button class="tab-button" data-tab="security">
+							<i class="fa-solid fa-triangle-exclamation"></i> Security
+                
+						
+						</button>
+					</div>
+					<div class="tab-content active" data-tab="general">
+						<div class="settings-section">
+							<h3>Language</h3>
+							<div class="selector-container">
+								<div class="selector" id="languageSelector" onclick="toggleLanguageSelector()">
+									<span>
+										<i class="fa-solid fa-language"></i>
+										<span class="language-flag" data-country="${getCountryCode(STATE.currentLanguage)}"></span> ${STATE.currentLanguage}
+                            
+									
+									</span>
+									<i class="fa-solid fa-chevron-down"></i>
+								</div>
+								<div class="options search-enabled" id="languageOptions" style="display:none;">
+									<div class="search-box">
+										<i class="fa-solid fa-search"></i>
+										<input type="text" placeholder="Search languages..." onkeyup="filterLanguages(this.value)">
+										</div> ${languageOptions}
+                        
+									
+									</div>
+								</div>
+							</div>
+							<div class="settings-section">
+								<h3>Notifications</h3>
+								<div class="toggle-group">
+									<label class="toggle-switch">
+										<input type="checkbox" ${STATE.settings.notifications ? "checked" : ""} onchange="toggleSetting('notifications')" class="hidden-checkbox">
+											<span class="toggle-slider"></span>
+											<span class="toggle-label">Notifications</span>
+										</label>
+										<label class="toggle-switch">
+											<input type="checkbox" ${STATE.settings.soundEffects ? "checked" : ""} onchange="toggleSetting('soundEffects')" class="hidden-checkbox">
+												<span class="toggle-slider"></span>
+												<span class="toggle-label">Sound Effects</span>
+											</label>
+										</div>
+									</div>
+								</div>
+								<div class="tab-content" data-tab="appearance">
+									<div class="settings-section">
+										<h3>Chat Display</h3>
+										<div class="display-options">
+											<label class="toggle-switch">
+												<input type="checkbox" ${STATE.settings.autoScroll ? "checked" : ""} onchange="toggleSetting('autoScroll')" class="hidden-checkbox">
+													<span class="toggle-slider"></span>
+													<span class="toggle-label">Auto Scroll</span>
+												</label>
+											</div>
+										</div>
+										<h3>Theme</h3>
+										<div class="theme-options-grid">${themeOptions}</div>
+									</div>
+									<div class="tab-content" data-tab="personalities">
+										<div class="settings-section">
+											<h3>Default Personalities</h3>
+											<div class="selector-container">
+												<div class="selector" id="personalitySelector" onclick="togglePersonalitySelector()">
+													<span>
+														<i class="fa-solid ${getPersonalityIcon(STATE.selectedPersonality.name)}"></i> ${STATE.selectedPersonality.name}
+                            
+													
+													</span>
+													<i class="fa-solid fa-chevron-down"></i>
+												</div>
+												<div class="options search-enabled" id="personalityOptions" style="display:none;">
+													<div class="search-box">
+														<i class="fa-solid fa-search"></i>
+														<input type="text" placeholder="Search personalities..." onkeyup="filterPersonalities(this.value)">
+														</div>
+														<div id="personalityList">${personalityOptions}</div>
+													</div>
+												</div>
+											</div>
+											<div class="settings-section custom-personalities-section">
+												<div class="section-header">
+													<h3>Custom Personalities</h3>
+													</button>
+									</div>
+									<div class="modal-content">
+										<div class="form-group">
+											<label for="personalityName">Name:</label>
+											<input type="text" id="personalityName" placeholder="Enter personality name" class="form-input">
+											</div>
+											<div class="form-group">
+												<label for="personalityDescription">Description:</label>
+												<textarea id="personalityDescription" placeholder="Enter personality description" class="form-input" rows="3"></textarea>
+											</div>
+											<div class="form-group">
+												<label for="personalityBehavior">Behavior Instructions:</label>
+												<textarea id="personalityBehavior" placeholder="Enter specific behavior instructions for the AI" class="form-input" rows="5"></textarea>
+											</div>
+											<button class="primary-button" onclick="addCustomPersonality()">
+												<i class="fa-solid fa-plus"></i> Add Personality 
+											
+											</button>
+									</div>
+												</div>
+												<div class="custom-personalities-list">${STATE.customPersonalities
+                          .map(
+                            (p) => `
+                            
+													
+													<div class="custom-personality-item">
+														<div class="personality-info">
+															<h4>${p.name}</h4>
+															<p>${p.description}</p>
+														</div>
+														<div class="personality-actions">
+															<button class="select-button" onclick="changePersonality('${p.name}')">
+																<i class="fa-solid fa-check"></i>
+															</button>
+															<button class="delete-button" onclick="deleteCustomPersonality('${p.name}')">
+																<i class="fa-solid fa-trash"></i>
+															</button>
+														</div>
+													</div>`
+                          )
+                          .join("")}
+												
+												</div>
+											</div>
+										</div>
+										<div class="tab-content" data-tab="security">
+											<div class="settings-section danger-zone">
+												<h3>Danger Zone</h3>
+												<div class="danger-actions">
+													<button class="danger-button" onclick="resetChat()">
+														<i class="fa-solid fa-trash"></i> Clear Chat History
+                        
+													
+													</button>
+													<button class="danger-button" onclick="removeApiKey()">
+														<i class="fa-solid fa-key"></i> Remove API Key
+                        
+													
+													</button>
+													<button class="danger-button" onclick="clearCache()">
+														<i class="fa-solid fa-server"></i> Clear Cache
+                        
+													
+													</button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>`;
+        modal.addEventListener("click", (e) => {
+          if (e.target === modal) {
+            closeModal();
+          }
+        });
+        modal.querySelectorAll(".tab-button").forEach((button) => {
+          button.addEventListener("click", () => {
+            const tabName = button.dataset.tab;
+            modal.querySelectorAll(".tab-button").forEach((btn) => btn.classList.remove("active"));
+            modal.querySelectorAll(".tab-content").forEach((content) => content.classList.remove("active"));
+            button.classList.add("active");
+            modal.querySelector(`.tab-content[data-tab="${tabName}"]`).classList.add("active");
+          });
+        });
+        document.body.appendChild(modal);
+      }
 
       function getCountryCode(language) {
         const languageMap = {
@@ -3104,6 +3264,9 @@ function showSettingsModal() {
         const welcomeMessage1 = `👋 Welcome to PatheticAI! I'm here to help you with any questions or tasks you may have.`;
         const { element: message1 } = createMessageElement(welcomeMessage1, false);
         existingMessages.appendChild(message1);
+        const welcomeMessage2 = `Editing Previous Chat's that Got Saved, are currently not Working.`;
+        const { element: message2 } = createMessageElement(welcomeMessage2, false);
+        existingMessages.appendChild(message2);
       }
 
       function resetChat() {
@@ -3129,61 +3292,73 @@ function showSettingsModal() {
         }
       }
 
-function showApiKeyModal() {
-    if (document.querySelector(".modal-overlay")) return;
-    const modal = document.createElement("div");
-    modal.className = "modal-overlay";
-    modal.innerHTML = `
-        <div class="api-modal-window">
-            <div class="modal-header">
-                <span class="modal-title">
-                    <i class="fas fa-key-skeleton" style="margin-right: 8px;"></i> API Key Required
-                </span>
-            </div>
-            <div class="modal-content">
-                <div class="info-section">
-                    <div class="info-icon">
-                        <i class="fas fa-info-circle"></i>
-                    </div>
-                    <p>To use PatheticAI, you need an API key from OpenRouter.</p>
-                </div>
-                <div class="input-container">
-                    <div class="input-wrapper">
-                        <input type="text" id="apiKeyInput" 
+      function showApiKeyModal() {
+        if (document.querySelector(".modal-overlay")) return;
+        const modal = document.createElement("div");
+        modal.className = "modal-overlay";
+        modal.innerHTML = `
+        
+										
+										<div class="api-modal-window">
+											<div class="modal-header">
+												<span class="modal-title">
+													<i class="fas fa-key-skeleton" style="margin-right: 8px;"></i> API Key Required
+                
+												
+												</span>
+												<button class="modal-close" aria-label="Close modal">
+													<i class="fas fa-times"></i>
+												</button>
+											</div>
+											<div class="modal-content">
+												<div class="info-section">
+													<div class="info-icon">
+														<i class="fas fa-info-circle"></i>
+													</div>
+													<p>To use PatheticAI, you need an API key from OpenRouter.</p>
+												</div>
+												<div class="input-container">
+													<div class="input-wrapper">
+														<input type="text" id="apiKeyInput" 
                             placeholder="Enter your API key (sk-or-v1-...)" 
-                            autocomplete="true" 
+                            autocomplete="off" 
                             spellcheck="false"
                         >
-                        <div class="input-validation">
-                            <i class="fas fa-check-circle validation-icon"></i>
-                        </div>
-                    </div>
-                    <div class="input-feedback"></div>
-                </div>
-                <button id="saveApiKeyButton" class="primary-button">
-                    <span class="button-content">
-                        <i class="fas fa-check"></i>
-                        <span>Save API Key</span>
-                    </span>
-                    <div class="button-loader"></div>
-                </button>
-                <div class="action-buttons">
-                    <button id="getKeyButton" class="secondary-button">
-                        <i class="fas fa-key"></i>
-                        <span>Get Key</span>
-                    </button>
-                    <button id="helpButton" class="secondary-button">
-                        <i class="fas fa-book"></i>
-                        <span>Help Guide</span>
-                    </button>
-                </div>
-            </div>
-        </div>
+															<div class="input-validation">
+																<i class="fas fa-check-circle validation-icon"></i>
+															</div>
+														</div>
+														<div class="input-feedback"></div>
+													</div>
+													<button id="saveApiKeyButton" class="primary-button">
+														<span class="button-content">
+															<i class="fas fa-check"></i>
+															<span>Save API Key</span>
+														</span>
+														<div class="button-loader"></div>
+													</button>
+													<div class="action-buttons">
+														<button id="getKeyButton" class="secondary-button">
+															<i class="fas fa-key"></i>
+															<span>Get Key</span>
+														</button>
+														<button id="helpButton" class="secondary-button">
+															<i class="fas fa-book"></i>
+															<span>Help Guide</span>
+														</button>
+													</div>
+												</div>
+											</div>
     `;
-    document.body.appendChild(modal);
-    requestAnimationFrame(() => {
-        modal.classList.add("visible");
-    });
+        document.body.appendChild(modal);
+        requestAnimationFrame(() => {
+          modal.classList.add("visible");
+        });
+        const closeButton = modal.querySelector(".modal-close");
+        closeButton.addEventListener("click", () => {
+          modal.classList.remove("visible");
+          setTimeout(() => modal.remove(), 300);
+        });
         const apiKeyInput = document.getElementById("apiKeyInput");
         const inputValidation = modal.querySelector(".input-validation");
         const inputFeedback = modal.querySelector(".input-feedback");
