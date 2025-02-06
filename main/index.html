@@ -3132,73 +3132,61 @@ function showSettingsModal() {
         }
       }
 
-      function showApiKeyModal() {
-        if (document.querySelector(".modal-overlay")) return;
-        const modal = document.createElement("div");
-        modal.className = "modal-overlay";
-        modal.innerHTML = `
-        
-										
-										<div class="api-modal-window">
-											<div class="modal-header">
-												<span class="modal-title">
-													<i class="fas fa-key-skeleton" style="margin-right: 8px;"></i> API Key Required
-                
-												
-												</span>
-												<button class="modal-close" aria-label="Close modal">
-													<i class="fas fa-times"></i>
-												</button>
-											</div>
-											<div class="modal-content">
-												<div class="info-section">
-													<div class="info-icon">
-														<i class="fas fa-info-circle"></i>
-													</div>
-													<p>To use PatheticAI, you need an API key from OpenRouter.</p>
-												</div>
-												<div class="input-container">
-													<div class="input-wrapper">
-														<input type="text" id="apiKeyInput" 
+function showApiKeyModal() {
+    if (document.querySelector(".modal-overlay")) return;
+    const modal = document.createElement("div");
+    modal.className = "modal-overlay";
+    modal.innerHTML = `
+        <div class="api-modal-window">
+            <div class="modal-header">
+                <span class="modal-title">
+                    <i class="fas fa-key-skeleton" style="margin-right: 8px;"></i> API Key Required
+                </span>
+            </div>
+            <div class="modal-content">
+                <div class="info-section">
+                    <div class="info-icon">
+                        <i class="fas fa-info-circle"></i>
+                    </div>
+                    <p>To use PatheticAI, you need an API key from OpenRouter.</p>
+                </div>
+                <div class="input-container">
+                    <div class="input-wrapper">
+                        <input type="text" id="apiKeyInput" 
                             placeholder="Enter your API key (sk-or-v1-...)" 
-                            autocomplete="off" 
+                            autocomplete="true" 
                             spellcheck="false"
                         >
-															<div class="input-validation">
-																<i class="fas fa-check-circle validation-icon"></i>
-															</div>
-														</div>
-														<div class="input-feedback"></div>
-													</div>
-													<button id="saveApiKeyButton" class="primary-button">
-														<span class="button-content">
-															<i class="fas fa-check"></i>
-															<span>Save API Key</span>
-														</span>
-														<div class="button-loader"></div>
-													</button>
-													<div class="action-buttons">
-														<button id="getKeyButton" class="secondary-button">
-															<i class="fas fa-key"></i>
-															<span>Get Key</span>
-														</button>
-														<button id="helpButton" class="secondary-button">
-															<i class="fas fa-book"></i>
-															<span>Help Guide</span>
-														</button>
-													</div>
-												</div>
-											</div>
+                        <div class="input-validation">
+                            <i class="fas fa-check-circle validation-icon"></i>
+                        </div>
+                    </div>
+                    <div class="input-feedback"></div>
+                </div>
+                <button id="saveApiKeyButton" class="primary-button">
+                    <span class="button-content">
+                        <i class="fas fa-check"></i>
+                        <span>Save API Key</span>
+                    </span>
+                    <div class="button-loader"></div>
+                </button>
+                <div class="action-buttons">
+                    <button id="getKeyButton" class="secondary-button">
+                        <i class="fas fa-key"></i>
+                        <span>Get Key</span>
+                    </button>
+                    <button id="helpButton" class="secondary-button">
+                        <i class="fas fa-book"></i>
+                        <span>Help Guide</span>
+                    </button>
+                </div>
+            </div>
+        </div>
     `;
-        document.body.appendChild(modal);
-        requestAnimationFrame(() => {
-          modal.classList.add("visible");
-        });
-        const closeButton = modal.querySelector(".modal-close");
-        closeButton.addEventListener("click", () => {
-          modal.classList.remove("visible");
-          setTimeout(() => modal.remove(), 300);
-        });
+    document.body.appendChild(modal);
+    requestAnimationFrame(() => {
+        modal.classList.add("visible");
+    });
         const apiKeyInput = document.getElementById("apiKeyInput");
         const inputValidation = modal.querySelector(".input-validation");
         const inputFeedback = modal.querySelector(".input-feedback");
