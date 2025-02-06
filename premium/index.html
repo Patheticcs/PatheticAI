@@ -1,450 +1,451 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>PatheticAI | Premium Version</title>
-        <meta
-            name="description"
-            content="We're a passionate team focused on creating reliable, effective tools to enhance your gaming and online experiences. We prioritize quality and ease of use, ensuring every solution we offer meets the highest standards to help you get the most out of your online activities."
-        />
-        <meta property="og:title" content="Pathetic" />
-        <meta property="og:description" content="Discover effective tools that enhance your gaming and online experiences. Prioritizing quality and ease of use, we deliver solutions that empower your digital journey." />
-        <meta property="og:image" content="/images/icon.png" />
-        <link rel="icon" href="/images/icon.png" type="image/png" />
-        <meta property="og:url" content="https://pathetic.one" />
-        <meta property="og:type" content="website" />
-        <meta property="og:site_name" content="Pathetic" />
-        <meta property="og:locale" content="en_US" />
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
-        <style>
-            @keyframes fadeIn {
-                from {
-                    opacity: 0;
-                    transform: translateY(20px);
-                }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PatheticAI | Premium Version</title>
+    <meta
+      name="description"
+      content="We're a passionate team focused on creating reliable, effective tools to enhance your gaming and online experiences. We prioritize quality and ease of use, ensuring every solution we offer meets the highest standards to help you get the most out of your online activities."
+    />
+    <meta property="og:title" content="Pathetic" />
+    <meta property="og:description" content="Discover effective tools that enhance your gaming and online experiences. Prioritizing quality and ease of use, we deliver solutions that empower your digital journey." />
+    <meta property="og:image" content="/images/icon.png" />
+    <link rel="icon" href="/images/icon.png" type="image/png" />
+    <meta property="og:url" content="https://pathetic.one" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Pathetic" />
+    <meta property="og:locale" content="en_US" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <style>
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
 
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
-            }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
 
-            @keyframes gradientMove {
-                0% {
-                    background-position: 0 50%;
-                }
+      @keyframes gradientMove {
+        0% {
+          background-position: 0 50%;
+        }
 
-                50% {
-                    background-position: 100% 50%;
-                }
+        50% {
+          background-position: 100% 50%;
+        }
 
-                100% {
-                    background-position: 0 50%;
-                }
-            }
+        100% {
+          background-position: 0 50%;
+        }
+      }
 
-            @keyframes glowPulse {
-                0%,
-                100% {
-                    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
-                }
+      @keyframes glowPulse {
+        0%,
+        100% {
+          box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        }
 
-                50% {
-                    box-shadow: 0 0 40px rgba(255, 255, 255, 0.4);
-                }
-            }
+        50% {
+          box-shadow: 0 0 40px rgba(255, 255, 255, 0.4);
+        }
+      }
 
-            @keyframes borderFlow {
-                0% {
-                    background-position: 0 0;
-                }
+      @keyframes borderFlow {
+        0% {
+          background-position: 0 0;
+        }
 
-                100% {
-                    background-position: 200% 0;
-                }
-            }
+        100% {
+          background-position: 200% 0;
+        }
+      }
 
-            * {
-                box-sizing: border-box;
-                margin: 0;
-                padding: 0;
-            }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
 
-            body {
-                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-                background: linear-gradient(135deg, #f5f7fa 0, #c3cfe2 100%);
-                min-height: 100vh;
-                display: flex;
-                color: #2d3436;
-                justify-content: center;
-                align-items: center;
-                margin: 0;
-                overflow: hidden;
-                position: relative;
-            }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        background-image: url("https://pathetic-ai.vercel.app/images/dark%20background.png");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        min-height: 100vh;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0;
+        overflow: hidden;
+        position: relative;
+      }
 
-            .glass-overlay {
-                position: fixed;
-                top: -50%;
-                left: -50%;
-                width: 200%;
-                height: 200%;
-                background: radial-gradient(circle at center, transparent 0, rgba(0, 0, 0, 0.4) 100%);
-                pointer-events: none;
-                z-index: 1;
-            }
+      .glass-overlay {
+        position: fixed;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle at center, transparent 0, rgba(0, 0, 0, 0.4) 100%);
+        pointer-events: none;
+        z-index: 1;
+      }
 
-            .container {
-                border-radius: 40px;
-                background: rgba(255, 255, 255, 0.25);
-                backdrop-filter: blur(10px);
-                border: 1px solid rgba(255, 255, 255, 0.3);
-                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-                text-align: center;
-                transition: all 0.5s ease-out;
-                min-height: 450px;
-                width: 650px;
-                position: relative;
-                overflow: hidden;
-            }
+      .container {
+        border-radius: 40px;
+        background: rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        text-align: center;
+        transition: all 0.5s ease-out;
+        min-height: 450px;
+        width: 650px;
+        position: relative;
+        overflow: hidden;
+      }
 
-            .container::before {
-                content: "";
-                position: absolute;
-                top: 0;
-                left: -100%;
-                width: 100%;
-                height: 100%;
-                background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-                transition: 0.5s;
-            }
+      .container::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        transition: 0.5s;
+      }
 
-            .container:hover::before {
-                left: 100%;
-            }
+      .container:hover::before {
+        left: 100%;
+      }
 
-            h2 {
-                font-size: 2.4em;
-                margin-top: 50px;
-                color: #000;
-                margin-bottom: 1.5em;
-                text-align: center;
-                position: relative;
-                text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-                animation: fadeIn 0.8s ease-out 0.2s backwards;
-            }
+      h2 {
+        font-size: 2.4em;
+        margin-top: 50px;
+        color: #fff;
+        margin-bottom: 1.5em;
+        text-align: center;
+        position: relative;
+        animation: fadeIn 0.8s ease-out 0.2s backwards;
+      }
 
-            .input-group {
-                position: relative;
-                margin: 2em 0;
-                animation: fadeIn 0.8s ease-out 0.4s backwards;
-            }
+      .input-group {
+        position: relative;
+        margin: 2em 0;
+        animation: fadeIn 0.8s ease-out 0.4s backwards;
+      }
 
-            input[type="text"] {
-                margin-top: 0;
-                width: 80%;
-                padding: 15px 20px;
-                font-size: 1em;
-                background: rgba(255, 255, 255, 0.07);
-                border: 1px solid rgba(0, 0, 0, 0.1);
-                border-radius: 15px;
-                color: #000;
-                outline: 0;
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            }
+      input[type="text"] {
+        margin-top: 0;
+        width: 80%;
+        padding: 15px 20px;
+        font-size: 1em;
+        background: rgba(255, 255, 255, 0.07);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 15px;
+        color: #fff;
+        outline: 0;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
 
-            input[type="text"]:hover {
-                background: rgba(255, 255, 255, 0.09);
-                box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-            }
+      input[type="text"]:hover {
+        background: rgba(255, 255, 255, 0.09);
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      }
 
-            input[type="text"]:focus {
-                border-color: rgba(0, 0, 0, 0.3);
-                background: rgba(255, 255, 255, 0.11);
-                box-shadow: 0 0 25px rgba(0, 0, 0, 0.2);
-            }
+      input[type="text"]:focus {
+        border-color: rgba(0, 0, 0, 0.3);
+        background: rgba(255, 255, 255, 0.11);
+        box-shadow: 0 0 25px rgba(0, 0, 0, 0.2);
+      }
 
-            .button-group {
-                display: flex;
-                gap: 1.5em;
-                justify-content: center;
-                margin-top: 2em;
-                animation: fadeIn 0.8s ease-out 0.6s backwards;
-            }
+      .button-group {
+        display: flex;
+        gap: 1.5em;
+        justify-content: center;
+        margin-top: 2em;
+        animation: fadeIn 0.8s ease-out 0.6s backwards;
+      }
 
-            button {
-                padding: 12px 30px;
-                border: none;
-                border-radius: 12px;
-                background: rgba(255, 255, 255, 0.1);
-                color: #000;
-                font-size: 1em;
-                cursor: pointer;
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                backdrop-filter: blur(5px);
-                border: 1px solid rgba(0, 0, 0, 0.1);
-                position: relative;
-                margin-top: 40px;
-                overflow: hidden;
-            }
+      button {
+        padding: 12px 30px;
+        border: none;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        font-size: 1em;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        backdrop-filter: blur(5px);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        position: relative;
+        margin-top: 40px;
+        overflow: hidden;
+      }
 
-            button::before {
-                content: "";
-                position: absolute;
-                top: 0;
-                left: -100%;
-                width: 100%;
-                height: 100%;
-                background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-                transition: 0.5s;
-            }
+      button::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: 0.5s;
+      }
 
-            button:hover {
-                background: rgba(255, 255, 255, 0.15);
-                box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-            }
+      button:hover {
+        background: rgba(255, 255, 255, 0.15);
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      }
 
-            button:hover::before {
-                left: 100%;
-            }
+      button:hover::before {
+        left: 100%;
+      }
 
-            button i {
-                margin-right: 8px;
-                transition: transform 0.3s ease;
-            }
+      button i {
+        margin-right: 8px;
+        transition: transform 0.3s ease;
+      }
 
-            button:hover i {
-                transform: scale(1.2);
-            }
+      button:hover i {
+        transform: scale(1.2);
+      }
 
-            .alert {
-                margin-top: 1.5em;
-                padding: 1px;
-                height: 50px;
-                width: 500px;
-                border-radius: 12px;
-                background: rgba(255, 59, 48, 0.15);
-                color: rgba(0, 0, 0, 0.9);
-                text-align: center;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                opacity: 0;
-                transform: translateY(-10px);
-                max-height: 0;
-                overflow: hidden;
-                margin-left: 75px;
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                backdrop-filter: blur(5px);
-                margin-bottom: 20px;
-            }
+      .alert {
+        margin-top: 1.5em;
+        padding: 1px;
+        height: 50px;
+        width: 500px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.15);
+        color: white;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        transform: translateY(-10px);
+        max-height: 0;
+        overflow: hidden;
+        margin-left: 75px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        backdrop-filter: blur(5px);
+        margin-bottom: 20px;
+      }
 
-            .alert.show {
-                opacity: 1;
-                transform: translateY(0);
-                max-height: 100px;
-            }
+      .alert.show {
+        opacity: 1;
+        transform: translateY(0);
+        max-height: 100px;
+      }
 
-            @keyframes shake {
-                0%,
-                100% {
-                    transform: translateX(0);
-                }
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
 
-                25% {
-                    transform: translateX(-10px);
-                }
+        25% {
+          transform: translateX(-10px);
+        }
 
-                75% {
-                    transform: translateX(10px);
-                }
-            }
+        75% {
+          transform: translateX(10px);
+        }
+      }
 
-            .shake {
-                animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="glass-overlay"></div>
-        <div class="container" id="login-container">
-            <div class="content-wrapper">
-                <h2>
-                    PatheticAI <br />
-                    Premium Version
-                </h2>
-                <div class="input-group">
-                    <input type="text" id="key" placeholder="Enter your access key" autocomplete="off" />
-                </div>
-                <div class="button-group">
-                    <button id="submitBtn"><i class="fas fa-key"></i>Submit</button>
-                    <button id="discordBtn"><i class="fab fa-discord"></i>Get Key</button>
-                </div>
-                <div id="alert" class="alert"></div>
-            </div>
+      .shake {
+        animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="glass-overlay"></div>
+    <div class="container" id="login-container">
+      <div class="content-wrapper">
+        <h2>
+          PatheticAI <br />
+          Premium Version
+        </h2>
+        <div class="input-group">
+          <input type="text" id="key" placeholder="Enter your access key" autocomplete="off" />
         </div>
-        <script>
-            document.addEventListener("DOMContentLoaded", () => new KeySystem());
-            document.addEventListener("contextmenu", (e) => e.preventDefault());
-            document.addEventListener("keydown", (e) => {
-                if ((e.ctrlKey && !["a", "v"].includes(e.key)) || e.keyCode === 123) {
-                    e.preventDefault();
-                }
-            });
+        <div class="button-group">
+          <button id="submitBtn"><i class="fas fa-key"></i>Submit</button>
+          <button id="discordBtn"><i class="fab fa-discord"></i>Get Key</button>
+        </div>
+        <div id="alert" class="alert"></div>
+      </div>
+    </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => new KeySystem());
+      document.addEventListener("contextmenu", (e) => e.preventDefault());
+      document.addEventListener("keydown", (e) => {
+        if ((e.ctrlKey && !["a", "v"].includes(e.key)) || e.keyCode === 123) {
+          e.preventDefault();
+        }
+      });
 
-            class KeySystem {
-                constructor() {
-                    this.submitBtn = document.getElementById("submitBtn");
-                    this.discordBtn = document.getElementById("discordBtn");
-                    this.keyInput = document.getElementById("key");
-                    this.alert = document.getElementById("alert");
-                    this.container = document.getElementById("login-container");
-                    this.attempts = 0;
-                    this.lastAttemptTime = 0;
-                    this.maxAttempts = 5;
-                    this.cooldownPeriod = 2000;
-                    this.keysCache = null;
+      class KeySystem {
+        constructor() {
+          this.submitBtn = document.getElementById("submitBtn");
+          this.discordBtn = document.getElementById("discordBtn");
+          this.keyInput = document.getElementById("key");
+          this.alert = document.getElementById("alert");
+          this.container = document.getElementById("login-container");
+          this.attempts = 0;
+          this.lastAttemptTime = 0;
+          this.maxAttempts = 5;
+          this.cooldownPeriod = 2000;
+          this.keysCache = null;
 
-                    this.initEventListeners();
-                    this.checkExpiredStatus();
-                    this.checkExistingSession();
-                }
+          this.initEventListeners();
+          this.checkExpiredStatus();
+          this.checkExistingSession();
+        }
 
-                initEventListeners() {
-                    this.submitBtn.addEventListener("click", () => this.validateKey());
-                    this.discordBtn.addEventListener("click", () => this.openDiscord());
-                    this.keyInput.addEventListener("keypress", (e) => {
-                        if (e.key === "Enter") this.validateKey();
-                    });
-                }
+        initEventListeners() {
+          this.submitBtn.addEventListener("click", () => this.validateKey());
+          this.discordBtn.addEventListener("click", () => this.openDiscord());
+          this.keyInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") this.validateKey();
+          });
+        }
 
-                checkExpiredStatus() {
-                    const urlParams = new URLSearchParams(window.location.search);
-                    if (urlParams.has("expired")) {
-                        this.showAlert("Session expired. Please enter a new key", "error");
-                        urlParams.delete("expired");
-                        window.history.replaceState({}, document.title, window.location.pathname);
-                    }
-                }
+        checkExpiredStatus() {
+          const urlParams = new URLSearchParams(window.location.search);
+          if (urlParams.has("expired")) {
+            this.showAlert("Session expired. Please enter a new key", "error");
+            urlParams.delete("expired");
+            window.history.replaceState({}, document.title, window.location.pathname);
+          }
+        }
 
-                async validateKey() {
-                    const key = this.keyInput.value.trim();
-                    if (!key) {
-                        this.showAlert("Please enter a key", "error");
-                        return;
-                    }
-                    const now = Date.now();
-                    if (now - this.lastAttemptTime < this.cooldownPeriod) {
-                        this.showAlert("Please wait before trying again", "error");
-                        return;
-                    }
-                    if (this.attempts >= this.maxAttempts) {
-                        this.showAlert("Too many attempts. Please try again later", "error");
-                        return;
-                    }
-                    this.attempts++;
-                    this.lastAttemptTime = now;
-                    this.submitBtn.disabled = true;
-                    try {
-                        const isValid = await this.checkKeyValidity(key);
-                        if (isValid) {
-                            this.handleSuccessfulLogin(key);
-                        } else {
-                            this.handleFailedLogin();
-                        }
-                    } catch (error) {
-                        console.error("Key validation error:", error);
-                        this.showAlert("Error checking key. Please try again", "error");
-                    } finally {
-                        this.submitBtn.disabled = false;
-                    }
-                }
+        async validateKey() {
+          const key = this.keyInput.value.trim();
+          if (!key) {
+            this.showAlert("Please enter a key", "error");
+            return;
+          }
+          const now = Date.now();
+          if (now - this.lastAttemptTime < this.cooldownPeriod) {
+            this.showAlert("Please wait before trying again", "error");
+            return;
+          }
+          if (this.attempts >= this.maxAttempts) {
+            this.showAlert("Too many attempts. Please try again later", "error");
+            return;
+          }
+          this.attempts++;
+          this.lastAttemptTime = now;
+          this.submitBtn.disabled = true;
+          try {
+            const isValid = await this.checkKeyValidity(key);
+            if (isValid) {
+              this.handleSuccessfulLogin(key);
+            } else {
+              this.handleFailedLogin();
+            }
+          } catch (error) {
+            console.error("Key validation error:", error);
+            this.showAlert("Error checking key. Please try again", "error");
+          } finally {
+            this.submitBtn.disabled = false;
+          }
+        }
 
-async checkKeyValidity(key) {
-    if (!this.keysCache) {
-        try {
-            const response = await fetch("premium.json");
-            if (!response.ok) {
+        async checkKeyValidity(key) {
+          if (!this.keysCache) {
+            try {
+              const response = await fetch("premium.json");
+              if (!response.ok) {
                 console.error("Failed to fetch keys:", response.statusText);
                 throw new Error(`Failed to fetch keys: ${response.statusText}`);
+              }
+              const data = await response.json();
+              this.keysCache = data.validKeys;
+              console.log("Keys fetched successfully:", this.keysCache);
+            } catch (error) {
+              console.error("Error fetching keys:", error);
+              throw new Error(`Error fetching keys: ${error.message}`);
             }
-            const data = await response.json();
-            this.keysCache = data.validKeys;
-            console.log("Keys fetched successfully:", this.keysCache);
-        } catch (error) {
-            console.error("Error fetching keys:", error);
-            throw new Error(`Error fetching keys: ${error.message}`);
+          }
+
+          console.log("Checking if key is valid:", key);
+          return this.keysCache.includes(key);
         }
-    }
 
-    console.log("Checking if key is valid:", key);
-    return this.keysCache.includes(key);
-}
+        handleSuccessfulLogin(key) {
+          this.showAlert("Success! Redirecting...", "success");
+          localStorage.setItem("loggedIn", "true");
+          localStorage.setItem("loggedInKey", key);
+          localStorage.setItem("loginTimestamp", Date.now().toString());
+          setTimeout(() => (window.location.href = "/premium/main"), 1500);
+        }
 
+        handleFailedLogin() {
+          this.showAlert("Invalid key! Please try again or get a new key", "error");
+          this.container.classList.add("shake");
+          setTimeout(() => this.container.classList.remove("shake"), 500);
+          this.keyInput.value = "";
+        }
 
-                handleSuccessfulLogin(key) {
-                    this.showAlert("Success! Redirecting...", "success");
-                    localStorage.setItem("loggedIn", "true");
-                    localStorage.setItem("loggedInKey", key);
-                    localStorage.setItem("loginTimestamp", Date.now().toString());
-                    setTimeout(() => (window.location.href = "/premium/main"), 1500);
-                }
+        showAlert(message, type) {
+          this.alert.textContent = message;
+          this.alert.style.background = type === "success" ? "rgba(255, 255, 255, 0.15)" : "rgba(255, 255, 255, 0.15)";
+          this.alert.classList.add("show");
+          this.container.style.height = "auto";
+          setTimeout(() => {
+            this.alert.classList.remove("show");
+            this.alert.textContent = "";
+          }, 3000);
+        }
 
-                handleFailedLogin() {
-                    this.showAlert("Invalid key! Please try again or get a new key", "error");
-                    this.container.classList.add("shake");
-                    setTimeout(() => this.container.classList.remove("shake"), 500);
-                    this.keyInput.value = "";
-                }
+        openDiscord() {
+          window.open("https://discord.gg/Hb5ccPY3XV", "_blank", "noopener,noreferrer");
+        }
 
-                showAlert(message, type) {
-                    this.alert.textContent = message;
-                    this.alert.style.background = type === "success" ? "rgba(48, 209, 88, 0.15)" : "rgba(255, 59, 48, 0.15)";
-                    this.alert.classList.add("show");
-                    this.container.style.height = "auto";
-                    setTimeout(() => {
-                        this.alert.classList.remove("show");
-                        this.alert.textContent = "";
-                    }, 3000);
-                }
+        clearSession() {
+          localStorage.removeItem("loggedIn");
+          localStorage.removeItem("loggedInKey");
+          localStorage.removeItem("loginTimestamp");
+        }
 
-                openDiscord() {
-                    window.open("https://discord.gg/Hb5ccPY3XV", "_blank", "noopener,noreferrer");
-                }
-
-                clearSession() {
-                    localStorage.removeItem("loggedIn");
-                    localStorage.removeItem("loggedInKey");
-                    localStorage.removeItem("loginTimestamp");
-                }
-
-                async checkExistingSession() {
-                    try {
-                        const loggedIn = localStorage.getItem("loggedIn");
-                        const savedKey = localStorage.getItem("loggedInKey");
-                        const timestamp = localStorage.getItem("loginTimestamp");
-                        if (!loggedIn || !savedKey || !timestamp) return;
-                        const now = Date.now();
-                        const expires = parseInt(timestamp) + 24 * 60 * 60 * 1000;
-                        const isValid = await this.checkKeyValidity(savedKey);
-                        if (!isValid) {
-                            this.clearSession();
-                            this.showAlert("Invalid session. Please enter a new key", "error");
-                            return;
-                        }
-                        if (now > expires) {
-                            this.clearSession();
-                            this.showAlert("Session expired. Please enter a new key", "error");
-                            return;
-                        }
-                        window.location.href = "/premium";
-                    } catch (error) {
-                        console.error("Session check error:", error);
-                        this.clearSession();
-                    }
-                }
+        async checkExistingSession() {
+          try {
+            const loggedIn = localStorage.getItem("loggedIn");
+            const savedKey = localStorage.getItem("loggedInKey");
+            const timestamp = localStorage.getItem("loginTimestamp");
+            if (!loggedIn || !savedKey || !timestamp) return;
+            const now = Date.now();
+            const expires = parseInt(timestamp) + 24 * 60 * 60 * 1000;
+            const isValid = await this.checkKeyValidity(savedKey);
+            if (!isValid) {
+              this.clearSession();
+              this.showAlert("Invalid session. Please enter a new key", "error");
+              return;
             }
-        </script>
-    </body>
+            if (now > expires) {
+              this.clearSession();
+              this.showAlert("Session expired. Please enter a new key", "error");
+              return;
+            }
+            window.location.href = "/premium";
+          } catch (error) {
+            console.error("Session check error:", error);
+            this.clearSession();
+          }
+        }
+      }
+    </script>
+  </body>
 </html>
